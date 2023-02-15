@@ -1,0 +1,7 @@
+mapa
+scrolling (cámara)
+animaciones
+enemigos (npcs)
+objetos (balas, ...)
+colisiones (detectar que ha tocado suelo)
+física (la caída y subida del salto)
