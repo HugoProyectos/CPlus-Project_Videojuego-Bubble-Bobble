@@ -44,7 +44,7 @@ public:
     {
         sprite = LoadTexture(rutaTextura.c_str());// Texture loading
 
-        distanciaSaltoMax = 20.0f;
+        distanciaSaltoMax = 60.0f;
 
         frameWidth = sprite.width;
         frameHeight = sprite.height;
@@ -79,7 +79,7 @@ public:
             enElAire = true;
             destRec.y -= velocidadSalto;
             saltoRecorrido += velocidadSalto;
-        } else if (!IsKeyReleased(KEY_X) && saltoRecorrido < distanciaSaltoMax && enElAire) {
+        } else if (IsKeyDown(KEY_X) && saltoRecorrido < distanciaSaltoMax && enElAire &&!cayendo) {
             destRec.y -= velocidadSalto;
             saltoRecorrido += velocidadSalto;
         } else if (enElAire && cayendo) {
@@ -157,6 +157,7 @@ void compruebaColisionEntorno(Personaje& p, Suelo& s) {
         p.destRec.y = (s.destRec.y - s.destRec.height / 2) - p.destRec.height / 2;
         p.enElAire = false;
         p.cayendo = false;
+        p.saltoRecorrido = 0;
     }
 }
 
