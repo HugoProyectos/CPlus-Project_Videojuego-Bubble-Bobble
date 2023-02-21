@@ -1,7 +1,27 @@
 mapa
-scrolling (cámara)
+scrolling (cámara) --ignorar
 animaciones
 enemigos (npcs)
-objetos (balas, ...)
+objetos (pompas, ...)
 colisiones (detectar que ha tocado suelo)
 física (la caída y subida del salto)
+
+----
+Mapa, scrolling, enemigos
+
+Personaje, burbujas
+
+------
+Mapa, fisica (personaje, enemigos y burbujas)
+
+IA
+
+---------
+Mapa nivel 1 -- (Incluyendo las cosas que sean necesarias para las físicas)
+
+Fisica del personaje -- (sin pompas ni animación)
+
+---------
+Mapa, Enemigos, IA (Enemigos - 2ºJugador)
+
+Personaje, Pompas, Agua, Fisica
