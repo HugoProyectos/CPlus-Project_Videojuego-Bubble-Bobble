@@ -57,11 +57,13 @@ public:
         } else if (saltoRecorrido < distanciaSaltoMax && enElAire && !cayendo) {
             destRec.y -= velocidadSalto;
             saltoRecorrido += velocidadSalto;
-        } else if (enElAire && cayendo) {
+        } else if (enElAire && cayendo && saltoRecorrido > 0) {
             destRec.y += velocidadSalto;
+            saltoRecorrido -= velocidadSalto;
         } else if (enElAire) {
+            saltoRecorrido = 0.0f;
             cayendo = true;
-            destRec.y += velocidadSalto;
+            destRec.y += velocidadSalto/2; //planeo
         }
 
         //Gestión de desplazamiento lateral
