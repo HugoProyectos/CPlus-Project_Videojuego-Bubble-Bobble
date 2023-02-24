@@ -1,17 +1,11 @@
 #pragma once
 #include "raylib.h"
+#include "sprite.hpp"
 #include <string>
 
-class Suelo {
-    const float tamanoMaximo = 6.0f;
+class Suelo : public Sprite {
+    
 public:
-    Texture2D sprite;
-    int frameWidth = 0;
-    int frameHeight = 0;
-
-    Rectangle srcRec, destRec;
-    Vector2 origin;
-    float tamano;
 
     Suelo() = default; //Debe llamarsse a Inicializador
 
