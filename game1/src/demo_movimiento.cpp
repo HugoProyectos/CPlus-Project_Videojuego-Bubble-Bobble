@@ -1,9 +1,11 @@
 #include "raylib.h"
-#include "clasesConSprite/Personaje.cpp"
+#include "clasesConSprite/Bub.cpp"
+
+const int TARGET_FPS = 60;
 
 //cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
 //Se mueve con A y S, y se salta con el espacio
-int not_main(void)
+int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -24,10 +26,10 @@ int not_main(void)
     //PlayMusicStream(fun);
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
-    Personaje bub = Personaje("resources/megaman_standing.png", 0.25f, 30.0f, 1.0f, 1.0f);
+    Bub bub = Bub(2.0f, 30.0f, 1.0f, 1.0f,TARGET_FPS);
     Suelo suelo = Suelo("resources/Suelo.png");
 
-    SetTargetFPS(60);
+    SetTargetFPS(TARGET_FPS);
     // Main game loop
     std::cout << "Inicia bucle" << std::endl;
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -42,7 +44,7 @@ int not_main(void)
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLACK);//RAYWHITE);
 
         suelo.Dibujar();
         bub.Dibujar();
