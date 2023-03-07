@@ -26,7 +26,7 @@ int main(void)
     //PlayMusicStream(fun);
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
-    Bub bub = Bub(2.0f, 30.0f, 1.0f, 1.0f,TARGET_FPS);
+    Bub bub = Bub(2.0f, 30.0f, 2.0f, 1.0f,TARGET_FPS);
     Suelo suelo = Suelo("resources/Suelo.png");
 
     SetTargetFPS(TARGET_FPS);
@@ -50,8 +50,11 @@ int main(void)
         bub.Dibujar();
 
         //DrawText("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200, screenHeight - 20, 10, GRAY);
-        std::string x_extremo = "Suelo sup y " + std::to_string(suelo.destRec.y - suelo.destRec.height / 2);
-        std::string valores = "Megaman inf y= " + std::to_string(bub.destRec.y + bub.destRec.height / 2) + " Valor H = " + std::to_string(bub.frameHeight);
+        std::string x_extremo = "Suelo X izquierda " + std::to_string(suelo.destRec.x - suelo.destRec.width / 2);
+        std::string x_extremo_2 = "Suelo X derecha " + std::to_string(suelo.destRec.x + suelo.destRec.width / 2);
+        std::string x_extremo_3 = "Bub X derecha " + std::to_string(bub.destRec.x + bub.destRec.width / 2);
+        std::string x_extremo_4 = "Bub X izquierda " + std::to_string(bub.destRec.x - bub.destRec.width / 2);
+        std::string valores = "Salto recorrido= " + std::to_string(bub.saltoRecorrido);
         DrawText(valores.c_str(), screenWidth - 600, screenHeight - 30, 20, GRAY);
         DrawText(x_extremo.c_str(), screenWidth - 600, screenHeight - 50, 20, GRAY);
 
