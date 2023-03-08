@@ -208,7 +208,7 @@ public:
 
 //cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
 //Se mueve con A y S, y se salta con el espacio
-int main(void)
+int main_menu(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
