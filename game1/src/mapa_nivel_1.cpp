@@ -126,10 +126,12 @@ public:
 class MainMenu {
 public:
 
-    Texture2D menu[3] = {
+    Texture2D menu[5] = {
         LoadTexture("resources/main_menu/menu_1.png"),
         LoadTexture("resources/main_menu/menu_2.png"),
-        LoadTexture("resources/main_menu/menu_3.png") };
+        LoadTexture("resources/main_menu/menu_3.png"),
+        LoadTexture("resources/main_menu/menu_4.png"),
+        LoadTexture("resources/main_menu/menu_5.png") };
     Texture2D currentMenu = menu[0];
 
     Music music = LoadMusicStream("resources/music/Bubble Bobble Arcade In-Game Music.mp3");
@@ -176,14 +178,23 @@ public:
         UnloadTexture(menu[2]);
     };
 
-    void Actualizar() {
-        UpdateMusicStream(music);
-        iteraciones++;
-        if (iteraciones == frecuencia) {
-            indice = (indice + 1) % 3;
-            iteraciones = 0;
+    void Actualizar(int creditos) {
+        if (creditos == 1) {
+            currentMenu = menu[3];
         }
-        currentMenu = menu[indice];
+        else if (creditos > 1) {
+            currentMenu = menu[4];
+        }
+        else {
+            UpdateMusicStream(music);
+            iteraciones++;
+            if (iteraciones == frecuencia) {
+                indice = (indice + 1) % 3;
+                iteraciones = 0;
+            }
+            currentMenu = menu[indice];
+        }
+
     };
 
     void Dibujar() {
@@ -197,7 +208,7 @@ public:
 
 //cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
 //Se mueve con A y S, y se salta con el espacio
-int mapa_nivel_1(void)
+int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -223,7 +234,7 @@ int mapa_nivel_1(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        main_menu.Actualizar();
+        main_menu.Actualizar(creditos.creditos);
         creditos.Actualizar();
         marcadores.Actualizar();
         //----------------------------------------------------------------------------------
