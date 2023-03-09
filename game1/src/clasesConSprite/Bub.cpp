@@ -31,7 +31,9 @@ public:
     int heightAnimation;
     int switchOrientacion = 1;
     int orientacionActual = 2;
-    
+    int dirCorrer = 0; //0 = parado, 1 = izquierda, 2 = derecha
+    int dirAir = 0; //0 = parado, 1 = izquieda, 2 = derecha
+
     int animacionActiva = 0; //0->StandingAnimation 1->MoveAnimation 2->JumpAnimation 3->FallAnimation 5->ShootingAnimation 6->DyingAninimation
     int targetFrames;
     
@@ -44,13 +46,15 @@ public:
     float distanciaSaltoMax = 0;
     float velocidadSalto = 0;
     float velocidadLateral = 0;
+    float deceleracion = 0.1f;
+    float velocidadActual = 0;
 
     Bub() = default; //Debe llamarse a Inicializador
 
     Bub(float tamano, float saltoMax, float velSalto, float velLateral, int _targetFrames) {
         Inicializador(tamano, saltoMax, velSalto, velLateral, _targetFrames);
     };
-    void Inicializador(float tamano, float saltoMax, float velSalto, float velLateral, int _targetFrames)
+    void Inicializador(float tamano, float saltoMax, float velSalto,float velLateral, int _targetFrames)
     {
         widthAnimation = standingAnimation.width / fStandingAnimation;
         heightAnimation = standingAnimation.height;
@@ -85,44 +89,120 @@ public:
 
     void Actualizar() {
         //Gestión de desplazamiento lateral
-        if (IsKeyDown(KEY_A) || (enElAire && saltoRecorrido > 0 && switchOrientacion == 2)) {
-            animacionActiva = MOVING;
-            switchOrientacion = 2;
-           // std::cout << "Muevo Izquierda, orientacion: " << switchOrientacion << std::endl;
-            destRec.x -= velocidadLateral;
-        }
-        else if (IsKeyDown(KEY_S) || (enElAire && saltoRecorrido > 0 && switchOrientacion == 3)) {
-            animacionActiva = MOVING;
-            switchOrientacion = 3;
-            destRec.x += velocidadLateral;
-           // std::cout << "Muevo Derecha, orientacion: " << switchOrientacion << std::endl;
-        } else {
-            if (!(enElAire && saltoRecorrido == 0)) {
-                switchOrientacion = 1;
+        if (enElAire) {
+            if (saltoRecorrido > 0) {
+                if (dirCorrer == 1) {  //Salta izquierda
+                    if (IsKeyDown(KEY_S)) {
+                        //(OPCIONAL) Añadir que decelere en vez de cambiar repentinamente de velocidad
+                        switchOrientacion = 3;
+                        destRec.x -= velocidadLateral/3;
+                        dirAir = 2;
+                    }
+                    else {
+                        if (IsKeyDown(KEY_A)) {
+                            switchOrientacion = 2;
+                            dirAir = 1;
+                            destRec.x -= velocidadLateral;
+                        }
+                        else if (dirAir == 1) {
+                            destRec.x -= velocidadLateral;
+                        }
+                        else {
+                            destRec.x -= velocidadLateral/3;
+                        }
+                    }
+                }
+                else if (dirCorrer == 2) {  //Salta derecha
+                    if (IsKeyDown(KEY_A)) {
+                        //(OPCIONAL) Añadir que decelere en vez de cambiar repentinamente de velocidad
+                        switchOrientacion = 2;
+                        destRec.x += velocidadLateral/3;
+                        dirAir = 1;
+                    }
+                    else {
+                        if (IsKeyDown(KEY_S)) {
+                            switchOrientacion = 3;
+                            dirAir = 2;
+                            destRec.x += velocidadLateral;
+                        }
+                        else if (dirAir == 2) {
+                            destRec.x += velocidadLateral;
+                        }
+                        else {
+                            destRec.x += velocidadLateral/3;
+                        }
+                    }
+                }
+                else {
+                    if (IsKeyDown(KEY_A)) {
+                        switchOrientacion = 2;
+                        destRec.x -= velocidadLateral / 2;
+                    }
+                    else if (IsKeyDown(KEY_S)) {
+                        switchOrientacion = 3;
+                        destRec.x += velocidadLateral / 2;
+                    }
+                }
+            }else {
+                if (IsKeyDown(KEY_A)) {
+                    animacionActiva = MOVING;
+                    switchOrientacion = 2;
+                    destRec.x -= velocidadLateral/2;
+                }else if(IsKeyDown(KEY_S)) {
+                    animacionActiva = MOVING;
+                    switchOrientacion = 3;
+                    destRec.x += velocidadLateral/2;
+                }
             }
-            animacionActiva = 0;
-           // std::cout << "Dejo de moverme, orientacion: " << switchOrientacion << std::endl;
+        }else {
+            if (IsKeyDown(KEY_A)) {
+                animacionActiva = MOVING;
+                switchOrientacion = 2;
+                std::cout << "Muevo Izquierda, orientacion: " << switchOrientacion << std::endl;
+                destRec.x -= velocidadLateral;
+                dirCorrer = 1;
+                dirAir = 1;
+            }
+            else if (IsKeyDown(KEY_S)) {
+                animacionActiva = MOVING;
+                switchOrientacion = 3;
+                std::cout << "Muevo Derecha, orientacion: " << switchOrientacion << std::endl;
+                destRec.x += velocidadLateral;
+                dirCorrer = 2;
+                dirAir = 2;
+            }
+            else {
+                dirCorrer = 0;
+                if (!(enElAire && saltoRecorrido == 0)) {
+                    switchOrientacion = 1;
+                }
+                animacionActiva = 0;
+            }
         }
 
         //Gestión de salto
         if (IsKeyPressed(KEY_SPACE) && !enElAire) {
-            std::cout << "Salto" << std::endl;
+            //std::cout << "Salto" << std::endl;
             animacionActiva = JUMPING;
             enElAire = true;
-            destRec.y -= velocidadSalto;
-            saltoRecorrido += velocidadSalto;
+            velocidadActual = velocidadSalto;
+            destRec.y -= velocidadActual;
+            saltoRecorrido += velocidadActual;
+            velocidadActual -= deceleracion;
         }
-        else if (saltoRecorrido < distanciaSaltoMax && enElAire && !cayendo) {
+        else if (velocidadActual > 0 && enElAire && !cayendo) {
             animacionActiva = JUMPING;
-            destRec.y -= velocidadSalto;
-            saltoRecorrido += velocidadSalto;
+            destRec.y -= velocidadActual;
+            saltoRecorrido += velocidadActual;
+            velocidadActual -= deceleracion;
         }
         else if (enElAire && cayendo && saltoRecorrido > 0) {
             animacionActiva = FALLING;
-            destRec.y += velocidadSalto;
-            saltoRecorrido -= velocidadSalto;
+            destRec.y -= velocidadActual;
+            saltoRecorrido += velocidadActual;
+            velocidadActual -= deceleracion;
         } else if (enElAire && cayendo) { //Planeando
-            std::cout << "I'm gliding" << std::endl;
+            //std::cout << "I'm gliding" << std::endl;
             animacionActiva = FALLING;
             destRec.y += velocidadSalto / 2;
             saltoRecorrido -= velocidadSalto / 2;
@@ -130,7 +210,9 @@ public:
         else if (enElAire) { //Inicio caída
             animacionActiva = FALLING;
             cayendo = true;
-            destRec.y += velocidadSalto; //planeo
+            destRec.y -= velocidadActual;
+            saltoRecorrido += velocidadActual; //planeo
+            velocidadActual -= deceleracion;
         }
 
         //Actualizar puntero de animacion
