@@ -1,6 +1,10 @@
 #include "raylib.h"
 #include "clasesConSprite/Personaje.cpp"
 #include <string>
+#include <fstream>
+
+#define BLOQUES_ANCHO 28
+#define BLOQUES_ALTO 26
 
 class Marcadores {
 public:
@@ -63,7 +67,7 @@ public:
     }
 };
 
-class Creditos {
+/*class Creditos {
 public:
     unsigned int creditos = 0;
     bool teclaPresionada = false;
@@ -122,98 +126,222 @@ public:
 
 
 };
+*/
 
-class MainMenu {
+class NumeroNivel {
 public:
 
-    Texture2D menu[5] = {
-        LoadTexture("resources/main_menu/menu_1.png"),
-        LoadTexture("resources/main_menu/menu_2.png"),
-        LoadTexture("resources/main_menu/menu_3.png"),
-        LoadTexture("resources/main_menu/menu_4.png"),
-        LoadTexture("resources/main_menu/menu_5.png") };
-    Texture2D currentMenu = menu[0];
+    unsigned int numero_nivel = 1;
+    int x = 0;
+    int y = 0;
+    float tamano_fuente_base;
+    float tamano_fuente;
+    Color color;
 
-    Music music = LoadMusicStream("resources/music/Bubble Bobble Arcade In-Game Music.mp3");
+    NumeroNivel() = default;
 
-    unsigned int frecuencia;
-    unsigned int iteraciones = 0;
+    NumeroNivel(int x, int y, int tamano_fuente_base, Color color, int numero_nivel) {
+        Inicializador(x, y, tamano_fuente_base, color, numero_nivel);
+    }
+
+    void Inicializador(int x, int y, int tamano_fuente_base, Color color, int numero_nivel)
+    {
+        this->x = x;
+        this->y = y;
+        this->color = color;
+        this->tamano_fuente_base = tamano_fuente_base;
+        this->tamano_fuente = GetScreenHeight() / (float)tamano_fuente_base;
+        this->numero_nivel = numero_nivel;
+    }
+
+    ~NumeroNivel() {
+
+    }
+
+    void Unload() {
+    };
+
+    void Actualizar() {
+
+    };
+
+    void Dibujar() {
+        // Dibuja el texto "CREDITOS" y el número de créditos
+        tamano_fuente = GetScreenHeight() / (float)tamano_fuente_base;
+
+        std::string texto = std::to_string(numero_nivel);
+
+        DrawText(texto.c_str(), 10 + MeasureText(texto.c_str(), tamano_fuente), 10, tamano_fuente, RAYWHITE);
+
+    }
+};
+
+class Columnas {
+public:
+    Texture2D bloque_grande;
 
     Rectangle srcRect;
     Rectangle destRect;
 
-    unsigned int indice = 0;
-
     unsigned int margenSuperior = 0;
     unsigned int margenInferior = 0;
 
-    MainMenu() = default; //Debe llamarsse a Inicializador
+    Columnas() = default; //Debe llamarsse a Inicializador
 
-    MainMenu(int frecuencia, int margenSuperior, int margenInferior) {
-        Inicializador(frecuencia, margenSuperior, margenInferior);
+    Columnas(std::string ruta_bloque_grande, int margenSuperior, int margenInferior) {
+        Inicializador(ruta_bloque_grande, margenSuperior, margenInferior);
     };
-    void Inicializador(int frecuencia, int margenSuperior, int margenInferior)
-    {
-        this->frecuencia = frecuencia;
-        // Source rectangle (part of the texture to use for drawing)
-        srcRect = { 0.0f, 0.0f, (float)currentMenu.width, (float)currentMenu.height };
 
-        PlayMusicStream(music);
+    void Inicializador(std::string ruta_bloque_grande, int margenSuperior, int margenInferior)
+    {
+        this->bloque_grande = LoadTexture(ruta_bloque_grande.c_str());
+        // Source rectangle (part of the texture to use for drawing)
+        srcRect = {0.0f, 0.0f, (float)bloque_grande.width, (float)bloque_grande.height};
 
         this->margenSuperior = margenSuperior;
         this->margenInferior = margenInferior;
     }
 
-    ~MainMenu() {
-        UnloadMusicStream(music);
-        UnloadTexture(menu[0]);
-        UnloadTexture(menu[1]);
-        UnloadTexture(menu[2]);
+    ~Columnas() {
+        UnloadTexture(bloque_grande);
     };
 
     void Unload() {
-        UnloadMusicStream(music);
-        UnloadTexture(menu[0]);
-        UnloadTexture(menu[1]);
-        UnloadTexture(menu[2]);
+        UnloadTexture(bloque_grande);
     };
 
-    void Actualizar(int creditos) {
-        if (creditos == 1) {
-            currentMenu = menu[3];
-        }
-        else if (creditos > 1) {
-            currentMenu = menu[4];
-        }
-        else {
-            UpdateMusicStream(music);
-            iteraciones++;
-            if (iteraciones == frecuencia) {
-                indice = (indice + 1) % 3;
-                iteraciones = 0;
-            }
-            currentMenu = menu[indice];
-        }
+    void Actualizar() {
+        //TODO
 
     };
 
     void Dibujar() {
         // Destination rectangle (screen rectangle where drawing part of texture)
-        int altura = GetScreenHeight();
-        destRect = { 0, (float)GetScreenHeight() / 14 , (float)GetScreenWidth(), (float)altura * 12 / 14 };
-        DrawTexturePro(currentMenu, srcRect, destRect, Vector2{ 0,0 }, 0, WHITE);
+        float altura_bloque = (GetScreenHeight() - margenInferior - margenSuperior) / (float)13;
+        float anchura_bloque = GetScreenWidth() / (float)16;
+
+        // Columna izquierda
+        destRect = { 0, (float)margenSuperior, anchura_bloque, altura_bloque };
+        for (int i = 0; i < 13 ; i++)
+        {
+            DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+            destRect.y += altura_bloque;
+        }
+
+        // Columna derecha
+        destRect = { (GetScreenWidth() - anchura_bloque), (float)margenSuperior, anchura_bloque, altura_bloque};
+        for (int i = 0; i < 13 ; i++)
+        {
+            DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+            destRect.y += altura_bloque;
+        }
+    }
+};
+
+class Mapa {
+public:
+    Texture2D bloque_pequeno;
+    bool huecos[BLOQUES_ALTO][BLOQUES_ANCHO];
+    Rectangle srcRect;
+    Rectangle destRect;
+
+    unsigned int margenSuperior = 0;
+    unsigned int margenInferior = 0;
+
+    Mapa() = default;
+
+    Mapa(std::string ruta_bloque_pequeno, bool (*huecos)[BLOQUES_ANCHO], int margenSuperior, int margenInferior) {
+        
+        Inicializador(ruta_bloque_pequeno, huecos, margenSuperior, margenInferior);
+    }
+    void Inicializador(std::string ruta_bloque_pequeno, bool (*huecos)[BLOQUES_ANCHO], int margenSuperior, int margenInferior)
+    {
+        for (int i = 0; i < BLOQUES_ALTO; i++) {
+            for (int j = 0; j < BLOQUES_ANCHO; j++) {
+                this->huecos[i][j] = huecos[i][j];
+            }
+        }
+        this->bloque_pequeno = LoadTexture(ruta_bloque_pequeno.c_str());
+        // Source rectangle (part of the texture to use for drawing)
+        srcRect = {0.0f, 0.0f, (float)bloque_pequeno.width, (float)bloque_pequeno.height};
+
+        this->margenSuperior = margenSuperior;
+        this->margenInferior = margenInferior;
+    }
+    ~Mapa() {
+        UnloadTexture(bloque_pequeno);
+    };
+
+    void Unload() {
+        UnloadTexture(bloque_pequeno);
+    };
+
+    void Actualizar() {}
+
+    
+    void Dibujar() {
+        // Destination rectangle (screen rectangle where drawing part of texture)
+        float altura_bloque = (GetScreenHeight() - margenSuperior - margenInferior )/ (float)26;
+        float anchura_bloque = GetScreenWidth()/ (float)32;
+
+        float anchura_columna = GetScreenWidth() / (float)16; // Anchura de cada columna
+
+        destRect = {
+            anchura_columna, // Posicion x de la esquina topleft
+            (float)margenSuperior, // Posicion y de la esquina topleft
+            anchura_bloque,  // anchura bloque
+            altura_bloque // altura bloque
+        };
+
+        for (int i = 0; i < BLOQUES_ALTO; i++) {
+            for (int j = 0; j < BLOQUES_ANCHO; j++) {
+                if (huecos[i][j]) {
+                    DrawTexturePro(bloque_pequeno, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);  
+                }
+                destRect.x += anchura_bloque;
+            }
+            destRect.y += destRect.height;
+            destRect.x = anchura_columna;
+        }
+    }
+};
+
+void leerArchivo(std::string nombreArchivo, bool matriz[BLOQUES_ALTO][BLOQUES_ANCHO]) {
+    std::ifstream archivo(nombreArchivo);
+
+    if (!archivo) {
+        std::cerr << "No se pudo abrir el archivo " << nombreArchivo << std::endl;
+        exit(1);
     }
 
-};
+    for (int i = 0; i < BLOQUES_ALTO; i++) {
+        for (int j = 0; j < BLOQUES_ANCHO; j++) {
+            char caracter;
+            archivo >> caracter;
+            if (caracter == '1') {
+                matriz[i][j] = true;
+            }
+            else if (caracter == '0') {
+                matriz[i][j] = false;
+            }
+            else {
+                j--; // retrocede una columna para repetir la lectura
+            }
+        }
+    }
+
+    archivo.close();
+}
 
 //cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
 //Se mueve con A y S, y se salta con el espacio
-int main(void)
+int mapa_nivel_1(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
+    
 
     InitWindow(screenWidth, screenHeight, "Bubble Bobble");
     SetWindowMinSize(200, 200);
@@ -223,9 +351,15 @@ int main(void)
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
     // Cargo el fondo
-    MainMenu main_menu = MainMenu(10, 40, 70);
-    Creditos creditos = Creditos(15, 10, 20, KEY_SIX);
+    Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40,0);
+
+    bool huecos[BLOQUES_ALTO][BLOQUES_ANCHO];
+
+    leerArchivo("resources/mapa_nivel_1/mapa_nivel_1.txt", huecos);
+
+    Mapa mapa = Mapa("resources/mapa_nivel_1/bloque_pequeno.png", huecos, 40, 0);
     Marcadores marcadores = Marcadores(0, 0, 20, SKYBLUE);
+    NumeroNivel numero_nivel= NumeroNivel(40, 0, 20, SKYBLUE, 1);
 
     SetTargetFPS(60);
     // Main game loop
@@ -234,9 +368,10 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        main_menu.Actualizar(creditos.creditos);
-        creditos.Actualizar();
+        columnas.Actualizar();
+        mapa.Actualizar();
         marcadores.Actualizar();
+        numero_nivel.Actualizar();
         //----------------------------------------------------------------------------------
 
 
@@ -245,10 +380,10 @@ int main(void)
         BeginDrawing();
         ClearBackground(BLACK);
 
-        main_menu.Dibujar();
-        creditos.Dibujar();
+        columnas.Dibujar();
+        mapa.Dibujar();
         marcadores.Dibujar();
-
+        numero_nivel.Dibujar();
 
         EndDrawing();
         //----------------------------------------------------------------------------------
@@ -256,9 +391,10 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    main_menu.Unload();
-    creditos.Unload();
+    columnas.Unload();
+    mapa.Unload();
     marcadores.Unload();
+    numero_nivel.Unload();
 
     CloseAudioDevice();
     CloseWindow();                // Close window and OpenGL context
