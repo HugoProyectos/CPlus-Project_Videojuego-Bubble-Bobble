@@ -42,7 +42,7 @@ public:
     bool cayendo = false;
     float saltoRecorrido = 0;
     float distanciaSaltoMax = 0;
-    float velocidadSalto = 0;
+    float velocidadSalto = 0;  //Añadir aceleracion, y hacer que velocidad nueva = velocidad anterior + aceleracion. Empezar con una aceleracion inicial, y que se le vayan restando valores. A partir de cierta velocidad, capar. Hay que comprobar que el tope coincida con el planeo.
     float velocidadLateral = 0;
 
     Bub() = default; //Debe llamarse a Inicializador
