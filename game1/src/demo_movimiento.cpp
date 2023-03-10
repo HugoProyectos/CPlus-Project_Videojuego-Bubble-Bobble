@@ -26,7 +26,7 @@ int main(void)
     //PlayMusicStream(fun);
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
-    Bub bub = Bub(2.0f, 30.0f, 2.0f, 1.0f,TARGET_FPS);
+    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f,TARGET_FPS);
     Suelo suelo = Suelo("resources/Suelo.png");
 
     SetTargetFPS(TARGET_FPS);
