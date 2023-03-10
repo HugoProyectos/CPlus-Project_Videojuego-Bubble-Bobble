@@ -10,6 +10,9 @@ public:
     bool golpeado = false;
     bool enfadado = false;
     float velocidadLateral = 0;
+    float velocidadSalto = 0;
+    float saltoRecorrido = 0;
+    float distanciaSaltoMax = 0;
 
     Enemigo() = default; //Debe llamarsse a Inicializador
 
@@ -20,6 +23,8 @@ public:
     {
         sprite = LoadTexture(rutaTextura.c_str());// Texture loading
         velocidadLateral = velLateral;
+        velocidadSalto = velSalto;
+        distanciaSaltoMax = saltoMax;
 
         frameWidth = sprite.width;
         frameHeight = sprite.height;
@@ -47,7 +52,7 @@ public:
         DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
     }
 
-    void compruebaColision(const Suelo& s) {
+    void compruebaColisionSuelo(const Suelo& s) {
         if ((destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2)) { //Choca abajo
             destRec.y = (s.destRec.y - s.destRec.height / 2) - destRec.height / 2;
             enElAire = false;

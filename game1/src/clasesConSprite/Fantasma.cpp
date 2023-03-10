@@ -1,10 +1,10 @@
 #pragma once
 #include "Enemigo.cpp"
 
-class Robot : public Enemigo {
+class Fantasma : public Enemigo {
 public:
     
-    Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral) {
+    Fantasma(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
     };
 
@@ -21,7 +21,7 @@ public:
         }
     }
 
-    //funciones de comportamiento
+    //Funciones de comportamiento
     void MoverIzq() {
         destRec.x -= velocidadLateral;
     }
@@ -51,7 +51,8 @@ public:
         }
     }
 
-
+    //Invocación de bola de fuego
+    
     //Comporbacion de colisiones
     //Herencia de void compruebaColisionSuelo(const Suelo& s)
 };

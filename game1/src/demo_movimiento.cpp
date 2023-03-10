@@ -1,5 +1,7 @@
 #include "raylib.h"
 #include "clasesConSprite/Personaje.cpp"
+#include "clasesConSprite/Robot.cpp"
+#include "clasesConSprite/Enemigo.cpp"
 
 //cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
 //Se mueve con A y S, y se salta con el espacio
@@ -24,7 +26,9 @@ int main(void)
     //PlayMusicStream(fun);
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
-    Personaje bub = Personaje("resources/megaman_standing.png", 0.25f, 30.0f, 1.0f, 1.0f);
+    Personaje bub = Personaje("resources/Suelo.png", 0.25f, 80.0f, 1.0f, 4.0f);
+    Robot robot = Robot("resources/Suelo.png", 0.25f, 40.0f, 1.0f, 1.0f);
+
     Suelo suelo = Suelo("resources/Suelo.png");
 
     SetTargetFPS(60);
@@ -36,6 +40,8 @@ int main(void)
         //----------------------------------------------------------------------------------
         bub.Actualizar();
         bub.compruebaColision(suelo);
+        robot.Actualizar(bub.destRec);
+        robot.compruebaColisionSuelo(suelo);
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -45,11 +51,12 @@ int main(void)
         ClearBackground(RAYWHITE);
 
         suelo.Dibujar();
+        robot.Dibujar();
         bub.Dibujar();
 
         //DrawText("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200, screenHeight - 20, 10, GRAY);
         std::string x_extremo = "Suelo sup y " + std::to_string(suelo.destRec.y - suelo.destRec.height / 2);
-        std::string valores = "Megaman inf y= " + std::to_string(bub.destRec.y + bub.destRec.height / 2) + " Valor H = " + std::to_string(bub.frameHeight);
+        std::string valores = "Megaman inf y= " + std::to_string(robot.destRec.y + robot.destRec.height / 2) + " Valor H = " + std::to_string(bub.frameHeight);
         DrawText(valores.c_str(), screenWidth - 600, screenHeight - 30, 20, GRAY);
         DrawText(x_extremo.c_str(), screenWidth - 600, screenHeight - 50, 20, GRAY);
 
@@ -59,8 +66,9 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
+    robot.Unload();
     bub.Unload();
-    suelo.UnloadAsteroide();
+    //suelo.UnloadAsteroide();
     UnloadMusicStream(fun);
 
     CloseAudioDevice();
