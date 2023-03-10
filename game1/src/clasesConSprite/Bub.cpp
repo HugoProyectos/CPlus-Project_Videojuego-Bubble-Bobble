@@ -27,8 +27,8 @@ public:
     Texture2D glidingAnimation = LoadTexture("resources/Players/Bobblun/Caida.png");
     int fGlidingAnimation = 4; //Número de fotogramas
 
-    int widthAnimation;
-    int heightAnimation;
+    int widthAnimation = 16;
+    int heightAnimation = 16;
     int switchOrientacion = 1;
     int orientacionActual = 2;
     int dirCorrer = 0; //0 = parado, 1 = izquierda, 2 = derecha
@@ -56,8 +56,9 @@ public:
     };
     void Inicializador(float tamano, float saltoMax, float velSalto,float velLateral, int _targetFrames)
     {
-        widthAnimation = standingAnimation.width / fStandingAnimation;
-        heightAnimation = standingAnimation.height;
+        sprite = LoadTexture("resources/Players/Bobblun/animation_set.png");
+        //widthAnimation = standingAnimation.width / fStandingAnimation;
+        //heightAnimation = standingAnimation.height;
         targetFrames = _targetFrames;
 
         std::cout << "Anchura y altura de un fotograma" << std::endl;
@@ -240,13 +241,16 @@ public:
     };
 
     void Dibujar() {
-        srcRec.x = (float)widthAnimation * (float)indiceAnimacion; //Cambia el fotograma   
+        srcRec.x = (float)widthAnimation * (float)indiceAnimacion; //Cambia el fotograma
         if ((switchOrientacion == 2 && orientacionActual == 3) || (switchOrientacion == 3 && orientacionActual == 2)) {
             std::cout << "Cambio de orientacion" << std::endl;
             srcRec.width *= -1; //Cambia la orientacion
             orientacionActual = switchOrientacion;
         }
         //std::cerr << "Indice Animacion: " << indiceAnimacion << std::endl;
+        srcRec.y = (float)widthAnimation * (float)animacionActiva;
+        DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
+        /*
         switch (animacionActiva) { //A los switch no le gustan las constantes, así que a morir al palo
         case 0:
             DrawTexturePro(standingAnimation, srcRec, destRec, origin, 0.0f, WHITE);
@@ -262,7 +266,7 @@ public:
             break;
         default:
             break;
-        }
+        }*/
     }
 
     void compruebaColision(const Suelo& s) {
