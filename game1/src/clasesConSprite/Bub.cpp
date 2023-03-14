@@ -26,6 +26,8 @@ public:
     int fFallingAnimation = 4; //Número de fotogramas
     Texture2D glidingAnimation = LoadTexture("resources/Players/Bobblun/Caida.png");
     int fGlidingAnimation = 4; //Número de fotogramas
+    Texture2D deathAnimation = LoadTexture("resources/Players/Bobblun/Muerte.png");
+    int fDeathAnimation = 30; //Numero de fotogramas
 
     int widthAnimation = 16;
     int heightAnimation = 16;
@@ -34,7 +36,7 @@ public:
     int dirCorrer = 0; //0 = parado, 1 = izquierda, 2 = derecha
     int dirAir = 0; //0 = parado, 1 = izquieda, 2 = derecha
 
-    int animacionActiva = 0; //0->StandingAnimation 1->MoveAnimation 2->JumpAnimation 3->FallAnimation 5->ShootingAnimation 6->DyingAninimation
+    int animacionActiva = 5; //0->StandingAnimation 1->MoveAnimation 2->JumpAnimation 3->FallAnimation 4->ShootingAnimation 5->DyingAninimation
     int targetFrames;
     
     int indiceAnimacion = 0;
@@ -90,6 +92,7 @@ public:
 
     void Actualizar() {
         //Gestión de desplazamiento lateral
+        /*
         if (enElAire) {
             if (saltoRecorrido > 0) {
                 if (dirCorrer == 1) {  //Salta izquierda
@@ -215,7 +218,7 @@ public:
             saltoRecorrido += velocidadActual; //planeo
             velocidadActual -= deceleracion;
         }
-
+        */
         //Actualizar puntero de animacion
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames) ) {
@@ -234,6 +237,8 @@ public:
             case 3:
                 indiceAnimacion = (indiceAnimacion + 1) % fFallingAnimation;
                 break;
+            case 5:
+                indiceAnimacion = (indiceAnimacion + 1) % fDeathAnimation;
             default:
                 break;
             }
