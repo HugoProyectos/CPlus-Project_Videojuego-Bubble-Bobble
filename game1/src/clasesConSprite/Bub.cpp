@@ -17,6 +17,8 @@ class Bub : public Sprite {
     const int SHOOTING = 4;
     const int DYING = 5;
 
+    const int NUM_FILAS = 4; //número de filas en el animation_set
+
     int fStandingAnimation = 4; //Número de fotogramas de la StandingAnimation
     int fMovingAnimation = 4; //Número de fotogramas
     int fJumpingAnimation = 4; //Número de fotogramas
@@ -185,7 +187,7 @@ public:
             }
             disparando = true;
             animacionActiva = SHOOTING;
-            indiceAnimacion = 0;
+            indiceAnimacion = 6; //Es el 0 de la segunda parte de animaciones
             Pompa p = Pompa(destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, 100);
             admin->pompas.push_back(p);
         } else if(!enElAire) {
@@ -269,7 +271,7 @@ public:
                 break;
             case 4:
                 indiceAnimacion++;
-                if (indiceAnimacion >= fShootingAnimation) {
+                if (indiceAnimacion >= (fShootingAnimation+6)) {
                     std::cout << "Puede volver a disparar" << std::endl;
                     disparando = false;
                     animacionActiva = STANDING;
@@ -290,7 +292,7 @@ public:
             orientacionActual = switchOrientacion;
         }
         //std::cerr << "Indice Animacion: " << indiceAnimacion << std::endl;
-        srcRec.y = (float)widthAnimation * (float)animacionActiva;
+        srcRec.y = (float)widthAnimation * (float)(animacionActiva%NUM_FILAS);
         DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
     }
 
