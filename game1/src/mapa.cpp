@@ -9,129 +9,6 @@
 #define BLOQUE_GRANDE_ANCHO 16
 #define BLOQUE_GRANDE_ALTO 13
 
-class Marcadores {
-public:
-    unsigned int puntuacion1 = 0;
-    unsigned int puntuacion_maxima = 300000;
-    unsigned int puntuacion2 = 0;
-
-    float x = 0;
-    float y = 0;
-    float tamano_fuente_base;
-    float tamano_fuente;
-    Color color;
-
-    Marcadores() = default;
-
-    Marcadores(float x, float y, float tamano_fuente_base, Color color) {
-        Inicializador(x, y, tamano_fuente_base, color);
-    }
-
-    void Inicializador(float x, float y, float tamano_fuente_base, Color color)
-    {
-        this->x = x;
-        this->y = y;
-        this->color = color;
-        this->tamano_fuente_base = tamano_fuente_base;
-        this->tamano_fuente = GetScreenHeight() / tamano_fuente_base;
-    }
-
-    ~Marcadores() {
-
-    }
-
-    void Unload() {
-    };
-
-    void Actualizar() {
-
-    };
-
-    void Dibujar() {
-        // Dibuja el texto "CREDITOS" y el número de créditos
-        tamano_fuente = GetScreenHeight() / tamano_fuente_base;
-
-        std::string texto1 = "1UP ";
-        std::string texto2 = "HIGH SCORE ";
-        std::string texto3 = "2UP ";
-
-        float tamano_texto1 = MeasureText((texto1 + std::to_string(puntuacion1)).c_str(), tamano_fuente);
-        float tamano_texto2 = MeasureText((texto2 + std::to_string(puntuacion_maxima)).c_str(), tamano_fuente);
-        float tamano_texto3 = MeasureText((texto3 + std::to_string(puntuacion2)).c_str(), tamano_fuente);
-
-        DrawText(texto1.c_str(), 10, 10, tamano_fuente, GREEN);
-        DrawText(std::to_string(puntuacion1).c_str(), 10 + MeasureText(texto1.c_str(), tamano_fuente), 10, tamano_fuente, RAYWHITE);
-
-        DrawText(texto2.c_str(), GetScreenWidth() / 2 - tamano_texto2 / 2, 10, tamano_fuente, RED);
-        DrawText(std::to_string(puntuacion_maxima).c_str(), GetScreenWidth() / 2 - tamano_texto2 / 2 + MeasureText(texto2.c_str(), tamano_fuente), 10, tamano_fuente, RAYWHITE);
-
-        DrawText(texto3.c_str(), GetScreenWidth() - 10 - tamano_texto3, 10, tamano_fuente, SKYBLUE);
-        DrawText(std::to_string(puntuacion2).c_str(), GetScreenWidth() - 10 - tamano_texto3 + MeasureText(texto3.c_str(), tamano_fuente), 10, tamano_fuente, RAYWHITE);
-    }
-};
-
-/*class Creditos {
-public:
-    unsigned int creditos = 0;
-    bool teclaPresionada = false;
-
-    int x = 0;
-    int y = 0;
-    int tamano_fuente_base;
-    int tamano_fuente;
-    int tecla = KEY_SIX;
-
-    Creditos() = default;
-
-    Creditos(int x, int y, int tamano_fuente_base, int tecla) {
-        Inicializador(x, y, tamano_fuente_base, tecla);
-    }
-
-    void Inicializador(int x, int y, int tamano_fuente_base, int tecla)
-    {
-        this->x = x;
-        this->y = y;
-        this->tamano_fuente_base = tamano_fuente_base;
-        this->tecla = tecla;
-        this->tamano_fuente = GetScreenHeight() / tamano_fuente_base;
-    }
-
-    ~Creditos() {
-
-    }
-
-    void Unload() {
-    };
-
-    void Actualizar() {
-        if (IsKeyDown(tecla) && !teclaPresionada)
-        {
-            // Realiza la acción que desees cuando se presione la tecla
-            // Por ejemplo, puedes imprimir un mensaje en la consola
-            teclaPresionada = true;
-            creditos++;
-        }
-
-        // Comprueba si se ha liberado la tecla
-        if (!IsKeyDown(tecla) && teclaPresionada)
-        {
-            teclaPresionada = false;  // Actualiza la variable para indicar que la tecla ha sido liberada
-        }
-    };
-
-    void Dibujar() {
-        // Dibuja el texto "CREDITOS" y el número de créditos
-        tamano_fuente = GetScreenHeight() / tamano_fuente_base;
-        std::string texto = "CREDITOS: " + std::to_string(creditos);
-        int tamano_texto = MeasureText(texto.c_str(), tamano_fuente);
-        DrawText(texto.c_str(), GetScreenWidth() - x - tamano_texto, GetScreenHeight() - y - tamano_fuente, tamano_fuente, RAYWHITE);
-    }
-
-
-};
-*/
-
-
 class NumeroNivel {
 public:
 
@@ -415,7 +292,7 @@ int main2(void)
     //Mapa mapa = Mapa("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/bloque_grande.png", "resources/mapa_nivel_1/mapa_nivel_1_v2.txt");
     Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 20.0f, 0.0f);
     Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa_nivel_1_v2.txt", 20.0f, 0.0f);
-    Marcadores marcadores = Marcadores(0, 0, 20, SKYBLUE);
+    Scores scores = Scores(0, 0, 20, SKYBLUE);
 
     SetTargetFPS(60);
     // Main game loop
@@ -426,7 +303,7 @@ int main2(void)
         //----------------------------------------------------------------------------------
         columnas.Actualizar();
         plataformas.Actualizar();
-        marcadores.Actualizar();
+        scores.Actualizar();
         //----------------------------------------------------------------------------------
 
 
@@ -437,7 +314,7 @@ int main2(void)
 
         columnas.Dibujar();
         plataformas.Dibujar();
-        marcadores.Dibujar();
+        scores.Dibujar();
 
         EndDrawing();
         //----------------------------------------------------------------------------------
@@ -447,7 +324,7 @@ int main2(void)
     //--------------------------------------------------------------------------------------
     columnas.Unload();
     plataformas.Unload();
-    marcadores.Unload();
+    scores.Unload();
 
     CloseAudioDevice();
     CloseWindow();                // Close window and OpenGL context
