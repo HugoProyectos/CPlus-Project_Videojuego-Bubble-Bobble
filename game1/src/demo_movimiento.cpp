@@ -28,8 +28,8 @@ int main(void)
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
     AdministradorPompas admin = AdministradorPompas();
 
-    Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f + 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
-    Pompa p = Pompa(destRec,0.0,5.0,true,300);
+    Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
+    Pompa p = Pompa(destRec,5.0,200.0,true,100);
 
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f,TARGET_FPS, admin);
     Suelo suelo = Suelo("resources/Suelo.png");
@@ -41,10 +41,10 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        bub.Actualizar();
-        bub.compruebaColision(suelo);
-        admin.actualizaPompas();
-        p.Actualizar();
+       bub.Actualizar();
+       bub.compruebaColision(suelo);
+       admin.actualizaPompas();
+       p.Actualizar();
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -56,7 +56,7 @@ int main(void)
         suelo.Dibujar();
         bub.Dibujar();
         admin.dibujaPompas();
-        p.Dibujar();
+        //p.Dibujar();
 
         //DrawText("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200, screenHeight - 20, 10, GRAY);
         std::string x_extremo = "Suelo X izquierda " + std::to_string(suelo.destRec.x - suelo.destRec.width / 2);
@@ -68,10 +68,18 @@ int main(void)
         std::string disparando = "disparando= " + std::to_string(bub.disparando);
         std::string valores = "Salto recorrido= " + std::to_string(bub.saltoRecorrido);
         
-        if (admin.pompas.size() > 0) {
-            std::string pompa = "Posicion X de la pompa= " + std::to_string(admin.pompas.at(0).destRec.x);
+        //if (admin.pompas.size() > 0) {
+        /*std::string pompa = "Posicion X de la pompa= " + std::to_string(p.destRec.x);//std::to_string(admin.pompas.at(0).destRec.x);
             DrawText(pompa.c_str(), screenWidth - 600, screenHeight - 90, 20, GRAY);
-        }
+            std::string vida = "Vida de la pompa = " + std::to_string(p.tVida);
+            DrawText(vida.c_str(), screenWidth - 600, screenHeight - 110, 20, GRAY);
+            std::string disparada = "disparada: " + std::to_string(p.disparada);
+            DrawText(disparada.c_str(), screenWidth - 600, screenHeight - 30, 20, GRAY);
+            std::string animacion = "ANIMACION: " + std::to_string(p.animacionActiva);
+            DrawText(animacion.c_str(), screenWidth - 600, screenHeight - 50, 20, GRAY);
+
+            //}
+            */
         DrawText(x_bub.c_str(), screenWidth - 600, screenHeight - 110, 20, GRAY);
         DrawText(disparando.c_str(), screenWidth - 600, screenHeight - 70, 20, GRAY);
         DrawText(valores.c_str(), screenWidth - 600, screenHeight - 30, 20, GRAY);

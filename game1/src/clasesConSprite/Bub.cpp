@@ -23,8 +23,8 @@ class Bub : public Sprite {
     int fFallingAnimation = 4; //Número de fotogramas
     int fShootingAnimation = 5; //Número de fotogramas
 
-    const float VELOCIDAD_DISPARO = 2.0;
-    const float DISTANCIA_DISPARO = 20.0;
+    const float VELOCIDAD_DISPARO = 5.0;
+    const float DISTANCIA_DISPARO = 200.0;
 
 public:
     
@@ -163,11 +163,11 @@ public:
                 }
             }else {
                 if (IsKeyDown(KEY_A)) {
-                    animacionActiva = MOVING;
+                    if (!disparando) animacionActiva = MOVING;
                     switchOrientacion = 2;
                     destRec.x -= velocidadLateral/2;
                 }else if(IsKeyDown(KEY_S)) {
-                    animacionActiva = MOVING;
+                    if (!disparando) animacionActiva = MOVING;
                     switchOrientacion = 3;
                     destRec.x += velocidadLateral/2;
                 }
@@ -177,16 +177,16 @@ public:
         // Se puede disparar en el aire. Las acciones en el aire no se ven limitadas por el disparo, 
         // pero las del suelo sí. Para mantener la idea if/else de en el aire o en el suelo, 
         // al del suelo se le ha añaido la restricción opuesta al de en el aire (!enElAire)
-        if (IsKeyPressed(KEY_F) & !disparando) { 
+        if (IsKeyPressed(KEY_F) && !disparando) { 
             std::cout << "Dispara" << std::endl;
             int sentido = 1; //Hacia la derecha
-            if (switchOrientacion == 2) { //Si es hacia la izquierda
+            if (orientacionActual == 2) { //Si es hacia la izquierda
                 sentido = -1;
             }
             disparando = true;
             animacionActiva = SHOOTING;
             indiceAnimacion = 0;
-            Pompa p = Pompa(destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, 300);
+            Pompa p = Pompa(destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, 100);
             admin->pompas.push_back(p);
         } else if(!enElAire) {
             if (IsKeyDown(KEY_A)) {
