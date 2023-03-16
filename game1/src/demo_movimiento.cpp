@@ -44,7 +44,7 @@ int main(void)
        bub.Actualizar();
        bub.compruebaColision(suelo);
        admin.actualizaPompas();
-       p.Actualizar();
+       //p.Actualizar();
         //----------------------------------------------------------------------------------
 
         // Draw

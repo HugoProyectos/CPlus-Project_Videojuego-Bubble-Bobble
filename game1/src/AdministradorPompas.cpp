@@ -31,7 +31,7 @@ public:
 			}
 		}
 		if (pompas.size() == 0) {
-			std::cout << "Sin pompas que actualizar" << std::endl;
+			//std::cout << "Sin pompas que actualizar" << std::endl;
 		}
 	};
 

@@ -74,13 +74,13 @@ public:
 		vidaMaxima = tiempoVida;
 		velocidadFrames = 8;
 		if (esDisparada) {
-			std::cout << "Disparada" << std::endl;
+			//std::cout << "Disparada" << std::endl;
 			disparada = 2;
 			this->distanciaDisparo = distanciaDisparo;
 			animacionActiva = DISPARO;
 		}
 		else {
-			std::cout << "NO Disparada" << std::endl;
+			//std::cout << "NO Disparada" << std::endl;
 			disparada = 0;
 			animacionActiva = VACIA;
 		}
@@ -133,16 +133,16 @@ public:
 				break;
 			case 4: //Explota
 				indiceAnimacion++;
-				std::cout << "Actualiza Anim a:" << indiceAnimacion << " fExplota: " << fExplota << std::endl;
+				//std::cout << "Actualiza Anim a:" << indiceAnimacion << " fExplota: " << fExplota << std::endl;
 				if (indiceAnimacion >= fExplota) {
 					indiceAnimacion = 0;
-					std::cout << "brickeo: " << indiceAnimacion << std::endl;
+					//std::cout << "brickeo: " << indiceAnimacion << std::endl;
 					matame = true;
 				}
-				std::cout << "Al salir es:" << indiceAnimacion << " fExplota: " << fExplota << std::endl;
+				//std::cout << "Al salir es:" << indiceAnimacion << " fExplota: " << fExplota << std::endl;
 				break;
 			default:
-				std::cout << "WHAT" << std::endl;
+				//std::cout << "WHAT" << std::endl;
 				indiceAnimacion = 0;
 				break;
 			};

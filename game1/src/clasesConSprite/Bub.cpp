@@ -178,7 +178,7 @@ public:
         // pero las del suelo sí. Para mantener la idea if/else de en el aire o en el suelo, 
         // al del suelo se le ha añaido la restricción opuesta al de en el aire (!enElAire)
         if (IsKeyPressed(KEY_F) && !disparando) { 
-            std::cout << "Dispara" << std::endl;
+            //std::cout << "Dispara" << std::endl;
             int sentido = 1; //Hacia la derecha
             if (orientacionActual == 2) { //Si es hacia la izquierda
                 sentido = -1;
@@ -285,7 +285,7 @@ public:
     void Dibujar() {
         srcRec.x = (float)widthAnimation * (float)indiceAnimacion; //Cambia el fotograma
         if ((switchOrientacion == 2 && orientacionActual == 3) || (switchOrientacion == 3 && orientacionActual == 2)) {
-            std::cout << "Cambio de orientacion" << std::endl;
+            //std::cout << "Cambio de orientacion" << std::endl;
             srcRec.width *= -1; //Cambia la orientacion
             orientacionActual = switchOrientacion;
         }
