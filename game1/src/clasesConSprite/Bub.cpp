@@ -1,6 +1,8 @@
 #pragma once
 #include "Sprite.hpp"
 #include "Suelo.cpp"
+#include "Pompa.cpp"
+#include "../AdministradorPompas.cpp"
 #include <iostream>
 
 
@@ -15,17 +17,27 @@ class Bub : public Sprite {
     const int SHOOTING = 4;
     const int DYING = 5;
 
-public:
-    Texture2D standingAnimation = LoadTexture("resources/Players/Bobblun/standing.png");
     int fStandingAnimation = 4; //Número de fotogramas de la StandingAnimation
-    Texture2D movingAnimation = LoadTexture("resources/Players/Bobblun/move.png");
     int fMovingAnimation = 4; //Número de fotogramas
-    Texture2D jumpingAnimation = LoadTexture("resources/Players/Bobblun/Subida.png");
     int fJumpingAnimation = 4; //Número de fotogramas
-    Texture2D fallingAnimation = LoadTexture("resources/Players/Bobblun/Caida.png");
     int fFallingAnimation = 4; //Número de fotogramas
-    Texture2D glidingAnimation = LoadTexture("resources/Players/Bobblun/Caida.png");
-    int fGlidingAnimation = 4; //Número de fotogramas
+    int fShootingAnimation = 5; //Número de fotogramas
+
+    const float VELOCIDAD_DISPARO = 2.0;
+    const float DISTANCIA_DISPARO = 20.0;
+
+public:
+    
+
+    // VARIABLES PARA LA GENERACIÓN DE POMPAS
+    bool disparando = false;
+    int multiplicadorVelocidadDisparo = 1;
+    int multiplicadorDistanciaDisparo = 1;
+
+    // Referencia al administrador de pompas
+    AdministradorPompas* admin;
+
+
 
     int widthAnimation = 16;
     int heightAnimation = 16;
@@ -51,11 +63,14 @@ public:
 
     Bub() = default; //Debe llamarse a Inicializador
 
-    Bub(float tamano, float saltoMax, float velSalto, float velLateral, int _targetFrames) {
-        Inicializador(tamano, saltoMax, velSalto, velLateral, _targetFrames);
+    Bub(float tamano, float saltoMax, float velSalto, float velLateral, int _targetFrames, AdministradorPompas& adm) {
+        Inicializador(tamano, saltoMax, velSalto, velLateral, _targetFrames, adm);
     };
-    void Inicializador(float tamano, float saltoMax, float velSalto,float velLateral, int _targetFrames)
+    void Inicializador(float tamano, float saltoMax, float velSalto,float velLateral, int _targetFrames, AdministradorPompas& adm)
     {
+        //
+        admin = &adm;
+
         sprite = LoadTexture("resources/Players/Bobblun/animation_set.png");
         //widthAnimation = standingAnimation.width / fStandingAnimation;
         //heightAnimation = standingAnimation.height;
@@ -90,6 +105,8 @@ public:
 
     void Actualizar() {
         //Gestión de desplazamiento lateral
+        
+
         if (enElAire) {
             if (saltoRecorrido > 0) {
                 if (dirCorrer == 1) {  //Salta izquierda
@@ -155,9 +172,25 @@ public:
                     destRec.x += velocidadLateral/2;
                 }
             }
-        }else {
+        }
+
+        // Se puede disparar en el aire. Las acciones en el aire no se ven limitadas por el disparo, 
+        // pero las del suelo sí. Para mantener la idea if/else de en el aire o en el suelo, 
+        // al del suelo se le ha añaido la restricción opuesta al de en el aire (!enElAire)
+        if (IsKeyPressed(KEY_F) & !disparando) { 
+            std::cout << "Dispara" << std::endl;
+            int sentido = 1; //Hacia la derecha
+            if (switchOrientacion == 2) { //Si es hacia la izquierda
+                sentido = -1;
+            }
+            disparando = true;
+            animacionActiva = SHOOTING;
+            indiceAnimacion = 0;
+            Pompa p = Pompa(destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, 300);
+            admin->pompas.push_back(p);
+        } else if(!enElAire) {
             if (IsKeyDown(KEY_A)) {
-                animacionActiva = MOVING;
+                if (!disparando) animacionActiva = MOVING;
                 switchOrientacion = 2;
                 std::cout << "Muevo Izquierda, orientacion: " << switchOrientacion << std::endl;
                 destRec.x -= velocidadLateral;
@@ -165,7 +198,7 @@ public:
                 dirAir = 1;
             }
             else if (IsKeyDown(KEY_S)) {
-                animacionActiva = MOVING;
+                if (!disparando) animacionActiva = MOVING;
                 switchOrientacion = 3;
                 std::cout << "Muevo Derecha, orientacion: " << switchOrientacion << std::endl;
                 destRec.x += velocidadLateral;
@@ -177,14 +210,14 @@ public:
                 if (!(enElAire && saltoRecorrido == 0)) {
                     switchOrientacion = 1;
                 }
-                animacionActiva = 0;
+                if (!disparando) animacionActiva = STANDING;
             }
         }
 
         //Gestión de salto
         if (IsKeyPressed(KEY_SPACE) && !enElAire) {
             //std::cout << "Salto" << std::endl;
-            animacionActiva = JUMPING;
+            if (!disparando) animacionActiva = JUMPING;
             enElAire = true;
             velocidadActual = velocidadSalto;
             destRec.y -= velocidadActual;
@@ -192,24 +225,24 @@ public:
             velocidadActual -= deceleracion;
         }
         else if (velocidadActual > 0 && enElAire && !cayendo) {
-            animacionActiva = JUMPING;
+            if (!disparando) animacionActiva = JUMPING;
             destRec.y -= velocidadActual;
             saltoRecorrido += velocidadActual;
             velocidadActual -= deceleracion;
         }
         else if (enElAire && cayendo && saltoRecorrido > 0) {
-            animacionActiva = FALLING;
+            if (!disparando) animacionActiva = FALLING;
             destRec.y -= velocidadActual;
             saltoRecorrido += velocidadActual;
             velocidadActual -= deceleracion;
         } else if (enElAire && cayendo) { //Planeando
             //std::cout << "I'm gliding" << std::endl;
-            animacionActiva = FALLING;
+            if (!disparando) animacionActiva = FALLING;
             destRec.y += velocidadSalto / 2;
             saltoRecorrido -= velocidadSalto / 2;
         }
         else if (enElAire) { //Inicio caída
-            animacionActiva = FALLING;
+            if(!disparando) animacionActiva = FALLING;
             cayendo = true;
             destRec.y -= velocidadActual;
             saltoRecorrido += velocidadActual; //planeo
@@ -219,7 +252,7 @@ public:
         //Actualizar puntero de animacion
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames) ) {
-            std::cerr << "Actualiza" << std::endl;
+            //std::cerr << "Actualiza" << std::endl;
             cuentaFrames = 0;
             switch (animacionActiva) {
             case 0:
@@ -233,6 +266,15 @@ public:
                 break;
             case 3:
                 indiceAnimacion = (indiceAnimacion + 1) % fFallingAnimation;
+                break;
+            case 4:
+                indiceAnimacion++;
+                if (indiceAnimacion >= fShootingAnimation) {
+                    std::cout << "Puede volver a disparar" << std::endl;
+                    disparando = false;
+                    animacionActiva = STANDING;
+                    indiceAnimacion = 0;
+                }
                 break;
             default:
                 break;
@@ -250,23 +292,6 @@ public:
         //std::cerr << "Indice Animacion: " << indiceAnimacion << std::endl;
         srcRec.y = (float)widthAnimation * (float)animacionActiva;
         DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
-        /*
-        switch (animacionActiva) { //A los switch no le gustan las constantes, así que a morir al palo
-        case 0:
-            DrawTexturePro(standingAnimation, srcRec, destRec, origin, 0.0f, WHITE);
-            break;
-        case 1:
-            DrawTexturePro(movingAnimation, srcRec, destRec, origin, 0.0f, WHITE);
-            break;
-        case 2:
-            DrawTexturePro(jumpingAnimation, srcRec, destRec, origin, 0.0f, WHITE);
-            break;
-        case 3:
-            DrawTexturePro(fallingAnimation, srcRec, destRec, origin, 0.0f, WHITE);
-            break;
-        default:
-            break;
-        }*/
     }
 
     void compruebaColision(const Suelo& s) {

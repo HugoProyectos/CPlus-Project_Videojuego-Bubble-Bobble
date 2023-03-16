@@ -1,6 +1,7 @@
 #pragma once
 #include "Sprite.hpp"
 #include "Suelo.cpp"
+#include "../AdministradorPompas.cpp"
 #include <iostream>
 
 class Personaje : public Sprite {
