@@ -31,7 +31,7 @@ int main_menu(void)
         //----------------------------------------------------------------------------------
         main_menu.Actualizar(credits.creditos);
         credits.Actualizar();
-        scores.Actualizar(credits.creditos);
+        scores.Actualizar();
         //----------------------------------------------------------------------------------
 
 
@@ -96,7 +96,7 @@ int nivel_1(void)
         columnas.Actualizar();
         plataformas.Actualizar();
         credits.Actualizar();
-        scores.Actualizar(credits.creditos);
+        scores.Actualizar();
         //----------------------------------------------------------------------------------
 
 
@@ -128,35 +128,143 @@ int nivel_1(void)
     return 0;
 }
 
-int main(void) {
-    int estado = 1; // Estado inicial: menú principal
+//------------------------------------------------------------------------------------------
+// Types and Structures Definition
+//------------------------------------------------------------------------------------------
+typedef enum GameScreen { MAIN_MENU, NIVEL_1 } GameScreen;
 
-    while (true)
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
+int main(void)
+{
+    // Initialization
+    //--------------------------------------------------------------------------------------
+    const int screenWidth = 800;
+    const int screenHeight = 450;
+
+    InitWindow(screenWidth, screenHeight, "Bubble Bobble");
+    SetWindowMinSize(200, 200);
+    SetWindowState(FLAG_WINDOW_RESIZABLE);
+
+    InitAudioDevice();
+
+    GameScreen currentScreen = MAIN_MENU;
+
+    // TODO: Initialize all required variables and load all required data here!
+    // 
+    // Global:
+    //--------------------------------------------------------------------------------------
+    Credits credits = Credits(15, 10, 20, KEY_SIX);
+    Scores scores = Scores(0, 0, 20, SKYBLUE);
+    //-------------------------------------------------------------------------------------- 
+    
+    // Main Menu:
+    //--------------------------------------------------------------------------------------
+    MainMenu main_menu = MainMenu(10, 40, 70);
+    //--------------------------------------------------------------------------------------
+
+    // Nivel 1:
+    //--------------------------------------------------------------------------------------
+    Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa_nivel_1_v2.txt", 40.0f, 0.0f);
+    //--------------------------------------------------------------------------------------
+
+    int framesCounter = 0;          // Useful to count frames
+
+    SetTargetFPS(60);               // Set desired framerate (frames-per-second)
+    //--------------------------------------------------------------------------------------
+
+    // Main game loop
+    while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        // Lógica de entrada de usuario
-        if (estado == 1)
+        // Update
+        //----------------------------------------------------------------------------------
+        switch (currentScreen)
         {
-            // Lógica del menú principal
-            if (IsKeyPressed(KEY_ONE))
-            {
-                estado = 2; // Cambiar al estado de nivel 1
-            }
-            else
-            {
-                main_menu(); // Ejecutar el bucle del menú principal
-            }
-        }
-        else if (estado == 2)
+        case MAIN_MENU:
         {
-            // Lógica del nivel 1
-            if (IsKeyPressed(KEY_TWO))
+            // TODO: Update MAIN_MENU screen variables here!
+            main_menu.Actualizar(credits.creditos);
+            credits.Actualizar();
+            scores.Actualizar();
+
+            // Wait for 2 seconds (120 frames) before jumping to TITLE screen
+            if (IsKeyPressed(KEY_ONE) && credits.creditos >= 1)
             {
-                estado = 1; // Cambiar al estado del menú principal
+                currentScreen = NIVEL_1;
+                credits.creditos -= 1;
+                scores.hayP1 = true;
             }
-            else
+            else if (IsKeyPressed(KEY_TWO) && credits.creditos >= 2) {
+                currentScreen = NIVEL_1;
+                credits.creditos -= 2;
+                scores.hayP1 = true;
+                scores.hayP2 = true;
+            }
+        } break;
+        case NIVEL_1:
+        {
+            // TODO: Update NIVEL_1 screen variables here!
+            columnas.Actualizar();
+            plataformas.Actualizar();
+            credits.Actualizar();
+            scores.Actualizar();
+
+            if (IsKeyPressed(KEY_TWO) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
             {
-                nivel_1(); // Ejecutar el bucle del nivel 1
+                credits.creditos -= 1;
+                scores.hayP2 = true;
             }
+
+        } break;
+        default: break;
         }
+        //----------------------------------------------------------------------------------
+
+        // Draw
+        //----------------------------------------------------------------------------------
+        BeginDrawing();
+
+        ClearBackground(BLACK);
+
+        switch (currentScreen)
+        {
+        case MAIN_MENU:
+        {
+            // TODO: Draw MAIN_MENU screen here!
+            main_menu.Dibujar();
+            credits.Dibujar();
+            scores.Dibujar();
+
+        } break;
+        case NIVEL_1:
+        {
+            // TODO: Draw NIVEL_1 screen here!
+            columnas.Dibujar();
+            plataformas.Dibujar();
+            scores.Dibujar();
+
+        } break;
+        default: break;
+        }
+
+        EndDrawing();
+        //----------------------------------------------------------------------------------
     }
+
+    // De-Initialization
+    //--------------------------------------------------------------------------------------
+
+    // TODO: Unload all loaded data (textures, fonts, audio) here!
+    main_menu.Unload();
+    columnas.Unload();
+    plataformas.Unload();
+    credits.Unload();
+    scores.Unload();
+
+    CloseWindow();        // Close window and OpenGL context
+    //--------------------------------------------------------------------------------------
+
+    return 0;
 }
