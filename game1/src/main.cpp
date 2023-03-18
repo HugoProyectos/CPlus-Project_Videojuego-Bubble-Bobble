@@ -31,7 +31,7 @@ int main_menu(void)
         //----------------------------------------------------------------------------------
         main_menu.Actualizar(credits.creditos);
         credits.Actualizar();
-        scores.Actualizar();
+        scores.Actualizar(credits.creditos);
         //----------------------------------------------------------------------------------
 
 
@@ -82,8 +82,9 @@ int nivel_1(void)
 
     // Cargo el fondo
     //Mapa mapa = Mapa("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/bloque_grande.png", "resources/mapa_nivel_1/mapa_nivel_1_v2.txt");
-    Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 20.0f, 0.0f);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa_nivel_1_v2.txt", 20.0f, 0.0f);
+    Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa_nivel_1_v2.txt", 40.0f, 0.0f);
+    Credits credits = Credits(15, 10, 20, KEY_SIX, false);
     Scores scores = Scores(0, 0, 20, SKYBLUE);
 
     SetTargetFPS(60);
@@ -94,7 +95,8 @@ int nivel_1(void)
         //----------------------------------------------------------------------------------
         columnas.Actualizar();
         plataformas.Actualizar();
-        scores.Actualizar();
+        credits.Actualizar();
+        scores.Actualizar(credits.creditos);
         //----------------------------------------------------------------------------------
 
 
@@ -105,8 +107,9 @@ int nivel_1(void)
 
         columnas.Dibujar();
         plataformas.Dibujar();
+        credits.Dibujar();
         scores.Dibujar();
-
+        
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
@@ -115,6 +118,7 @@ int nivel_1(void)
     //--------------------------------------------------------------------------------------
     columnas.Unload();
     plataformas.Unload();
+    credits.Unload();
     scores.Unload();
 
     CloseAudioDevice();

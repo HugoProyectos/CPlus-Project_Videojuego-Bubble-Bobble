@@ -9,54 +9,6 @@
 #define BLOQUE_GRANDE_ANCHO 16
 #define BLOQUE_GRANDE_ALTO 13
 
-class NumeroNivel {
-public:
-
-    unsigned int numero_nivel = 1;
-    int x = 0;
-    int y = 0;
-    float tamano_fuente_base;
-    float tamano_fuente;
-    Color color;
-
-    NumeroNivel() = default;
-
-    NumeroNivel(int x, int y, int tamano_fuente_base, Color color, int numero_nivel) {
-        Inicializador(x, y, tamano_fuente_base, color, numero_nivel);
-    }
-
-    void Inicializador(int x, int y, int tamano_fuente_base, Color color, int numero_nivel)
-    {
-        this->x = x;
-        this->y = y;
-        this->color = color;
-        this->tamano_fuente_base = tamano_fuente_base;
-        this->tamano_fuente = GetScreenHeight() / (float)tamano_fuente_base;
-        this->numero_nivel = numero_nivel;
-    }
-
-    ~NumeroNivel() {
-
-    }
-
-    void Unload() {
-    };
-
-    void Actualizar() {
-
-    };
-
-    void Dibujar() {
-        // Dibuja el texto "CREDITOS" y el número de créditos
-        tamano_fuente = GetScreenHeight() / (float)tamano_fuente_base;
-
-        std::string texto = std::to_string(numero_nivel);
-
-        DrawText(texto.c_str(), 10 + MeasureText(texto.c_str(), tamano_fuente), 10, tamano_fuente, RAYWHITE);
-
-    }
-};
-
 class Plataforma {
 public:
     // Posicion en la cuadricula [1..ancho] [1..alto]
@@ -216,13 +168,16 @@ public:
     float ratioMargenSup = 0;
     float ratioMargenInf = 0;
 
+    std::string numeroNivel = "";
+
+
     Columnas() = default; //Debe llamarsse a Inicializador
 
-    Columnas(std::string ruta_bloque_grande, float margenSuperior, float margenInferior) {
-        Inicializador(ruta_bloque_grande, margenSuperior, margenInferior);
+    Columnas(std::string ruta_bloque_grande, float margenSuperior, float margenInferior, unsigned int numeroNivel) {
+        Inicializador(ruta_bloque_grande, margenSuperior, margenInferior, numeroNivel);
     };
 
-    void Inicializador(std::string ruta_bloque_grande, float margenSuperior, float margenInferior)
+    void Inicializador(std::string ruta_bloque_grande, float margenSuperior, float margenInferior, unsigned int numeroNivel)
     {
         this->bloque_grande = LoadTexture(ruta_bloque_grande.c_str());
         // Source rectangle (part of the texture to use for drawing)
@@ -230,6 +185,8 @@ public:
 
         this->ratioMargenSup = margenSuperior != 0 ? GetScreenHeight() / margenSuperior : 0;
         this->ratioMargenInf = margenInferior != 0 ? GetScreenHeight() / margenInferior : 0;
+
+        this->numeroNivel = std::to_string(numeroNivel);
     }
 
     ~Columnas() {
@@ -266,6 +223,10 @@ public:
             DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
             destRect.y += altura_bloque;
         }
+
+        // Poner nº de nivel
+        int tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
+        DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
     }
 };
 
