@@ -12,6 +12,7 @@ int main(void)
     const int screenWidth = 800;
     const int screenHeight = 450;
     const int numEspadas = 50;
+    const float targetFPS = 60;
 
     InitWindow(screenWidth, screenHeight, "Practica 1.2 - espada giratoria");
     SetWindowMinSize(200, 200);
@@ -27,7 +28,7 @@ int main(void)
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
     Personaje bub = Personaje("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 4.0f);
-    Robot robot = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f);
+    Robot robot = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFPS);
 
     Suelo suelo = Suelo("resources/Suelo.png");
 

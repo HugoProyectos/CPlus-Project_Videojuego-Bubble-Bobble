@@ -12,17 +12,17 @@ public:
 
     int animacionActiva = 0; //0->WalkAnimationBasic
     int indiceAnimacion = 0;
+
     //Frames
     int targetFrames;
     int cuentaFrames = 0;
     int velocidadFrames = 2;
 
-    Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral) {
+    Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
-        targetFrames = 60;
-        std::cerr << "Inicio correcto" << std::endl;
+        targetFrames = _targetFPS;
     };
 
     // Controlador de comportamiento
