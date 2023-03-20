@@ -22,6 +22,9 @@ public:
     // Posicion en pantalla
     float topleft[2] = { 0,0 };
 
+    float altura = 0;
+    float anchura = 0;
+
 
     Plataforma() = default;
 
@@ -49,6 +52,9 @@ public:
         float tamanoMargenSup = ratioMargenSup != 0 ? GetScreenHeight() / ratioMargenSup : 0;
         float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
         this->topleft[1] = tamanoMargenSup + (positionY - 1) * (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO;
+        this->altura = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO * this->tamanoY;
+        this->anchura = GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO * this->tamanoX;
+        
     }
 
     void Dibujar() {
