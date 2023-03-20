@@ -5,7 +5,7 @@
 
 //cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
 //Se mueve con A y S, y se salta con el espacio
-int main1234(void)
+int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -26,8 +26,8 @@ int main1234(void)
     //PlayMusicStream(fun);
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
-    Personaje bub = Personaje("resources/Suelo.png", 0.25f, 80.0f, 1.0f, 4.0f);
-    Robot robot = Robot("resources/Suelo.png", 0.25f, 40.0f, 1.0f, 1.0f);
+    Personaje bub = Personaje("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 4.0f);
+    Robot robot = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f);
 
     Suelo suelo = Suelo("resources/Suelo.png");
 

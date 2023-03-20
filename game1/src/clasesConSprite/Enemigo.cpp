@@ -26,8 +26,12 @@ public:
         velocidadSalto = velSalto;
         distanciaSaltoMax = saltoMax;
 
-        frameWidth = sprite.width;
-        frameHeight = sprite.height;
+        //frameWidth = sprite.width;
+        //frameHeight = sprite.height;
+
+        frameWidth = 16;
+        frameHeight = 16;
+
 
         // Source rectangle (part of the texture to use for drawing)
         srcRec = { 0.0f, 0.0f, (float)frameWidth, (float)frameHeight };
@@ -48,9 +52,9 @@ public:
         UnloadTexture(sprite);
     };
 
-    void Dibujar() {
-        DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
-    }
+    //void Dibujar() {
+    //    DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
+    //}
 
     void compruebaColisionSuelo(const Suelo& s) {
         if ((destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2)) { //Choca abajo
