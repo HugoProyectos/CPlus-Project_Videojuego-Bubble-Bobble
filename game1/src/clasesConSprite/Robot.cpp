@@ -5,18 +5,18 @@ class Robot : public Enemigo {
 public:
     
     //Sprite pixels
-    int pixels = 16;
+    int pixels = 16; //El numero de pixeles del sprite
 
     //Animation
     Texture2D walkAnimation = LoadTexture("resources/enemyRobot/robotWalk.png");
     Texture2D deadAnimation = LoadTexture("resources/enemyRobot/robotMuerte.png");
     Texture2D animations[2] = { walkAnimation, deadAnimation };
 
-    int fWalkAnimation = 4; //VECTOR(cada animacion tiene un numero de frames)       Número de fotogramas de la animacion 
-    int fDeadAnimation = 2;
+    int fWalkAnimation = 4; //Número de fotogramas de la animacion camniar
+    int fDeadAnimation = 2; //Número de fotogramas de la animacion muerte
     int fAnimation[2] = { fWalkAnimation , fDeadAnimation };
     
-    int widthAnimation; //Se actualiza para cada animación activa
+    int widthAnimation; // Se actualiza para cada animación activa
     int heightAnimation;
 
     int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation, 1->DeadAnimation
