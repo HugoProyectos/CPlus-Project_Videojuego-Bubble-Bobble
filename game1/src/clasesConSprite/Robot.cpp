@@ -6,12 +6,13 @@ public:
     
     //Animation
     Texture2D walkAnimation = LoadTexture("resources/enemyRobot/robotWalk.png");
-    int fWalkAnimation = 4; //Número de fotogramas de la animacion
-    int widthAnimation;
+    Texture2D deadAnimation = LoadTexture("resources/enemyRobot/robotMuerte.png");
+    int fWalkAnimation = 4; //VECTOR(cada animacion tiene un numero de frames)       Número de fotogramas de la animacion 
+    int widthAnimation; //Se actualiza para cada animación activa
     int heightAnimation;
 
-    int animacionActiva = 0; //0->WalkAnimationBasic
-    int indiceAnimacion = 0;
+    int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation
+    int indiceAnimacion = 0; //Indica el número de frame actual de la animación activa
 
     //Frames
     int targetFrames;
@@ -43,6 +44,7 @@ public:
             cuentaFrames = 0;
             switch (animacionActiva) {
             case 0:
+                //Actualizar width&height animacion
                 indiceAnimacion = (indiceAnimacion + 1) % fWalkAnimation;
                 break;
             default:
@@ -53,6 +55,7 @@ public:
 
     void Dibujar() {
         srcRec.x = (float)widthAnimation * (float)indiceAnimacion;
+        //Cambiar a un vector de animaciones[animacionActiva]
         DrawTexturePro(walkAnimation, srcRec, destRec, origin, 0.0f, WHITE);
     }
 
