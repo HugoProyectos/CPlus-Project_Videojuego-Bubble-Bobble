@@ -1,7 +1,7 @@
 #pragma once
 #include "Enemigo.cpp"
 
-class Robot : public Enemigo {
+class Morado : public Enemigo {
 public:
     
     //Sprite pixels
@@ -27,7 +27,7 @@ public:
     int cuentaFrames = 0;
     int velocidadFrames = 2;
 
-    Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS) {
+    Morado(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
@@ -36,16 +36,9 @@ public:
 
     // Controlador de comportamiento
     void Actualizar(Rectangle playerPosition) {
-        if (enElAire || (destRec.y > playerPosition.y && destRec.x == playerPosition.x)) { //Si el personaje esta encima
-            Salto();
-        }
-        else if (destRec.x > playerPosition.x) { //Si el personaje esta a la izquierda
-            MoverIzq();
-        }
-        else if (destRec.x < playerPosition.x) { //Si el personaje esta a la derecha
-            MoverDer();
-        }
-           
+        
+        MoverDerAbajo();
+
         //Actualizar puntero de animacion
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames)) {
@@ -75,45 +68,44 @@ public:
     }
 
     //funciones de comportamiento
-    void MoverIzq() {
+    void MoverIzqArriba() {
         destRec.x -= velocidadLateral;
+        destRec.y -= velocidadLateral;
+        srcRec.width = pixels;
+    }
+    void MoverIzqAbajo() {
+        destRec.x -= velocidadLateral;
+        destRec.y += velocidadLateral;
         srcRec.width = pixels;
     }
 
-    void MoverDer() {
+    void MoverDerArriba() {
         destRec.x += velocidadLateral;
+        destRec.y -= velocidadLateral;
         srcRec.width = -pixels;
     }
-
-    void Salto() {
-        //Gestión de salto
-        if (!enElAire) {
-            //std::cout << "Salto" << std::endl;
-            enElAire = true;
-        }
-        else if (saltoRecorrido < distanciaSaltoMax && enElAire && !cayendo) {
-            destRec.y -= velocidadSalto;
-            saltoRecorrido += velocidadSalto;
-        }
-        else if (enElAire && cayendo && saltoRecorrido > 0) {
-            destRec.y += velocidadSalto;
-            saltoRecorrido -= velocidadSalto;
-        }
-        else if (enElAire) {
-            saltoRecorrido = 0.0f;
-            cayendo = true;
-            destRec.y += velocidadSalto / 2; //planeo
-        }
+    void MoverDerAbajo() {
+        destRec.x += velocidadLateral;
+        destRec.y += velocidadLateral;
+        srcRec.width = -pixels;
     }
 
 
     //Comporbacion de colisiones
     //Herencia de void compruebaColisionSuelo(const Suelo& s)
     void compruebaColision(const Suelo& s) {
-        if ((destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2)) { //Choca abajo
+        //Choca abajo
+        if ((destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2)) { 
             destRec.y = (s.destRec.y - s.destRec.height / 2) - destRec.height / 2;
-            enElAire = false;
-            cayendo = false;
         }
+
+        //Choca arriba
+
+        
+        //Choca derecha
+
+        //Choca izquierda
+
+
     }
 };

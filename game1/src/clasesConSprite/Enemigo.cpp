@@ -55,12 +55,4 @@ public:
     //void Dibujar() {
     //    DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
     //}
-
-    void compruebaColisionSuelo(const Suelo& s) {
-        if ((destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2)) { //Choca abajo
-            destRec.y = (s.destRec.y - s.destRec.height / 2) - destRec.height / 2;
-            enElAire = false;
-            cayendo = false;
-        }
-    }
 };

@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "clasesConSprite/Personaje.cpp"
 #include "clasesConSprite/Robot.cpp"
+#include "clasesConSprite/Morado.cpp"
 #include "clasesConSprite/Enemigo.cpp"
 
 //cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
@@ -28,7 +29,7 @@ int main(void)
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
     Personaje bub = Personaje("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 4.0f);
-    Robot robot = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFPS);
+    Morado robot = Morado("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFPS);
 
     Suelo suelo = Suelo("resources/Suelo.png");
 
@@ -42,7 +43,7 @@ int main(void)
         bub.Actualizar();
         bub.compruebaColision(suelo);
         robot.Actualizar(bub.destRec);
-        robot.compruebaColisionSuelo(suelo);
+        robot.compruebaColision(suelo);
         //----------------------------------------------------------------------------------
 
         // Draw
