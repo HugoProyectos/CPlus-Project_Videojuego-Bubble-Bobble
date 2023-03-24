@@ -28,8 +28,9 @@ int main(void)
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
     AdministradorPompas admin = AdministradorPompas();
 
-    Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
-    Pompa p = Pompa(destRec,5.0,200.0,true,100);
+    Rectangle destRec = { GetScreenWidth() / 2.0f - 100, GetScreenHeight() / 2.0f + 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
+    Pompa p = Pompa(destRec,5.0,200.0,false,50000);
+    admin.pompas.push_back(p);
 
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f,TARGET_FPS, admin);
     admin.posicionJugador = bub.destRec;
@@ -57,6 +58,25 @@ int main(void)
         suelo.Dibujar();
         bub.Dibujar();
         admin.dibujaPompas();
+
+        DrawLine((int)bub.destRec.x - (int)bub.destRec.width/2, 0, (int)bub.destRec.x - (int)bub.destRec.width / 2, screenHeight, GRAY);
+        DrawLine(0, (int)bub.destRec.y - (int)bub.destRec.height / 2, screenWidth, (int)bub.destRec.y - (int)bub.destRec.height / 2, GRAY);
+        DrawLine((int)bub.destRec.x + (int)bub.destRec.width / 2, 0, (int)bub.destRec.x + (int)bub.destRec.width / 2, screenHeight, GRAY);
+        DrawLine(0, (int)bub.destRec.y + (int)bub.destRec.height / 2, screenWidth, (int)bub.destRec.y + (int)bub.destRec.height / 2, GRAY);
+        std::string x_extremo_5 = "Pompa X izquierda ";
+        std::string x_extremo_6 = "Pompa X derecha ";
+        if (admin.pompas.size() > 0) {
+            DrawLine((int)admin.pompas.at(0).destRec.x - (int)admin.pompas.at(0).destRec.width / 2, 0, (int)admin.pompas.at(0).destRec.x - (int)admin.pompas.at(0).destRec.width / 2, screenHeight, GRAY);
+            DrawLine(0, (int)admin.pompas.at(0).destRec.y - (int)admin.pompas.at(0).destRec.height / 2, screenWidth, (int)admin.pompas.at(0).destRec.y - (int)admin.pompas.at(0).destRec.height / 2, GRAY);
+            DrawLine((int)admin.pompas.at(0).destRec.x + (int)admin.pompas.at(0).destRec.width / 2, 0, (int)admin.pompas.at(0).destRec.x + (int)admin.pompas.at(0).destRec.width / 2, screenHeight, GRAY);
+            DrawLine(0, (int)admin.pompas.at(0).destRec.y + (int)admin.pompas.at(0).destRec.height / 2, screenWidth, (int)admin.pompas.at(0).destRec.y + (int)admin.pompas.at(0).destRec.height / 2, GRAY);
+        
+            x_extremo_5 = "Pompa X izquierda " + std::to_string(admin.pompas.at(0).destRec.x - admin.pompas.at(0).destRec.width / 2);
+            x_extremo_6 = "Pompa X derecha " + std::to_string(admin.pompas.at(0).destRec.x + admin.pompas.at(0).destRec.width / 2);
+            //std::cout << ((admin.pompas.at(0).destRec.x + admin.pompas.at(0).destRec.width / 2) > (bub.destRec.x - bub.destRec.width) && (admin.pompas.at(0).destRec.x - admin.pompas.at(0).destRec.width / 2) < (bub.destRec.x - bub.destRec.width / 2)) << std::endl;
+            //std::cout << ((admin.pompas.at(0).destRec.x - admin.pompas.at(0).destRec.width / 2) < (bub.destRec.x + bub.destRec.width / 2) && (admin.pompas.at(0).destRec.x + admin.pompas.at(0).destRec.width / 2) > (bub.destRec.x + bub.destRec.width / 2)) << std::endl;
+        }
+        
         //p.Dibujar();
 
         //DrawText("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200, screenHeight - 20, 10, GRAY);
@@ -65,8 +85,10 @@ int main(void)
         std::string x_extremo_3 = "Bub X derecha " + std::to_string(bub.destRec.x + bub.destRec.width / 2);
         std::string x_extremo_4 = "Bub X izquierda " + std::to_string(bub.destRec.x - bub.destRec.width / 2);
         
+        
         std::string x_bub = "Bub x " + std::to_string(bub.destRec.x);
-        std::string disparando = "disparando= " + std::to_string(bub.disparando);
+        std::string cayendo = "cayendo= " + std::to_string(bub.cayendo);
+        std::string cayendo_2 = "cayendo= " + std::to_string(admin.jugadorCayendo);
         std::string valores = "Salto recorrido= " + std::to_string(bub.saltoRecorrido);
         
         //if (admin.pompas.size() > 0) {
@@ -81,10 +103,10 @@ int main(void)
 
             //}
             */
-        DrawText(x_bub.c_str(), screenWidth - 600, screenHeight - 110, 20, GRAY);
-        DrawText(disparando.c_str(), screenWidth - 600, screenHeight - 70, 20, GRAY);
-        DrawText(valores.c_str(), screenWidth - 600, screenHeight - 30, 20, GRAY);
-        DrawText(x_extremo.c_str(), screenWidth - 600, screenHeight - 50, 20, GRAY);
+        DrawText(x_extremo_3.c_str(), screenWidth - 600, screenHeight - 110, 20, GRAY);
+        //DrawText(x_extremo_4.c_str(), screenWidth - 600, screenHeight - 70, 20, GRAY);
+        //DrawText(x_extremo_6.c_str(), screenWidth - 600, screenHeight - 30, 20, GRAY);
+        DrawText(x_extremo_5.c_str(), screenWidth - 600, screenHeight - 50, 20, GRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------

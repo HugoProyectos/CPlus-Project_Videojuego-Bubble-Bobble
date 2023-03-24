@@ -1,7 +1,6 @@
 #pragma once
 #include "Sprite.hpp"
 #include "Suelo.cpp"
-#include "Pompa.cpp"
 #include "../AdministradorPompas.cpp"
 #include <iostream>
 
@@ -188,13 +187,13 @@ public:
             disparando = true;
             animacionActiva = SHOOTING;
             indiceAnimacion = 6; //Es el 0 de la segunda parte de animaciones
-            Pompa p = Pompa(destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, 100);
+            Pompa p = Pompa(destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, 500);
             admin->pompas.push_back(p);
         } else if(!enElAire) {
             if (IsKeyDown(KEY_A)) {
                 if (!disparando) animacionActiva = MOVING;
                 switchOrientacion = 2;
-                std::cout << "Muevo Izquierda, orientacion: " << switchOrientacion << std::endl;
+                //std::cout << "Muevo Izquierda, orientacion: " << switchOrientacion << std::endl;
                 destRec.x -= velocidadLateral;
                 dirCorrer = 1;
                 dirAir = 1;
@@ -202,7 +201,7 @@ public:
             else if (IsKeyDown(KEY_S)) {
                 if (!disparando) animacionActiva = MOVING;
                 switchOrientacion = 3;
-                std::cout << "Muevo Derecha, orientacion: " << switchOrientacion << std::endl;
+                //std::cout << "Muevo Derecha, orientacion: " << switchOrientacion << std::endl;
                 destRec.x += velocidadLateral;
                 dirCorrer = 2;
                 dirAir = 2;
@@ -250,6 +249,10 @@ public:
             saltoRecorrido += velocidadActual; //planeo
             velocidadActual -= deceleracion;
         }
+        //Le dice al administrador los datos que necesita saber
+        admin->jugadorCayendo = cayendo; 
+        admin->posicionJugador = destRec;
+        admin->sentidoJugador = orientacionActual;
 
         //Actualizar puntero de animacion
         cuentaFrames++;
