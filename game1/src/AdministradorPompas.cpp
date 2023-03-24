@@ -6,6 +6,7 @@
 class AdministradorPompas{
 public:
 	std::vector<Pompa> pompas;
+	Rectangle posicionJugador;
 
 	AdministradorPompas() = default;
 

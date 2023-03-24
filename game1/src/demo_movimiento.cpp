@@ -32,6 +32,7 @@ int main(void)
     Pompa p = Pompa(destRec,5.0,200.0,true,100);
 
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f,TARGET_FPS, admin);
+    admin.posicionJugador = bub.destRec;
     Suelo suelo = Suelo("resources/Suelo.png");
 
     SetTargetFPS(TARGET_FPS);
