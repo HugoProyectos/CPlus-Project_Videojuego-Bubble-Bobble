@@ -29,7 +29,7 @@ int main(void)
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
     Personaje bub = Personaje("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 4.0f);
-    Morado robot = Morado("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFPS);
+    Robot robot = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFPS);
 
     Suelo suelo = Suelo("resources/Suelo.png");
 

@@ -27,6 +27,9 @@ public:
     int cuentaFrames = 0;
     int velocidadFrames = 2;
 
+    //Muerto
+    bool muerto = false;
+
     Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         widthAnimation = walkAnimation.width / fWalkAnimation;
@@ -35,8 +38,12 @@ public:
     };
 
     // Controlador de comportamiento
-    void Actualizar(Rectangle playerPosition) {
-        if (enElAire || (destRec.y > playerPosition.y && destRec.x == playerPosition.x)) { //Si el personaje esta encima
+    void Actualizar(Rectangle playerPosition) override {
+        if (muerto) {
+            animacionActiva = 1;
+            Caer();
+        }
+        else if (enElAire || (destRec.y > playerPosition.y && destRec.x == playerPosition.x)) { //Si el personaje esta encima
             Salto();
         }
         else if (destRec.x > playerPosition.x) { //Si el personaje esta a la izquierda
@@ -85,6 +92,10 @@ public:
         srcRec.width = -pixels;
     }
 
+    void Caer() {
+        destRec.y += velocidadSalto;
+    }
+
     void Salto() {
         //Gestión de salto
         if (!enElAire) {
@@ -110,7 +121,7 @@ public:
     //Comporbacion de colisiones
     //Herencia de void compruebaColisionSuelo(const Suelo& s)
     void compruebaColision(const Suelo& s) {
-        if ((destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2)) { //Choca abajo
+        if (!muerto && (destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2)) { //Choca abajo
             destRec.y = (s.destRec.y - s.destRec.height / 2) - destRec.height / 2;
             enElAire = false;
             cayendo = false;
