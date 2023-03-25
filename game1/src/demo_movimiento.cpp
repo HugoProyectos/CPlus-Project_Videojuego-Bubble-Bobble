@@ -27,7 +27,11 @@ int main(void)
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f,TARGET_FPS);
+    bub.destRec.y = 0;
     Suelo suelo = Suelo("resources/Suelo.png");
+    suelo.frameWidth = 200;
+    Suelo suelo2 = Suelo("resources/Suelo.png");
+    suelo2.destRec.y = 100;
 
     SetTargetFPS(TARGET_FPS);
     // Main game loop
@@ -37,7 +41,10 @@ int main(void)
         // Update
         //----------------------------------------------------------------------------------
         bub.Actualizar();
+        bub.enElAire = true;
+        bub.cayendo = true;
         bub.compruebaColision(suelo);
+        bub.compruebaColision(suelo2);
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -47,6 +54,7 @@ int main(void)
         ClearBackground(BLACK);//RAYWHITE);
 
         suelo.Dibujar();
+        suelo2.Dibujar();
         bub.Dibujar();
 
         //DrawText("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200, screenHeight - 20, 10, GRAY);

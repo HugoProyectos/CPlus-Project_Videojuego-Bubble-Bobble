@@ -7,6 +7,8 @@ class Suelo : public Sprite {
     
 public:
 
+    int aproach;
+
     Suelo() = default; //Debe llamarsse a Inicializador
 
     Suelo(std::string rutaTextura) {

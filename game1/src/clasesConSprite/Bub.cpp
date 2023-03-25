@@ -36,7 +36,7 @@ public:
     int dirCorrer = 0; //0 = parado, 1 = izquierda, 2 = derecha
     int dirAir = 0; //0 = parado, 1 = izquieda, 2 = derecha
 
-    int animacionActiva = 5; //0->StandingAnimation 1->MoveAnimation 2->JumpAnimation 3->FallAnimation 4->ShootingAnimation 5->DyingAninimation
+    int animacionActiva = 0; //0->StandingAnimation 1->MoveAnimation 2->JumpAnimation 3->FallAnimation 4->ShootingAnimation 5->DyingAninimation
     int targetFrames;
     
     int indiceAnimacion = 0;
@@ -91,8 +91,11 @@ public:
     };
 
     void Actualizar() {
+        //Si cae al fondo del nivel reaparece en el techo
+        if (destRec.y > 500) {
+            destRec.y = 0;
+        }
         //Gestión de desplazamiento lateral
-        /*
         if (enElAire) {
             if (saltoRecorrido > 0) {
                 if (dirCorrer == 1) {  //Salta izquierda
@@ -218,7 +221,6 @@ public:
             saltoRecorrido += velocidadActual; //planeo
             velocidadActual -= deceleracion;
         }
-        */
         //Actualizar puntero de animacion
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames) ) {
@@ -274,15 +276,144 @@ public:
         }*/
     }
 
-    void compruebaColision(const Suelo& s) {
-        if (((destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2)) && 
-            ((destRec.x - destRec.width/2) < (s.destRec.x + s.destRec.width/2)) && //No se sale por la derecha
-            ((destRec.x + destRec.width / 2) > (s.destRec.x - s.destRec.width / 2)) //No se sale por la izquierda
-            ) { //Choca abajo
-            destRec.y = (s.destRec.y - s.destRec.height / 2) - destRec.height / 2;
-            enElAire = false;
-            cayendo = false;
-            saltoRecorrido = 0;
+    void compruebaColision(Suelo& s) {
+        //Comprobamos si colisiona con la superficie
+        if ( 
+            (
+                //Comprobamos colision esquina inferior derecha
+                ( ( (s.destRec.y + s.destRec.height / 2) > (destRec.y + destRec.height / 2) ) && 
+                  ( (destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2) )
+                ) && ( 
+                  ( (s.destRec.x + s.destRec.width / 2) > (destRec.x + destRec.width / 2) ) &&
+                  ( (destRec.x + destRec.width / 2) > (s.destRec.x - s.destRec.width / 2) )
+                )
+            ) ||
+            (
+                //Comprobamos colision esquina superior derecha
+                ( ( (s.destRec.y + s.destRec.height / 2) > (destRec.y - destRec.height / 2) ) &&
+                  ( (destRec.y - destRec.height / 2) > (s.destRec.y - s.destRec.height / 2) )
+                ) && (
+                  ( (s.destRec.x + s.destRec.width / 2) > (destRec.x + destRec.width / 2) ) &&
+                  ( (destRec.x + destRec.width / 2) > (s.destRec.x - s.destRec.width / 2) )
+                )
+            ) ||
+            (
+                //Comprobamos colision esquina superior izquierda
+                ( ( (s.destRec.y + s.destRec.height / 2) > (destRec.y - destRec.height / 2) ) &&
+                  ( (destRec.y - destRec.height / 2) > (s.destRec.y - s.destRec.height / 2) )
+                ) && (
+                  ( (s.destRec.x + s.destRec.width / 2) > (destRec.x - destRec.width / 2) ) &&
+                  ( (destRec.x - destRec.width / 2) > (s.destRec.x - s.destRec.width / 2) )
+                )
+            ) ||
+            (
+                //Comprobamos colision esquina inferior izquierda
+                ( ( (s.destRec.y + s.destRec.height / 2) > (destRec.y + destRec.height / 2) ) &&
+                  ( (destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2) )
+                ) && (
+                  ( (s.destRec.x + s.destRec.width / 2) > (destRec.x - destRec.width / 2) ) &&
+                  ( (destRec.x - destRec.width / 2) > (s.destRec.x - s.destRec.width / 2) )
+                )
+            )
+            ) {
+            std::cout << "Choque" << std::endl;
+            switch (s.aproach) {
+            case 1:
+                destRec.x = (s.destRec.x - s.destRec.height / 2) - destRec.height / 2;
+                break;
+            case 2:
+                destRec.x = (s.destRec.x + s.destRec.height / 2) + destRec.height / 2;
+                break;
+            case 3:
+                destRec.y = (s.destRec.y - s.destRec.height / 2) - destRec.height / 2;
+                enElAire = false;
+                cayendo = false;
+                saltoRecorrido = 0;
+                break;
+            }
+        }
+        //Comprobamos si se esta acercando a la superficie desde alguna dirección
+        else {
+            //Izquierda
+            if (
+                //Comprobamos colision esquina superior derecha
+                  (
+                    ( ( (s.destRec.y + s.destRec.height / 2) > (destRec.y - destRec.height / 2) ) &&
+                      ( (destRec.y - destRec.height / 2) > (s.destRec.y - s.destRec.height / 2) )
+                    ) && (
+                      ( (s.destRec.x + s.destRec.width / 2) > (destRec.x + destRec.width / 2 + 5) ) &&
+                      ( (destRec.x + destRec.width / 2 + 5) > (s.destRec.x - s.destRec.width / 2) )
+                    )
+                  )
+                ||
+                //Comprobamos colision esquina inferior derecha
+                  (
+                    ( ( (s.destRec.y + s.destRec.height / 2) > (destRec.y + destRec.height / 2) ) &&
+                      ( (destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2) )
+                    ) && (
+                      ( (s.destRec.x + s.destRec.width / 2) > (destRec.x + destRec.width / 2 + 5) ) &&
+                      ( (destRec.x + destRec.width / 2 + 5) > (s.destRec.x - s.destRec.width / 2) )
+                    )
+                  )
+                ) {
+                std::cout << "Aproach izquierda" << std::endl;
+                s.aproach = 1;
+            }
+            //Derecha
+            else if (
+                //Comprobamos colision esquina superior izquierda
+                  (
+                    ( ( (s.destRec.y + s.destRec.height / 2) > (destRec.y - destRec.height / 2) ) &&
+                      ( (destRec.y - destRec.height / 2) > (s.destRec.y - s.destRec.height / 2) )
+                    ) && (
+                       ( (s.destRec.x + s.destRec.width / 2) > (destRec.x - destRec.width / 2 - 5) ) &&
+                       ( (destRec.x - destRec.width / 2 - 5) > (s.destRec.x - s.destRec.width / 2) )
+                    )
+                  )
+                ||
+                //Comprobamos colision esquina inferior izquierda
+                  (
+                    ( ( (s.destRec.y + s.destRec.height / 2) > (destRec.y + destRec.height / 2) ) &&
+                      ( (destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2) )
+                    ) && (
+                      ( (s.destRec.x + s.destRec.width / 2) > (destRec.x - destRec.width / 2 - 5) ) &&
+                      ( (destRec.x - destRec.width / 2 - 5) > (s.destRec.x - s.destRec.width / 2) )
+                    )
+                  )
+                ) {
+                std::cout << "Aproach derecha" << std::endl;
+                s.aproach = 2;
+            }
+            //Arriba
+            else if (
+                //Comprobamos colision esquina inferior derecha
+                  (
+                    ( ( (s.destRec.y + s.destRec.height / 2) > (destRec.y + destRec.height / 2 + 5) ) &&
+                      ( (destRec.y + destRec.height / 2 + 5) > (s.destRec.y - s.destRec.height / 2) )
+                    ) && (
+                      ( (s.destRec.x + s.destRec.width / 2) > (destRec.x + destRec.width / 2) ) &&
+                      ( (destRec.x + destRec.width / 2) > (s.destRec.x - s.destRec.width / 2) )
+                    )
+                  )
+                ||
+                //Comprobamos colision esquina inferior izquierda
+                  (
+                    ( ( (s.destRec.y + s.destRec.height / 2) > (destRec.y + destRec.height / 2 + 5) ) &&
+                      ( (destRec.y + destRec.height / 2 + 5) > (s.destRec.y - s.destRec.height / 2) )
+                    ) && (
+                      ( (s.destRec.x + s.destRec.width / 2) > (destRec.x - destRec.width / 2) ) &&
+                      ( (destRec.x - destRec.width / 2) > (s.destRec.x - s.destRec.width / 2) )
+                    )
+                  )
+                ) {
+                std::cout << "Aproach arriba" << std::endl;
+                s.aproach = 3;
+            }
+            //Abajo
+            else {
+                //Si no se cumplen anteriores asumimos que se acerca por debajo
+                s.aproach = 4;
+            }
         }
     }
 };
