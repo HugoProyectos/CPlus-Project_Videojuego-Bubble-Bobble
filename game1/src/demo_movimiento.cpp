@@ -29,7 +29,6 @@ int main(void)
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f,TARGET_FPS);
     bub.destRec.y = 0;
     Suelo suelo = Suelo("resources/Suelo.png");
-    suelo.frameWidth = 200;
     Suelo suelo2 = Suelo("resources/Suelo.png");
     suelo2.destRec.y = 100;
 

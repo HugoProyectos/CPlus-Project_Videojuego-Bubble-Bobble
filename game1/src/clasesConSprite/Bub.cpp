@@ -188,7 +188,7 @@ public:
         }
 
         //Gestión de salto
-        if (IsKeyPressed(KEY_SPACE) && !enElAire) {
+        if (IsKeyDown(KEY_SPACE) && !enElAire) {
             //std::cout << "Salto" << std::endl;
             animacionActiva = JUMPING;
             enElAire = true;
@@ -319,10 +319,10 @@ public:
             std::cout << "Choque" << std::endl;
             switch (s.aproach) {
             case 1:
-                destRec.x = (s.destRec.x - s.destRec.height / 2) - destRec.height / 2;
+                destRec.x = (s.destRec.x - s.destRec.width / 2) - destRec.width / 2;
                 break;
             case 2:
-                destRec.x = (s.destRec.x + s.destRec.height / 2) + destRec.height / 2;
+                destRec.x = (s.destRec.x + s.destRec.width / 2) + destRec.width / 2;
                 break;
             case 3:
                 destRec.y = (s.destRec.y - s.destRec.height / 2) - destRec.height / 2;
@@ -361,7 +361,7 @@ public:
             }
             //Derecha
             else if (
-                //Comprobamos colision esquina superior izquierda
+                //Comprobamos colision esquina superior derecha
                   (
                     ( ( (s.destRec.y + s.destRec.height / 2) > (destRec.y - destRec.height / 2) ) &&
                       ( (destRec.y - destRec.height / 2) > (s.destRec.y - s.destRec.height / 2) )
@@ -371,7 +371,7 @@ public:
                     )
                   )
                 ||
-                //Comprobamos colision esquina inferior izquierda
+                //Comprobamos colision esquina inferior derecha
                   (
                     ( ( (s.destRec.y + s.destRec.height / 2) > (destRec.y + destRec.height / 2) ) &&
                       ( (destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2) )
