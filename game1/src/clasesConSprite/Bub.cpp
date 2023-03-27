@@ -23,6 +23,7 @@ class Bub : public Sprite {
     int fJumpingAnimation = 4; //Número de fotogramas
     int fFallingAnimation = 4; //Número de fotogramas
     int fShootingAnimation = 5; //Número de fotogramas
+    int fDeathAnimation = 30; //Número de fotogramas
 
     const float VELOCIDAD_DISPARO = 5.0;
     const float DISTANCIA_DISPARO = 200.0;
@@ -38,7 +39,10 @@ public:
     // Referencia al administrador de pompas
     AdministradorPompas* admin;
 
-
+    //Indicador de muerte y vidas
+    bool muriendo = false;
+    bool muerto = false;
+    int numVidas = 2;
 
     int widthAnimation = 16;
     int heightAnimation = 16;
@@ -106,199 +110,222 @@ public:
 
     void Actualizar() {
         //Gestión de desplazamiento lateral
-        
 
-        if (enElAire) {
-            if (saltoRecorrido > 0) {
-                if (dirCorrer == 1) {  //Salta izquierda
-                    if (IsKeyDown(KEY_S)) {
-                        //(OPCIONAL) Añadir que decelere en vez de cambiar repentinamente de velocidad
-                        switchOrientacion = 3;
-                        destRec.x -= velocidadLateral/3;
-                        dirAir = 2;
+        if(!muerto){
+            if (enElAire) {
+                if (saltoRecorrido > 0) {
+                    if (dirCorrer == 1) {  //Salta izquierda
+                        if (IsKeyDown(KEY_S)) {
+                            //(OPCIONAL) Añadir que decelere en vez de cambiar repentinamente de velocidad
+                            switchOrientacion = 3;
+                            destRec.x -= velocidadLateral / 3;
+                            dirAir = 2;
+                        }
+                        else {
+                            if (IsKeyDown(KEY_A)) {
+                                switchOrientacion = 2;
+                                dirAir = 1;
+                                destRec.x -= velocidadLateral;
+                            }
+                            else if (dirAir == 1) {
+                                destRec.x -= velocidadLateral;
+                            }
+                            else {
+                                destRec.x -= velocidadLateral / 3;
+                            }
+                        }
+                    }
+                    else if (dirCorrer == 2) {  //Salta derecha
+                        if (IsKeyDown(KEY_A)) {
+                            //(OPCIONAL) Añadir que decelere en vez de cambiar repentinamente de velocidad
+                            switchOrientacion = 2;
+                            destRec.x += velocidadLateral / 3;
+                            dirAir = 1;
+                        }
+                        else {
+                            if (IsKeyDown(KEY_S)) {
+                                switchOrientacion = 3;
+                                dirAir = 2;
+                                destRec.x += velocidadLateral;
+                            }
+                            else if (dirAir == 2) {
+                                destRec.x += velocidadLateral;
+                            }
+                            else {
+                                destRec.x += velocidadLateral / 3;
+                            }
+                        }
                     }
                     else {
                         if (IsKeyDown(KEY_A)) {
                             switchOrientacion = 2;
-                            dirAir = 1;
-                            destRec.x -= velocidadLateral;
+                            destRec.x -= velocidadLateral / 2;
                         }
-                        else if (dirAir == 1) {
-                            destRec.x -= velocidadLateral;
-                        }
-                        else {
-                            destRec.x -= velocidadLateral/3;
-                        }
-                    }
-                }
-                else if (dirCorrer == 2) {  //Salta derecha
-                    if (IsKeyDown(KEY_A)) {
-                        //(OPCIONAL) Añadir que decelere en vez de cambiar repentinamente de velocidad
-                        switchOrientacion = 2;
-                        destRec.x += velocidadLateral/3;
-                        dirAir = 1;
-                    }
-                    else {
-                        if (IsKeyDown(KEY_S)) {
+                        else if (IsKeyDown(KEY_S)) {
                             switchOrientacion = 3;
-                            dirAir = 2;
-                            destRec.x += velocidadLateral;
-                        }
-                        else if (dirAir == 2) {
-                            destRec.x += velocidadLateral;
-                        }
-                        else {
-                            destRec.x += velocidadLateral/3;
+                            destRec.x += velocidadLateral / 2;
                         }
                     }
                 }
                 else {
                     if (IsKeyDown(KEY_A)) {
+                        if (!disparando && !muriendo) animacionActiva = MOVING;
                         switchOrientacion = 2;
                         destRec.x -= velocidadLateral / 2;
                     }
                     else if (IsKeyDown(KEY_S)) {
+                        if (!disparando && !muriendo) animacionActiva = MOVING;
                         switchOrientacion = 3;
                         destRec.x += velocidadLateral / 2;
                     }
                 }
-            }else {
-                if (IsKeyDown(KEY_A)) {
+            }
+
+            // Se puede disparar en el aire. Las acciones en el aire no se ven limitadas por el disparo, 
+            // pero las del suelo sí. Para mantener la idea if/else de en el aire o en el suelo, 
+            // al del suelo se le ha añaido la restricción opuesta al de en el aire (!enElAire)
+            if (IsKeyPressed(KEY_F) && !disparando && !muriendo) {
+                //std::cout << "Dispara" << std::endl;
+                int sentido = 1; //Hacia la derecha
+                if (orientacionActual == 2) { //Si es hacia la izquierda
+                    sentido = -1;
+                }
+                disparando = true;
+                animacionActiva = SHOOTING;
+                indiceAnimacion = 6; //Es el 0 de la segunda parte de animaciones
+                Pompa p = Pompa(destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, 500);
+                admin->pompas.push_back(p);
+            }
+            else if (!enElAire) {
+                if (IsKeyDown(KEY_A) && !muriendo) {
                     if (!disparando) animacionActiva = MOVING;
                     switchOrientacion = 2;
-                    destRec.x -= velocidadLateral/2;
-                }else if(IsKeyDown(KEY_S)) {
+                    //std::cout << "Muevo Izquierda, orientacion: " << switchOrientacion << std::endl;
+                    destRec.x -= velocidadLateral;
+                    dirCorrer = 1;
+                    dirAir = 1;
+                }
+                else if (IsKeyDown(KEY_S) && !muriendo) {
                     if (!disparando) animacionActiva = MOVING;
                     switchOrientacion = 3;
-                    destRec.x += velocidadLateral/2;
+                    //std::cout << "Muevo Derecha, orientacion: " << switchOrientacion << std::endl;
+                    destRec.x += velocidadLateral;
+                    dirCorrer = 2;
+                    dirAir = 2;
+                }
+                else {
+                    dirCorrer = 0;
+                    if (!(enElAire && saltoRecorrido == 0)) {
+                        switchOrientacion = 1;
+                    }
+                    if (!disparando && !muriendo) animacionActiva = STANDING;
                 }
             }
-        }
 
-        // Se puede disparar en el aire. Las acciones en el aire no se ven limitadas por el disparo, 
-        // pero las del suelo sí. Para mantener la idea if/else de en el aire o en el suelo, 
-        // al del suelo se le ha añaido la restricción opuesta al de en el aire (!enElAire)
-        if (IsKeyPressed(KEY_F) && !disparando) { 
-            //std::cout << "Dispara" << std::endl;
-            int sentido = 1; //Hacia la derecha
-            if (orientacionActual == 2) { //Si es hacia la izquierda
-                sentido = -1;
+            //Gestión de salto
+            if (IsKeyPressed(KEY_SPACE) && !enElAire && !muriendo) {
+                //std::cout << "Salto" << std::endl;
+                if (!disparando) animacionActiva = JUMPING;
+                enElAire = true;
+                velocidadActual = velocidadSalto;
+                destRec.y -= velocidadActual;
+                saltoRecorrido += velocidadActual;
+                velocidadActual -= deceleracion;
             }
-            disparando = true;
-            animacionActiva = SHOOTING;
-            indiceAnimacion = 6; //Es el 0 de la segunda parte de animaciones
-            Pompa p = Pompa(destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, 500);
-            admin->pompas.push_back(p);
-        } else if(!enElAire) {
-            if (IsKeyDown(KEY_A)) {
-                if (!disparando) animacionActiva = MOVING;
-                switchOrientacion = 2;
-                //std::cout << "Muevo Izquierda, orientacion: " << switchOrientacion << std::endl;
-                destRec.x -= velocidadLateral;
-                dirCorrer = 1;
-                dirAir = 1;
+            else if (velocidadActual > 0 && enElAire && !cayendo) {
+                if (!disparando && !muriendo) animacionActiva = JUMPING;
+                destRec.y -= velocidadActual;
+                saltoRecorrido += velocidadActual;
+                velocidadActual -= deceleracion;
             }
-            else if (IsKeyDown(KEY_S)) {
-                if (!disparando) animacionActiva = MOVING;
-                switchOrientacion = 3;
-                //std::cout << "Muevo Derecha, orientacion: " << switchOrientacion << std::endl;
-                destRec.x += velocidadLateral;
-                dirCorrer = 2;
-                dirAir = 2;
+            else if (enElAire && cayendo && saltoRecorrido > 0) {
+                if (!disparando && !muriendo) animacionActiva = FALLING;
+                destRec.y -= velocidadActual;
+                saltoRecorrido += velocidadActual;
+                velocidadActual -= deceleracion;
             }
-            else {
-                dirCorrer = 0;
-                if (!(enElAire && saltoRecorrido == 0)) {
-                    switchOrientacion = 1;
+            else if (enElAire && cayendo) { //Planeando
+                //std::cout << "I'm gliding" << std::endl;
+                if (!disparando && !muriendo) animacionActiva = FALLING;
+                destRec.y += velocidadSalto / 2;
+                saltoRecorrido -= velocidadSalto / 2;
+            }
+            else if (enElAire) { //Inicio caída
+                if (!disparando && !muriendo) animacionActiva = FALLING;
+                cayendo = true;
+                destRec.y -= velocidadActual;
+                saltoRecorrido += velocidadActual; //planeo
+                velocidadActual -= deceleracion;
+            }
+
+            //Comprueba choque con los enemigos
+            for (int i = 0; i < admin->enemigos.size(); i++) {
+                if (!admin->enemigos.at(i)->borrame && !admin->enemigos.at(i)->muerto && !muriendo
+                    && ((destRec.y + destRec.height / 2) >= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2)
+                        && (destRec.y - destRec.height / 2) <= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2)
+                        || (destRec.y + destRec.height / 2) >= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2)
+                        && (destRec.y - destRec.height / 2) <= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2))
+                    && ((destRec.x + destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2)
+                        && (destRec.x - destRec.width / 2) <= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2)
+                        || (destRec.x + destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2)
+                        && (destRec.x - destRec.width / 2) <= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2))) { //Colisiona con un enemigo
+                    //std::cout << "I DIED" << std::endl;
+                    muriendo = true;
+                    animacionActiva = DYING;
                 }
-                if (!disparando) animacionActiva = STANDING;
             }
-        }
 
-        //Gestión de salto
-        if (IsKeyPressed(KEY_SPACE) && !enElAire) {
-            //std::cout << "Salto" << std::endl;
-            if (!disparando) animacionActiva = JUMPING;
-            enElAire = true;
-            velocidadActual = velocidadSalto;
-            destRec.y -= velocidadActual;
-            saltoRecorrido += velocidadActual;
-            velocidadActual -= deceleracion;
-        }
-        else if (velocidadActual > 0 && enElAire && !cayendo) {
-            if (!disparando) animacionActiva = JUMPING;
-            destRec.y -= velocidadActual;
-            saltoRecorrido += velocidadActual;
-            velocidadActual -= deceleracion;
-        }
-        else if (enElAire && cayendo && saltoRecorrido > 0) {
-            if (!disparando) animacionActiva = FALLING;
-            destRec.y -= velocidadActual;
-            saltoRecorrido += velocidadActual;
-            velocidadActual -= deceleracion;
-        } else if (enElAire && cayendo) { //Planeando
-            //std::cout << "I'm gliding" << std::endl;
-            if (!disparando) animacionActiva = FALLING;
-            destRec.y += velocidadSalto / 2;
-            saltoRecorrido -= velocidadSalto / 2;
-        }
-        else if (enElAire) { //Inicio caída
-            if(!disparando) animacionActiva = FALLING;
-            cayendo = true;
-            destRec.y -= velocidadActual;
-            saltoRecorrido += velocidadActual; //planeo
-            velocidadActual -= deceleracion;
-        }
-        //Le dice al administrador los datos que necesita saber
-        admin->jugadorCayendo = cayendo; 
-        admin->posicionJugador = destRec;
-        admin->sentidoJugador = orientacionActual;
+            //Le dice al administrador los datos que necesita saber
+            admin->jugadorCayendo = cayendo;
+            admin->posicionJugador = destRec;
+            admin->sentidoJugador = orientacionActual;
+            admin->muriendo = muriendo;
 
-        //Comprueba choque con los enemigos
-        for (int i = 0; i < admin->enemigos.size(); i++) {
-            if (!admin->enemigos.at(i)->borrame && !admin->enemigos.at(i)->muerto
-                && ((destRec.y + destRec.height / 2) > (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2)
-                    && (destRec.y - destRec.height / 2) < (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2)
-                    || (destRec.y + destRec.height / 2) > (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2)
-                    && (destRec.y - destRec.height / 2) < (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2))
-                && ((destRec.x + destRec.width / 2) > (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2)
-                    && (destRec.x - destRec.width / 2) < (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2)
-                    || (destRec.x + destRec.width / 2) > (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2)
-                    && (destRec.x - destRec.width / 2) < (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2))) { //Colisiona con un enemigo
+            cuentaFrames++;
+            if (cuentaFrames >= (targetFrames / velocidadFrames)) {
+                //Pasar algunas comprobaciones de colisión aquí en caso de gran ralentí
 
-            }
-        }
-        
-        cuentaFrames++;
-        if (cuentaFrames >= (targetFrames / velocidadFrames) ) {
-            //Pasar algunas comprobaciones de colisión aquí en caso de gran ralentí
-
-            //Actualizar puntero de animacion
-            cuentaFrames = 0;
-            switch (animacionActiva) {
-            case 0:
-                indiceAnimacion = (indiceAnimacion + 1) % fStandingAnimation;
-                break;
-            case 1:
-                indiceAnimacion = (indiceAnimacion + 1) % fMovingAnimation;
-                break;
-            case 2:
-                indiceAnimacion = (indiceAnimacion + 1) % fJumpingAnimation;
-                break;
-            case 3:
-                indiceAnimacion = (indiceAnimacion + 1) % fFallingAnimation;
-                break;
-            case 4:
-                indiceAnimacion++;
-                if (indiceAnimacion >= (fShootingAnimation+6)) {
-                    std::cout << "Puede volver a disparar" << std::endl;
-                    disparando = false;
-                    animacionActiva = STANDING;
-                    indiceAnimacion = 0;
+                //Actualizar puntero de animacion
+                cuentaFrames = 0;
+                switch (animacionActiva) {
+                case 0:
+                    indiceAnimacion = (indiceAnimacion + 1) % fStandingAnimation;
+                    break;
+                case 1:
+                    indiceAnimacion = (indiceAnimacion + 1) % fMovingAnimation;
+                    break;
+                case 2:
+                    indiceAnimacion = (indiceAnimacion + 1) % fJumpingAnimation;
+                    break;
+                case 3:
+                    indiceAnimacion = (indiceAnimacion + 1) % fFallingAnimation;
+                    break;
+                case 4:
+                    indiceAnimacion++;
+                    if (indiceAnimacion >= (fShootingAnimation + 6)) {
+                        std::cout << "Puede volver a disparar" << std::endl;
+                        disparando = false;
+                        animacionActiva = STANDING;
+                        indiceAnimacion = 0;
+                    }
+                    break;
+                case 5:
+                    indiceAnimacion++;
+                    if (indiceAnimacion >= (fDeathAnimation + 6)) {
+                        indiceAnimacion = 6;
+                        muerto = true;
+                    }
+                    break;
+                default:
+                    break;
                 }
-                break;
-            default:
-                break;
+            }
+        } else {
+            if (numVidas > 0) {
+                numVidas--;
+                muerto = false;
+                muriendo = false;
+                animacionActiva = STANDING;
             }
         }
     };

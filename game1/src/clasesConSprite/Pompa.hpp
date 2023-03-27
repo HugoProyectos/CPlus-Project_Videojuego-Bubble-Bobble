@@ -78,7 +78,7 @@ public:
 
 	void Inicializador(const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
 
-	sh_Enemigo Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1);
+	sh_Enemigo Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1);
 
 	void Dibujar();
 };

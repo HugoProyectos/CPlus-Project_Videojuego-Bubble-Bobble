@@ -11,6 +11,7 @@ public:
 	Rectangle posicionJugador = { -1,-1,-1,-1 };
 	bool jugadorCayendo = false;
 	int sentidoJugador = 2; //3->mira a la derecha 2->mira a la izquierda: variable orientacionActual de Bub
+	bool muriendo = false;
 
 	std::vector<Pompa> pompas;
 	std::vector<sh_Enemigo> enemigos;
@@ -36,7 +37,7 @@ public:
 				pompas = elimina(i);
 				i--;
 			} else if (pompas.at(i).disparada > 0) { //comprueba contacto con los enemigos
-				std::cout << "CHECK DISPARADA" << std::endl;
+				//std::cout << "CHECK DISPARADA" << std::endl;
 
 				for (int j = 0; j < enemigos.size(); j++) {
 					if (!enemigos.at(j)->borrame 
@@ -48,18 +49,18 @@ public:
 					&& (pompas.at(i).destRec.x - pompas.at(i).destRec.width / 2) < (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
 					|| (pompas.at(i).destRec.x + pompas.at(i).destRec.width / 2) > (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)
 					&& (pompas.at(i).destRec.x - pompas.at(i).destRec.width / 2) < (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2))) { //Si choca con el enemigo, lo marca para que se borre y se cambia el estado de la pompa
-						std::cout << "Entro" << std::endl;
+						//std::cout << "Entro" << std::endl;
 						enemigos.at(j)->borrame = true;
-						std::cout << "Salgo" << std::endl;
+						//std::cout << "Salgo" << std::endl;
 						pompas.at(i).modulo = enemigos.at(j)->tipo;
 						pompas.at(i).enemigoContenido = enemigos.at(j)->tipo;
 						pompas.at(i).disparada = 0;
 					}
 				}
-				pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador);
+				pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo);
 
 			} else {
-				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador);
+				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo);
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 				}

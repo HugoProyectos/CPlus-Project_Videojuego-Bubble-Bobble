@@ -45,7 +45,7 @@ void Pompa::Inicializador(const Rectangle origen, float velDisparo, float distan
 
 }
 
-sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1) {
+sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1) {
 	sh_Enemigo result = NULL;
 
 	if (disparada == 2) {
@@ -77,74 +77,74 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1) {
 			tVida -= VELOCIDAD_MUERTE;
 			animacionActiva = VACIA;
 
-
-			/////COMPROBACIÓN DE COLISIÓN CON EL JUGADOR
-			bool contactoEspalda = ((destRec.x - destRec.width / 2) < (pJ1.x + pJ1.width / 2)) 
-								&& ((destRec.x + destRec.width / 2) > (pJ1.x + pJ1.width / 2));
-			bool contactoCabeza = (destRec.x - destRec.width / 2) <= (pJ1.x + pJ1.width / 2) 
-								&& (destRec.x + destRec.width / 2) >= (pJ1.x + pJ1.width / 2) 
-								|| (destRec.x + destRec.width / 2) >= (pJ1.x) 
-								&& (destRec.x - destRec.width / 2) < (pJ1.x);
-			if (sentidoJ1 != 2) { //Si J1 mira derecha, hay que cambiar
-				//std::cout << "RECTIFICANDO" << std::endl;
-				contactoEspalda = ((destRec.x - destRec.width / 2) < (pJ1.x - pJ1.width / 2)) 
-								&& ((destRec.x + destRec.width / 2) > (pJ1.x - pJ1.width / 2));
-				contactoCabeza = (destRec.x - destRec.width / 2) <= (pJ1.x - pJ1.width / 2) 
-								&& (destRec.x + destRec.width / 2) >= (pJ1.x - pJ1.width / 2) 
-								|| (destRec.x + destRec.width / 2) >= (pJ1.x) 
-								&& (destRec.x - destRec.width / 2) < (pJ1.x);
-				//std::cout << contactoEspalda<< std::endl;
-			}
-			
-			if (contactoEspalda
-			&& ((destRec.y - destRec.width / 2) <= (pJ1.y + pJ1.height / 2) && (destRec.y + destRec.height / 2) >= (pJ1.y + pJ1.height / 2)
-			||   (destRec.y - destRec.width / 2) <= (pJ1.y - pJ1.height / 2) && (destRec.y + destRec.height / 2) >= (pJ1.y - pJ1.height / 2)) ) { //Choca por detrás del jugador (primera linea->horizontal, segunda y tercera->posibilidades verticales)
-				animacionActiva = EXPLOTA;
-				indiceAnimacion = 0;
-				tVida = -1;
-
-				if (modulo == 1) {
-					Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
-					robo.destRec = destRec;
-					robo.muerto = true;
-					result = std::make_shared<Robot>(robo);
+			if (!muriendoJ1){
+				/////COMPROBACIÓN DE COLISIÓN CON EL JUGADOR
+				bool contactoEspalda = ((destRec.x - destRec.width / 2) < (pJ1.x + pJ1.width / 2))
+					&& ((destRec.x + destRec.width / 2) > (pJ1.x + pJ1.width / 2));
+				bool contactoCabeza = (destRec.x - destRec.width / 2) <= (pJ1.x + pJ1.width / 2)
+					&& (destRec.x + destRec.width / 2) >= (pJ1.x + pJ1.width / 2)
+					|| (destRec.x + destRec.width / 2) >= (pJ1.x)
+					&& (destRec.x - destRec.width / 2) < (pJ1.x);
+				if (sentidoJ1 != 2) { //Si J1 mira derecha, hay que cambiar
+					//std::cout << "RECTIFICANDO" << std::endl;
+					contactoEspalda = ((destRec.x - destRec.width / 2) < (pJ1.x - pJ1.width / 2))
+						&& ((destRec.x + destRec.width / 2) > (pJ1.x - pJ1.width / 2));
+					contactoCabeza = (destRec.x - destRec.width / 2) <= (pJ1.x - pJ1.width / 2)
+						&& (destRec.x + destRec.width / 2) >= (pJ1.x - pJ1.width / 2)
+						|| (destRec.x + destRec.width / 2) >= (pJ1.x)
+						&& (destRec.x - destRec.width / 2) < (pJ1.x);
+					//std::cout << contactoEspalda<< std::endl;
 				}
 
-				std::cout << "Peto por espalda" << std::endl;
-			}
-			else if ((destRec.y + destRec.height / 2) >= (pJ1.y - pJ1.height / 2) && (destRec.y - destRec.height / 2) <= (pJ1.y - pJ1.height / 2)
-			&& (contactoCabeza)) {	//Choque por arriba
-				animacionActiva = EXPLOTA;
-				indiceAnimacion = 0;
-				tVida = -1;
-				std::cout << "Peto por cabeza" << std::endl;
+				if (contactoEspalda
+					&& ((destRec.y - destRec.width / 2) <= (pJ1.y + pJ1.height / 2) && (destRec.y + destRec.height / 2) >= (pJ1.y + pJ1.height / 2)
+						|| (destRec.y - destRec.width / 2) <= (pJ1.y - pJ1.height / 2) && (destRec.y + destRec.height / 2) >= (pJ1.y - pJ1.height / 2))) { //Choca por detrás del jugador (primera linea->horizontal, segunda y tercera->posibilidades verticales)
+					animacionActiva = EXPLOTA;
+					indiceAnimacion = 0;
+					tVida = -1;
 
-				if (modulo == 1) {
-					Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
-					robo.destRec = destRec;
-					robo.muerto = true;
-					result = std::make_shared<Robot>(robo);
+					if (modulo == 1) {
+						Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
+						robo.destRec = destRec;
+						robo.muerto = true;
+						result = std::make_shared<Robot>(robo);
+					}
+
+					std::cout << "Peto por espalda" << std::endl;
 				}
+				else if ((destRec.y + destRec.height / 2) >= (pJ1.y - pJ1.height / 2) && (destRec.y - destRec.height / 2) <= (pJ1.y - pJ1.height / 2)
+					&& (contactoCabeza)) {	//Choque por arriba
+					animacionActiva = EXPLOTA;
+					indiceAnimacion = 0;
+					tVida = -1;
+					std::cout << "Peto por cabeza" << std::endl;
 
-			}
-			else if (((destRec.x - destRec.width / 2) < (pJ1.x + pJ1.width / 2) && (destRec.x + destRec.width / 2) > (pJ1.x + pJ1.width / 2)
-			|| (destRec.x + destRec.width / 2) > (pJ1.x - pJ1.width) && (destRec.x - destRec.width / 2) < (pJ1.x - pJ1.width / 2))
-			&& (pJ1.y + pJ1.height/2) > (destRec.y - destRec.height/2) && (pJ1.y + pJ1.height / 2) < (destRec.y + destRec.height / 2)
-			&& cayendoJ1) { //Choque en caída
-				animacionActiva = EXPLOTA;
-				indiceAnimacion = 0;
-				tVida = -1;
-				std::cout << "Peto por caida" << std::endl;
+					if (modulo == 1) {
+						Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
+						robo.destRec = destRec;
+						robo.muerto = true;
+						result = std::make_shared<Robot>(robo);
+					}
 
-				if (modulo == 1) {
-					Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
-					robo.destRec = destRec;
-					robo.muerto = true;
-					result = std::make_shared<Robot>(robo);
 				}
+				else if (((destRec.x - destRec.width / 2) < (pJ1.x + pJ1.width / 2) && (destRec.x + destRec.width / 2) > (pJ1.x + pJ1.width / 2)
+					|| (destRec.x + destRec.width / 2) > (pJ1.x - pJ1.width) && (destRec.x - destRec.width / 2) < (pJ1.x - pJ1.width / 2))
+					&& (pJ1.y + pJ1.height / 2) > (destRec.y - destRec.height / 2) && (pJ1.y + pJ1.height / 2) < (destRec.y + destRec.height / 2)
+					&& cayendoJ1) { //Choque en caída
+					animacionActiva = EXPLOTA;
+					indiceAnimacion = 0;
+					tVida = -1;
+					std::cout << "Peto por caida" << std::endl;
 
+					if (modulo == 1) {
+						Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
+						robo.destRec = destRec;
+						robo.muerto = true;
+						result = std::make_shared<Robot>(robo);
+					}
+
+				}
 			}
-			
 
 			/////FIN COMPROBACIÓN DE COLISIÓN CON EL JUGADOR
 
