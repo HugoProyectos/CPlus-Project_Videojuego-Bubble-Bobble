@@ -44,8 +44,8 @@ public:
         this->top = (positionY - 1) * GetScreenHeight() / (float)BLOQUE_PEQUENO_ALTO;
         float anchura = GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO * this->tamanoX;
         float altura = (GetScreenHeight()) / (float)BLOQUE_PEQUENO_ALTO * this->tamanoY;
-        this->right = this->left + anchura * this->tamanoX;
-        this->bot = this->top + altura * this->tamanoY;
+        this->right = this->left + anchura;
+        this->bot = this->top + altura;
     }
 
     ~Plataforma(){}
@@ -60,8 +60,8 @@ public:
         this->top = tamanoMargenSup + (positionY - 1) * (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO;
         float anchura = GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO * this->tamanoX;
         float altura = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO * this->tamanoY;
-        this->right = this->left + anchura * this->tamanoX;
-        this->bot = this->top + altura * this->tamanoY;
+        this->right = this->left + anchura;
+        this->bot = this->top + altura;
     }
 
     void Dibujar() {
