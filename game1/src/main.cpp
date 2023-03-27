@@ -212,6 +212,9 @@ int main(void)
     SetTargetFPS(60);               // Set desired framerate (frames-per-second)
     //--------------------------------------------------------------------------------------
 
+    bub.cayendo = true;
+    bub.enElAire = true;
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {

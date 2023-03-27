@@ -302,51 +302,51 @@ public:
         if (
             (
                 //Comprobamos colision esquina inferior derecha
-                (((s.positionY + s.tamanoY) > (destRec.y + destRec.height / 2)) &&
-                    ((destRec.y + destRec.height / 2) > (s.positionY))
+                (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2) > (s.top))
                     ) && (
-                        ((s.positionX + s.tamanoX) > (destRec.x + destRec.width / 2)) &&
-                        ((destRec.x + destRec.width / 2) > (s.positionX))
+                        ((s.right) > (destRec.x + destRec.width / 2)) &&
+                        ((destRec.x + destRec.width / 2) > (s.left))
                         )
                 ) ||
             (
                 //Comprobamos colision esquina superior derecha
-                (((s.positionY + s.tamanoY) > (destRec.y - destRec.height / 2)) &&
-                    ((destRec.y - destRec.height / 2) > (s.positionY))
+                (((s.bot) > (destRec.y - destRec.height / 2)) &&
+                    ((destRec.y - destRec.height / 2) > (s.top))
                     ) && (
-                        ((s.positionX + s.tamanoX) > (destRec.x + destRec.width / 2)) &&
-                        ((destRec.x + destRec.width / 2) > (s.positionX))
+                        ((s.right) > (destRec.x + destRec.width / 2)) &&
+                        ((destRec.x + destRec.width / 2) > (s.left))
                         )
                 ) ||
             (
                 //Comprobamos colision esquina superior izquierda
-                (((s.positionY + s.tamanoY) > (destRec.y - destRec.height / 2)) &&
-                    ((destRec.y - destRec.height / 2) > (s.positionY))
+                (((s.bot) > (destRec.y - destRec.height / 2)) &&
+                    ((destRec.y - destRec.height / 2) > (s.top))
                     ) && (
-                        ((s.positionX + s.tamanoX) > (destRec.x - destRec.width / 2)) &&
-                        ((destRec.x - destRec.width / 2) > (s.positionX))
+                        ((s.right ) > (destRec.x - destRec.width / 2)) &&
+                        ((destRec.x - destRec.width / 2) > (s.left))
                         )
                 ) ||
             (
                 //Comprobamos colision esquina inferior izquierda
-                (((s.positionY + s.tamanoY) > (destRec.y + destRec.height / 2)) &&
-                    ((destRec.y + destRec.height / 2) > (s.positionY))
+                (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2) > (s.top))
                     ) && (
-                        ((s.positionX + s.tamanoX) > (destRec.x - destRec.width / 2)) &&
-                        ((destRec.x - destRec.width / 2) > (s.positionX))
+                        ((s.right) > (destRec.x - destRec.width / 2)) &&
+                        ((destRec.x - destRec.width / 2) > (s.left))
                         )
                 )
             ) {
             std::cout << "Choque" << std::endl;
             switch (s.aproach) {
             case 1:
-                destRec.x = s.positionX - destRec.width / 2;
+                destRec.x = s.left - destRec.width / 2;
                 break;
             case 2:
-                destRec.x = (s.positionX + s.tamanoX) + destRec.width / 2;
+                destRec.x = s.right + destRec.width / 2;
                 break;
             case 3:
-                destRec.y = (s.positionY) - destRec.height / 2;
+                destRec.y = s.top - destRec.height / 2;
                 enElAire = false;
                 cayendo = false;
                 saltoRecorrido = 0;
@@ -359,21 +359,21 @@ public:
             if (
                 //Comprobamos colision esquina superior derecha
                 (
-                    (((s.positionY + s.tamanoY) > (destRec.y - destRec.height / 2)) &&
-                        ((destRec.y - destRec.height / 2) > (s.positionY))
+                    (((s.bot) > (destRec.y - destRec.height / 2)) &&
+                        ((destRec.y - destRec.height / 2) > (s.top))
                         ) && (
-                            ((s.positionX + s.tamanoX) > (destRec.x + destRec.width / 2 + 5)) &&
-                            ((destRec.x + destRec.width / 2 + 5) > (s.positionX))
+                            ((s.right) > (destRec.x + destRec.width / 2 + 5)) &&
+                            ((destRec.x + destRec.width / 2 + 5) > (s.left))
                             )
                     )
                 ||
                 //Comprobamos colision esquina inferior derecha
                 (
-                    (((s.positionY + s.tamanoY) > (destRec.y + destRec.height / 2)) &&
-                        ((destRec.y + destRec.height / 2) > (s.positionY))
+                    (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                        ((destRec.y + destRec.height / 2) > (s.top))
                         ) && (
-                            ((s.positionX + s.tamanoX) > (destRec.x + destRec.width / 2 + 5)) &&
-                            ((destRec.x + destRec.width / 2 + 5) > (s.positionX))
+                            ((s.right) > (destRec.x + destRec.width / 2 + 5)) &&
+                            ((destRec.x + destRec.width / 2 + 5) > (s.left))
                             )
                     )
                 ) {
@@ -383,21 +383,21 @@ public:
             else if (
                 //Comprobamos colision esquina superior derecha
                 (
-                    (((s.positionY + s.tamanoY) > (destRec.y - destRec.height / 2)) &&
-                        ((destRec.y - destRec.height / 2) > (s.positionY))
+                    (((s.bot) > (destRec.y - destRec.height / 2)) &&
+                        ((destRec.y - destRec.height / 2) > (s.top))
                         ) && (
-                            ((s.positionX + s.tamanoX) > (destRec.x - destRec.width / 2 - 5)) &&
-                            ((destRec.x - destRec.width / 2 - 5) > (s.positionX))
+                            ((s.right) > (destRec.x - destRec.width / 2 - 5)) &&
+                            ((destRec.x - destRec.width / 2 - 5) > (s.left))
                             )
                     )
                 ||
                 //Comprobamos colision esquina inferior derecha
                 (
-                    (((s.positionY + s.tamanoY) > (destRec.y + destRec.height / 2)) &&
-                        ((destRec.y + destRec.height / 2) > (s.positionY))
+                    (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                        ((destRec.y + destRec.height / 2) > (s.top))
                         ) && (
-                            ((s.positionX + s.tamanoX) > (destRec.x - destRec.width / 2 - 5)) &&
-                            ((destRec.x - destRec.width / 2 - 5) > (s.positionX))
+                            ((s.right) > (destRec.x - destRec.width / 2 - 5)) &&
+                            ((destRec.x - destRec.width / 2 - 5) > (s.left))
                             )
                     )
                 ) {
@@ -407,21 +407,21 @@ public:
             else if (
                 //Comprobamos colision esquina inferior derecha
                 (
-                    (((s.positionY + s.tamanoY) > (destRec.y + destRec.height / 2 + 5)) &&
-                        ((destRec.y + destRec.height / 2 + 5) > (s.positionY))
+                    (((s.bot) > (destRec.y + destRec.height / 2 + 5)) &&
+                        ((destRec.y + destRec.height / 2 + 5) > (s.top))
                         ) && (
-                            ((s.positionX + s.tamanoX) > (destRec.x + destRec.width / 2)) &&
-                            ((destRec.x + destRec.width / 2) > (s.positionX))
+                            ((s.right) > (destRec.x + destRec.width / 2)) &&
+                            ((destRec.x + destRec.width / 2) > (s.left))
                             )
                     )
                 ||
                 //Comprobamos colision esquina inferior izquierda
                 (
-                    (((s.positionY + s.tamanoY) > (destRec.y + destRec.height / 2 + 5)) &&
-                        ((destRec.y + destRec.height / 2 + 5) > (s.positionY))
+                    (((s.bot) > (destRec.y + destRec.height / 2 + 5)) &&
+                        ((destRec.y + destRec.height / 2 + 5) > (s.top))
                         ) && (
-                            ((s.positionX + s.tamanoX) > (destRec.x - destRec.width / 2)) &&
-                            ((destRec.x - destRec.width / 2) > (s.positionX))
+                            ((s.right) > (destRec.x - destRec.width / 2)) &&
+                            ((destRec.x - destRec.width / 2) > (s.left))
                             )
                     )
                 ) {
