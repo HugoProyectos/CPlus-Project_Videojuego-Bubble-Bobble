@@ -181,6 +181,14 @@ public:
     float ratioMargenSup = 0;
     float ratioMargenInf = 0;
 
+    float top = 0;
+    float bot = 0;
+    float left_izq = 0;
+    float left_der = 0;
+    float right_izq = 0;
+    float right_der = 0;
+
+
     std::string numeroNivel = "";
 
 
@@ -212,6 +220,21 @@ public:
 
     void Actualizar() {
         // TODO
+        float tamanoMargenSup = ratioMargenSup != 0 ? GetScreenHeight() / ratioMargenSup : 0;
+        float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
+        float altura_bloque = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_GRANDE_ALTO;
+        float anchura_bloque = GetScreenWidth() / (float)BLOQUE_GRANDE_ANCHO;
+
+        this->top = tamanoMargenSup;
+        this->bot = tamanoMargenSup + altura_bloque * BLOQUE_GRANDE_ALTO;
+
+        // Left y right de la columna de la izquierda
+        this->left_izq = 0;
+        this->right_izq = anchura_bloque;
+
+        // Left y right de la columna de la derecha
+        this->left_der = GetScreenWidth() - anchura_bloque;
+        this->right_der = GetScreenWidth() - anchura_bloque + anchura_bloque;
     };
 
     void Dibujar() {
