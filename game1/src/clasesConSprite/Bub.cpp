@@ -31,6 +31,8 @@ class Bub : public Sprite {
 
 public:
     
+    // VARIABLE DE ULTIMA PLATAFORMA SUELO
+    Plataforma lastGround;
 
     // VARIABLES PARA LA GENERACIÓN DE POMPAS
     bool disparando = false;
@@ -199,6 +201,7 @@ public:
                 destRec.x -= velocidadLateral;
                 dirCorrer = 1;
                 dirAir = 1;
+                compruebaSuelo(lastGround);
             }
             else if (IsKeyDown(KEY_S)) {
                 if (!disparando) animacionActiva = MOVING;
@@ -207,6 +210,7 @@ public:
                 destRec.x += velocidadLateral;
                 dirCorrer = 2;
                 dirAir = 2;
+                compruebaSuelo(lastGround);
             }
             else {
                 dirCorrer = 0;
@@ -350,6 +354,7 @@ public:
                 enElAire = false;
                 cayendo = false;
                 saltoRecorrido = 0;
+                lastGround = s;
                 break;
             }
         }
@@ -377,6 +382,7 @@ public:
                             )
                     )
                 ) {
+                std::cout << "Aproach left" << std::endl;
                 s.aproach = 1;
             }
             //Derecha
@@ -401,6 +407,7 @@ public:
                             )
                     )
                 ) {
+                std::cout << "Aproach right" << std::endl;
                 s.aproach = 2;
             }
             //Arriba
@@ -425,6 +432,7 @@ public:
                             )
                     )
                 ) {
+                std::cout << "Aproach top" << std::endl;
                 s.aproach = 3;
             }
             //Abajo
@@ -432,6 +440,32 @@ public:
                 //Si no se cumplen anteriores asumimos que se acerca por debajo
                 s.aproach = 4;
             }
+        }
+    }
+
+    void compruebaSuelo(Plataforma s) {
+        if (
+            !(
+                //Comprobamos colision esquina inferior derecha
+                (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2 + 1) > (s.top))
+                    ) && (
+                        ((s.right) > (destRec.x + destRec.width / 2)) &&
+                        ((destRec.x + destRec.width / 2) > (s.left))
+                        )
+                ) &&
+            !(
+                //Comprobamos colision esquina inferior izquierda
+                (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2 + 1) > (s.top))
+                    ) && (
+                        ((s.right) > (destRec.x - destRec.width / 2)) &&
+                        ((destRec.x - destRec.width / 2) > (s.left))
+                        )
+                )
+            ) {
+            enElAire = true;
+            cayendo = true;
         }
     }
 };
