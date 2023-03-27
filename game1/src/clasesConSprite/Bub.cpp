@@ -254,10 +254,26 @@ public:
         admin->posicionJugador = destRec;
         admin->sentidoJugador = orientacionActual;
 
-        //Actualizar puntero de animacion
+        //Comprueba choque con los enemigos
+        for (int i = 0; i < admin->enemigos.size(); i++) {
+            if (!admin->enemigos.at(i)->borrame && !admin->enemigos.at(i)->muerto
+                && ((destRec.y + destRec.height / 2) > (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2)
+                    && (destRec.y - destRec.height / 2) < (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2)
+                    || (destRec.y + destRec.height / 2) > (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2)
+                    && (destRec.y - destRec.height / 2) < (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2))
+                && ((destRec.x + destRec.width / 2) > (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2)
+                    && (destRec.x - destRec.width / 2) < (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2)
+                    || (destRec.x + destRec.width / 2) > (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2)
+                    && (destRec.x - destRec.width / 2) < (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2))) { //Colisiona con un enemigo
+
+            }
+        }
+        
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames) ) {
-            //std::cerr << "Actualiza" << std::endl;
+            //Pasar algunas comprobaciones de colisión aquí en caso de gran ralentí
+
+            //Actualizar puntero de animacion
             cuentaFrames = 0;
             switch (animacionActiva) {
             case 0:
