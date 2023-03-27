@@ -46,6 +46,8 @@ void Pompa::Inicializador(const Rectangle origen, float velDisparo, float distan
 }
 
 sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1) {
+	sh_Enemigo result = NULL;
+
 	if (disparada == 2) {
 		//std::cout << "PIUM" << std::endl;
 		distanciaRecorrida += velocidadDesplazamiento; //Actualiza el contador
@@ -62,9 +64,13 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1) {
 			animacionActiva = EXPLOTA;
 			indiceAnimacion = 0;
 			tVida--;
-
-			sh_Robot robo = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60));
-			robo->destRec = destRec;
+			
+			if (modulo == 1) {
+				Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
+				robo.destRec = destRec;
+				result = std::make_shared<Robot>(robo);
+			}
+			
 		}
 		else if (tVida > 0) {
 			disparada = 0;
@@ -96,6 +102,13 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1) {
 				animacionActiva = EXPLOTA;
 				indiceAnimacion = 0;
 				tVida = -1;
+
+				if (modulo == 1) {
+					Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
+					robo.destRec = destRec;
+					result = std::make_shared<Robot>(robo);
+				}
+
 				std::cout << "Peto por espalda" << std::endl;
 			}
 			else if ((destRec.y + destRec.height / 2) >= (pJ1.y - pJ1.height / 2) && (destRec.y - destRec.height / 2) <= (pJ1.y - pJ1.height / 2)
@@ -104,6 +117,13 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1) {
 				indiceAnimacion = 0;
 				tVida = -1;
 				std::cout << "Peto por cabeza" << std::endl;
+
+				if (modulo == 1) {
+					Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
+					robo.destRec = destRec;
+					result = std::make_shared<Robot>(robo);
+				}
+
 			}
 			else if (((destRec.x - destRec.width / 2) < (pJ1.x + pJ1.width / 2) && (destRec.x + destRec.width / 2) > (pJ1.x + pJ1.width / 2)
 			|| (destRec.x + destRec.width / 2) > (pJ1.x - pJ1.width) && (destRec.x - destRec.width / 2) < (pJ1.x - pJ1.width / 2))
@@ -113,6 +133,14 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1) {
 				indiceAnimacion = 0;
 				tVida = -1;
 				std::cout << "Peto por caida" << std::endl;
+
+				if (modulo == 1) {
+					Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
+					robo.destRec = destRec;
+					robo.muerto = true;
+					result = std::make_shared<Robot>(robo);
+				}
+
 			}
 			
 
@@ -165,7 +193,7 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1) {
 			break;
 		};
 	}
-
+	return result;
 }
 
 void Pompa::Dibujar() {

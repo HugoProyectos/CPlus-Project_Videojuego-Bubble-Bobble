@@ -46,7 +46,7 @@ public:
         this->tamano = tamano;
 
         // Destination rectangle (screen rectangle where drawing part of texture)
-        destRec = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f, (float)frameWidth * tamano, (float)frameHeight * tamano }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
+        destRec = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f - 100, (float)frameWidth * tamano, (float)frameHeight * tamano }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
         //destRec = { 0,0, (float)frameWidth * tamano, (float)frameHeight * tamano }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
 
         // Origin of the texture (rotation/scale point), it's relative to destination rectangle size

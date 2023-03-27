@@ -34,7 +34,7 @@ int main(void)
     admin.pompas.push_back(p);
 
     sh_Robot robo = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS));
-    robo->muerto = true;
+    //robo->muerto = true;
     admin.enemigos.push_back(robo);
 
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f,TARGET_FPS, admin);
