@@ -14,7 +14,7 @@ public:
     Texture2D animations[2] = { walkAnimation, deadAnimation };
 
     int fWalkAnimation = 4; //Número de fotogramas de la animacion camniar
-    int fDeadAnimation = 2; //Número de fotogramas de la animacion muerte
+    int fDeadAnimation = 4; //Número de fotogramas de la animacion muerte
     int fAnimation[2] = { fWalkAnimation , fDeadAnimation };
     
     int widthAnimation; // Se actualiza para cada animación activa
@@ -27,6 +27,9 @@ public:
     int targetFrames;
     int cuentaFrames = 0;
     int velocidadFrames = 2;
+
+    //Colisiones
+    Plataforma lastGround;
 
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
@@ -108,6 +111,11 @@ public:
             destRec.y -= velocidadSalto;
             saltoRecorrido += velocidadSalto;
         }
+        else if (saltoRecorrido < 0) {
+            //Caida lenta
+            destRec.y += velocidadSalto/2;
+            saltoRecorrido -= velocidadSalto/2;
+        }
         else if (enElAire && cayendo && saltoRecorrido > 0) {
             destRec.y += velocidadSalto;
             saltoRecorrido -= velocidadSalto;
@@ -121,10 +129,37 @@ public:
 
 
     //Comporbacion de colisiones
-    //Herencia de void compruebaColisionSuelo(const Suelo& s)
-    void compruebaColision(const Suelo& s) {
-        if (!muerto && (destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2)) { //Choca abajo
-            destRec.y = (s.destRec.y - s.destRec.height / 2) - destRec.height / 2;
+    void compruebaSuelo(Plataforma s) {
+        if (
+            !(
+                //Comprobamos colision esquina inferior derecha
+                (( (s.bot) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2 + 1) > (s.top))
+                    ) && (
+                        ((s.right) > (destRec.x + destRec.width / 2)) &&
+                        ((destRec.x + destRec.width / 2) > (s.left))
+                        )
+                ) &&
+            !(
+                //Comprobamos colision esquina inferior izquierda
+                (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2 + 1) > (s.top))
+                    ) && (
+                        ((s.right) > (destRec.x - destRec.width / 2)) &&
+                        ((destRec.x - destRec.width / 2) > (s.left))
+                        )
+                )
+            ) {
+            // No colisiona con plataforma
+            enElAire = true;
+            cayendo = true;
+        }
+        else if(muerto){
+            enElAire = false;
+            cayendo = false;
+            borrame = true;
+        }
+        else {
             enElAire = false;
             cayendo = false;
         }
