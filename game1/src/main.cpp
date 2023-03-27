@@ -251,8 +251,6 @@ int main(void)
             credits.Actualizar();
             scores.Actualizar();
             bub.Actualizar();
-            //bub.cayendo = true;
-            //bub.enElAire = true;
             for (int i = 0; i < numPlat; i++) {
                 bub.compruebaColision(plataformas.listaPlataforma[i]);
             }
