@@ -1,18 +1,21 @@
 #pragma once
 #include "clasesConSprite/Pompa.hpp"
+#include "clasesConSprite/Enemigo.cpp"
 #include <vector>
 #include <iostream> //Para debuggear
 
 class AdministradorPompas{
 public:
-	std::vector<Pompa> pompas;
-
-	Rectangle posicionJugador = {-1,-1,-1,-1};
+	Rectangle posicionJugador = { -1,-1,-1,-1 };
 	bool jugadorCayendo = false;
 	int sentidoJugador = 2; //3->mira a la derecha 2->mira a la izquierda: variable orientacionActual de Bub
 
+	std::vector<Pompa> pompas;
+	std::vector<Enemigo> enemigos;
+	
 	AdministradorPompas() = default;
 
+	//Sección pompas
 	std::vector<Pompa> elimina(int i) {
 		std::vector<Pompa> auxiliar;
 		for (int j = 0; j < pompas.size(); j++) {
@@ -44,4 +47,7 @@ public:
 			pompas[i].Dibujar();
 		}
 	};
+
+	//Sección enemigos
+
 };

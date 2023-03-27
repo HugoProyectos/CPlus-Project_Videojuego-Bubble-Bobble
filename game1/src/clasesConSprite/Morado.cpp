@@ -95,7 +95,7 @@ public:
     //Herencia de void compruebaColisionSuelo(const Suelo& s)
     void compruebaColision(const Suelo& s) {
         //Choca abajo
-        if ((destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2)) { 
+        if ((destRec.y + destRec.height / 2) < (s.destRec.y + s.destRec.height / 2) && ((destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2))) {
             destRec.y = (s.destRec.y - s.destRec.height / 2) - destRec.height / 2;
         }
 
