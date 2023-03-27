@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream> //Para debuggear
 
-typedef std::shared_ptr<Enemigo> sh_Enemigo;
+
 
 class AdministradorPompas{
 public:
@@ -35,6 +35,17 @@ public:
 				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas
 				pompas = elimina(i);
 				i--;
+			} else if (pompas.at(i).disparada > 0) { //comprueba contacto con los enemigos
+				for (int j = 0; j < enemigos.size(); j++) {
+					if ((pompas.at(i).destRec.x + pompas.at(i).destRec.width/2) > (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width/2)
+					&& (pompas.at(i).destRec.x - pompas.at(i).destRec.width / 2) < (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
+					|| (pompas.at(i).destRec.x + pompas.at(i).destRec.width / 2) > (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)
+					&& (pompas.at(i).destRec.x - pompas.at(i).destRec.width / 2) < (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)) { //Si choca con el enemigo, lo marca para que se borre y se cambia el estado de la pompa
+						enemigos.at(j)->borrame = true;
+						pompas.at(i).modulo = enemigos.at(i)->tipo;
+
+					}
+				}
 			} else {
 				pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador);
 			}

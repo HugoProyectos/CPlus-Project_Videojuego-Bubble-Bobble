@@ -62,6 +62,9 @@ public:
         UnloadTexture(sprite);
     };
 
+    //void Dibujar() {
+    //    DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
+    //}
 };
 
 typedef std::shared_ptr<Enemigo> sh_Enemigo;
