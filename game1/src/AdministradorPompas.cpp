@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream> //Para debuggear
 
+typedef std::shared_ptr<Enemigo> sh_Enemigo;
+
 class AdministradorPompas{
 public:
 	Rectangle posicionJugador = { -1,-1,-1,-1 };
@@ -11,7 +13,7 @@ public:
 	int sentidoJugador = 2; //3->mira a la derecha 2->mira a la izquierda: variable orientacionActual de Bub
 
 	std::vector<Pompa> pompas;
-	std::vector<Enemigo> enemigos;
+	std::vector<sh_Enemigo> enemigos;
 	
 	AdministradorPompas() = default;
 
@@ -49,5 +51,36 @@ public:
 	};
 
 	//Sección enemigos
+	std::vector<sh_Enemigo> eliminaEnemigo(int i) {
+		std::vector<sh_Enemigo> auxiliar;
+		for (int j = 0; j < enemigos.size(); j++) {
+			if (j != i) {
+				auxiliar.push_back(enemigos.at(j));
+			}
+		}
+		return auxiliar;
+	}
 
+	void actualizaEnemigos() {
+		for (int i = 0; i < enemigos.size(); i++) {
+			if (enemigos.at(i)->borrame) {
+				//auto aBorrar = pompas.begin() + i;
+				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas
+				enemigos = eliminaEnemigo(i);
+				i--;
+			}
+			else {
+				enemigos.at(i)->Actualizar(posicionJugador);
+			}
+		}
+		if (enemigos.size() == 0) {
+			//std::cout << "Sin pompas que actualizar" << std::endl;
+		}
+	};
+
+	void dibujaEnemigos() {
+		for (int i = 0; i < enemigos.size(); i++) {
+			enemigos[i]->Dibujar();
+		}
+	};
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "Enemigo.cpp"
 
+
 class Robot : public Enemigo {
 public:
     
@@ -27,11 +28,12 @@ public:
     int cuentaFrames = 0;
     int velocidadFrames = 2;
 
-    //Muerto
-    bool muerto = false;
+    //Muerto -> Ahora esta en Enemigo
+    //bool muerto = false;
 
     Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
+        tipo = 0;
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
         targetFrames = _targetFPS;
@@ -76,7 +78,7 @@ public:
         }
     }
 
-    void Dibujar() {
+    void Dibujar() override {
         srcRec.x = (float)widthAnimation * (float)indiceAnimacion;
         DrawTexturePro(animations[animacionActiva], srcRec, destRec, origin, 0.0f, WHITE);
     }
@@ -128,3 +130,5 @@ public:
         }
     }
 };
+
+typedef std::shared_ptr<Robot> sh_Robot;

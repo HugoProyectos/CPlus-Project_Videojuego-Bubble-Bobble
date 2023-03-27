@@ -5,6 +5,10 @@
 
 class Enemigo : public Sprite {
 public:
+    int tipo = -1; // 0->Robot
+    bool borrame = false; //Eliminarlo de la lista
+    bool muerto = false; //Iniciar animacion de muerte
+    
     bool enElAire = false;
     bool cayendo = false;
     bool golpeado = false;
@@ -20,7 +24,8 @@ public:
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
     };
 
-    void virtual Actualizar(Rectangle playerPosition) {}
+    void virtual Actualizar(Rectangle playerPosition) = 0;
+    void virtual Dibujar() = 0;
 
     void Inicializador(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral)
     {

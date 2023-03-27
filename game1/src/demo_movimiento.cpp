@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "AdministradorPompas.cpp"
 #include "clasesConSprite/Bub.cpp"
+#include "clasesConSprite/Robot.cpp"
 
 const int TARGET_FPS = 60;
 
@@ -32,6 +33,10 @@ int main(void)
     Pompa p = Pompa(destRec,5.0,200.0,false,50000);
     admin.pompas.push_back(p);
 
+    sh_Robot robo = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS));
+    robo->muerto = true;
+    admin.enemigos.push_back(robo);
+
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f,TARGET_FPS, admin);
     admin.posicionJugador = bub.destRec;
     Suelo suelo = Suelo("resources/Suelo.png");
@@ -46,6 +51,7 @@ int main(void)
        bub.Actualizar();
        bub.compruebaColision(suelo);
        admin.actualizaPompas();
+       admin.actualizaEnemigos();
        //p.Actualizar();
         //----------------------------------------------------------------------------------
 
@@ -58,6 +64,7 @@ int main(void)
         suelo.Dibujar();
         bub.Dibujar();
         admin.dibujaPompas();
+        admin.dibujaEnemigos();
 
         DrawLine((int)bub.destRec.x - (int)bub.destRec.width/2, 0, (int)bub.destRec.x - (int)bub.destRec.width / 2, screenHeight, GRAY);
         DrawLine(0, (int)bub.destRec.y - (int)bub.destRec.height / 2, screenWidth, (int)bub.destRec.y - (int)bub.destRec.height / 2, GRAY);
