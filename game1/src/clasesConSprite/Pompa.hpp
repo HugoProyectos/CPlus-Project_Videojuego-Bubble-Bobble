@@ -2,6 +2,7 @@
 #include "Sprite.hpp"
 #include <string>
 #include <cmath>
+#include "Robot.cpp"
 #include <iostream> //DEBUG
 
 // Aquí debajo se pondrán las constantes para especificar 
@@ -29,15 +30,17 @@ class Pompa : public Sprite {
 	const int NARANJA = 1;
 	const int ROJO = 2;
 
+	const int NUM_FOTOGRAMAS = 3;
+
 	const int widthAnimation = 16;
 	const int heightAnimation = 16;
 
 	const int fDisparo = 7;
 	const int fExplota = 10;
+	const int fAtrapado = 3;
 
 	//Razón a la que se va restando la vida a la pompa
 	const int VELOCIDAD_MUERTE = 1;
-	
 
 public:
 	static uint32_t ID_GLOBAL;
@@ -51,6 +54,7 @@ public:
 
 	//Enemigo contenido
 	int enemigoContenido = 0;
+	int modulo = 0;
 
 	//Desplazamiento
 	float velocidadDesplazamiento = 0;
@@ -74,7 +78,7 @@ public:
 
 	void Inicializador(const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
 
-	void Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1);
+	sh_Enemigo Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1);
 
 	void Dibujar();
 };

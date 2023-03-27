@@ -45,7 +45,7 @@ void Pompa::Inicializador(const Rectangle origen, float velDisparo, float distan
 
 }
 
-void Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1) {
+sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1) {
 	if (disparada == 2) {
 		//std::cout << "PIUM" << std::endl;
 		distanciaRecorrida += velocidadDesplazamiento; //Actualiza el contador
@@ -62,6 +62,9 @@ void Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1) {
 			animacionActiva = EXPLOTA;
 			indiceAnimacion = 0;
 			tVida--;
+
+			sh_Robot robo = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60));
+			robo->destRec = destRec;
 		}
 		else if (tVida > 0) {
 			disparada = 0;
@@ -150,7 +153,15 @@ void Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1) {
 			break;
 		default:
 			//std::cout << "WHAT" << std::endl;
-			indiceAnimacion = 0;
+			if (modulo > 0) {
+				indiceAnimacion++;
+				if (indiceAnimacion >= (modulo * NUM_FOTOGRAMAS) + NUM_FOTOGRAMAS) {
+					indiceAnimacion = modulo * NUM_FOTOGRAMAS;
+				}
+			} else {
+				indiceAnimacion = 0;
+			}
+			
 			break;
 		};
 	}
