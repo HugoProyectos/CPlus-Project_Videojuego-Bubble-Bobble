@@ -22,6 +22,8 @@ public:
     // Posicion en pantalla
     float topleft[2] = { 0,0 };
 
+    //Dirección en la que se acerca el personaje
+    int aproach;
 
     Plataforma() = default;
 

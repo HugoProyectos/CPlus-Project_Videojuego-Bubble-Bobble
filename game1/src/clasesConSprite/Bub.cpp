@@ -2,6 +2,7 @@
 #include "Sprite.hpp"
 #include "Suelo.cpp"
 #include "Pompa.cpp"
+#include "mapa.cpp"
 #include "../AdministradorPompas.cpp"
 #include <iostream>
 
@@ -296,15 +297,141 @@ public:
         DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
     }
 
-    void compruebaColision(const Suelo& s) {
-        if (((destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2)) && 
-            ((destRec.x - destRec.width/2) < (s.destRec.x + s.destRec.width/2)) && //No se sale por la derecha
-            ((destRec.x + destRec.width / 2) > (s.destRec.x - s.destRec.width / 2)) //No se sale por la izquierda
-            ) { //Choca abajo
-            destRec.y = (s.destRec.y - s.destRec.height / 2) - destRec.height / 2;
-            enElAire = false;
-            cayendo = false;
-            saltoRecorrido = 0;
+    void compruebaColision(Plataforma& s) {
+        //Comprobamos si colisiona con la superficie
+        if (
+            (
+                //Comprobamos colision esquina inferior derecha
+                (((s.positionY + s.tamanoY) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2) > (s.positionY))
+                    ) && (
+                        ((s.positionX + s.tamanoX) > (destRec.x + destRec.width / 2)) &&
+                        ((destRec.x + destRec.width / 2) > (s.positionX))
+                        )
+                ) ||
+            (
+                //Comprobamos colision esquina superior derecha
+                (((s.positionY + s.tamanoY) > (destRec.y - destRec.height / 2)) &&
+                    ((destRec.y - destRec.height / 2) > (s.positionY))
+                    ) && (
+                        ((s.positionX + s.tamanoX) > (destRec.x + destRec.width / 2)) &&
+                        ((destRec.x + destRec.width / 2) > (s.positionX))
+                        )
+                ) ||
+            (
+                //Comprobamos colision esquina superior izquierda
+                (((s.positionY + s.tamanoY) > (destRec.y - destRec.height / 2)) &&
+                    ((destRec.y - destRec.height / 2) > (s.positionY))
+                    ) && (
+                        ((s.positionX + s.tamanoX) > (destRec.x - destRec.width / 2)) &&
+                        ((destRec.x - destRec.width / 2) > (s.positionX))
+                        )
+                ) ||
+            (
+                //Comprobamos colision esquina inferior izquierda
+                (((s.positionY + s.tamanoY) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2) > (s.positionY))
+                    ) && (
+                        ((s.positionX + s.tamanoX) > (destRec.x - destRec.width / 2)) &&
+                        ((destRec.x - destRec.width / 2) > (s.positionX))
+                        )
+                )
+            ) {
+            std::cout << "Choque" << std::endl;
+            switch (s.aproach) {
+            case 1:
+                destRec.x = s.positionX - destRec.width / 2;
+                break;
+            case 2:
+                destRec.x = (s.positionX + s.tamanoX) + destRec.width / 2;
+                break;
+            case 3:
+                destRec.y = (s.positionY) - destRec.height / 2;
+                enElAire = false;
+                cayendo = false;
+                saltoRecorrido = 0;
+                break;
+            }
+        }
+        //Comprobamos si se esta acercando a la superficie desde alguna dirección
+        else {
+            //Izquierda
+            if (
+                //Comprobamos colision esquina superior derecha
+                (
+                    (((s.positionY + s.tamanoY) > (destRec.y - destRec.height / 2)) &&
+                        ((destRec.y - destRec.height / 2) > (s.positionY))
+                        ) && (
+                            ((s.positionX + s.tamanoX) > (destRec.x + destRec.width / 2 + 5)) &&
+                            ((destRec.x + destRec.width / 2 + 5) > (s.positionX))
+                            )
+                    )
+                ||
+                //Comprobamos colision esquina inferior derecha
+                (
+                    (((s.positionY + s.tamanoY) > (destRec.y + destRec.height / 2)) &&
+                        ((destRec.y + destRec.height / 2) > (s.positionY))
+                        ) && (
+                            ((s.positionX + s.tamanoX) > (destRec.x + destRec.width / 2 + 5)) &&
+                            ((destRec.x + destRec.width / 2 + 5) > (s.positionX))
+                            )
+                    )
+                ) {
+                s.aproach = 1;
+            }
+            //Derecha
+            else if (
+                //Comprobamos colision esquina superior derecha
+                (
+                    (((s.positionY + s.tamanoY) > (destRec.y - destRec.height / 2)) &&
+                        ((destRec.y - destRec.height / 2) > (s.positionY))
+                        ) && (
+                            ((s.positionX + s.tamanoX) > (destRec.x - destRec.width / 2 - 5)) &&
+                            ((destRec.x - destRec.width / 2 - 5) > (s.positionX))
+                            )
+                    )
+                ||
+                //Comprobamos colision esquina inferior derecha
+                (
+                    (((s.positionY + s.tamanoY) > (destRec.y + destRec.height / 2)) &&
+                        ((destRec.y + destRec.height / 2) > (s.positionY))
+                        ) && (
+                            ((s.positionX + s.tamanoX) > (destRec.x - destRec.width / 2 - 5)) &&
+                            ((destRec.x - destRec.width / 2 - 5) > (s.positionX))
+                            )
+                    )
+                ) {
+                s.aproach = 2;
+            }
+            //Arriba
+            else if (
+                //Comprobamos colision esquina inferior derecha
+                (
+                    (((s.positionY + s.tamanoY) > (destRec.y + destRec.height / 2 + 5)) &&
+                        ((destRec.y + destRec.height / 2 + 5) > (s.positionY))
+                        ) && (
+                            ((s.positionX + s.tamanoX) > (destRec.x + destRec.width / 2)) &&
+                            ((destRec.x + destRec.width / 2) > (s.positionX))
+                            )
+                    )
+                ||
+                //Comprobamos colision esquina inferior izquierda
+                (
+                    (((s.positionY + s.tamanoY) > (destRec.y + destRec.height / 2 + 5)) &&
+                        ((destRec.y + destRec.height / 2 + 5) > (s.positionY))
+                        ) && (
+                            ((s.positionX + s.tamanoX) > (destRec.x - destRec.width / 2)) &&
+                            ((destRec.x - destRec.width / 2) > (s.positionX))
+                            )
+                    )
+                ) {
+                s.aproach = 3;
+            }
+            //Abajo
+            else {
+                //Si no se cumplen anteriores asumimos que se acerca por debajo
+                s.aproach = 4;
+            }
         }
     }
 };
