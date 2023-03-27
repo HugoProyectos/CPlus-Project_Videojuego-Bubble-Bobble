@@ -1,11 +1,12 @@
 #pragma once
 #include "Sprite.hpp"
 #include "Suelo.cpp"
+#include "mapa.cpp"
 #include <iostream>
 
 class Enemigo : public Sprite {
 public:
-    int tipo = -1; // 0->Robot
+    int tipo = -1; // 1->Robot
     bool borrame = false; //Eliminarlo de la lista
     bool muerto = false; //Iniciar animacion de muerte
     
@@ -61,7 +62,6 @@ public:
         UnloadTexture(sprite);
     };
 
-    //void Dibujar() {
-    //    DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
-    //}
 };
+
+typedef std::shared_ptr<Enemigo> sh_Enemigo;
