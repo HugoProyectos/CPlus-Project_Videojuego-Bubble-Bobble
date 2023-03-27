@@ -72,6 +72,7 @@ int main(void)
         DrawLine(0, (int)bub.destRec.y + (int)bub.destRec.height / 2, screenWidth, (int)bub.destRec.y + (int)bub.destRec.height / 2, GRAY);
         std::string x_extremo_5 = "Pompa X izquierda ";
         std::string x_extremo_6 = "Pompa X derecha ";
+        std::string modulo = "Pompa modulo ";
         if (admin.pompas.size() > 0) {
             DrawLine((int)admin.pompas.at(0).destRec.x - (int)admin.pompas.at(0).destRec.width / 2, 0, (int)admin.pompas.at(0).destRec.x - (int)admin.pompas.at(0).destRec.width / 2, screenHeight, GRAY);
             DrawLine(0, (int)admin.pompas.at(0).destRec.y - (int)admin.pompas.at(0).destRec.height / 2, screenWidth, (int)admin.pompas.at(0).destRec.y - (int)admin.pompas.at(0).destRec.height / 2, GRAY);
@@ -80,6 +81,7 @@ int main(void)
         
             x_extremo_5 = "Pompa X izquierda " + std::to_string(admin.pompas.at(0).destRec.x - admin.pompas.at(0).destRec.width / 2);
             x_extremo_6 = "Pompa X derecha " + std::to_string(admin.pompas.at(0).destRec.x + admin.pompas.at(0).destRec.width / 2);
+            modulo = "Pompa modulo " + std::to_string(admin.pompas.at(0).modulo);
             //std::cout << ((admin.pompas.at(0).destRec.x + admin.pompas.at(0).destRec.width / 2) > (bub.destRec.x - bub.destRec.width) && (admin.pompas.at(0).destRec.x - admin.pompas.at(0).destRec.width / 2) < (bub.destRec.x - bub.destRec.width / 2)) << std::endl;
             //std::cout << ((admin.pompas.at(0).destRec.x - admin.pompas.at(0).destRec.width / 2) < (bub.destRec.x + bub.destRec.width / 2) && (admin.pompas.at(0).destRec.x + admin.pompas.at(0).destRec.width / 2) > (bub.destRec.x + bub.destRec.width / 2)) << std::endl;
         }
@@ -111,7 +113,7 @@ int main(void)
             //}
             */
         DrawText(x_extremo_3.c_str(), screenWidth - 600, screenHeight - 110, 20, GRAY);
-        //DrawText(x_extremo_4.c_str(), screenWidth - 600, screenHeight - 70, 20, GRAY);
+        DrawText(modulo.c_str(), screenWidth - 600, screenHeight - 70, 20, GRAY);
         //DrawText(x_extremo_6.c_str(), screenWidth - 600, screenHeight - 30, 20, GRAY);
         DrawText(x_extremo_5.c_str(), screenWidth - 600, screenHeight - 50, 20, GRAY);
 

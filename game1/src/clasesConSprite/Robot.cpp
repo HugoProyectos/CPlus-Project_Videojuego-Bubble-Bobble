@@ -33,7 +33,7 @@ public:
 
     Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
-        tipo = 0;
+        tipo = 1;
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
         targetFrames = _targetFPS;

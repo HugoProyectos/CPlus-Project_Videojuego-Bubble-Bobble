@@ -32,22 +32,37 @@ public:
 		for (int i = 0; i < pompas.size(); i++) {
 			if (pompas.at(i).matame) {
 				//auto aBorrar = pompas.begin() + i;
-				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas
+				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas			
 				pompas = elimina(i);
 				i--;
 			} else if (pompas.at(i).disparada > 0) { //comprueba contacto con los enemigos
+				std::cout << "CHECK DISPARADA" << std::endl;
+
 				for (int j = 0; j < enemigos.size(); j++) {
-					if ((pompas.at(i).destRec.x + pompas.at(i).destRec.width/2) > (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width/2)
+					if (!enemigos.at(j)->borrame 
+					&& ((pompas.at(i).destRec.y + pompas.at(i).destRec.height / 2) > (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
+					&& (pompas.at(i).destRec.y - pompas.at(i).destRec.height / 2) < (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
+					|| (pompas.at(i).destRec.y + pompas.at(i).destRec.height / 2) > (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
+					&& (pompas.at(i).destRec.y - pompas.at(i).destRec.height / 2) < (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2))
+						&& ((pompas.at(i).destRec.x + pompas.at(i).destRec.width/2) > (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width/2)
 					&& (pompas.at(i).destRec.x - pompas.at(i).destRec.width / 2) < (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
 					|| (pompas.at(i).destRec.x + pompas.at(i).destRec.width / 2) > (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)
-					&& (pompas.at(i).destRec.x - pompas.at(i).destRec.width / 2) < (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)) { //Si choca con el enemigo, lo marca para que se borre y se cambia el estado de la pompa
+					&& (pompas.at(i).destRec.x - pompas.at(i).destRec.width / 2) < (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2))) { //Si choca con el enemigo, lo marca para que se borre y se cambia el estado de la pompa
+						std::cout << "Entro" << std::endl;
 						enemigos.at(j)->borrame = true;
-						pompas.at(i).modulo = enemigos.at(i)->tipo;
-
+						std::cout << "Salgo" << std::endl;
+						pompas.at(i).modulo = enemigos.at(j)->tipo;
+						pompas.at(i).enemigoContenido = enemigos.at(j)->tipo;
+						pompas.at(i).disparada = 0;
 					}
 				}
-			} else {
 				pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador);
+
+			} else {
+				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador);
+				if (enemigo != NULL) {
+					enemigos.push_back(enemigo);
+				}
 			}
 		}
 		if (pompas.size() == 0) {
@@ -85,7 +100,7 @@ public:
 			}
 		}
 		if (enemigos.size() == 0) {
-			//std::cout << "Sin pompas que actualizar" << std::endl;
+			std::cout << "Sin enemigos que actualizar" << std::endl;
 		}
 	};
 
