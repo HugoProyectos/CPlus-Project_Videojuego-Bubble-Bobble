@@ -1,10 +1,15 @@
 #pragma once
 #include "Sprite.hpp"
 #include "Suelo.cpp"
+#include "mapa.cpp"
 #include <iostream>
 
 class Enemigo : public Sprite {
 public:
+    int tipo = -1; // 1->Robot
+    bool borrame = false; //Eliminarlo de la lista
+    bool muerto = false; //Iniciar animacion de muerte
+    
     bool enElAire = false;
     bool cayendo = false;
     bool golpeado = false;
@@ -19,6 +24,10 @@ public:
     Enemigo(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
     };
+
+    void virtual Actualizar(Rectangle playerPosition) = 0;
+    void virtual Dibujar() = 0;
+
     void Inicializador(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral)
     {
         sprite = LoadTexture(rutaTextura.c_str());// Texture loading
@@ -38,7 +47,8 @@ public:
         this->tamano = tamano;
 
         // Destination rectangle (screen rectangle where drawing part of texture)
-        destRec = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f, (float)frameWidth * tamano, (float)frameHeight * tamano }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
+        destRec = { GetScreenWidth() / 2.0f - 50, GetScreenHeight() / 2.0f - 20, (float)frameWidth * tamano, (float)frameHeight * tamano }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
+        //destRec = { 0,0, (float)frameWidth * tamano, (float)frameHeight * tamano }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
 
         // Origin of the texture (rotation/scale point), it's relative to destination rectangle size
         origin = { (float)frameWidth * tamano / 2, (float)frameHeight * tamano / 2 }; //En principio no lo necesitamos
@@ -56,3 +66,5 @@ public:
     //    DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
     //}
 };
+
+typedef std::shared_ptr<Enemigo> sh_Enemigo;

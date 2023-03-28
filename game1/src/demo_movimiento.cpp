@@ -1,6 +1,7 @@
 /*#include "raylib.h"
 #include "AdministradorPompas.cpp"
 #include "clasesConSprite/Bub.cpp"
+#include "clasesConSprite/Robot.cpp"
 
 const int TARGET_FPS = 60;
 
@@ -30,10 +31,18 @@ int demo(void)
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
     AdministradorPompas admin = AdministradorPompas();
 
-    Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
-    Pompa p = Pompa(destRec,5.0,200.0,true,100);
+    Rectangle destRec = { GetScreenWidth() / 2.0f - 100, GetScreenHeight() / 2.0f + 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
+    Pompa p = Pompa(destRec,5.0,200.0,false,50000);
+    admin.pompas.push_back(p);
 
-    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f,TARGET_FPS, admin);
+    Rectangle destRob = { GetScreenWidth() / 2.0f + 100, GetScreenHeight() / 2 - 20, 2 * 16, 2 * 16 };
+    sh_Robot robo = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
+    //robo->muerto = true;
+    admin.enemigos.push_back(robo);
+
+    Rectangle destBub = { (float)GetScreenWidth() / 2 - 100, (float)GetScreenHeight() / 2 - 20, 2 * 16, 2 * 16 };
+    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f,TARGET_FPS, destBub, admin);
+    admin.posicionJugador = bub.destRec;
     Suelo suelo = Suelo("resources/Suelo.png");
 
     SetTargetFPS(TARGET_FPS);
@@ -43,9 +52,10 @@ int demo(void)
     {
         // Update
         //----------------------------------------------------------------------------------
+       admin.actualizaPompas();
+       admin.actualizaEnemigos();
        bub.Actualizar();
        bub.compruebaColision(suelo);
-       admin.actualizaPompas();
        //p.Actualizar();
         //----------------------------------------------------------------------------------
 
@@ -58,6 +68,31 @@ int demo(void)
         suelo.Dibujar();
         bub.Dibujar();
         admin.dibujaPompas();
+        admin.dibujaEnemigos();
+
+        DrawLine((int)bub.destRec.x - (int)bub.destRec.width/2, 0, (int)bub.destRec.x - (int)bub.destRec.width / 2, screenHeight, GRAY);
+        DrawLine(0, (int)bub.destRec.y - (int)bub.destRec.height / 2, screenWidth, (int)bub.destRec.y - (int)bub.destRec.height / 2, GRAY);
+        DrawLine((int)bub.destRec.x + (int)bub.destRec.width / 2, 0, (int)bub.destRec.x + (int)bub.destRec.width / 2, screenHeight, GRAY);
+        DrawLine(0, (int)bub.destRec.y + (int)bub.destRec.height / 2, screenWidth, (int)bub.destRec.y + (int)bub.destRec.height / 2, GRAY);
+        std::string x_extremo_5 = "Pompa X izquierda ";
+        std::string x_extremo_6 = "Pompa X derecha ";
+        std::string modulo = "Pompa modulo ";
+        if (admin.pompas.size() > 0) {
+            DrawLine((int)admin.pompas.at(0).destRec.x - (int)admin.pompas.at(0).destRec.width / 2, 0, (int)admin.pompas.at(0).destRec.x - (int)admin.pompas.at(0).destRec.width / 2, screenHeight, GRAY);
+            DrawLine(0, (int)admin.pompas.at(0).destRec.y - (int)admin.pompas.at(0).destRec.height / 2, screenWidth, (int)admin.pompas.at(0).destRec.y - (int)admin.pompas.at(0).destRec.height / 2, GRAY);
+            DrawLine((int)admin.pompas.at(0).destRec.x + (int)admin.pompas.at(0).destRec.width / 2, 0, (int)admin.pompas.at(0).destRec.x + (int)admin.pompas.at(0).destRec.width / 2, screenHeight, GRAY);
+            DrawLine(0, (int)admin.pompas.at(0).destRec.y + (int)admin.pompas.at(0).destRec.height / 2, screenWidth, (int)admin.pompas.at(0).destRec.y + (int)admin.pompas.at(0).destRec.height / 2, GRAY);
+        
+            x_extremo_5 = "Pompa X izquierda " + std::to_string(admin.pompas.at(0).destRec.x - admin.pompas.at(0).destRec.width / 2);
+            x_extremo_6 = "Pompa X derecha " + std::to_string(admin.pompas.at(0).destRec.x + admin.pompas.at(0).destRec.width / 2);
+            modulo = "Pompa modulo " + std::to_string(admin.pompas.at(0).modulo);
+            //std::cout << ((admin.pompas.at(0).destRec.x + admin.pompas.at(0).destRec.width / 2) > (bub.destRec.x - bub.destRec.width) && (admin.pompas.at(0).destRec.x - admin.pompas.at(0).destRec.width / 2) < (bub.destRec.x - bub.destRec.width / 2)) << std::endl;
+            //std::cout << ((admin.pompas.at(0).destRec.x - admin.pompas.at(0).destRec.width / 2) < (bub.destRec.x + bub.destRec.width / 2) && (admin.pompas.at(0).destRec.x + admin.pompas.at(0).destRec.width / 2) > (bub.destRec.x + bub.destRec.width / 2)) << std::endl;
+        }
+
+        if (admin.enemigos.size() > 0) {
+
+        }
         //p.Dibujar();
 
         //DrawText("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200, screenHeight - 20, 10, GRAY);
@@ -66,8 +101,10 @@ int demo(void)
         std::string x_extremo_3 = "Bub X derecha " + std::to_string(bub.destRec.x + bub.destRec.width / 2);
         std::string x_extremo_4 = "Bub X izquierda " + std::to_string(bub.destRec.x - bub.destRec.width / 2);
         
+        
         std::string x_bub = "Bub x " + std::to_string(bub.destRec.x);
-        std::string disparando = "disparando= " + std::to_string(bub.disparando);
+        std::string cayendo = "cayendo= " + std::to_string(bub.cayendo);
+        std::string cayendo_2 = "cayendo= " + std::to_string(admin.jugadorCayendo);
         std::string valores = "Salto recorrido= " + std::to_string(bub.saltoRecorrido);
         
         //if (admin.pompas.size() > 0) {

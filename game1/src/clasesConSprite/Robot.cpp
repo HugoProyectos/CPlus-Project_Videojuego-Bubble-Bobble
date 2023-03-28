@@ -1,6 +1,7 @@
 #pragma once
 #include "Enemigo.cpp"
 
+
 class Robot : public Enemigo {
 public:
     
@@ -13,7 +14,7 @@ public:
     Texture2D animations[2] = { walkAnimation, deadAnimation };
 
     int fWalkAnimation = 4; //Número de fotogramas de la animacion camniar
-    int fDeadAnimation = 2; //Número de fotogramas de la animacion muerte
+    int fDeadAnimation = 4; //Número de fotogramas de la animacion muerte
     int fAnimation[2] = { fWalkAnimation , fDeadAnimation };
     
     int widthAnimation; // Se actualiza para cada animación activa
@@ -27,16 +28,28 @@ public:
     int cuentaFrames = 0;
     int velocidadFrames = 2;
 
-    Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS) {
+    //Colisiones
+    Plataforma lastGround;
+
+    //Muerto -> Ahora esta en Enemigo
+    //bool muerto = false;
+
+    Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
+        destRec = destino;
+        tipo = 1;
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
         targetFrames = _targetFPS;
     };
 
     // Controlador de comportamiento
-    void Actualizar(Rectangle playerPosition) {
-        if (enElAire || (destRec.y > playerPosition.y && destRec.x == playerPosition.x)) { //Si el personaje esta encima
+    void Actualizar(Rectangle playerPosition) override {
+        if (muerto) {
+            animacionActiva = 1;
+            Caer();
+        }
+        else if (enElAire || (destRec.y > playerPosition.y && destRec.x == playerPosition.x)) { //Si el personaje esta encima
             Salto();
         }
         else if (destRec.x > playerPosition.x) { //Si el personaje esta a la izquierda
@@ -69,7 +82,7 @@ public:
         }
     }
 
-    void Dibujar() {
+    void Dibujar() override {
         srcRec.x = (float)widthAnimation * (float)indiceAnimacion;
         DrawTexturePro(animations[animacionActiva], srcRec, destRec, origin, 0.0f, WHITE);
     }
@@ -85,6 +98,10 @@ public:
         srcRec.width = -pixels;
     }
 
+    void Caer() {
+        destRec.y += velocidadSalto;
+    }
+
     void Salto() {
         //Gestión de salto
         if (!enElAire) {
@@ -94,6 +111,11 @@ public:
         else if (saltoRecorrido < distanciaSaltoMax && enElAire && !cayendo) {
             destRec.y -= velocidadSalto;
             saltoRecorrido += velocidadSalto;
+        }
+        else if (saltoRecorrido < 0) {
+            //Caida lenta
+            destRec.y += velocidadSalto/2;
+            saltoRecorrido -= velocidadSalto/2;
         }
         else if (enElAire && cayendo && saltoRecorrido > 0) {
             destRec.y += velocidadSalto;
@@ -108,12 +130,41 @@ public:
 
 
     //Comporbacion de colisiones
-    //Herencia de void compruebaColisionSuelo(const Suelo& s)
-    void compruebaColision(const Suelo& s) {
-        if ((destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2)) { //Choca abajo
-            destRec.y = (s.destRec.y - s.destRec.height / 2) - destRec.height / 2;
+    void compruebaSuelo(Plataforma s) {
+        /*if (
+            !(
+                //Comprobamos colision esquina inferior derecha
+                (( (s.bot) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2 + 1) > (s.top))
+                    ) && (
+                        ((s.right) > (destRec.x + destRec.width / 2)) &&
+                        ((destRec.x + destRec.width / 2) > (s.left))
+                        )
+                ) &&
+            !(
+                //Comprobamos colision esquina inferior izquierda
+                (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2 + 1) > (s.top))
+                    ) && (
+                        ((s.right) > (destRec.x - destRec.width / 2)) &&
+                        ((destRec.x - destRec.width / 2) > (s.left))
+                        )
+                )
+            ) {
+            // No colisiona con plataforma
+            enElAire = true;
+            cayendo = true;
+        }
+        else if(muerto){
             enElAire = false;
             cayendo = false;
+            borrame = true;
         }
+        else {
+            enElAire = false;
+            cayendo = false;
+        }*/
     }
 };
+
+typedef std::shared_ptr<Robot> sh_Robot;
