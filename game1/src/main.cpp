@@ -129,7 +129,7 @@ int nivel_1(void)
             bub.compruebaColision(plataformas.listaPlataforma[i]);
         }
         admin.actualizaPompas();
-        admin.actualizaEnemigos();
+        admin.actualizaEnemigos(plataformas);
         //----------------------------------------------------------------------------------
 
 
@@ -271,7 +271,7 @@ int main(void)
                 bub.compruebaColision(plataformas.listaPlataforma[i]);
             }
             admin.actualizaPompas();
-            admin.actualizaEnemigos();
+            admin.actualizaEnemigos(plataformas);
 
             if (IsKeyPressed(KEY_TWO) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
             {

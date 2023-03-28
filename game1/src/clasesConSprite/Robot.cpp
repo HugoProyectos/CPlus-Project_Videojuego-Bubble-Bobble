@@ -132,7 +132,7 @@ public:
 
 
     //Comporbacion de colisiones
-    void compruebaSuelo(Plataforma s) {
+    void compruebaSuelo(Plataforma s) override {
         if (
             !(
                 //Comprobamos colision esquina inferior derecha

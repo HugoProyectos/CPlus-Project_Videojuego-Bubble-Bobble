@@ -1,4 +1,5 @@
 #pragma once
+#include "mapa.cpp"
 #include "clasesConSprite/Pompa.hpp"
 #include "clasesConSprite/Enemigo.cpp"
 #include <vector>
@@ -90,7 +91,7 @@ public:
 		return auxiliar;
 	}
 
-	void actualizaEnemigos() {
+	void actualizaEnemigos(Plataformas plataformas) {
 		for (int i = 0; i < enemigos.size(); i++) {
 			if (enemigos.at(i)->borrame) {
 				//auto aBorrar = pompas.begin() + i;
@@ -100,6 +101,9 @@ public:
 			}
 			else {
 				enemigos.at(i)->Actualizar(posicionJugador);
+				for (int j = 0; j < plataformas.listaPlataforma.size(); j++) {
+					enemigos.at(i)->compruebaSuelo(plataformas.listaPlataforma[i]);
+				}
 			}
 		}
 		if (enemigos.size() == 0) {

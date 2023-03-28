@@ -62,6 +62,8 @@ public:
         UnloadTexture(sprite);
     };
 
+    void virtual compruebaSuelo(Plataforma s) = 0;
+
     //void Dibujar() {
     //    DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
     //}
