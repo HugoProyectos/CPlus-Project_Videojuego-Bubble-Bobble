@@ -128,6 +128,7 @@ int nivel_1(void)
         for (int i = 0; i < numPlat; i++) {
             bub.compruebaColision(plataformas.listaPlataforma[i]);
         }
+        bub.compruebaPared(columnas);
         admin.actualizaPompas();
         admin.actualizaEnemigos(plataformas);
         //----------------------------------------------------------------------------------
@@ -270,6 +271,7 @@ int main(void)
             for (int i = 0; i < numPlat; i++) {
                 bub.compruebaColision(plataformas.listaPlataforma[i]);
             }
+            bub.compruebaPared(columnas);
             admin.actualizaPompas();
             admin.actualizaEnemigos(plataformas);
 

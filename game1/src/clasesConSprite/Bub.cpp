@@ -392,7 +392,7 @@ public:
                 )
             ) {
             //std::cout << "Choque" << std::endl;
-            switch (s.aproach) {
+            switch (s.aproach[0]) {
             case 1:
                 destRec.x = s.left - destRec.width / 2;
                 break;
@@ -433,7 +433,7 @@ public:
                     )
                 ) {
                 //std::cout << "Aproach left" << std::endl;
-                s.aproach = 1;
+                s.aproach[0] = 1;
             }
             //Derecha
             else if (
@@ -458,7 +458,7 @@ public:
                     )
                 ) {
                 //std::cout << "Aproach right" << std::endl;
-                s.aproach = 2;
+                s.aproach[0] = 2;
             }
             //Arriba
             else if (
@@ -483,12 +483,12 @@ public:
                     )
                 ) {
                 //std::cout << "Aproach top" << std::endl;
-                s.aproach = 3;
+                s.aproach[0] = 3;
             }
             //Abajo
             else {
                 //Si no se cumplen anteriores asumimos que se acerca por debajo
-                s.aproach = 4;
+                s.aproach[0] = 4;
             }
         }
     }
@@ -519,28 +519,14 @@ public:
         }
     }
 
-    void compruebaPared(Plataforma s) {
-        if (
-                (
-                    //Comprobamos colision esquina inferior derecha
-                    (((s.bot) > (destRec.y + destRec.height / 2)) &&
-                        ((destRec.y + destRec.height / 2 + 1) > (s.top))
-                        ) && (
-                            ((s.right) > (destRec.x + destRec.width / 2)) &&
-                            ((destRec.x + destRec.width / 2) > (s.left))
-                            )
-                ) ||
-                (
-                    (((s.bot) > (destRec.y + destRec.height / 2)) &&
-                        ((destRec.y + destRec.height / 2 + 1) > (s.top))
-                        ) && (
-                            ((s.right) > (destRec.x - destRec.width / 2)) &&
-                            ((destRec.x - destRec.width / 2) > (s.left))
-                            )
-                )
-            ) 
-        {
-            //
+    void compruebaPared(const Columnas& s) {
+        //Comprobamos columna derecha
+        if (s.left_der < (destRec.x + destRec.width/2) ) {
+            destRec.x = s.left_der - destRec.width / 2;
+        }
+        //Comprobamos columna izquierda
+        else if (s.right_izq > (destRec.x - destRec.width / 2) ) {
+            destRec.x = s.right_izq + destRec.width / 2;
         }
     }
 };
