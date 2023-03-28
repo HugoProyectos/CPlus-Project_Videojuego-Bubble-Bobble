@@ -87,7 +87,7 @@ int nivel_1(void)
     // Cargo el fondo
     //Mapa mapa = Mapa("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/bloque_grande.png", "resources/mapa_nivel_1/mapa_nivel_1_v2.txt");
     Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa_nivel_1_v2.txt", 40.0f, 0.0f);
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_2/mapa_nivel_2.txt", 40.0f, 0.0f);
     Credits credits = Credits(15, 10, 20, KEY_SIX, false);
     Scores scores = Scores(0, 0, 20, SKYBLUE);
 
@@ -192,8 +192,8 @@ int main(void)
 
     // Nivel 1:
     //--------------------------------------------------------------------------------------
-    Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa_nivel_1_v2.txt", 40.0f, 0.0f);
+    Columnas columnas = Columnas("resources/mapa_nivel_2/bloque_grande_2.png", 40.0f, 0.0f, 1);
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_2/bloque_pequeno_2.png", "resources/mapa_nivel_2/mapa_nivel_2.txt", 40.0f, 0.0f);
     
     int numPlat = plataformas.listaPlataforma.size();
 

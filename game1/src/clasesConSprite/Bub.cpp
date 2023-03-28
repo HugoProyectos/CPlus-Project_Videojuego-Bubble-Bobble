@@ -468,4 +468,29 @@ public:
             cayendo = true;
         }
     }
+
+    void compruebaPared(Plataforma s) {
+        if (
+                (
+                    //Comprobamos colision esquina inferior derecha
+                    (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                        ((destRec.y + destRec.height / 2 + 1) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x + destRec.width / 2)) &&
+                            ((destRec.x + destRec.width / 2) > (s.left))
+                            )
+                ) ||
+                (
+                    (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                        ((destRec.y + destRec.height / 2 + 1) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x - destRec.width / 2)) &&
+                            ((destRec.x - destRec.width / 2) > (s.left))
+                            )
+                )
+            ) 
+        {
+            //
+        }
+    }
 };
