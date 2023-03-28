@@ -7,7 +7,7 @@ const int TARGET_FPS = 60;
 
 //cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
 //Se mueve con A y S, y se salta con el espacio
-int main_menu(void)
+int not_main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
