@@ -34,8 +34,9 @@ public:
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
-    Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS) {
+    Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
+        destRec = destino;
         tipo = 1;
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
@@ -130,7 +131,7 @@ public:
 
     //Comporbacion de colisiones
     void compruebaSuelo(Plataforma s) {
-        if (
+        /*if (
             !(
                 //Comprobamos colision esquina inferior derecha
                 (( (s.bot) > (destRec.y + destRec.height / 2)) &&
@@ -162,7 +163,7 @@ public:
         else {
             enElAire = false;
             cayendo = false;
-        }
+        }*/
     }
 };
 

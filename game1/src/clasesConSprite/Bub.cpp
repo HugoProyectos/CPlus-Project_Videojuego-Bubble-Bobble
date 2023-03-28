@@ -27,7 +27,7 @@ class Bub : public Sprite {
 
     const float VELOCIDAD_DISPARO = 5.0;
     const float DISTANCIA_DISPARO = 200.0;
-
+    Rectangle inicio = { -1,-1,-1,-1 };
 public:
     
 
@@ -68,8 +68,10 @@ public:
 
     Bub() = default; //Debe llamarse a Inicializador
 
-    Bub(float tamano, float saltoMax, float velSalto, float velLateral, int _targetFrames, AdministradorPompas& adm) {
+    Bub(float tamano, float saltoMax, float velSalto, float velLateral, int _targetFrames, Rectangle destino, AdministradorPompas& adm) {
         Inicializador(tamano, saltoMax, velSalto, velLateral, _targetFrames, adm);
+        destRec = destino;
+        inicio = destino;
     };
     void Inicializador(float tamano, float saltoMax, float velSalto,float velLateral, int _targetFrames, AdministradorPompas& adm)
     {
@@ -95,6 +97,7 @@ public:
 
         // Destination rectangle (screen rectangle where drawing part of texture)
         destRec = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f, (float)widthAnimation * tamano, (float)heightAnimation * tamano }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
+        inicio = destRec;
 
         // Origin of the texture (rotation/scale point), it's relative to destination rectangle size
         origin = { (float)widthAnimation * tamano / 2, (float)heightAnimation * tamano / 2 }; //En principio no lo necesitamos
@@ -326,6 +329,7 @@ public:
                 muerto = false;
                 muriendo = false;
                 animacionActiva = STANDING;
+                destRec = inicio;
             }
         }
     };

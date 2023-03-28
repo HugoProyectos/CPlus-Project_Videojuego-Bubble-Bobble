@@ -40,7 +40,7 @@ public:
 				//std::cout << "CHECK DISPARADA" << std::endl;
 
 				for (int j = 0; j < enemigos.size(); j++) {
-					if (!enemigos.at(j)->borrame 
+					if (!enemigos.at(j)->borrame && !!enemigos.at(j)->muerto
 					&& ((pompas.at(i).destRec.y + pompas.at(i).destRec.height / 2) > (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
 					&& (pompas.at(i).destRec.y - pompas.at(i).destRec.height / 2) < (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
 					|| (pompas.at(i).destRec.y + pompas.at(i).destRec.height / 2) > (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)

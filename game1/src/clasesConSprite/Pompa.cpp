@@ -66,7 +66,7 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 			tVida--;
 			
 			if (modulo == 1) {
-				Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
+				Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60, destRec);
 				robo.destRec = destRec;
 				result = std::make_shared<Robot>(robo);
 			}
@@ -104,8 +104,7 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					tVida = -1;
 
 					if (modulo == 1) {
-						Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
-						robo.destRec = destRec;
+						Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60, destRec);
 						robo.muerto = true;
 						result = std::make_shared<Robot>(robo);
 					}
@@ -120,8 +119,7 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					std::cout << "Peto por cabeza" << std::endl;
 
 					if (modulo == 1) {
-						Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
-						robo.destRec = destRec;
+						Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60, destRec);
 						robo.muerto = true;
 						result = std::make_shared<Robot>(robo);
 					}
@@ -137,8 +135,7 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					std::cout << "Peto por caida" << std::endl;
 
 					if (modulo == 1) {
-						Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60);
-						robo.destRec = destRec;
+						Robot robo = Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, 60, destRec);
 						robo.muerto = true;
 						result = std::make_shared<Robot>(robo);
 					}

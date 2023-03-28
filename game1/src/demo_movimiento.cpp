@@ -33,11 +33,13 @@ int main(void)
     Pompa p = Pompa(destRec,5.0,200.0,false,50000);
     admin.pompas.push_back(p);
 
-    sh_Robot robo = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS));
+    Rectangle destRob = { GetScreenWidth() / 2.0f + 100, GetScreenHeight() / 2 - 100, 2 * 16, 2 * 16 };
+    sh_Robot robo = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     //robo->muerto = true;
     admin.enemigos.push_back(robo);
 
-    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f,TARGET_FPS, admin);
+    Rectangle destBub = { (float)GetScreenWidth() / 2 - 100, (float)GetScreenHeight() / 2 - 20, 2 * 16, 2 * 16 };
+    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f,TARGET_FPS, destBub, admin);
     admin.posicionJugador = bub.destRec;
     Suelo suelo = Suelo("resources/Suelo.png");
 
@@ -85,7 +87,10 @@ int main(void)
             //std::cout << ((admin.pompas.at(0).destRec.x + admin.pompas.at(0).destRec.width / 2) > (bub.destRec.x - bub.destRec.width) && (admin.pompas.at(0).destRec.x - admin.pompas.at(0).destRec.width / 2) < (bub.destRec.x - bub.destRec.width / 2)) << std::endl;
             //std::cout << ((admin.pompas.at(0).destRec.x - admin.pompas.at(0).destRec.width / 2) < (bub.destRec.x + bub.destRec.width / 2) && (admin.pompas.at(0).destRec.x + admin.pompas.at(0).destRec.width / 2) > (bub.destRec.x + bub.destRec.width / 2)) << std::endl;
         }
-        
+
+        if (admin.enemigos.size() > 0) {
+
+        }
         //p.Dibujar();
 
         //DrawText("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200, screenHeight - 20, 10, GRAY);
