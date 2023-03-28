@@ -40,25 +40,27 @@ public:
 				//std::cout << "CHECK DISPARADA" << std::endl;
 
 				for (int j = 0; j < enemigos.size(); j++) {
-					if (!enemigos.at(j)->borrame && !!enemigos.at(j)->muerto
-					&& ((pompas.at(i).destRec.y + pompas.at(i).destRec.height / 2) > (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
-					&& (pompas.at(i).destRec.y - pompas.at(i).destRec.height / 2) < (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
-					|| (pompas.at(i).destRec.y + pompas.at(i).destRec.height / 2) > (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
-					&& (pompas.at(i).destRec.y - pompas.at(i).destRec.height / 2) < (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2))
-						&& ((pompas.at(i).destRec.x + pompas.at(i).destRec.width/2) > (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width/2)
-					&& (pompas.at(i).destRec.x - pompas.at(i).destRec.width / 2) < (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
-					|| (pompas.at(i).destRec.x + pompas.at(i).destRec.width / 2) > (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)
-					&& (pompas.at(i).destRec.x - pompas.at(i).destRec.width / 2) < (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2))) { //Si choca con el enemigo, lo marca para que se borre y se cambia el estado de la pompa
+					if (!enemigos.at(j)->borrame && !enemigos.at(j)->muerto
+					&& ((pompas.at(i).destRec.y + pompas.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
+					&& (pompas.at(i).destRec.y - pompas.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
+					|| (pompas.at(i).destRec.y + pompas.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
+					&& (pompas.at(i).destRec.y - pompas.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2))
+						&& ((pompas.at(i).destRec.x + pompas.at(i).destRec.width/2) >= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width/2)
+					&& (pompas.at(i).destRec.x - pompas.at(i).destRec.width / 2) <= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
+					|| (pompas.at(i).destRec.x + pompas.at(i).destRec.width / 2) >= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)
+					&& (pompas.at(i).destRec.x - pompas.at(i).destRec.width / 2) <= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2))) { //Si choca con el enemigo, lo marca para que se borre y se cambia el estado de la pompa
 						//std::cout << "Entro" << std::endl;
 						enemigos.at(j)->borrame = true;
 						//std::cout << "Salgo" << std::endl;
 						pompas.at(i).modulo = enemigos.at(j)->tipo;
-						pompas.at(i).enemigoContenido = enemigos.at(j)->tipo;
+						pompas.at(i).enemigoContenido = enemigos.at(j);
 						pompas.at(i).disparada = 0;
 					}
 				}
-				pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo);
-
+				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo);
+				if (enemigo != NULL) {
+					enemigos.push_back(enemigo);
+				}
 			} else {
 				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo);
 				if (enemigo != NULL) {
@@ -101,7 +103,7 @@ public:
 			}
 		}
 		if (enemigos.size() == 0) {
-			std::cout << "Sin enemigos que actualizar" << std::endl;
+			//std::cout << "Sin enemigos que actualizar" << std::endl;
 		}
 	};
 

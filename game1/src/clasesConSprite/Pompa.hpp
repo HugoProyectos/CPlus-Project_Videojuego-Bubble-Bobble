@@ -53,7 +53,7 @@ public:
 	bool matame = false;
 
 	//Enemigo contenido
-	int enemigoContenido = 0;
+	sh_Enemigo enemigoContenido = NULL;
 	int modulo = 0;
 
 	//Desplazamiento

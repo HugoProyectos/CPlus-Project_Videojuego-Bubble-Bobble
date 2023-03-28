@@ -33,7 +33,7 @@ int main(void)
     Pompa p = Pompa(destRec,5.0,200.0,false,50000);
     admin.pompas.push_back(p);
 
-    Rectangle destRob = { GetScreenWidth() / 2.0f + 100, GetScreenHeight() / 2 - 100, 2 * 16, 2 * 16 };
+    Rectangle destRob = { GetScreenWidth() / 2.0f + 100, GetScreenHeight() / 2 - 20, 2 * 16, 2 * 16 };
     sh_Robot robo = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     //robo->muerto = true;
     admin.enemigos.push_back(robo);
@@ -50,10 +50,10 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-       bub.Actualizar();
-       bub.compruebaColision(suelo);
        admin.actualizaPompas();
        admin.actualizaEnemigos();
+       bub.Actualizar();
+       bub.compruebaColision(suelo);
        //p.Actualizar();
         //----------------------------------------------------------------------------------
 
