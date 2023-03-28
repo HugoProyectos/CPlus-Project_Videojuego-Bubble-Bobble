@@ -2,6 +2,7 @@
 #include "Sprite.hpp"
 #include "Suelo.cpp"
 #include "Pompa.cpp"
+#include "mapa.cpp"
 #include "../AdministradorPompas.cpp"
 #include <iostream>
 
@@ -30,6 +31,8 @@ class Bub : public Sprite {
 
 public:
     
+    // VARIABLE DE ULTIMA PLATAFORMA SUELO
+    Plataforma lastGround;
 
     // VARIABLES PARA LA GENERACIÓN DE POMPAS
     bool disparando = false;
@@ -198,6 +201,7 @@ public:
                 destRec.x -= velocidadLateral;
                 dirCorrer = 1;
                 dirAir = 1;
+                compruebaSuelo(lastGround);
             }
             else if (IsKeyDown(KEY_S)) {
                 if (!disparando) animacionActiva = MOVING;
@@ -206,6 +210,7 @@ public:
                 destRec.x += velocidadLateral;
                 dirCorrer = 2;
                 dirAir = 2;
+                compruebaSuelo(lastGround);
             }
             else {
                 dirCorrer = 0;
@@ -296,15 +301,171 @@ public:
         DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
     }
 
-    void compruebaColision(const Suelo& s) {
-        if (((destRec.y + destRec.height / 2) > (s.destRec.y - s.destRec.height / 2)) && 
-            ((destRec.x - destRec.width/2) < (s.destRec.x + s.destRec.width/2)) && //No se sale por la derecha
-            ((destRec.x + destRec.width / 2) > (s.destRec.x - s.destRec.width / 2)) //No se sale por la izquierda
-            ) { //Choca abajo
-            destRec.y = (s.destRec.y - s.destRec.height / 2) - destRec.height / 2;
-            enElAire = false;
-            cayendo = false;
-            saltoRecorrido = 0;
+    void compruebaColision(Plataforma& s) {
+        //Comprobamos si colisiona con la superficie
+        if (
+            (
+                //Comprobamos colision esquina inferior derecha
+                (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2) > (s.top))
+                    ) && (
+                        ((s.right) > (destRec.x + destRec.width / 2)) &&
+                        ((destRec.x + destRec.width / 2) > (s.left))
+                        )
+                ) ||
+            (
+                //Comprobamos colision esquina superior derecha
+                (((s.bot) > (destRec.y - destRec.height / 2)) &&
+                    ((destRec.y - destRec.height / 2) > (s.top))
+                    ) && (
+                        ((s.right) > (destRec.x + destRec.width / 2)) &&
+                        ((destRec.x + destRec.width / 2) > (s.left))
+                        )
+                ) ||
+            (
+                //Comprobamos colision esquina superior izquierda
+                (((s.bot) > (destRec.y - destRec.height / 2)) &&
+                    ((destRec.y - destRec.height / 2) > (s.top))
+                    ) && (
+                        ((s.right ) > (destRec.x - destRec.width / 2)) &&
+                        ((destRec.x - destRec.width / 2) > (s.left))
+                        )
+                ) ||
+            (
+                //Comprobamos colision esquina inferior izquierda
+                (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2) > (s.top))
+                    ) && (
+                        ((s.right) > (destRec.x - destRec.width / 2)) &&
+                        ((destRec.x - destRec.width / 2) > (s.left))
+                        )
+                )
+            ) {
+            std::cout << "Choque" << std::endl;
+            switch (s.aproach) {
+            case 1:
+                destRec.x = s.left - destRec.width / 2;
+                break;
+            case 2:
+                destRec.x = s.right + destRec.width / 2;
+                break;
+            case 3:
+                destRec.y = s.top - destRec.height / 2;
+                enElAire = false;
+                cayendo = false;
+                saltoRecorrido = 0;
+                lastGround = s;
+                break;
+            }
+        }
+        //Comprobamos si se esta acercando a la superficie desde alguna dirección
+        else {
+            //Izquierda
+            if (
+                //Comprobamos colision esquina superior derecha
+                (
+                    (((s.bot) > (destRec.y - destRec.height / 2)) &&
+                        ((destRec.y - destRec.height / 2) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x + destRec.width / 2 + 5)) &&
+                            ((destRec.x + destRec.width / 2 + 5) > (s.left))
+                            )
+                    )
+                ||
+                //Comprobamos colision esquina inferior derecha
+                (
+                    (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                        ((destRec.y + destRec.height / 2) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x + destRec.width / 2 + 5)) &&
+                            ((destRec.x + destRec.width / 2 + 5) > (s.left))
+                            )
+                    )
+                ) {
+                std::cout << "Aproach left" << std::endl;
+                s.aproach = 1;
+            }
+            //Derecha
+            else if (
+                //Comprobamos colision esquina superior derecha
+                (
+                    (((s.bot) > (destRec.y - destRec.height / 2)) &&
+                        ((destRec.y - destRec.height / 2) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x - destRec.width / 2 - 5)) &&
+                            ((destRec.x - destRec.width / 2 - 5) > (s.left))
+                            )
+                    )
+                ||
+                //Comprobamos colision esquina inferior derecha
+                (
+                    (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                        ((destRec.y + destRec.height / 2) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x - destRec.width / 2 - 5)) &&
+                            ((destRec.x - destRec.width / 2 - 5) > (s.left))
+                            )
+                    )
+                ) {
+                std::cout << "Aproach right" << std::endl;
+                s.aproach = 2;
+            }
+            //Arriba
+            else if (
+                //Comprobamos colision esquina inferior derecha
+                (
+                    (((s.bot) > (destRec.y + destRec.height / 2 + 5)) &&
+                        ((destRec.y + destRec.height / 2 + 5) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x + destRec.width / 2)) &&
+                            ((destRec.x + destRec.width / 2) > (s.left))
+                            )
+                    )
+                ||
+                //Comprobamos colision esquina inferior izquierda
+                (
+                    (((s.bot) > (destRec.y + destRec.height / 2 + 5)) &&
+                        ((destRec.y + destRec.height / 2 + 5) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x - destRec.width / 2)) &&
+                            ((destRec.x - destRec.width / 2) > (s.left))
+                            )
+                    )
+                ) {
+                std::cout << "Aproach top" << std::endl;
+                s.aproach = 3;
+            }
+            //Abajo
+            else {
+                //Si no se cumplen anteriores asumimos que se acerca por debajo
+                s.aproach = 4;
+            }
+        }
+    }
+
+    void compruebaSuelo(Plataforma s) {
+        if (
+            !(
+                //Comprobamos colision esquina inferior derecha
+                (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2 + 1) > (s.top))
+                    ) && (
+                        ((s.right) > (destRec.x + destRec.width / 2)) &&
+                        ((destRec.x + destRec.width / 2) > (s.left))
+                        )
+                ) &&
+            !(
+                //Comprobamos colision esquina inferior izquierda
+                (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                    ((destRec.y + destRec.height / 2 + 1) > (s.top))
+                    ) && (
+                        ((s.right) > (destRec.x - destRec.width / 2)) &&
+                        ((destRec.x - destRec.width / 2) > (s.left))
+                        )
+                )
+            ) {
+            enElAire = true;
+            cayendo = true;
         }
     }
 };

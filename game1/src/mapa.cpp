@@ -20,8 +20,13 @@ public:
     unsigned int tamanoY = 1;
 
     // Posicion en pantalla
-    float topleft[2] = { 0,0 };
+    float top = 0;
+    float bot = 0;
+    float left = 0;
+    float right = 0;
 
+    //Dirección en la que se acerca el personaje
+    int aproach;
 
     Plataforma() = default;
 
@@ -35,8 +40,12 @@ public:
         this->positionY = positionY;
         this->tamanoX = tamanoX;
         this->tamanoY = tamanoY;
-        this->topleft[0] = (positionX - 1 + 2) * GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO;
-        this->topleft[1] = (positionY - 1) * GetScreenHeight() / (float)BLOQUE_PEQUENO_ALTO;
+        this->left = (positionX - 1 + 2) * GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO;
+        this->top = (positionY - 1) * GetScreenHeight() / (float)BLOQUE_PEQUENO_ALTO;
+        float anchura = GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO * this->tamanoX;
+        float altura = (GetScreenHeight()) / (float)BLOQUE_PEQUENO_ALTO * this->tamanoY;
+        this->right = this->left + anchura;
+        this->bot = this->top + altura;
     }
 
     ~Plataforma(){}
@@ -45,10 +54,14 @@ public:
 
     void Actualizar(float ratioMargenSup, float ratioMargenInf)
     {
-        this->topleft[0] = (positionX - 1 + 2) * GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO;
+        this->left = (positionX - 1 + 2) * GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO;
         float tamanoMargenSup = ratioMargenSup != 0 ? GetScreenHeight() / ratioMargenSup : 0;
         float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
-        this->topleft[1] = tamanoMargenSup + (positionY - 1) * (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO;
+        this->top = tamanoMargenSup + (positionY - 1) * (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO;
+        float anchura = GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO * this->tamanoX;
+        float altura = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO * this->tamanoY;
+        this->right = this->left + anchura;
+        this->bot = this->top + altura;
     }
 
     void Dibujar() {
@@ -140,8 +153,8 @@ public:
 
         for (int i = 0; i < listaPlataforma.size(); i++) {
             destRect = {
-                listaPlataforma[i].topleft[0], // Posicion x de la esquina topleft
-                listaPlataforma[i].topleft[1], // Posicion y de la esquina topleft
+                listaPlataforma[i].left, // Posicion x de la esquina topleft
+                listaPlataforma[i].top, // Posicion y de la esquina topleft
                 anchura_bloque,  // anchura bloque
                 altura_bloque // altura bloque
             };
@@ -150,7 +163,7 @@ public:
                     DrawTexturePro(bloque_pequeno, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
                     destRect.y += altura_bloque;
                 }
-                destRect.y = listaPlataforma[i].topleft[1];
+                destRect.y = listaPlataforma[i].top;
                 destRect.x += anchura_bloque;
             }
         }
@@ -167,6 +180,14 @@ public:
 
     float ratioMargenSup = 0;
     float ratioMargenInf = 0;
+
+    float top = 0;
+    float bot = 0;
+    float left_izq = 0;
+    float left_der = 0;
+    float right_izq = 0;
+    float right_der = 0;
+
 
     std::string numeroNivel = "";
 
@@ -199,6 +220,21 @@ public:
 
     void Actualizar() {
         // TODO
+        float tamanoMargenSup = ratioMargenSup != 0 ? GetScreenHeight() / ratioMargenSup : 0;
+        float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
+        float altura_bloque = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_GRANDE_ALTO;
+        float anchura_bloque = GetScreenWidth() / (float)BLOQUE_GRANDE_ANCHO;
+
+        this->top = tamanoMargenSup;
+        this->bot = tamanoMargenSup + altura_bloque * BLOQUE_GRANDE_ALTO;
+
+        // Left y right de la columna de la izquierda
+        this->left_izq = 0;
+        this->right_izq = anchura_bloque;
+
+        // Left y right de la columna de la derecha
+        this->left_der = GetScreenWidth() - anchura_bloque;
+        this->right_der = GetScreenWidth() - anchura_bloque + anchura_bloque;
     };
 
     void Dibujar() {

@@ -1,12 +1,14 @@
-#include "raylib.h"
+/*#include "raylib.h"
 #include "AdministradorPompas.cpp"
 #include "clasesConSprite/Bub.cpp"
 
 const int TARGET_FPS = 60;
 
-//cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
+//cambiar nombre de "not_main" a "main" para que el depurador entre aquÃ­.
 //Se mueve con A y S, y se salta con el espacio
+
 int demo(void)
+
 {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -69,7 +71,7 @@ int demo(void)
         std::string valores = "Salto recorrido= " + std::to_string(bub.saltoRecorrido);
         
         //if (admin.pompas.size() > 0) {
-        /*std::string pompa = "Posicion X de la pompa= " + std::to_string(p.destRec.x);//std::to_string(admin.pompas.at(0).destRec.x);
+        std::string pompa = "Posicion X de la pompa= " + std::to_string(p.destRec.x);//std::to_string(admin.pompas.at(0).destRec.x);
             DrawText(pompa.c_str(), screenWidth - 600, screenHeight - 90, 20, GRAY);
             std::string vida = "Vida de la pompa = " + std::to_string(p.tVida);
             DrawText(vida.c_str(), screenWidth - 600, screenHeight - 110, 20, GRAY);
@@ -79,7 +81,7 @@ int demo(void)
             DrawText(animacion.c_str(), screenWidth - 600, screenHeight - 50, 20, GRAY);
 
             //}
-            */
+            
         DrawText(x_bub.c_str(), screenWidth - 600, screenHeight - 110, 20, GRAY);
         DrawText(disparando.c_str(), screenWidth - 600, screenHeight - 70, 20, GRAY);
         DrawText(valores.c_str(), screenWidth - 600, screenHeight - 30, 20, GRAY);
@@ -100,4 +102,4 @@ int demo(void)
     //--------------------------------------------------------------------------------------
 
     return 0;
-}
+}*/
