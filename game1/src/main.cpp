@@ -98,8 +98,9 @@ int nivel_1(void)
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
     Pompa p = Pompa(destRec, 5.0, 200.0, true, 100);
 
-    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, admin);
-    bub.destRec.x = 100; bub.destRec.y = 100;
+    Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32};
+    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
+    //bub.destRec.x = 100; bub.destRec.y = 100;
 
     SetTargetFPS(TARGET_FPS);
 
@@ -162,7 +163,7 @@ typedef enum GameScreen { MAIN_MENU, NIVEL_1 } GameScreen;
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
-int principal_main(void)
+int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -202,8 +203,10 @@ int principal_main(void)
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
     Pompa p = Pompa(destRec, 5.0, 200.0, true, 100);
 
-    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, admin);
-    bub.destRec.x = 100; bub.destRec.y = 100;
+    Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32 };
+    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
+
+    //bub.destRec.x = 100; bub.destRec.y = 100;
     
     //--------------------------------------------------------------------------------------
 

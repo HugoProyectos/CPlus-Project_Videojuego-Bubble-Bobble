@@ -1,7 +1,7 @@
 #pragma once
 #include "Sprite.hpp"
 #include "Suelo.cpp"
-#include "Pompa.cpp"
+#include "Pompa.hpp"
 #include "mapa.cpp"
 #include "../AdministradorPompas.cpp"
 #include <iostream>
@@ -239,11 +239,6 @@ public:
                 saltoRecorrido += velocidadActual;
                 velocidadActual -= deceleracion;
             }
-            disparando = true;
-            animacionActiva = SHOOTING;
-            indiceAnimacion = 6; //Es el 0 de la segunda parte de animaciones
-            Pompa p = Pompa(destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, 100);
-            admin->pompas.push_back(p);
         } else if(!enElAire) {
             if (IsKeyDown(KEY_A)) {
                 if (!disparando) animacionActiva = MOVING;
