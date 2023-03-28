@@ -99,7 +99,7 @@ int nivel_1(void)
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
     Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
 
-    Rectangle destRob = { GetScreenWidth() / 2, 50, 32, 32 };
+    Rectangle destRob = { GetScreenWidth() / 2, 70, 32, 32 };
     sh_Enemigo robot = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     admin.enemigos.push_back(robot);
 
@@ -212,7 +212,7 @@ int main(void)
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
     Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
     
-    Rectangle destRob = { GetScreenWidth()/2, 50, 32, 32};
+    Rectangle destRob = { GetScreenWidth()/2, 70, 32, 32};
     sh_Enemigo robot = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     admin.enemigos.push_back(robot);
 

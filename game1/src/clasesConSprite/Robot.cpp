@@ -41,6 +41,8 @@ public:
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
         targetFrames = _targetFPS;
+        enElAire = true;
+        cayendo = true;
     };
 
     // Controlador de comportamiento
@@ -49,13 +51,13 @@ public:
             animacionActiva = 1;
             Caer();
         }
-        else if (enElAire || (destRec.y > playerPosition.y && destRec.x == playerPosition.x)) { //Si el personaje esta encima
+        else if (enElAire || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10)) { //Si el personaje esta encima
             Salto();
         }
-        else if (destRec.x > playerPosition.x) { //Si el personaje esta a la izquierda
+        else if (destRec.x > playerPosition.x + 10) { //Si el personaje esta a la izquierda
             MoverIzq();
         }
-        else if (destRec.x < playerPosition.x) { //Si el personaje esta a la derecha
+        else if (destRec.x < playerPosition.x - 10) { //Si el personaje esta a la derecha
             MoverDer();
         }
            

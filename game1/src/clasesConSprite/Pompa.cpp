@@ -68,6 +68,8 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 			if (modulo == 1) {
 				enemigoContenido->destRec = destRec;
 				enemigoContenido->borrame = false;
+				enemigoContenido->enElAire = true;
+				enemigoContenido->cayendo = true;
 				result = enemigoContenido;
 			}
 			
@@ -107,6 +109,8 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 						enemigoContenido->destRec = destRec;
 						enemigoContenido->borrame = false;
 						enemigoContenido->muerto = true;
+						enemigoContenido->enElAire = true;
+						enemigoContenido->cayendo = true;
 						result = enemigoContenido;
 					}
 
@@ -123,6 +127,8 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 						enemigoContenido->destRec = destRec;
 						enemigoContenido->borrame = false;
 						enemigoContenido->muerto = true;
+						enemigoContenido->enElAire = true;
+						enemigoContenido->cayendo = true;
 						result = enemigoContenido;
 					}
 
@@ -140,6 +146,8 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 						enemigoContenido->destRec = destRec;
 						enemigoContenido->borrame = false;
 						enemigoContenido->muerto = true;
+						enemigoContenido->enElAire = true;
+						enemigoContenido->cayendo = true;
 						result = enemigoContenido;
 					}
 
@@ -151,12 +159,28 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 			//destRec.x -= 1;
 
 			//Que vaya hacia arriba poco a poco
-			if (destRec.y > 0) {
-				destRec.y += -0.5;
+			if (!oscilando) {
+				if (destRec.y > 70) {
+					destRec.y += -0.5;
+				}
+				else {
+					oscilando = true;
+				}
 			}
-			else {
-				destRec.y += 0.5;
+
+			if (oscilando) {
+				if (abajo) {
+					destRec.y += 0.5;
+				} else {
+					destRec.y += -0.5;
+				}
+				contador++;
+				if (contador >= 20) {
+					abajo = !abajo;
+					contador = 0;
+				}
 			}
+			
 		}
 
 	}

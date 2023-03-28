@@ -41,6 +41,11 @@ class Pompa : public Sprite {
 
 	//Razón a la que se va restando la vida a la pompa
 	const int VELOCIDAD_MUERTE = 1;
+	
+	//Modo oscilacion
+	bool oscilando = false;
+	bool abajo = true;
+	uint8_t contador = 0;
 
 public:
 	static uint32_t ID_GLOBAL;
