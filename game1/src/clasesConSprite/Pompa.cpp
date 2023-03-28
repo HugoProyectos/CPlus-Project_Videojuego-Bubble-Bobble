@@ -8,18 +8,18 @@ void Pompa::init() { //Solo se llama una vez, para reiniciar los identificadores
 	Pompa::ID_GLOBAL = 0u;
 }
 
-Pompa::Pompa(const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida) {
-	Inicializador(origen, velDisparo, distanciaDisparo, esDisparada, tiempoVida);
+Pompa::Pompa(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida) {
+	Inicializador(spriteSheet, origen, velDisparo, distanciaDisparo, esDisparada, tiempoVida);
 }
 
 bool Pompa::operator==(const Pompa& p) {
 	return ID == p.ID;
 }
 
-void Pompa::Inicializador(const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida) {
+void Pompa::Inicializador(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida) {
 	ID = ID_GLOBAL++; //Asigna identificador único (De no ser todo secuencial, habrá que gestionar sección crítica)
 
-	sprite = LoadTexture("resources/Players/Bobblun/pompa.png");
+	sprite = spriteSheet;
 
 	destRec = origen;//{ origen.x, origen.y, (float)widthAnimation * 2, (float)heightAnimation * 2 };
 	tVida = tiempoVida;

@@ -131,7 +131,7 @@ public:
 
     //Comporbacion de colisiones
     void compruebaSuelo(Plataforma s) {
-        /*if (
+        if (
             !(
                 //Comprobamos colision esquina inferior derecha
                 (( (s.bot) > (destRec.y + destRec.height / 2)) &&
@@ -163,7 +163,7 @@ public:
         else {
             enElAire = false;
             cayendo = false;
-        }*/
+        }
     }
 };
 

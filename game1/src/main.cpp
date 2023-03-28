@@ -95,8 +95,14 @@ int nivel_1(void)
 
     AdministradorPompas admin = AdministradorPompas();
 
+    Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
-    Pompa p = Pompa(destRec, 5.0, 200.0, true, 100);
+    Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
+
+    Rectangle destRob = { GetScreenWidth() / 2, 50, 32, 32 };
+    sh_Enemigo robot = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
+    admin.enemigos.push_back(robot);
+
 
     Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32};
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
@@ -123,6 +129,7 @@ int nivel_1(void)
             bub.compruebaColision(plataformas.listaPlataforma[i]);
         }
         admin.actualizaPompas();
+        admin.actualizaEnemigos();
         //----------------------------------------------------------------------------------
 
 
@@ -137,6 +144,7 @@ int nivel_1(void)
         scores.Dibujar();
         bub.Dibujar();
         admin.dibujaPompas();
+        admin.dibujaEnemigos();
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
@@ -200,8 +208,13 @@ int main(void)
 
     AdministradorPompas admin = AdministradorPompas();
 
+    Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
-    Pompa p = Pompa(destRec, 5.0, 200.0, true, 100);
+    Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
+    
+    Rectangle destRob = { GetScreenWidth()/2, 50, 32, 32};
+    sh_Enemigo robot = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
+    admin.enemigos.push_back(robot);
 
     Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
@@ -258,6 +271,7 @@ int main(void)
                 bub.compruebaColision(plataformas.listaPlataforma[i]);
             }
             admin.actualizaPompas();
+            admin.actualizaEnemigos();
 
             if (IsKeyPressed(KEY_TWO) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
             {
@@ -294,7 +308,7 @@ int main(void)
             scores.Dibujar();
             bub.Dibujar();
             admin.dibujaPompas();
-
+            admin.dibujaEnemigos();
         } break;
         default: break;
         }

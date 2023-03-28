@@ -72,11 +72,11 @@ public:
 
 
 	Pompa() = default;
-	Pompa(const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
+	Pompa(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
 	
 	bool operator==(const Pompa& p);
 
-	void Inicializador(const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
+	void Inicializador(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
 
 	sh_Enemigo Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1);
 
