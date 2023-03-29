@@ -6,7 +6,7 @@
 const int TARGET_FPS = 60;
 
 //cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
-//Se mueve con A y S, y se salta con el espacio
+//Se mueve con A y S, y se salta con el espacio.
 int not_main(void)
 {
     // Initialization
@@ -202,8 +202,8 @@ int main(void)
 
     // Nivel 1:
     //--------------------------------------------------------------------------------------
-    Columnas columnas = Columnas("resources/mapa_nivel_2/bloque_grande_2.png", 40.0f, 0.0f, 1);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_2/bloque_pequeno_2.png", "resources/mapa_nivel_2/mapa_nivel_2.txt", 40.0f, 0.0f);
+    Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa_nivel_1_v2.txt", 40.0f, 0.0f);
     
     int numPlat = plataformas.listaPlataforma.size();
 
@@ -217,7 +217,7 @@ int main(void)
     sh_Enemigo robot = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     admin.enemigos.push_back(robot);
 
-    destRob = { (float)GetScreenWidth() / 2, 50, 32, 32 };
+    destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
     sh_Enemigo robot2 = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     admin.enemigos.push_back(robot2);
 

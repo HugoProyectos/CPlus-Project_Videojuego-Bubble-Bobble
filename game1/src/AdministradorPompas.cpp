@@ -56,6 +56,7 @@ public:
 						pompas.at(i).modulo = enemigos.at(j)->tipo;
 						pompas.at(i).enemigoContenido = enemigos.at(j);
 						pompas.at(i).disparada = 0;
+						break;
 					}
 				}
 				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo);

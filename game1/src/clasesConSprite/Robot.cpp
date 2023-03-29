@@ -55,7 +55,6 @@ public:
             CaerLento();
         }
         else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10)) { //Si el personaje esta encima
-            std::cout << "Funcion salto" << std::endl;
             Salto();
         }
         else if (destRec.x > playerPosition.x + 5) { //Si el personaje esta a la izquierda
