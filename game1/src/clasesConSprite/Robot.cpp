@@ -4,7 +4,7 @@
 
 class Robot : public Enemigo {
 public:
-    
+
     //Sprite pixels
     int pixels = 16; //El numero de pixeles del sprite
 
@@ -16,7 +16,7 @@ public:
     int fWalkAnimation = 4; //Número de fotogramas de la animacion camniar
     int fDeadAnimation = 4; //Número de fotogramas de la animacion muerte
     int fAnimation[2] = { fWalkAnimation , fDeadAnimation };
-    
+
     int widthAnimation; // Se actualiza para cada animación activa
     int heightAnimation;
 
@@ -51,16 +51,20 @@ public:
             animacionActiva = 1;
             Caer();
         }
-        else if (enElAire || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10)) { //Si el personaje esta encima
+        else if (!saltando && enElAire) {
+            CaerLento();
+        }
+        else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10)) { //Si el personaje esta encima
+            std::cout << "Funcion salto" << std::endl;
             Salto();
         }
-        else if (destRec.x > playerPosition.x + 10) { //Si el personaje esta a la izquierda
+        else if (destRec.x > playerPosition.x + 5) { //Si el personaje esta a la izquierda
             MoverIzq();
         }
-        else if (destRec.x < playerPosition.x - 10) { //Si el personaje esta a la derecha
+        else if (destRec.x < playerPosition.x - 5) { //Si el personaje esta a la derecha
             MoverDer();
         }
-           
+
         //Actualizar puntero de animacion
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames)) {
@@ -104,34 +108,51 @@ public:
         destRec.y += velocidadSalto;
     }
 
+    void CaerLento() {
+        destRec.y += velocidadSalto/2;
+    }
+
     void Salto() {
         //Gestión de salto
-        if (!enElAire) {
-            //std::cout << "Salto" << std::endl;
+        if (!saltando) {
+            //std::cout << "Inicio Salto" << std::endl;
+            saltando = true;
+            finSaltando = false;
             enElAire = true;
+            cayendo = false;
         }
-        else if (saltoRecorrido < distanciaSaltoMax && enElAire && !cayendo) {
+        //Subiendo
+        else if ((saltoRecorrido <= distanciaSaltoMax) && !finSaltando) {
+            //std::cout << "Subida Salto" << std::endl;
             destRec.y -= velocidadSalto;
             saltoRecorrido += velocidadSalto;
         }
-        else if (saltoRecorrido < 0) {
-            //Caida lenta
-            destRec.y += velocidadSalto/2;
-            saltoRecorrido -= velocidadSalto/2;
-        }
-        else if (enElAire && cayendo && saltoRecorrido > 0) {
+        //Hemos llegado al máximo
+        else if (saltoRecorrido >= distanciaSaltoMax) {
+            //std::cout << "max salto" << std::endl;
+            finSaltando = true;
             destRec.y += velocidadSalto;
             saltoRecorrido -= velocidadSalto;
         }
-        else if (enElAire) {
-            saltoRecorrido = 0.0f;
-            cayendo = true;
-            destRec.y += velocidadSalto / 2; //planeo
+        //Bajar
+        else if (saltoRecorrido > 0 && finSaltando && enElAire) {
+            //std::cout << "Bajar Salto" << std::endl;
+            destRec.y += velocidadSalto;
+            saltoRecorrido -= velocidadSalto;
+        }
+        else if (saltoRecorrido <= 0) {
+            //std::cout << " Salto acabado" << std::endl;
+            saltando = false;
+            finSaltando = true;
+        }
+        else {
+            //std::cout << " Salto perdido" << std::endl;
+
         }
     }
 
     //Comprobacion de colisiones
-    void compruebaColision(Plataforma& s,int enemyNum) override {
+    void compruebaColision(Plataforma& s, int enemyNum) override {
         //Comprobamos si colisiona con la superficie
         if (
             (
@@ -171,7 +192,7 @@ public:
                         )
                 )
             ) {
-            switch (s.aproach[enemyNum+1]) {
+            switch (s.aproach[enemyNum + 1]) {
             case 1:
                 destRec.x = s.left - destRec.width / 2;
                 break;
@@ -275,7 +296,7 @@ public:
         if (
             !(
                 //Comprobamos colision esquina inferior derecha
-                (( (lastGround.bot) > (destRec.y + destRec.height / 2)) &&
+                (((lastGround.bot) > (destRec.y + destRec.height / 2)) &&
                     ((destRec.y + destRec.height / 2 + 1) > (lastGround.top))
                     ) && (
                         ((lastGround.right) > (destRec.x + destRec.width / 2)) &&
@@ -296,7 +317,7 @@ public:
             enElAire = true;
             cayendo = true;
         }
-        else if(muerto){
+        else if (muerto) {
             enElAire = false;
             cayendo = false;
             borrame = true;

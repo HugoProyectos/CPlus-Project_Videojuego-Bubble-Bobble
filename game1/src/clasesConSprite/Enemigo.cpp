@@ -10,6 +10,8 @@ public:
     bool borrame = false; //Eliminarlo de la lista
     bool muerto = false; //Iniciar animacion de muerte
     
+    bool saltando = false;
+    bool finSaltando = false;
     bool enElAire = false;
     bool cayendo = false;
     bool golpeado = false;

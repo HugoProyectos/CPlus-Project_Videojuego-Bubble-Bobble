@@ -214,8 +214,12 @@ int main(void)
     Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
     
     Rectangle destRob = { GetScreenWidth()/2, 70, 32, 32};
-    sh_Enemigo robot = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
+    sh_Enemigo robot = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     admin.enemigos.push_back(robot);
+
+    destRob = { (float)GetScreenWidth() / 2, 50, 32, 32 };
+    sh_Enemigo robot2 = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
+    admin.enemigos.push_back(robot2);
 
     Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
