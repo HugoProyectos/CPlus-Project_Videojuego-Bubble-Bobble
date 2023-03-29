@@ -62,7 +62,9 @@ public:
         UnloadTexture(sprite);
     };
 
-    void virtual compruebaSuelo(Plataforma s) = 0;
+    void virtual compruebaSuelo() = 0;
+
+    void virtual compruebaColision(Plataforma& s, int enemyNum) = 0;
 
     //void Dibujar() {
     //    DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);

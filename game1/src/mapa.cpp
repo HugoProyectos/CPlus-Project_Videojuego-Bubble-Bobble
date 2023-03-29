@@ -26,7 +26,7 @@ public:
     float right = 0;
 
     //Dirección en la que se acerca el personaje
-    int aproach;
+    int aproach[4];
 
     Plataforma() = default;
 
