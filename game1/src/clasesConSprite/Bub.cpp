@@ -118,8 +118,14 @@ public:
     };
 
     void Actualizar() {
+        //Gestion de wrap vertical
+        if (destRec.y > 500) {
+            destRec.y = -10;
+        }
+        else if (destRec.y < -50) {
+            destRec.y = 450;
+        }
         //Gestión de desplazamiento lateral
-        
 		if(!muerto){
 			if (enElAire) {
 				if (saltoRecorrido > 0) {
