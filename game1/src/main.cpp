@@ -202,8 +202,8 @@ int main(void)
 
     // Nivel 1:
     //--------------------------------------------------------------------------------------
-    Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa_nivel_1_v2.txt", 40.0f, 0.0f);
+    Columnas columnas = Columnas("resources/mapa_nivel_5/bloque_grande.png", 40.0f, 0.0f, 1);
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt", 40.0f, 0.0f);
     
     int numPlat = plataformas.listaPlataforma.size();
 
