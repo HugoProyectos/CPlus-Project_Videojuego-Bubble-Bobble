@@ -2,7 +2,7 @@
 #include "mapa.cpp"
 #include "AdministradorPompas.cpp"
 #include "clasesConSprite/Bub.cpp"
-#include "clasesConSprite/Agua.cpp"
+#include "clasesConSprite/Agua.hpp"
 
 const int TARGET_FPS = 60;
 
@@ -108,9 +108,6 @@ int nivel_1(void)
     Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32};
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
     //bub.destRec.x = 100; bub.destRec.y = 100;
-
-    Rectangle destAgua = { 150, GetScreenHeight() - 50, 16, 16 };
-    Agua agua = Agua(destAgua,admin,true);
 
     SetTargetFPS(TARGET_FPS);
 
@@ -228,6 +225,10 @@ int main(void)
     Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
 
+    Texture2D spriteAgua = LoadTexture("resources/agua.png");
+    Rectangle destAgua = { 150, 100, 16, 16 };
+    Agua agua = Agua(destAgua, true, spriteAgua, numPlat);
+
     //bub.destRec.x = 100; bub.destRec.y = 100;
     
     //--------------------------------------------------------------------------------------
@@ -280,8 +281,8 @@ int main(void)
                 bub.compruebaColision(plataformas.listaPlataforma[i]);
             }
             bub.compruebaPared(columnas);
+            agua.Actualizar(plataformas,columnas);
             admin.actualizaPompas();
-            //admin.actualizaAgua();
             admin.actualizaEnemigos(plataformas);
 
             if (IsKeyPressed(KEY_TWO) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
@@ -318,8 +319,10 @@ int main(void)
             plataformas.Dibujar();
             scores.Dibujar();
             bub.Dibujar();
+            agua.Dibujar();
             admin.dibujaPompas();
             admin.dibujaEnemigos();
+            
         } break;
         default: break;
         }

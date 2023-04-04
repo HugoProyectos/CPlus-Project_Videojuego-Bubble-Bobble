@@ -1,25 +1,18 @@
 #pragma once
-#include "Sprite.hpp"
+#include "TileAgua.hpp"
 #include "../AdministradorPompas.cpp"
-#include <string>
-#include <cmath>
 #include <iostream> //DEBUG
-
-
-class tileAgua : public Sprite {
-
-    int widthAnimation = 16;
-    int heightAnimation = 16;
-public:
-
-};
 
 class Agua : public Sprite {
 
-public:
-    // Referencia al administrador de pompas
-    AdministradorPompas* admin;
+    tileAgua stream[10];
+    bool existe = false;
 
-    Agua() = default; //Debe llamarse a Inicializador
-    Agua(Rectangle destino, AdministradorPompas& adm, bool right);
+public:
+
+    Agua(Rectangle destino, bool right, Texture2D sprite, int numPlat);
+
+    void Actualizar(Plataformas& plat,Columnas& col);
+
+    void Dibujar();
 };
