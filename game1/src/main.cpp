@@ -91,7 +91,7 @@ int nivel_1(void)
     Credits credits = Credits(15, 10, 20, KEY_SIX, false);
     Scores scores = Scores(0, 0, 20, SKYBLUE);
 
-    int numPlat = plataformas.listaPlataforma.size();
+    //int numPlat = plataformas.listaPlataforma.size();
 
     AdministradorPompas admin = AdministradorPompas();
 
@@ -125,7 +125,7 @@ int nivel_1(void)
         bub.Actualizar();
         bub.cayendo = true;
         bub.enElAire = true;
-        for (int i = 0; i < numPlat; i++) {
+        for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
             bub.compruebaColision(plataformas.listaPlataforma[i]);
         }
         bub.compruebaPared(columnas);
@@ -205,7 +205,7 @@ int main(void)
     Columnas columnas = Columnas("resources/mapa_nivel_5/bloque_grande.png", 40.0f, 0.0f, 1);
     Plataformas plataformas = Plataformas("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt", 40.0f, 0.0f);
     
-    int numPlat = plataformas.listaPlataforma.size();
+    //int numPlat = plataformas.listaPlataforma.size();
 
     AdministradorPompas admin = AdministradorPompas();
 
@@ -272,12 +272,18 @@ int main(void)
             credits.Actualizar();
             scores.Actualizar();
             bub.Actualizar();
-            for (int i = 0; i < numPlat; i++) {
+            for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
                 bub.compruebaColision(plataformas.listaPlataforma[i]);
             }
             bub.compruebaPared(columnas);
             admin.actualizaPompas();
             admin.actualizaEnemigos(plataformas);
+
+            if (IsKeyPressed(KEY_THREE))
+            {
+                columnas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_grande.png", 2);  
+                plataformas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_pequeno.png", "resources/mapa_nivel_3/mapa.txt");         
+            }
 
             if (IsKeyPressed(KEY_TWO) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
             {
