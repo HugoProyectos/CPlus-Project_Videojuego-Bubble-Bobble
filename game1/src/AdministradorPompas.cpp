@@ -13,6 +13,7 @@ public:
 	bool jugadorCayendo = false;
 	int sentidoJugador = 2; //3->mira a la derecha 2->mira a la izquierda: variable orientacionActual de Bub
 	bool muriendo = false;
+	int j1DebeRebotar = 0; //0->No
 
 	std::vector<Pompa> pompas;
 	std::vector<sh_Enemigo> enemigos;
@@ -59,12 +60,12 @@ public:
 						break;
 					}
 				}
-				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo);
+				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo, j1DebeRebotar);
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 				}
 			} else {
-				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo);
+				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo, j1DebeRebotar);
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 				}

@@ -45,7 +45,7 @@ void Pompa::Inicializador(Texture2D spriteSheet, const Rectangle origen, float v
 
 }
 
-sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1) {
+sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1, int& j1DebeRebotar) {
 	sh_Enemigo result = NULL;
 
 	if (disparada == 2) {
@@ -98,9 +98,41 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					//std::cout << contactoEspalda<< std::endl;
 				}
 
-				if (contactoEspalda
-					&& ((destRec.y - destRec.width / 2) <= (pJ1.y + pJ1.height / 2) && (destRec.y + destRec.height / 2) >= (pJ1.y + pJ1.height / 2)
-						|| (destRec.y - destRec.width / 2) <= (pJ1.y - pJ1.height / 2) && (destRec.y + destRec.height / 2) >= (pJ1.y - pJ1.height / 2))) { //Choca por detrás del jugador (primera linea->horizontal, segunda y tercera->posibilidades verticales)
+				if (((destRec.x - destRec.width / 2) < (pJ1.x + pJ1.width / 2) && (destRec.x + destRec.width / 2) > (pJ1.x + pJ1.width / 2)
+					|| (destRec.x + destRec.width / 2) > (pJ1.x - pJ1.width) && (destRec.x - destRec.width / 2) < (pJ1.x - pJ1.width / 2))
+					&& (pJ1.y + pJ1.height / 2) > (destRec.y - destRec.height / 2) && (pJ1.y + pJ1.height / 2) < (destRec.y + destRec.height / 2)
+					&& cayendoJ1 && animacionActiva != EXPLOTA) { //Choque en caída
+					if (j1DebeRebotar == 0 && !IsKeyDown(KEY_SPACE)) { // Explota la pompa
+						animacionActiva = EXPLOTA;
+						indiceAnimacion = 0;
+						tVida = -1;
+						std::cout << "Peto por caida" << std::endl;
+
+						if (modulo == 1) {
+							enemigoContenido->destRec = destRec;
+							enemigoContenido->borrame = false;
+							enemigoContenido->muerto = true;
+							enemigoContenido->enElAire = true;
+							enemigoContenido->cayendo = true;
+							result = enemigoContenido;
+						}
+					}
+					else if (IsKeyDown(KEY_SPACE) && (pJ1.y + pJ1.height / 2) < (destRec.y - destRec.height / 4)) { //Debe rebotar sin explotar la pompa
+						std::cout << "DEBES REBOTAR" << std::endl;
+						//int u; //DEBUG bloqueante
+						//std::cin >> u;
+						if (indiceAnimacion == 0) {
+							indiceAnimacion = 1;
+							contadorFrames = 0;
+						}
+						j1DebeRebotar = 1;
+					}
+
+
+				}
+				else if (contactoEspalda
+					&& ((destRec.y - destRec.width / 2) < (pJ1.y + pJ1.height / 4) && (destRec.y + destRec.height / 2) > (pJ1.y + pJ1.height / 4)
+						|| (destRec.y - destRec.width / 2) < (pJ1.y - pJ1.height / 2) && (destRec.y + destRec.height / 2) > (pJ1.y - pJ1.height / 2))) { //Choca por detrás del jugador (primera linea->horizontal, segunda y tercera->posibilidades verticales)
 					animacionActiva = EXPLOTA;
 					indiceAnimacion = 0;
 					tVida = -1;
@@ -133,25 +165,7 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					}
 
 				}
-				else if (((destRec.x - destRec.width / 2) < (pJ1.x + pJ1.width / 2) && (destRec.x + destRec.width / 2) > (pJ1.x + pJ1.width / 2)
-					|| (destRec.x + destRec.width / 2) > (pJ1.x - pJ1.width) && (destRec.x - destRec.width / 2) < (pJ1.x - pJ1.width / 2))
-					&& (pJ1.y + pJ1.height / 2) > (destRec.y - destRec.height / 2) && (pJ1.y + pJ1.height / 2) < (destRec.y + destRec.height / 2)
-					&& cayendoJ1) { //Choque en caída
-					animacionActiva = EXPLOTA;
-					indiceAnimacion = 0;
-					tVida = -1;
-					std::cout << "Peto por caida" << std::endl;
-
-					if (modulo == 1) {
-						enemigoContenido->destRec = destRec;
-						enemigoContenido->borrame = false;
-						enemigoContenido->muerto = true;
-						enemigoContenido->enElAire = true;
-						enemigoContenido->cayendo = true;
-						result = enemigoContenido;
-					}
-
-				}
+				
 			}
 
 			/////FIN COMPROBACIÓN DE COLISIÓN CON EL JUGADOR
@@ -212,8 +226,14 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 				if (indiceAnimacion >= (modulo * NUM_FOTOGRAMAS) + NUM_FOTOGRAMAS) {
 					indiceAnimacion = modulo * NUM_FOTOGRAMAS;
 				}
-			} else {
-				indiceAnimacion = 0;
+			}
+			else {
+				if (indiceAnimacion == 1 && contadorFrames < maxFrames && contadorFrames > 0) {
+					contadorFrames++;
+				} else {
+					contadorFrames = -1;
+					indiceAnimacion = 0;
+				}
 			}
 			
 			break;

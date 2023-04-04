@@ -24,6 +24,8 @@ class Pompa : public Sprite {
 	const int DISPARO = 0;
 	const int VACIA = 1;
 	const int EXPLOTA = 4;
+	int contadorFrames = -1;
+	const int maxFrames = 10;
 
 	//Índices de color
 	const int VERDE = 0;
@@ -83,7 +85,7 @@ public:
 
 	void Inicializador(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
 
-	sh_Enemigo Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1);
+	sh_Enemigo Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1, int& j1DebeRebotar);
 
 	void Dibujar();
 };

@@ -121,6 +121,21 @@ public:
         //Gestión de desplazamiento lateral
         
 		if(!muerto){
+            if (admin->j1DebeRebotar > 0) { //Si rebota sobre una pompa, es como iniciar un nuevo salto
+                std::cout << "Me dicen que rebote" << std::endl;
+                saltoRecorrido = 0; 
+                admin->j1DebeRebotar = 0;
+                dirCorrer = 0;
+                //Copy-paste del inicio del salto
+                if (!disparando) animacionActiva = JUMPING;
+                enElAire = true;
+                cayendo = false;
+                velocidadActual = velocidadSalto;
+                destRec.y -= velocidadActual;
+                saltoRecorrido += velocidadActual;
+                velocidadActual -= deceleracion;
+            }
+
 			if (enElAire) {
 				if (saltoRecorrido > 0) {
 					if (dirCorrer == 1) {  //Salta izquierda
@@ -232,6 +247,7 @@ public:
 
 			//Gestión de salto
 			if (IsKeyPressed(KEY_SPACE) && !enElAire && !muriendo) {
+
 				//std::cout << "Salto" << std::endl;
 				if (!disparando) animacionActiva = JUMPING;
 				enElAire = true;
@@ -333,6 +349,7 @@ public:
                 muriendo = false;
 				enElAire = true;
 				cayendo = true;
+                disparando = false;
                 animacionActiva = STANDING;
                 destRec = inicio;
             }

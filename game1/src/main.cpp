@@ -315,6 +315,8 @@ int main(void)
             bub.Dibujar();
             admin.dibujaPompas();
             admin.dibujaEnemigos();
+
+            //DrawLine(0, int(bub.destRec.y + bub.destRec.height / 4), screenWidth, int(bub.destRec.y + bub.destRec.height / 4), GRAY);
         } break;
         default: break;
         }
