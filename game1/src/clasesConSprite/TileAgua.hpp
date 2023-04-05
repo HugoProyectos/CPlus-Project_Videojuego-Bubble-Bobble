@@ -1,16 +1,25 @@
 #pragma once
 #include "Sprite.hpp"
 #include "mapa.cpp"
+#include "Bub.cpp"
 #include <iostream> //DEBUG
+
+struct Response {
+    Rectangle rect;
+    bool enElAire;
+};
 
 class tileAgua : public Sprite {
 
+
+
     //Variables animacion
-    int widthAnimation = 16;
-    int heightAnimation = 16;
-    Texture2D spritesheet;
-    Rectangle srcRect = { 0,0,8,8 };
-    Rectangle destRect = { -1,-1,-1,-1 };
+    int width = 8;
+    int height = 8;
+    Texture2D spritesheet = Texture2D();
+    Rectangle srcRect = { 8.0f,0.0f,(float)height, (float)width };
+    
+
 
     //Variables fisica
     bool direccionDerecha = true;
@@ -22,16 +31,19 @@ class tileAgua : public Sprite {
 
 public:
 
+    Rectangle destRect = { -1,-1,-1,-1 };
+
     tileAgua() = default;
     tileAgua(Rectangle destino, bool right, Texture2D sprite, int numPlataformas);
     
-    Rectangle ActualizarHead(Plataformas& plat);
-    Rectangle Actualizar(Rectangle pos);
+    Response ActualizarHead(Plataformas& plat);
+    Response Actualizar(Response input);
 
     bool comprobarColisionY(Plataforma& plat);
     bool comprobarColisionX(Plataforma& plat);
     void comprobarColisionParedes(Columnas& col);
     void comprobarSuelo(Plataforma& lastGround);
-    
-    void Dibujar();
+    bool colisionBub(Bub& bub);
+
+    void Dibujar(int pos);
 };

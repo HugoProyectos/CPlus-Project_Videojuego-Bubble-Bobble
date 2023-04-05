@@ -7,9 +7,10 @@ tileAgua::tileAgua(Rectangle destino, bool right, Texture2D sprite, int plats) {
 	numPlataformas = plats;
 }
 
-Rectangle tileAgua::ActualizarHead(Plataformas& plat) {
+Response tileAgua::ActualizarHead(Plataformas& plat) {
 
-	Rectangle current = destRec;
+	Response current;
+	current.rect = destRec; current.enElAire = enElAire;
 	//PARTE ESPECIAL PARA PRUEBAS************************************
 	if (destRec.y > 500) {
 		destRec = { 150, 100, 16, 16 };
@@ -54,10 +55,11 @@ Rectangle tileAgua::ActualizarHead(Plataformas& plat) {
 	return current;
 }
 
-Rectangle tileAgua::Actualizar(Rectangle pos) {
-	Rectangle current = destRec;
-	destRec = pos;
-	return current;
+Response tileAgua::Actualizar(Response input) {
+	Response output;
+	output.rect = destRec; output.enElAire = enElAire;
+	destRec = input.rect; enElAire = input.enElAire;
+	return output;
 }
 
 bool tileAgua::comprobarColisionY(Plataforma& plat) {
@@ -164,6 +166,86 @@ void tileAgua::comprobarSuelo(Plataforma& lastGround) {
 	}
 }
 
-void tileAgua::Dibujar() {
+bool tileAgua::colisionBub(Bub& bub) {
+	if (
+		(
+			//Comprobamos colision esquina inferior derecha
+			(((destRec.y + destRec.height) >= (bub.destRec.y + bub.destRec.height / 2)) &&
+				((bub.destRec.y + bub.destRec.height / 2) >= (destRec.y - destRec.height))
+				) && (
+					((destRec.x + destRec.width) >= (bub.destRec.x + bub.destRec.width / 2)) &&
+					((bub.destRec.x + bub.destRec.width / 2) >= (destRec.x - destRec.width))
+					)
+			) ||
+		(
+			//Comprobamos colision esquina superior derecha
+			(((destRec.y + destRec.height) >= (bub.destRec.y - bub.destRec.height / 2)) &&
+				((bub.destRec.y - bub.destRec.height / 2) >= (destRec.y - destRec.height))
+				) && (
+					((destRec.x + destRec.width) >= (bub.destRec.x + bub.destRec.width / 2)) &&
+					((bub.destRec.x + bub.destRec.width / 2) >= (destRec.x - destRec.width))
+					)
+			) ||
+		(
+			//Comprobamos colision esquina superior izquierda
+			(((destRec.y + destRec.height) >= (bub.destRec.y - bub.destRec.height / 2)) &&
+				((bub.destRec.y - bub.destRec.height / 2) > (destRec.y - destRec.height))
+				) && (
+					((destRec.x + destRec.width) >= (bub.destRec.x - bub.destRec.width / 2)) &&
+					((bub.destRec.x - bub.destRec.width / 2) >= (destRec.x - destRec.width))
+					)
+			) ||
+		(
+			//Comprobamos colision esquina inferior izquierda
+			(((destRec.y + destRec.height) >= (bub.destRec.y + bub.destRec.height / 2)) &&
+				((bub.destRec.y + bub.destRec.height / 2) >= (destRec.y - destRec.height))
+				) && (
+					((destRec.x + destRec.width) >= (bub.destRec.x - bub.destRec.width / 2)) &&
+					((bub.destRec.x - bub.destRec.width / 2) >= (destRec.x - destRec.width))
+					)
+			)
+		) {
+		std::cout << destRec.x << " " << destRec.y << std::endl;
+		std::cout << bub.destRec.x << " " << bub.destRec.y << std::endl;
+		bub.enElAgua = true;
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+
+void tileAgua::Dibujar(int pos) {
+	/*if (pos == 0) {
+		if (enElAire) {
+
+		}
+		else {
+
+		}
+	}
+	else if (pos == 9) {
+		if (enElAire) {
+
+		}
+		else {
+
+		}
+	}
+	else {
+		if (enElAire) {
+
+		}
+		else {
+
+		}
+	}*/
+	if (enElAire) {
+		srcRec.x = 72;
+	}
+	else {
+		srcRec.x = 64;
+	}
 	DrawTexturePro(spritesheet, srcRec, destRec, origin, 0.0f, WHITE);
 }

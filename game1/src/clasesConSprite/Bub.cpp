@@ -63,8 +63,12 @@ public:
     int indiceAnimacion = 0;
     int cuentaFrames = 0;
     int velocidadFrames = 8;
+
+    //Variables de fisicas
     bool enElAire = false;
     bool cayendo = false;
+    bool enElAgua = false;
+    int waterlessFrames = 0;
     float saltoRecorrido = 0;
     float distanciaSaltoMax = 0;
     float velocidadSalto = 0;  //Añadir aceleracion, y hacer que velocidad nueva = velocidad anterior + aceleracion. Empezar con una aceleracion inicial, y que se le vayan restando valores. A partir de cierta velocidad, capar. Hay que comprobar que el tope coincida con el planeo.
@@ -118,9 +122,15 @@ public:
     };
 
     void Actualizar() {
+        //Frames de "inmunidad" al agua
+        if (waterlessFrames > 0) { waterlessFrames--; }
         //Gestion de wrap vertical
         if (destRec.y > 500) {
             destRec.y = -10;
+            enElAire = true;
+            cayendo = true;
+            enElAgua = false;
+            waterlessFrames = 10;
         }
         else if (destRec.y < -50) {
             destRec.y = 450;
@@ -212,18 +222,20 @@ public:
 				if (IsKeyDown(KEY_A) && !muriendo) {
 					if (!disparando) animacionActiva = MOVING;
 					switchOrientacion = 2;
-					//std::cout << "Muevo Izquierda, orientacion: " << switchOrientacion << std::endl;
-					destRec.x -= velocidadLateral;
-					dirCorrer = 1;
+                    if (!enElAgua) {
+                        destRec.x -= velocidadLateral;
+                    }
+                    dirCorrer = 1;
 					dirAir = 1;
 					compruebaSuelo(lastGround);
 				}
 				else if (IsKeyDown(KEY_S) && !muriendo) {
 					if (!disparando) animacionActiva = MOVING;
 					switchOrientacion = 3;
-					//std::cout << "Muevo Derecha, orientacion: " << switchOrientacion << std::endl;
-					destRec.x += velocidadLateral;
-					dirCorrer = 2;
+                    if (!enElAgua) {
+                        destRec.x += velocidadLateral;
+                    }
+                    dirCorrer = 2;
 					dirAir = 2;
 					compruebaSuelo(lastGround);
 				}
@@ -238,9 +250,9 @@ public:
 
 			//Gestión de salto
 			if (IsKeyPressed(KEY_SPACE) && !enElAire && !muriendo) {
-				//std::cout << "Salto" << std::endl;
 				if (!disparando) animacionActiva = JUMPING;
 				enElAire = true;
+                if (enElAgua) { enElAgua = false; waterlessFrames = 10; }
 				velocidadActual = velocidadSalto;
 				destRec.y -= velocidadActual;
 				saltoRecorrido += velocidadActual;
@@ -339,6 +351,7 @@ public:
                 muriendo = false;
 				enElAire = true;
 				cayendo = true;
+                enElAgua = false;
                 animacionActiva = STANDING;
                 destRec = inicio;
             }
@@ -358,6 +371,12 @@ public:
     }
 
     void compruebaColision(Plataforma& s) {
+        //Si esta en el agua no comprobamos colision
+        if (enElAgua) {
+            enElAire = false;
+            cayendo = false;
+            return;
+        }
         //Comprobamos si colisiona con la superficie
         if (
             (

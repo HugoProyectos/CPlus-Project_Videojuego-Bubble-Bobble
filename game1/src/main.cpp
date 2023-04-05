@@ -281,6 +281,13 @@ int main(void)
                 bub.compruebaColision(plataformas.listaPlataforma[i]);
             }
             bub.compruebaPared(columnas);
+            if (bub.enElAgua) {
+                bub.destRec.x = agua.stream[agua.bubTile].destRec.x;
+                bub.destRec.y = agua.stream[agua.bubTile].destRec.y;
+            }
+            else {
+                agua.colisionBub(bub);
+            }
             agua.Actualizar(plataformas,columnas);
             admin.actualizaPompas();
             admin.actualizaEnemigos(plataformas);
@@ -318,8 +325,8 @@ int main(void)
             columnas.Dibujar();
             plataformas.Dibujar();
             scores.Dibujar();
-            bub.Dibujar();
             agua.Dibujar();
+            bub.Dibujar();
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             
