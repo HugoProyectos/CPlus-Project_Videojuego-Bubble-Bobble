@@ -17,8 +17,7 @@ class tileAgua : public Sprite {
     int width = 8;
     int height = 8;
     Texture2D spritesheet = Texture2D();
-    Rectangle srcRect = { 8.0f,0.0f,(float)height, (float)width };
-    
+    //Rectangle srcRect = { 8.0f,0.0f,(float)height, (float)width }; //Se ha pasado la asignación a srcRec en el constructor
 
 
     //Variables fisica

@@ -2,6 +2,7 @@
 
 tileAgua::tileAgua(Rectangle destino, bool right, Texture2D sprite, int plats) {
 	destRec = destino;
+	srcRec = { 8.0f, 0.0f, (float)height, (float)width };
 	direccionDerecha = right;
 	spritesheet = sprite;
 	numPlataformas = plats;
@@ -247,5 +248,5 @@ void tileAgua::Dibujar(int pos) {
 	else {
 		srcRec.x = 64;
 	}
-	DrawTexturePro(spritesheet, srcRec, destRec, origin, 0.0f, WHITE);
+	DrawTexturePro(spritesheet, srcRec, destRec, origin, 0.0f, WHITE); //de donde está sacando origin
 }
