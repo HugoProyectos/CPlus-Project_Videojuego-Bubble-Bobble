@@ -2,6 +2,7 @@
 
 tileAgua::tileAgua(Rectangle destino, bool right, Texture2D sprite, int plats) {
 	destRec = destino;
+	origin = { (float)height / 2, (float)width / 2 };
 	srcRec = { 8.0f, 0.0f, (float)height, (float)width };
 	direccionDerecha = right;
 	spritesheet = sprite;
