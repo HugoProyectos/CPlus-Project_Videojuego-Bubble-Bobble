@@ -9,20 +9,18 @@ public:
     //Animation
     Texture2D walkAnimation = LoadTexture("resources/enemyFantasma/fantasmaWalk.png");
     Texture2D deadAnimation = LoadTexture("resources/enemyFantasma/fantasmaMuerte.png");
-    Texture2D ballLeftAnimation = LoadTexture("resources/enemyFantasma/fantasmaBolaIzquierda.png");
-    Texture2D ballRightAnimation = LoadTexture("resources/enemyFantasma/fantasmaBolaDerecha.png");
-    Texture2D animations[4] = { walkAnimation, deadAnimation, ballLeftAnimation, ballRightAnimation };
+    Texture2D ballAnimation = LoadTexture("resources/enemyFantasma/fantasmaBola.png");
+    Texture2D animations[4] = { walkAnimation, deadAnimation, ballAnimation };
 
     int fWalkAnimation = 2; //Número de fotogramas de la animacion camniar
     int fDeadAnimation = 2; //Número de fotogramas de la animacion muerte
-    int fBallLeftAnimation = 4;
-    int fBallRightAnimation = 4;
-    int fAnimation[4] = { fWalkAnimation , fDeadAnimation, fBallLeftAnimation, fBallRightAnimation };
+    int fBallAnimation = 4;
+    int fAnimation[4] = { fWalkAnimation , fDeadAnimation, fBallAnimation };
 
     int widthAnimation; // Se actualiza para cada animación activa
     int heightAnimation;
 
-    int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation, 1->DeadAnimation, 2->BallLeft, 3->BallRight
+    int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation, 1->DeadAnimation, 2->BallLeft,
     int indiceAnimacion = 0; //Indica el número de frame actual de la animación activa
 
     //Frames
@@ -31,8 +29,7 @@ public:
     int velocidadFrames = 2;
 
     //Del propio fantasma
-    bool disparando; //False -> no dispara, true-> dispara
-
+    bool disparando;
     //Colisiones
     Plataforma lastGround;
 
@@ -60,14 +57,20 @@ public:
         else if (!saltando && enElAire) {
             CaerLento();
         }
-        else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10)) { //Si el personaje esta encima
+        else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10) && !disparando) { //Si el personaje esta encima
             Salto();
         }
-        else if (destRec.x > playerPosition.x + 5) { //Si el personaje esta a la izquierda
+        else if (destRec.x > playerPosition.x + 150  &&!disparando) { //Si el personaje esta a la izquierda
             MoverIzq();
         }
-        else if (destRec.x < playerPosition.x - 5) { //Si el personaje esta a la derecha
+        else if (destRec.x < playerPosition.x - 150  && !disparando) { //Si el personaje esta a la derecha
             MoverDer();
+        }
+        else if (destRec.x > playerPosition.x + 5  ) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
+            BolaIzq();
+        }
+        else if (destRec.x < playerPosition.x - 5 ) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
+            BolaDer();
         }
 
         //Actualizar puntero de animacion
@@ -91,11 +94,10 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[2];
                 widthAnimation = animations[2].width / fAnimation[2];
                 heightAnimation = animations[2].height;
-                break;
-            case 3:
-                indiceAnimacion = (indiceAnimacion + 1) % fAnimation[3];
-                widthAnimation = animations[3].width / fAnimation[3];
-                heightAnimation = animations[3].height;
+                if (indiceAnimacion == 3) {
+                    disparando = false; 
+                    animacionActiva = 0;
+                }
                 break;
             default:
                 break;
@@ -125,6 +127,16 @@ public:
 
     void CaerLento() {
         destRec.y += velocidadSalto / 2;
+    }
+
+    void BolaIzq() {
+        disparando = true;
+        animacionActiva = 2;
+    }
+
+    void BolaDer() {
+        disparando = true;
+        animacionActiva = 2;
     }
 
     void Salto() {
