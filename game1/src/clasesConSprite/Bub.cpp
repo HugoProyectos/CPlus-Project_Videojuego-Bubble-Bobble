@@ -130,7 +130,7 @@ public:
             enElAire = true;
             cayendo = true;
             enElAgua = false;
-            waterlessFrames = 10;
+            waterlessFrames = 3;
         }
         else if (destRec.y < -50) {
             destRec.y = 450;
@@ -252,7 +252,7 @@ public:
 			if (IsKeyPressed(KEY_SPACE) && !enElAire && !muriendo) {
 				if (!disparando) animacionActiva = JUMPING;
 				enElAire = true;
-                if (enElAgua) { enElAgua = false; waterlessFrames = 10; }
+                if (enElAgua) { enElAgua = false; waterlessFrames = 3; }
 				velocidadActual = velocidadSalto;
 				destRec.y -= velocidadActual;
 				saltoRecorrido += velocidadActual;

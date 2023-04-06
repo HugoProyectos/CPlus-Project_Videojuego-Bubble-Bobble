@@ -2,7 +2,6 @@
 
 tileAgua::tileAgua(Rectangle destino, bool right, Texture2D sprite, int plats) {
 	destRec = destino;
-	//origin = { (float)height / 2, (float)width / 2 };
 	origin = { 0,0 };
 	srcRec = { 0.0f, 0.0f, (float)height, (float)width };
 	direccionDerecha = right;
@@ -35,7 +34,7 @@ Response tileAgua::ActualizarHead(Plataformas& plat) {
 	}
 	else {
 		if (direccionDerecha) {
-			destRec.x += 16;
+			destRec.x += destRec.width;
 			for (int i = 0; i < numPlataformas; i++) {
 				//Comprobamos si hemos chocado con una pared
 				if (comprobarColisionX(plat.listaPlataforma[i])) {
@@ -46,7 +45,7 @@ Response tileAgua::ActualizarHead(Plataformas& plat) {
 			comprobarSuelo(plat.listaPlataforma[lastGroundNum]);
 		}
 		else {
-			destRec.x -= 16;
+			destRec.x -= destRec.width;
 			for (int i = 0; i < numPlataformas; i++) {
 				//Comprobamos si hemos chocado con una pared
 				if (comprobarColisionX(plat.listaPlataforma[i])) {
@@ -257,7 +256,6 @@ void tileAgua::Dibujar(int pos) {
 					srcRec.x = 48;
 				}
 				else {
-					std::cout << "Hola" << std::endl;
 					srcRec.x = 32;
 				}
 			}
@@ -266,7 +264,6 @@ void tileAgua::Dibujar(int pos) {
 					srcRec.x = 56;
 				}
 				else {
-					std::cout << "Hola" << std::endl;
 					srcRec.x = 40;
 				}
 			}
