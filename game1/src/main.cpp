@@ -101,7 +101,9 @@ int nivel_1(void)
 
     Rectangle destRob = { GetScreenWidth() / 2, 70, 32, 32 };
     sh_Enemigo robot = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
+    //sh_Enemigo fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     admin.enemigos.push_back(robot);
+    //admin.enemigos.push_back(fantasma);
 
 
     Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32};
