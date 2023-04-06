@@ -7,6 +7,8 @@
 struct Response {
     Rectangle rect;
     bool enElAire;
+    bool derecha;
+    bool bend;
 };
 
 class tileAgua : public Sprite {
@@ -16,6 +18,7 @@ class tileAgua : public Sprite {
     //Variables animacion
     int width = 8;
     int height = 8;
+    int bend = 1; //0 = No_bend 1=Right_bend 2=Left_bend
     Texture2D spritesheet = Texture2D();
     //Rectangle srcRect = { 8.0f,0.0f,(float)height, (float)width }; //Se ha pasado la asignación a srcRec en el constructor
 
