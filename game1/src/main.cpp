@@ -2,6 +2,7 @@
 #include "mapa.cpp"
 #include "AdministradorPompas.cpp"
 #include "clasesConSprite/Bub.cpp"
+#include "Controls.cpp"
 
 const int TARGET_FPS = 60;
 
@@ -167,7 +168,7 @@ int nivel_1(void)
 //------------------------------------------------------------------------------------------
 // Types and Structures Definition
 //------------------------------------------------------------------------------------------
-typedef enum GameScreen { MAIN_MENU, NIVEL_1 } GameScreen;
+typedef enum GameScreen { MAIN_MENU, NIVEL_1, CONTROLS_MENU } GameScreen;
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -185,7 +186,7 @@ int main(void)
 
     InitAudioDevice();
 
-    GameScreen currentScreen = MAIN_MENU;
+    GameScreen currentScreen = CONTROLS_MENU;
 
     // TODO: Initialize all required variables and load all required data here!
     // 
@@ -198,12 +199,20 @@ int main(void)
     // Main Menu:
     //--------------------------------------------------------------------------------------
     MainMenu main_menu = MainMenu(10, 40, 70);
+    unsigned int tecla_p1;
+    unsigned int tecla_p2;
     //--------------------------------------------------------------------------------------
 
     // Nivel 1:
     //--------------------------------------------------------------------------------------
-    Columnas columnas = Columnas("resources/mapa_nivel_5/bloque_grande.png", 40.0f, 0.0f, 1);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt", 40.0f, 0.0f);
+    Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f);
+    //--------------------------------------------------------------------------------------
+
+    // Controls:
+    //--------------------------------------------------------------------------------------
+    Controls controls = Controls("config.ini");
+    //--------------------------------------------------------------------------------------
     
     int numPlat = plataformas.listaPlataforma.size();
 
@@ -251,13 +260,13 @@ int main(void)
             scores.Actualizar();
 
             // Wait for 2 seconds (120 frames) before jumping to TITLE screen
-            if (IsKeyPressed(KEY_ONE) && credits.creditos >= 1)
+            if (IsKeyPressed(tecla_p1) && credits.creditos >= 1)
             {
                 currentScreen = NIVEL_1;
                 credits.creditos -= 1;
                 scores.hayP1 = true;
             }
-            else if (IsKeyPressed(KEY_TWO) && credits.creditos >= 2) {
+            else if (IsKeyPressed(tecla_p2) && credits.creditos >= 2) {
                 currentScreen = NIVEL_1;
                 credits.creditos -= 2;
                 scores.hayP1 = true;
@@ -279,12 +288,25 @@ int main(void)
             admin.actualizaPompas();
             admin.actualizaEnemigos(plataformas);
 
-            if (IsKeyPressed(KEY_TWO) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
+            if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
             {
                 credits.creditos -= 1;
                 scores.hayP2 = true;
             }
 
+        } break;
+        case CONTROLS_MENU:
+        {
+            controls.Actualizar();
+            if (IsKeyPressed(KEY_ENTER)) {
+                // ASIGNAR TODOS LOS BOTONES
+                credits.tecla = controls.coin;
+                tecla_p1 = controls.play1;
+                tecla_p2 = controls.play2;
+                // ...  
+
+                currentScreen = MAIN_MENU;
+            }
         } break;
         default: break;
         }
@@ -315,6 +337,10 @@ int main(void)
             bub.Dibujar();
             admin.dibujaPompas();
             admin.dibujaEnemigos();
+        } break;
+        case CONTROLS_MENU:
+        {
+            controls.Dibujar();
         } break;
         default: break;
         }
