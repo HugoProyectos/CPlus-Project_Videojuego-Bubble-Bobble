@@ -2,6 +2,7 @@
 #include "mapa.cpp"
 #include "AdministradorPompas.cpp"
 #include "clasesConSprite/Bub.cpp"
+#include <clasesConSprite/Morado.cpp>
 
 const int TARGET_FPS = 60;
 
@@ -214,8 +215,8 @@ int main(void)
     Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
     
     Rectangle destRob = { GetScreenWidth()/2, 70, 32, 32};
-    sh_Enemigo robot = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
-    admin.enemigos.push_back(robot);
+    sh_Enemigo mor = std::make_shared<Morado>(Morado("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
+    admin.enemigos.push_back(mor);
 
     destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
     sh_Enemigo robot2 = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));

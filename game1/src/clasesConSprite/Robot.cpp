@@ -10,17 +10,21 @@ public:
 
     //Animation
     Texture2D walkAnimation = LoadTexture("resources/enemyRobot/robotWalk.png");
-    Texture2D deadAnimation = LoadTexture("resources/enemyRobot/robotMuerte.png");
-    Texture2D animations[2] = { walkAnimation, deadAnimation };
+    Texture2D deadAnimation = LoadTexture("resources/enemyRobot/robotDead.png");
+    Texture2D waterAnimation = LoadTexture("resources/enemyRobot/robotWater.png");
+    Texture2D angryAnimation = LoadTexture("resources/enemyRobot/robotAngry.png");
+    Texture2D animations[4] = { walkAnimation, deadAnimation, waterAnimation, angryAnimation };
 
     int fWalkAnimation = 4; //Número de fotogramas de la animacion camniar
     int fDeadAnimation = 4; //Número de fotogramas de la animacion muerte
-    int fAnimation[2] = { fWalkAnimation , fDeadAnimation };
+    int fWaterAnimation = 4; //Número de fotogramas de la animacion muerte agua
+    int fAngryAnimation = 4; //Número de fotogramas de la animacion enfado
+    int fAnimation[4] = { fWalkAnimation , fDeadAnimation, fWaterAnimation, fAngryAnimation };
 
     int widthAnimation; // Se actualiza para cada animación activa
     int heightAnimation;
 
-    int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation, 1->DeadAnimation
+    int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation, 1->DeadAnimation, 2->WaterAniamtion, 3->AngryAnimation
     int indiceAnimacion = 0; //Indica el número de frame actual de la animación activa
 
     //Frames
