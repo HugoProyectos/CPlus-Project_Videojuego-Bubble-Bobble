@@ -4,6 +4,19 @@
 
 uint32_t Pompa::ID_GLOBAL = 0;
 
+sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
+	sh_Enemigo resultado = NULL;
+	if (modulo == 1) {
+		enemigoContenido->destRec = destRec;
+		enemigoContenido->borrame = false;
+		enemigoContenido->enElAire = true;
+		enemigoContenido->cayendo = true;
+		enemigoContenido->muerto = matalo;
+		resultado = enemigoContenido;
+	}
+	return resultado;
+}
+
 void Pompa::init() { //Solo se llama una vez, para reiniciar los identificadores de pompas
 	Pompa::ID_GLOBAL = 0u;
 }
@@ -59,19 +72,25 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 		}
 	}
 	else {
+		//Si ha iniciado cadena y ya está explotando, es solo en el primer frame que transfiere cadena
+		if (cadena && animacionActiva == EXPLOTA) {
+			cadena = false;
+		} else if (cadena) { // Si aún no ha explotado, inicia explosión
+			animacionActiva = EXPLOTA;
+			indiceAnimacion = 0;
+			tVida = -1;
+			std::cout << "Peto por cadena" << std::endl;
+
+			result = extraeEnemigo(true);
+		}
+
 		//Con las interacciones debe hacerlo solo si no tiene enemigo dentro
-		if (tVida == 0) {
+		else if (tVida == 0) {
 			animacionActiva = EXPLOTA;
 			indiceAnimacion = 0;
 			tVida--;
 			
-			if (modulo == 1) {
-				enemigoContenido->destRec = destRec;
-				enemigoContenido->borrame = false;
-				enemigoContenido->enElAire = true;
-				enemigoContenido->cayendo = true;
-				result = enemigoContenido;
-			}
+			result = extraeEnemigo(false);
 			
 		}
 		else if (tVida > 0) {
@@ -107,15 +126,11 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 						indiceAnimacion = 0;
 						tVida = -1;
 						std::cout << "Peto por caida" << std::endl;
+						
+						//Marca que su explosión debe transmitirse
+						cadena = true; 
 
-						if (modulo == 1) {
-							enemigoContenido->destRec = destRec;
-							enemigoContenido->borrame = false;
-							enemigoContenido->muerto = true;
-							enemigoContenido->enElAire = true;
-							enemigoContenido->cayendo = true;
-							result = enemigoContenido;
-						}
+						result = extraeEnemigo(true);
 					}
 					else if (IsKeyDown(KEY_SPACE) && (pJ1.y + pJ1.height / 2) < (destRec.y - destRec.height / 4)) { //Debe rebotar sin explotar la pompa
 						std::cout << "DEBES REBOTAR" << std::endl;
@@ -137,14 +152,10 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					indiceAnimacion = 0;
 					tVida = -1;
 
-					if (modulo == 1) {
-						enemigoContenido->destRec = destRec;
-						enemigoContenido->borrame = false;
-						enemigoContenido->muerto = true;
-						enemigoContenido->enElAire = true;
-						enemigoContenido->cayendo = true;
-						result = enemigoContenido;
-					}
+					//Marca que su explosión debe transmitirse
+					cadena = true;
+
+					result = extraeEnemigo(true);
 
 					std::cout << "Peto por espalda" << std::endl;
 				}
@@ -155,14 +166,10 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					tVida = -1;
 					std::cout << "Peto por cabeza" << std::endl;
 
-					if (modulo == 1) {
-						enemigoContenido->destRec = destRec;
-						enemigoContenido->borrame = false;
-						enemigoContenido->muerto = true;
-						enemigoContenido->enElAire = true;
-						enemigoContenido->cayendo = true;
-						result = enemigoContenido;
-					}
+					//Marca que su explosión debe transmitirse
+					cadena = true;
+
+					result = extraeEnemigo(true);
 
 				}
 				

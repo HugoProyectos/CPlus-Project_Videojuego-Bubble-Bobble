@@ -21,9 +21,7 @@ const int FANTASMA = 8;
  * 5,6,7 -> Pompas verde-naranja-rojo (3-3-3) de un enemigo (así con todos)
  */
 class Pompa : public Sprite {
-	const int DISPARO = 0;
-	const int VACIA = 1;
-	const int EXPLOTA = 4;
+	
 	int contadorFrames = -1;
 	const int maxFrames = 10;
 
@@ -49,7 +47,15 @@ class Pompa : public Sprite {
 	bool abajo = true;
 	uint8_t contador = 0;
 
+	//Abstracción de generación de enemigo al explotar
+	sh_Enemigo extraeEnemigo(bool matalo);
+
 public:
+	//Indice de animación básicos
+	static const int DISPARO = 0;
+	static const int VACIA = 1;
+	static const int EXPLOTA = 4;
+
 	static uint32_t ID_GLOBAL;
 	int ID = -1;
 	static void init();
@@ -58,6 +64,10 @@ public:
 	int vidaMaxima = 0;
 	int tVida = 0;
 	bool matame = false;
+
+	//Indica si inicia cadena de explosiones
+	bool cadena = false;
+
 
 	//Enemigo contenido
 	sh_Enemigo enemigoContenido = NULL;

@@ -64,12 +64,40 @@ public:
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 				}
+				if (pompas.at(i).cadena) {
+					for (int j = 0; j < pompas.size(); j++) {
+						if (!pompas.at(j).cadena && pompas.at(j).animacionActiva != Pompa::EXPLOTA) {
+							pompas.at(j).cadena = true;
+						}
+					}
+				}
 			} else {
 				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo, j1DebeRebotar);
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 				}
+				if (pompas.at(i).cadena) {
+					for (int j = 0; j < pompas.size(); j++) {
+						//Si es candidata a continuar la cadena y está en contacto con la pompa de la cadena
+						if (!pompas.at(j).cadena && pompas.at(j).animacionActiva != Pompa::EXPLOTA ) {
+							Rectangle ini = pompas.at(i).destRec;
+							Rectangle candidata = pompas.at(j).destRec;
+							//Choca por izquierda
+							//			derecha
+							//			abajo
+							//			arriba
+							if ((ini.x - ini.width / 2 < candidata.x + candidata.width / 2) && (ini.x + ini.width / 2 >= candidata.x + candidata.width / 2) && !((ini.y - ini.height / 2 < candidata.y + candidata.height / 2) || (ini.y + ini.height / 2 < candidata.y + candidata.height / 2))
+								|| (ini.x - ini.width / 2 < candidata.x - candidata.width / 2) && (ini.x + ini.width / 2 >= candidata.x - candidata.width / 2) && !((ini.y - ini.height / 2 < candidata.y + candidata.height / 2) || (ini.y + ini.height / 2 < candidata.y + candidata.height / 2))
+								|| (ini.y - ini.height / 2 < candidata.y + candidata.height / 2) && (ini.x + ini.width / 2 >= candidata.y + candidata.height / 2) && !((ini.x - ini.width / 2 > candidata.x + candidata.width / 2) || (ini.x + ini.width / 2 < candidata.x - candidata.width / 2))
+								|| (ini.y - ini.height / 2 < candidata.y - candidata.height / 2) && (ini.x + ini.width / 2 >= candidata.y - candidata.height / 2) && !((ini.x - ini.width / 2 > candidata.x + candidata.width / 2) || (ini.x + ini.width / 2 < candidata.x - candidata.width / 2))) {
+								pompas.at(j).cadena = true;
+							}
+							
+						}
+					}
+				}
 			}
+			
 		}
 		if (pompas.size() == 0) {
 			//std::cout << "Sin pompas que actualizar" << std::endl;
