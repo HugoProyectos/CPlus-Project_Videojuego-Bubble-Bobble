@@ -3,10 +3,12 @@
 #include "AdministradorPompas.cpp"
 #include "clasesConSprite/Bub.cpp"
 #include <clasesConSprite/Fantasma.cpp>
+#include <clasesConSprite/Morado.cpp>
+
 
 const int TARGET_FPS = 60;
 
-//cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
+//cambiar nombre de "not_main" a "main" para que el depurador entre aquÃ­.
 //Se mueve con A y S, y se salta con el espacio.
 int not_main(void)
 {
@@ -68,7 +70,7 @@ int not_main(void)
 }
 
 
-//cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
+//cambiar nombre de "not_main" a "main" para que el depurador entre aquÃ­.
 //Se mueve con A y S, y se salta con el espacio
 int nivel_1(void)
 {
@@ -219,6 +221,8 @@ int main(void)
     Rectangle destRob = { GetScreenWidth() / 2, 70, 32, 32 };
     sh_Enemigo fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
     admin.enemigos.push_back(fantasma);
+    sh_Enemigo mor = std::make_shared<Morado>(Morado("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
+    admin.enemigos.push_back(mor);
 
 
     destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
