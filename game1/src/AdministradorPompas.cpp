@@ -92,7 +92,7 @@ public:
 		return auxiliar;
 	}
 
-	void actualizaEnemigos(Plataformas& plataformas) {
+	void actualizaEnemigos(Plataformas& plataformas, Columnas& columnas) {
 		for (int i = 0; i < enemigos.size(); i++) {
 			if (enemigos.at(i)->borrame) {
 				//auto aBorrar = pompas.begin() + i;
@@ -105,6 +105,7 @@ public:
 				for (int j = 0; j < plataformas.listaPlataforma.size(); j++) {
 					enemigos.at(i)->compruebaSuelo();
 					enemigos.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
+					enemigos.at(i)->compruebaPared(columnas);
 				}
 			}
 		}

@@ -68,6 +68,8 @@ public:
 
     void virtual compruebaColision(Plataforma& s, int enemyNum) = 0;
 
+    void virtual compruebaPared(const Columnas& s) = 0;
+
     //void Dibujar() {
     //    DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
     //}

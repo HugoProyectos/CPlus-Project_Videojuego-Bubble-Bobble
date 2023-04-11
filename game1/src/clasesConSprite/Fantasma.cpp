@@ -1,5 +1,8 @@
 #pragma once
 #include "Enemigo.cpp"
+#include "Bola.cpp"
+#include "AdministradorPompas.cpp"
+#include <ctime>
 
 class Fantasma : public Enemigo {
 public:
@@ -30,13 +33,19 @@ public:
 
     //Del propio fantasma
     bool disparando;
+    bool dir;
+    bool hayBola;
     //Colisiones
     Plataforma lastGround;
+    AdministradorPompas* admin;
+
+    clock_t temp;
+
 
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
-    Fantasma(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino) {
+    Fantasma(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         destRec = destino;
         tipo = 1;
@@ -46,10 +55,17 @@ public:
         enElAire = true;
         cayendo = true;
         disparando = false;
+        this->admin = &admin;
+        hayBola = false;
     };
 
     // Controlador de comportamiento
     void Actualizar(Rectangle playerPosition) override {
+        
+        if ((clock() - temp) > 5 * CLOCKS_PER_SEC) {
+            hayBola = false;
+        }
+        
         if (muerto) {
             animacionActiva = 1;
             Caer();
@@ -60,16 +76,16 @@ public:
         else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10) && !disparando) { //Si el personaje esta encima
             Salto();
         }
-        else if (destRec.x > playerPosition.x + 150  &&!disparando) { //Si el personaje esta a la izquierda
+        else if (destRec.x > playerPosition.x + 100  && !disparando) { //Si el personaje esta a la izquierda      
             MoverIzq();
         }
-        else if (destRec.x < playerPosition.x - 150  && !disparando) { //Si el personaje esta a la derecha
+        else if (destRec.x < playerPosition.x - 100  && !disparando) { //Si el personaje esta a la derecha
             MoverDer();
         }
-        else if (destRec.x > playerPosition.x + 5  ) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
+        else if (destRec.x > playerPosition.x + 5 && !hayBola) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
             BolaIzq();
         }
-        else if (destRec.x < playerPosition.x - 5 ) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
+        else if (destRec.x < playerPosition.x - 5 && !hayBola ) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
             BolaDer();
         }
 
@@ -95,8 +111,12 @@ public:
                 widthAnimation = animations[2].width / fAnimation[2];
                 heightAnimation = animations[2].height;
                 if (indiceAnimacion == 3) {
-                    disparando = false; 
+                    disparando = false;
                     animacionActiva = 0;
+                    sh_Enemigo bola = std::make_shared<Bola>(Bola("resources/enemyFantasma/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir));
+                    admin->enemigos.push_back(bola);
+                    temp = clock();
+                    hayBola = true;
                 }
                 break;
             default:
@@ -130,11 +150,13 @@ public:
     }
 
     void BolaIzq() {
+        dir = false;
         disparando = true;
         animacionActiva = 2;
     }
 
     void BolaDer() {
+        dir = true;
         disparando = true;
         animacionActiva = 2;
     }
@@ -351,6 +373,17 @@ public:
         else {
             enElAire = false;
             cayendo = false;
+        }
+    }
+
+    void compruebaPared(const Columnas& s) override {
+        //Comprobamos columna derecha
+        if (s.left_der < (destRec.x + destRec.width / 2)) {
+            destRec.x = s.left_der - destRec.width / 2;
+        }
+        //Comprobamos columna izquierda
+        else if (s.right_izq > (destRec.x - destRec.width / 2)) {
+            destRec.x = s.right_izq + destRec.width / 2;
         }
     }
 
