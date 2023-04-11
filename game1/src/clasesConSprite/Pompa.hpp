@@ -75,6 +75,7 @@ public:
 
 	//Desplazamiento
 	float velocidadDesplazamiento = 0;
+	int sentidoLateral = 1; //1-> Sin sentido, 2 -> hacia la izquierda, 3->hacia la derecha
 	//Relacionado con el modo disparo
 	float distanciaRecorrida = 0;
 	float distanciaDisparo = 0;
@@ -95,7 +96,7 @@ public:
 
 	void Inicializador(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
 
-	sh_Enemigo Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1, int& j1DebeRebotar);
+	sh_Enemigo Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1, int& j1DebeRebotar, float j1VelLateral);
 
 	void Dibujar();
 };

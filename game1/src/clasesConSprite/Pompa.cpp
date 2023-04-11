@@ -58,7 +58,7 @@ void Pompa::Inicializador(Texture2D spriteSheet, const Rectangle origen, float v
 
 }
 
-sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1, int& j1DebeRebotar) {
+sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1, int& j1DebeRebotar, float j1VelLateral) {
 	sh_Enemigo result = NULL;
 
 	if (disparada == 2) {
@@ -100,6 +100,8 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 
 			if (!muriendoJ1){
 				/////COMPROBACIÓN DE COLISIÓN CON EL JUGADOR
+				bool contactoFrente = ((destRec.x - destRec.width / 2) < (pJ1.x - pJ1.width / 2))
+					&& ((destRec.x + destRec.width / 2) > (pJ1.x - pJ1.width / 2));
 				bool contactoEspalda = ((destRec.x - destRec.width / 2) < (pJ1.x + pJ1.width / 2))
 					&& ((destRec.x + destRec.width / 2) > (pJ1.x + pJ1.width / 2));
 				bool contactoCabeza = (destRec.x - destRec.width / 2) <= (pJ1.x + pJ1.width / 2)
@@ -108,6 +110,8 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					&& (destRec.x - destRec.width / 2) < (pJ1.x);
 				if (sentidoJ1 != 2) { //Si J1 mira derecha, hay que cambiar
 					//std::cout << "RECTIFICANDO" << std::endl;
+					contactoFrente = ((destRec.x - destRec.width / 2) < (pJ1.x + pJ1.width / 2))
+						&& ((destRec.x + destRec.width / 2) > (pJ1.x + pJ1.width / 2));
 					contactoEspalda = ((destRec.x - destRec.width / 2) < (pJ1.x - pJ1.width / 2))
 						&& ((destRec.x + destRec.width / 2) > (pJ1.x - pJ1.width / 2));
 					contactoCabeza = (destRec.x - destRec.width / 2) <= (pJ1.x - pJ1.width / 2)
@@ -172,6 +176,21 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					result = extraeEnemigo(true);
 
 				}
+				else if (contactoFrente
+					&& ((destRec.y - destRec.width / 2) < (pJ1.y + pJ1.height / 4) && (destRec.y + destRec.height / 2) > (pJ1.y + pJ1.height / 4)
+						|| (destRec.y - destRec.width / 2) < (pJ1.y - pJ1.height / 2) && (destRec.y + destRec.height / 2) > (pJ1.y - pJ1.height / 2))) {
+					
+					if (sentidoJ1 == 2) {
+						destRec.x -= j1VelLateral / 2;
+					}
+					else {
+						destRec.x += j1VelLateral / 2;
+					}
+					if (indiceAnimacion == 0) {
+						indiceAnimacion = 2;
+						contadorFrames = 0;
+					}
+				}
 				
 			}
 
@@ -179,13 +198,25 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 
 			//destRec.x -= 1;
 
+
+			/////INICIO DESPLAZAMIENTO ESTÁTICO POR EL MAPA
 			//Que vaya hacia arriba poco a poco
 			if (!oscilando) {
 				if (destRec.y > 70) {
 					destRec.y += -0.5;
 				}
 				else {
-					oscilando = true;
+					if (destRec.x < (GetScreenWidth() / 2) - GetScreenWidth()/30) {
+						destRec.x += 0.5;
+						sentidoLateral = 2;
+					} else if (destRec.x > (GetScreenWidth() / 2) + GetScreenWidth() / 30) {
+						destRec.x -= 0.5;
+						sentidoLateral = 3;
+					}
+					else {
+						oscilando = true;
+					}
+					
 				}
 			}
 
@@ -201,7 +232,7 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					contador = 0;
 				}
 			}
-			
+			/////FIN DESPLAZAMIENTO ESTÁTICO POR EL MAPA
 		}
 
 	}
@@ -235,7 +266,7 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 				}
 			}
 			else {
-				if (indiceAnimacion == 1 && contadorFrames < maxFrames && contadorFrames > 0) {
+				if ((indiceAnimacion == 1 || indiceAnimacion == 2) && contadorFrames < maxFrames && contadorFrames > 0) {
 					contadorFrames++;
 				} else {
 					contadorFrames = -1;

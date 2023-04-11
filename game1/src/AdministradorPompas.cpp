@@ -14,6 +14,7 @@ public:
 	int sentidoJugador = 2; //3->mira a la derecha 2->mira a la izquierda: variable orientacionActual de Bub
 	bool muriendo = false;
 	int j1DebeRebotar = 0; //0->No
+	int j1VelLateral = 0;
 
 	std::vector<Pompa> pompas;
 	std::vector<sh_Enemigo> enemigos;
@@ -60,19 +61,58 @@ public:
 						break;
 					}
 				}
-				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo, j1DebeRebotar);
+				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo, j1DebeRebotar, j1VelLateral);
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 				}
 				if (pompas.at(i).cadena) {
 					for (int j = 0; j < pompas.size(); j++) {
 						if (!pompas.at(j).cadena && pompas.at(j).animacionActiva != Pompa::EXPLOTA) {
-							pompas.at(j).cadena = true;
+							Rectangle ini = pompas.at(i).destRec;
+							Rectangle candidata = pompas.at(j).destRec;
+							//Choca por izquierda
+							//			derecha
+							//			abajo
+							//			arriba
+							if ((ini.x - ini.width / 2 + 2 < candidata.x + candidata.width / 2 - 2) && (ini.x + ini.width / 2 - 2 >= candidata.x + candidata.width / 2 - 2) && !((ini.y - ini.height / 2 + 2 > candidata.y + candidata.height / 2 - 2) || (ini.y + ini.height / 2 - 2 < candidata.y - candidata.height / 2 + 2))
+								|| (ini.x - ini.width / 2 + 2 < candidata.x - candidata.width / 2 + 2) && (ini.x + ini.width / 2 - 2 >= candidata.x - candidata.width / 2 + 2) && !((ini.y - ini.height / 2 + 2 > candidata.y + candidata.height / 2 - 2) || (ini.y + ini.height / 2 - 2 < candidata.y - candidata.height / 2 + 2))
+								|| (ini.y - ini.height / 2 + 2 < candidata.y + candidata.height / 2 - 2) && (ini.y + ini.height / 2 - 2 >= candidata.y + candidata.height / 2 - 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))
+								|| (ini.y - ini.height / 2 + 2 < candidata.y - candidata.height / 2 + 2) && (ini.y + ini.height / 2 - 2 >= candidata.y - candidata.height / 2 + 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))) {
+								pompas.at(j).cadena = true;
+							}
 						}
 					}
 				}
 			} else {
-				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo, j1DebeRebotar);
+				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo, j1DebeRebotar, j1VelLateral);
+				if (pompas.at(i).animacionActiva != Pompa::EXPLOTA && i < pompas.size() - 1) {
+
+					for (int j = i + 1; j < pompas.size(); j++) {
+						Rectangle pompa1 = pompas.at(i).destRec;
+						Rectangle pompa2 = pompas.at(j).destRec;
+						if (pompas.at(j).disparada == 0 && pompas.at(j).animacionActiva != Pompa::EXPLOTA) {
+							//Empuja la pompa2 (se ha creado más tarde, por lo que está en una etapa más tardía de la ruta.
+							//Choca por la derecha de la que empuja -> Empuja hacia la derecha
+							if ((pompa1.x - pompa1.width / 3 < pompa2.x + pompa2.width / 3 ) && (pompa1.x + pompa1.width / 3  >= pompa2.x + pompa2.width / 3 ) && !((pompa1.y - pompa1.height / 3  > pompa2.y + pompa2.height / 3 ) || (pompa1.y + pompa1.height / 3  < pompa2.y - pompa2.height / 3 ))) {
+								pompas.at(i).destRec.x += pompa1.width / 8;
+								pompas.at(i).tVida -= 5;
+								pompas.at(j).tVida -= 5;
+							}
+							//Choca por la izquierda de la que empuja -> Empuja hacia la izquierda
+							else if ((pompa1.x - pompa1.width / 3 < pompa2.x - pompa2.width / 3) && (pompa1.x + pompa1.width / 3 >= pompa2.x - pompa2.width / 3) && !((pompa1.y - pompa1.height / 3 > pompa2.y + pompa2.height / 3) || (pompa1.y + pompa1.height / 3 < pompa2.y - pompa2.height / 3))) {
+								pompas.at(i).destRec.x -= pompa1.width / 8;
+								pompas.at(i).tVida -= 5;
+								pompas.at(j).tVida -= 5;
+							}
+							if (pompas.at(i).tVida < 0) {
+								pompas.at(i).tVida = 0;
+							}
+							if (pompas.at(j).tVida < 0) {
+								pompas.at(j).tVida = 0;
+							}
+						}
+					}
+				}
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 				}
@@ -86,10 +126,10 @@ public:
 							//			derecha
 							//			abajo
 							//			arriba
-							if ((ini.x - ini.width / 2 < candidata.x + candidata.width / 2) && (ini.x + ini.width / 2 >= candidata.x + candidata.width / 2) && !((ini.y - ini.height / 2 < candidata.y + candidata.height / 2) || (ini.y + ini.height / 2 < candidata.y + candidata.height / 2))
-								|| (ini.x - ini.width / 2 < candidata.x - candidata.width / 2) && (ini.x + ini.width / 2 >= candidata.x - candidata.width / 2) && !((ini.y - ini.height / 2 < candidata.y + candidata.height / 2) || (ini.y + ini.height / 2 < candidata.y + candidata.height / 2))
-								|| (ini.y - ini.height / 2 < candidata.y + candidata.height / 2) && (ini.x + ini.width / 2 >= candidata.y + candidata.height / 2) && !((ini.x - ini.width / 2 > candidata.x + candidata.width / 2) || (ini.x + ini.width / 2 < candidata.x - candidata.width / 2))
-								|| (ini.y - ini.height / 2 < candidata.y - candidata.height / 2) && (ini.x + ini.width / 2 >= candidata.y - candidata.height / 2) && !((ini.x - ini.width / 2 > candidata.x + candidata.width / 2) || (ini.x + ini.width / 2 < candidata.x - candidata.width / 2))) {
+							if ((ini.x - ini.width / 2 + 2 < candidata.x + candidata.width / 2 - 2) && (ini.x + ini.width / 2 - 2 >= candidata.x + candidata.width / 2 - 2) && !((ini.y - ini.height / 2 + 2 > candidata.y + candidata.height / 2 - 2) || (ini.y + ini.height / 2 - 2 < candidata.y - candidata.height / 2 + 2))
+								|| (ini.x - ini.width / 2 + 2 < candidata.x - candidata.width / 2 + 2) && (ini.x + ini.width / 2 - 2 >= candidata.x - candidata.width / 2 + 2) && !((ini.y - ini.height / 2 + 2 > candidata.y + candidata.height / 2 - 2) || (ini.y + ini.height / 2 - 2 < candidata.y - candidata.height / 2 + 2))
+								|| (ini.y - ini.height / 2 + 2 < candidata.y + candidata.height / 2 - 2) && (ini.y + ini.height / 2 - 2 >= candidata.y + candidata.height / 2 - 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))
+								|| (ini.y - ini.height / 2 + 2 < candidata.y - candidata.height / 2 + 2) && (ini.y + ini.height / 2 - 2 >= candidata.y - candidata.height / 2 + 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))) {
 								pompas.at(j).cadena = true;
 							}
 							

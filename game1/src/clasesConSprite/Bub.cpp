@@ -32,6 +32,8 @@ class Bub : public Sprite {
     const float DISTANCIA_DISPARO = 200.0;
     Rectangle inicio = { -1,-1,-1,-1 };
 
+   
+
 public:
     
     // VARIABLE DE ULTIMA PLATAFORMA SUELO
@@ -41,6 +43,7 @@ public:
     bool disparando = false;
     int multiplicadorVelocidadDisparo = 1;
     int multiplicadorDistanciaDisparo = 1;
+    int vidaPompa = 1000;
 
     // Referencia al administrador de pompas
     AdministradorPompas* admin;
@@ -121,6 +124,8 @@ public:
         //Gestión de desplazamiento lateral
         
 		if(!muerto){
+            float velocidadLateralActual = 0;
+
             if (admin->j1DebeRebotar > 0) { //Si rebota sobre una pompa, es como iniciar un nuevo salto
                 std::cout << "Me dicen que rebote" << std::endl;
                 saltoRecorrido = 0; 
@@ -143,6 +148,7 @@ public:
 							//(OPCIONAL) Añadir que decelere en vez de cambiar repentinamente de velocidad
 							switchOrientacion = 3;
 							destRec.x -= velocidadLateral/3;
+                            velocidadLateralActual = velocidadLateral / 3;
 							dirAir = 2;
 						}
 						else {
@@ -150,12 +156,15 @@ public:
 								switchOrientacion = 2;
 								dirAir = 1;
 								destRec.x -= velocidadLateral;
+                                velocidadLateralActual = velocidadLateral;
 							}
 							else if (dirAir == 1) {
 								destRec.x -= velocidadLateral;
+                                velocidadLateralActual = velocidadLateral;
 							}
 							else {
 								destRec.x -= velocidadLateral/3;
+                                velocidadLateralActual = velocidadLateral / 3;
 							}
 						}
 					}
@@ -164,6 +173,7 @@ public:
 							//(OPCIONAL) Añadir que decelere en vez de cambiar repentinamente de velocidad
 							switchOrientacion = 2;
 							destRec.x += velocidadLateral/3;
+                            velocidadLateralActual = velocidadLateral / 3;
 							dirAir = 1;
 						}
 						else {
@@ -171,12 +181,15 @@ public:
 								switchOrientacion = 3;
 								dirAir = 2;
 								destRec.x += velocidadLateral;
+                                velocidadLateralActual = velocidadLateral;
 							}
 							else if (dirAir == 2) {
 								destRec.x += velocidadLateral;
+                                velocidadLateralActual = velocidadLateral;
 							}
 							else {
 								destRec.x += velocidadLateral/3;
+                                velocidadLateralActual = velocidadLateral / 3;
 							}
 						}
 					}
@@ -184,10 +197,12 @@ public:
 						if (IsKeyDown(KEY_A)) {
 							switchOrientacion = 2;
 							destRec.x -= velocidadLateral / 2;
+                            velocidadLateralActual = velocidadLateral / 2;
 						}
 						else if (IsKeyDown(KEY_S)) {
 							switchOrientacion = 3;
 							destRec.x += velocidadLateral / 2;
+                            velocidadLateralActual = velocidadLateral / 2;
 						}
 					}
 				}else {
@@ -195,10 +210,12 @@ public:
 						if (!disparando && !muriendo) animacionActiva = MOVING;
 						switchOrientacion = 2;
 						destRec.x -= velocidadLateral/2;
+                        velocidadLateralActual = velocidadLateral / 2;
 					}else if(IsKeyDown(KEY_S)) {
 						if (!disparando && !muriendo) animacionActiva = MOVING;
 						switchOrientacion = 3;
 						destRec.x += velocidadLateral/2;
+                        velocidadLateralActual = velocidadLateral / 2;
 					}
 				}
 			}
@@ -215,7 +232,7 @@ public:
 				disparando = true;
 				animacionActiva = SHOOTING;
 				indiceAnimacion = 6; //Es el 0 de la segunda parte de animaciones
-				Pompa p = Pompa(spriteBurbuja, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, 500);
+				Pompa p = Pompa(spriteBurbuja, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa);
 				admin->pompas.push_back(p);
 			} else if(!enElAire) {
 				if (IsKeyDown(KEY_A) && !muriendo) {
@@ -223,6 +240,7 @@ public:
 					switchOrientacion = 2;
 					//std::cout << "Muevo Izquierda, orientacion: " << switchOrientacion << std::endl;
 					destRec.x -= velocidadLateral;
+                    velocidadLateralActual = velocidadLateral;
 					dirCorrer = 1;
 					dirAir = 1;
 					compruebaSuelo(lastGround);
@@ -232,6 +250,7 @@ public:
 					switchOrientacion = 3;
 					//std::cout << "Muevo Derecha, orientacion: " << switchOrientacion << std::endl;
 					destRec.x += velocidadLateral;
+                    velocidadLateralActual = velocidadLateral;
 					dirCorrer = 2;
 					dirAir = 2;
 					compruebaSuelo(lastGround);
@@ -299,6 +318,7 @@ public:
             }
 
             //Le dice al administrador los datos que necesita saber
+            admin->j1VelLateral = velocidadLateralActual;
             admin->jugadorCayendo = cayendo;
             admin->posicionJugador = destRec;
             admin->sentidoJugador = orientacionActual;
