@@ -2,11 +2,13 @@
 #include "mapa.cpp"
 #include "AdministradorPompas.cpp"
 #include "clasesConSprite/Bub.cpp"
+#include <clasesConSprite/Fantasma.cpp>
 #include <clasesConSprite/Morado.cpp>
+
 
 const int TARGET_FPS = 60;
 
-//cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
+//cambiar nombre de "not_main" a "main" para que el depurador entre aquÃ­.
 //Se mueve con A y S, y se salta con el espacio.
 int not_main(void)
 {
@@ -41,7 +43,7 @@ int not_main(void)
 
 
         // Draw
-        //----------------------------------------------------------------------------------
+        //---------------------------------------------------------------------------------
         BeginDrawing();
         ClearBackground(BLACK);
 
@@ -68,7 +70,7 @@ int not_main(void)
 }
 
 
-//cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
+//cambiar nombre de "not_main" a "main" para que el depurador entre aquÃ­.
 //Se mueve con A y S, y se salta con el espacio
 int nivel_1(void)
 {
@@ -102,10 +104,12 @@ int nivel_1(void)
 
     Rectangle destRob = { GetScreenWidth() / 2, 70, 32, 32 };
     sh_Enemigo robot = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
+    sh_Enemigo fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
     admin.enemigos.push_back(robot);
+    admin.enemigos.push_back(fantasma);
 
 
-    Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32};
+    Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
     //bub.destRec.x = 100; bub.destRec.y = 100;
 
@@ -113,7 +117,7 @@ int nivel_1(void)
 
     // Cargo elementos del personaje jugable
 
-    
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -131,7 +135,7 @@ int nivel_1(void)
         }
         bub.compruebaPared(columnas);
         admin.actualizaPompas();
-        admin.actualizaEnemigos(plataformas);
+        admin.actualizaEnemigos(plataformas, columnas);
         //----------------------------------------------------------------------------------
 
 
@@ -195,7 +199,7 @@ int main(void)
     Credits credits = Credits(15, 10, 20, KEY_SIX);
     Scores scores = Scores(0, 0, 20, SKYBLUE);
     //-------------------------------------------------------------------------------------- 
-    
+
     // Main Menu:
     //--------------------------------------------------------------------------------------
     MainMenu main_menu = MainMenu(10, 40, 70);
@@ -205,7 +209,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
     Columnas columnas = Columnas("resources/mapa_nivel_5/bloque_grande.png", 40.0f, 0.0f, 1);
     Plataformas plataformas = Plataformas("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt", 40.0f, 0.0f);
-    
+
     int numPlat = plataformas.listaPlataforma.size();
 
     AdministradorPompas admin = AdministradorPompas();
@@ -213,20 +217,25 @@ int main(void)
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
     Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
-    
-    Rectangle destRob = { GetScreenWidth()/2, 70, 32, 32};
+
+    Rectangle destRob = { GetScreenWidth() / 2, 70, 32, 32 };
+    sh_Enemigo fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+    admin.enemigos.push_back(fantasma);
     sh_Enemigo mor = std::make_shared<Morado>(Morado("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     admin.enemigos.push_back(mor);
 
+
     destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
+    /*
     sh_Enemigo robot2 = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     admin.enemigos.push_back(robot2);
+    */
 
     Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
 
     //bub.destRec.x = 100; bub.destRec.y = 100;
-    
+
     //--------------------------------------------------------------------------------------
 
     int framesCounter = 0;          // Useful to count frames
@@ -278,7 +287,7 @@ int main(void)
             }
             bub.compruebaPared(columnas);
             admin.actualizaPompas();
-            admin.actualizaEnemigos(plataformas);
+            admin.actualizaEnemigos(plataformas, columnas);
 
             if (IsKeyPressed(KEY_TWO) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
             {
@@ -290,7 +299,7 @@ int main(void)
         default: break;
         }
         //----------------------------------------------------------------------------------
-
+        //
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
