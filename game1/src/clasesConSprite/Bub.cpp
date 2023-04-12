@@ -35,6 +35,9 @@ class Bub : public Sprite {
    
 
 public:
+    //VARIABLES DE DESPLAZAMIENTO DE BUB 
+    uint8_t cambioMapa = 2; //2->Primera Iteración 1->Desplazándose 0->Ya no
+    Vector2 posicionOriginal = { 100, GetScreenHeight() - 50 };
     
     // VARIABLE DE ULTIMA PLATAFORMA SUELO
     Plataforma lastGround;
@@ -122,8 +125,13 @@ public:
 
     void Actualizar() {
         //Gestión de desplazamiento lateral
-        
-		if(!muerto){
+        if (cambioMapa > 0) {
+            if (cambioMapa == 2) {
+
+                cambioMapa = 1;
+            }
+        }
+		else if(!muerto){
             float velocidadLateralActual = 0;
 
             if (admin->j1DebeRebotar > 0) { //Si rebota sobre una pompa, es como iniciar un nuevo salto
