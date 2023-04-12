@@ -1,7 +1,6 @@
 #pragma once
 #include "Sprite.hpp"
 #include "mapa.cpp"
-#include "Bub.cpp"
 #include <iostream> //DEBUG
 
 struct Response {
@@ -44,7 +43,7 @@ public:
     bool comprobarColisionX(Plataforma& plat);
     void comprobarColisionParedes(Columnas& col);
     void comprobarSuelo(Plataforma& lastGround);
-    bool colisionBub(Bub& bub);
+    bool colisionBub(Rectangle bub);
 
     void Dibujar(int pos);
 };

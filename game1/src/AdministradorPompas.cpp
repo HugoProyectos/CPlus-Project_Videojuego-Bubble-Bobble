@@ -16,7 +16,7 @@ public:
 	bool muriendo = false;
 	int j1DebeRebotar = 0; //0->No
 	int j1VelLateral = 0;
-	Agua agua;
+	Agua agua = Agua();
 
 	std::vector<Pompa> pompas;
 	std::vector<sh_Enemigo> enemigos;
@@ -58,6 +58,7 @@ public:
 						enemigos.at(j)->borrame = true;
 						//std::cout << "Salgo" << std::endl;
 						pompas.at(i).modulo = enemigos.at(j)->tipo;
+						pompas.at(i).indiceAnimacion = pompas.at(i).modulo * Pompa::NUM_FOTOGRAMAS;
 						pompas.at(i).enemigoContenido = enemigos.at(j);
 						pompas.at(i).disparada = 0;
 						break;
@@ -120,13 +121,15 @@ public:
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 				}
-				else if (creaAgua == 2) {
-					agua.stream[0].destRec = pompas.at(i).destRec;
+				else if (creaAgua == 2 && !agua.existe) {
+					agua.stream[0].destRec.x = pompas.at(i).destRec.x;
+					agua.stream[0].destRec.y = pompas.at(i).destRec.y;
 					agua.stream[0].direccionDerecha = false;
 					agua.existe = true;
 				}
-				else if (creaAgua == 3) {
-					agua.stream[0].destRec = pompas.at(i).destRec;
+				else if (creaAgua == 3 && !agua.existe) {
+					agua.stream[0].destRec.x = pompas.at(i).destRec.x;
+					agua.stream[0].destRec.y = pompas.at(i).destRec.y;
 					agua.stream[0].direccionDerecha = true;
 					agua.existe = true;
 				}

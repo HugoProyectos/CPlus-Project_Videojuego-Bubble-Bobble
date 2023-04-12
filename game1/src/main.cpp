@@ -210,13 +210,13 @@ int main(void)
 
     AdministradorPompas admin = AdministradorPompas();
     Texture2D spriteAgua = LoadTexture("resources/agua.png");
-    Rectangle destAgua = { 150, 100, 16, 16 };
+    Rectangle destAgua = { -100, -100, 16, 16 };
     admin.agua = Agua(destAgua, true, spriteAgua, numPlat);
     admin.agua.existe = false;
 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
-    Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
+    //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
     
     //Rectangle destRob = { GetScreenWidth()/2, 70, 32, 32};
     //sh_Enemigo robot = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
@@ -226,8 +226,16 @@ int main(void)
     //sh_Enemigo robot2 = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     //dmin.enemigos.push_back(robot2);
 
-    Rectangle destPompa = { 100, GetScreenHeight() - 500, 16, 16 };
-    Pompa p = Pompa(spritePompa, destPompa, 0, 0, false, 1000000);;
+    Rectangle destPompa = { 100, GetScreenHeight() - GetScreenHeight()/2, 32, 32 };
+    Pompa p = Pompa(spritePompa, destPompa, 0, 0, false, 1000000);
+    Rectangle destPompa2 = { 120, GetScreenHeight() - GetScreenHeight() / 2, 32, 32 };
+    Pompa p2 = Pompa(spritePompa, destPompa, 0, 0, false, 1000000);
+    p.modulo = 2;
+    p2.modulo = 2;
+    p.indiceAnimacion = 2 * Pompa::NUM_FOTOGRAMAS;
+    p2.indiceAnimacion = 2 * Pompa::NUM_FOTOGRAMAS;
+    admin.pompas.push_back(p);
+    admin.pompas.push_back(p2);
 
     Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
@@ -287,13 +295,13 @@ int main(void)
             }
             bub.compruebaPared(columnas);
             if (bub.enElAgua) {
-                bub.destRec.x = agua.stream[agua.bubTile].destRec.x;
-                bub.destRec.y = agua.stream[agua.bubTile].destRec.y;
+                bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
+                bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
             }
             else {
-                agua.colisionBub(bub);
+                bub.enElAgua = admin.agua.colisionBub(bub.destRec, bub.waterlessFrames);
             }
-            agua.Actualizar(plataformas,columnas);
+            admin.agua.Actualizar(plataformas,columnas);
             admin.actualizaPompas();
             admin.actualizaEnemigos(plataformas);
 
@@ -333,7 +341,7 @@ int main(void)
             columnas.Dibujar();
             plataformas.Dibujar();
             scores.Dibujar();
-            agua.Dibujar();
+            admin.agua.Dibujar();
             bub.Dibujar();
             admin.dibujaPompas();
             admin.dibujaEnemigos();

@@ -16,10 +16,10 @@ Response tileAgua::ActualizarHead(Plataformas& plat) {
 	current.derecha = direccionDerecha; current.bend = bend;
 	bend = false;
 	//PARTE ESPECIAL PARA PRUEBAS************************************
-	if (destRec.y > 500) {
+	/*if (destRec.y > 500) {
 		destRec.x = 150; destRec.y = 100;
 		return current;
-	}
+	}*/
 	//***************************************************************
 
 	if (enElAire) {
@@ -174,46 +174,45 @@ void tileAgua::comprobarSuelo(Plataforma& lastGround) {
 	}
 }
 
-bool tileAgua::colisionBub(Bub& bub) {
+bool tileAgua::colisionBub(Rectangle bub) {
 	if (
 		(
 			//Comprobamos colision esquina inferior derecha
-			(((destRec.y + destRec.height) >= (bub.destRec.y + bub.destRec.height / 2)) &&
-				((bub.destRec.y + bub.destRec.height / 2) >= (destRec.y))
+			(((destRec.y + destRec.height) >= (bub.y + bub.height / 2)) &&
+				((bub.y + bub.height / 2) >= (destRec.y))
 				) && (
-					((destRec.x + destRec.width) > (bub.destRec.x + bub.destRec.width / 2)) &&
-					((bub.destRec.x + bub.destRec.width / 2) > (destRec.x))
+					((destRec.x + destRec.width) > (bub.x + bub.width / 2)) &&
+					((bub.x + bub.width / 2) > (destRec.x))
 					)
 			) ||
 		(
 			//Comprobamos colision esquina superior derecha
-			(((destRec.y + destRec.height) >= (bub.destRec.y - bub.destRec.height / 2)) &&
-				((bub.destRec.y - bub.destRec.height / 2) >= (destRec.y))
+			(((destRec.y + destRec.height) >= (bub.y - bub.height / 2)) &&
+				((bub.y - bub.height / 2) >= (destRec.y))
 				) && (
-					((destRec.x + destRec.width) > (bub.destRec.x + bub.destRec.width / 2)) &&
-					((bub.destRec.x + bub.destRec.width / 2) > (destRec.x))
+					((destRec.x + destRec.width) > (bub.x + bub.width / 2)) &&
+					((bub.x + bub.width / 2) > (destRec.x))
 					)
 			) ||
 		(
 			//Comprobamos colision esquina superior izquierda
-			(((destRec.y + destRec.height) >= (bub.destRec.y - bub.destRec.height / 2)) &&
-				((bub.destRec.y - bub.destRec.height / 2) >= (destRec.y))
+			(((destRec.y + destRec.height) >= (bub.y - bub.height / 2)) &&
+				((bub.y - bub.height / 2) >= (destRec.y))
 				) && (
-					((destRec.x + destRec.width) > (bub.destRec.x - bub.destRec.width / 2)) &&
-					((bub.destRec.x - bub.destRec.width / 2) > (destRec.x))
+					((destRec.x + destRec.width) > (bub.x - bub.width / 2)) &&
+					((bub.x - bub.width / 2) > (destRec.x))
 					)
 			) ||
 		(
 			//Comprobamos colision esquina inferior izquierda
-			(((destRec.y + destRec.height) >= (bub.destRec.y + bub.destRec.height / 2)) &&
-				((bub.destRec.y + bub.destRec.height / 2) >= (destRec.y))
+			(((destRec.y + destRec.height) >= (bub.y + bub.height / 2)) &&
+				((bub.y + bub.height / 2) >= (destRec.y))
 				) && (
-					((destRec.x + destRec.width) > (bub.destRec.x - bub.destRec.width / 2)) &&
-					((bub.destRec.x - bub.destRec.width / 2) > (destRec.x))
+					((destRec.x + destRec.width) > (bub.x - bub.width / 2)) &&
+					((bub.x - bub.width / 2) > (destRec.x))
 					)
 			)
 		) {
-		bub.enElAgua = true;
 		return true;
 	}
 	else {

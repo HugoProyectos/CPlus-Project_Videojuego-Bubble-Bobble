@@ -35,7 +35,6 @@ class Pompa : public Sprite {
 	const int NARANJA = 1;
 	const int ROJO = 2;
 
-	const int NUM_FOTOGRAMAS = 3;
 
 	const int widthAnimation = 16;
 	const int heightAnimation = 16;
@@ -60,6 +59,7 @@ public:
 	static const int DISPARO = 0;
 	static const int VACIA = 1;
 	static const int EXPLOTA = 4;
+	static const int NUM_FOTOGRAMAS = 3;
 
 	static uint32_t ID_GLOBAL;
 	int ID = -1;
