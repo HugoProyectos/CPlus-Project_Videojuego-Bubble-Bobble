@@ -21,17 +21,16 @@ class tileAgua : public Sprite {
     int bend = 1; //0 = No_bend 1=Right_bend 2=Left_bend
     Texture2D spritesheet = Texture2D();
     //Rectangle srcRect = { 8.0f,0.0f,(float)height, (float)width }; //Se ha pasado la asignación a srcRec en el constructor
-
-
-    //Variables fisica
-    bool direccionDerecha = true;
-    bool enElAire = true;
-    int lastGroundNum = 0; //Incializar a -1 da error
+ 
 
     //Variables optimizacion
     int numPlataformas = -1;
 
 public:
+    //Variables fisica
+    bool direccionDerecha = true;
+    bool enElAire = true;
+    int lastGroundNum = 0; //Incializar a -1 da error
 
     Rectangle destRect = { -1,-1,-1,-1 };
 

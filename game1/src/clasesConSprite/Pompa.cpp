@@ -58,7 +58,7 @@ void Pompa::Inicializador(Texture2D spriteSheet, const Rectangle origen, float v
 
 }
 
-sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1, int& j1DebeRebotar, float j1VelLateral) {
+sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1, int& j1DebeRebotar, float j1VelLateral, uint8_t& creaAgua) {
 	sh_Enemigo result = NULL;
 
 	if (disparada == 2) {
@@ -81,7 +81,12 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 			tVida = -1;
 			std::cout << "Peto por cadena" << std::endl;
 
-			result = extraeEnemigo(true);
+			if (modulo == 2) {
+				creaAgua = sentidoJ1;
+			}
+			else {
+				result = extraeEnemigo(true);
+			}
 		}
 
 		//Con las interacciones debe hacerlo solo si no tiene enemigo dentro
@@ -134,7 +139,12 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 						//Marca que su explosión debe transmitirse
 						cadena = true; 
 
-						result = extraeEnemigo(true);
+						if (modulo == 2) {
+							creaAgua = sentidoJ1;
+						}
+						else {
+							result = extraeEnemigo(true);
+						}
 					}
 					else if (IsKeyDown(KEY_SPACE) && (pJ1.y + pJ1.height / 2) < (destRec.y - destRec.height / 4)) { //Debe rebotar sin explotar la pompa
 						std::cout << "DEBES REBOTAR" << std::endl;
@@ -159,7 +169,12 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					//Marca que su explosión debe transmitirse
 					cadena = true;
 
-					result = extraeEnemigo(true);
+					if (modulo == 2) {
+						creaAgua = sentidoJ1;
+					}
+					else {
+						result = extraeEnemigo(true);
+					}
 
 					std::cout << "Peto por espalda" << std::endl;
 				}
@@ -173,7 +188,12 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					//Marca que su explosión debe transmitirse
 					cadena = true;
 
-					result = extraeEnemigo(true);
+					if (modulo == 2) {
+						creaAgua = sentidoJ1;
+					}
+					else {
+						result = extraeEnemigo(true);
+					}
 
 				}
 				else if (contactoFrente

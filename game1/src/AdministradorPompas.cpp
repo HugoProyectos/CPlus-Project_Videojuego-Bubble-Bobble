@@ -2,6 +2,7 @@
 #include "mapa.cpp"
 #include "clasesConSprite/Pompa.hpp"
 #include "clasesConSprite/Enemigo.cpp"
+#include "clasesConSprite/Agua.hpp"
 #include <vector>
 #include <iostream> //Para debuggear
 
@@ -15,6 +16,7 @@ public:
 	bool muriendo = false;
 	int j1DebeRebotar = 0; //0->No
 	int j1VelLateral = 0;
+	Agua agua;
 
 	std::vector<Pompa> pompas;
 	std::vector<sh_Enemigo> enemigos;
@@ -61,7 +63,8 @@ public:
 						break;
 					}
 				}
-				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo, j1DebeRebotar, j1VelLateral);
+				uint8_t useless;
+				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo, j1DebeRebotar, j1VelLateral, useless);
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 				}
@@ -84,7 +87,8 @@ public:
 					}
 				}
 			} else {
-				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo, j1DebeRebotar, j1VelLateral);
+				uint8_t creaAgua = false;
+				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo, j1DebeRebotar, j1VelLateral, creaAgua);
 				if (pompas.at(i).animacionActiva != Pompa::EXPLOTA && i < pompas.size() - 1) {
 
 					for (int j = i + 1; j < pompas.size(); j++) {
@@ -115,6 +119,16 @@ public:
 				}
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
+				}
+				else if (creaAgua == 2) {
+					agua.stream[0].destRec = pompas.at(i).destRec;
+					agua.stream[0].direccionDerecha = false;
+					agua.existe = true;
+				}
+				else if (creaAgua == 3) {
+					agua.stream[0].destRec = pompas.at(i).destRec;
+					agua.stream[0].direccionDerecha = true;
+					agua.existe = true;
 				}
 				if (pompas.at(i).cadena) {
 					for (int j = 0; j < pompas.size(); j++) {

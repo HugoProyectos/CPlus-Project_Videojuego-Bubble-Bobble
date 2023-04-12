@@ -11,7 +11,7 @@ public:
     tileAgua stream[10];
     bool existe = false;
     int bubTile;
-
+    Agua() = default;
     Agua(Rectangle destino, bool right, Texture2D sprite, int numPlat);
 
     void Actualizar(Plataformas& plat,Columnas& col);

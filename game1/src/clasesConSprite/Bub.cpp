@@ -37,7 +37,7 @@ class Bub : public Sprite {
 public:
     //VARIABLES DE DESPLAZAMIENTO DE BUB 
     uint8_t cambioMapa = 2; //2->Primera Iteraci�n 1->Desplaz�ndose 0->Ya no
-    Vector2 posicionOriginal = { 100, GetScreenHeight() - 50 };
+    Vector2 posicionOriginal = { (float)100, (float)GetScreenHeight() - 50 };
     
     // VARIABLE DE ULTIMA PLATAFORMA SUELO
     Plataforma lastGround;
@@ -142,13 +142,13 @@ public:
             destRec.y = 450;
         }
         //Gesti�n de desplazamiento lateral
-        if (cambioMapa > 0) {
+        /*if (cambioMapa > 0) {
             if (cambioMapa == 2) {
 
                 cambioMapa = 1;
             }
         }
-		else if(!muerto){
+		else*/ if(!muerto){
             float velocidadLateralActual = 0;
 
             if (admin->j1DebeRebotar > 0) { //Si rebota sobre una pompa, es como iniciar un nuevo salto
@@ -264,9 +264,11 @@ public:
 					if (!disparando) animacionActiva = MOVING;
 					switchOrientacion = 2;
 					//std::cout << "Muevo Izquierda, orientacion: " << switchOrientacion << std::endl;
-					destRec.x -= velocidadLateral;
-                    velocidadLateralActual = velocidadLateral;
-					dirCorrer = 1;
+                    if (!enElAgua) {
+                        destRec.x -= velocidadLateral;
+                        velocidadLateralActual = velocidadLateral;
+                    }
+                    dirCorrer = 1;
 					dirAir = 1;
 					compruebaSuelo(lastGround);
 				}
@@ -274,8 +276,10 @@ public:
 					if (!disparando) animacionActiva = MOVING;
 					switchOrientacion = 3;
 					//std::cout << "Muevo Derecha, orientacion: " << switchOrientacion << std::endl;
-					destRec.x += velocidadLateral;
-                    velocidadLateralActual = velocidadLateral;
+                    if (!enElAgua) {
+                        destRec.x += velocidadLateral;
+                        velocidadLateralActual = velocidadLateral;
+                    }
 					dirCorrer = 2;
 					dirAir = 2;
 					compruebaSuelo(lastGround);

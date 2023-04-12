@@ -5,6 +5,11 @@
 #include "Robot.cpp"
 #include <iostream> //DEBUG
 
+
+//Valores de módulo acorde a lo que lleva dentro la pompa
+//1->ROBOT
+//2->AGUA
+
 // Aquí debajo se pondrán las constantes para especificar 
 // las animaciones de enemigos atrapados en pompas
 const int ROBOT = 5;
@@ -96,7 +101,7 @@ public:
 
 	void Inicializador(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
 
-	sh_Enemigo Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1, int& j1DebeRebotar, float j1VelLateral);
+	sh_Enemigo Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1, int& j1DebeRebotar, float j1VelLateral, uint8_t& creaAgua); //3->Derecha, 2->Izquierda
 
 	void Dibujar();
 };

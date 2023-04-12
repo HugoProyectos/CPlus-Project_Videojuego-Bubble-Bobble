@@ -1,5 +1,14 @@
 #include "Agua.hpp"
 
+Agua::Agua()
+{
+	existe = false;
+	Rectangle dest = { -1,-1,-1,-1 };
+	for (int i = 0; i < 10; i++) {
+		stream[i] = tileAgua(dest, false, sprite, 0);
+	}
+}
+
 Agua::Agua(Rectangle destino, bool right, Texture2D sprite, int numPlat)
 {
 	existe = true;
