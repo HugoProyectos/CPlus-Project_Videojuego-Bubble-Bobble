@@ -289,7 +289,6 @@ public:
         }
     }
 
-
     //Comprobacion de si debe caer
     void compruebaSuelo() override {
         if (

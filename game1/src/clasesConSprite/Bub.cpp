@@ -8,8 +8,8 @@
 
 
 
-//Se ha decidido que tengan sprites distintos para cada animación,
-//La estructura difiere del modelo original genérico de personaje por ello.
+//Se ha decidido que tengan sprites distintos para cada animaciï¿½n,
+//La estructura difiere del modelo original genï¿½rico de personaje por ello.
 class Bub : public Sprite {
     const int STANDING = 0;
     const int MOVING = 1;
@@ -19,14 +19,14 @@ class Bub : public Sprite {
     const int DYING = 5;
     const Texture2D spriteBurbuja = LoadTexture("resources/Players/Bobblun/Pompa.png");
 
-    const int NUM_FILAS = 4; //número de filas en el animation_set
+    const int NUM_FILAS = 4; //nï¿½mero de filas en el animation_set
 
-    int fStandingAnimation = 4; //Número de fotogramas de la StandingAnimation
-    int fMovingAnimation = 4; //Número de fotogramas
-    int fJumpingAnimation = 4; //Número de fotogramas
-    int fFallingAnimation = 4; //Número de fotogramas
-    int fShootingAnimation = 5; //Número de fotogramas
-    int fDeathAnimation = 30; //Número de fotogramas
+    int fStandingAnimation = 4; //Nï¿½mero de fotogramas de la StandingAnimation
+    int fMovingAnimation = 4; //Nï¿½mero de fotogramas
+    int fJumpingAnimation = 4; //Nï¿½mero de fotogramas
+    int fFallingAnimation = 4; //Nï¿½mero de fotogramas
+    int fShootingAnimation = 5; //Nï¿½mero de fotogramas
+    int fDeathAnimation = 30; //Nï¿½mero de fotogramas
 
     const float VELOCIDAD_DISPARO = 5.0;
     const float DISTANCIA_DISPARO = 200.0;
@@ -36,13 +36,13 @@ class Bub : public Sprite {
 
 public:
     //VARIABLES DE DESPLAZAMIENTO DE BUB 
-    uint8_t cambioMapa = 2; //2->Primera Iteración 1->Desplazándose 0->Ya no
+    uint8_t cambioMapa = 2; //2->Primera Iteraciï¿½n 1->Desplazï¿½ndose 0->Ya no
     Vector2 posicionOriginal = { 100, GetScreenHeight() - 50 };
     
     // VARIABLE DE ULTIMA PLATAFORMA SUELO
     Plataforma lastGround;
 
-    // VARIABLES PARA LA GENERACIÓN DE POMPAS
+    // VARIABLES PARA LA GENERACIï¿½N DE POMPAS
     bool disparando = false;
     int multiplicadorVelocidadDisparo = 1;
     int multiplicadorDistanciaDisparo = 1;
@@ -69,11 +69,15 @@ public:
     int indiceAnimacion = 0;
     int cuentaFrames = 0;
     int velocidadFrames = 8;
+
+    //Variables de fisicas
     bool enElAire = false;
     bool cayendo = false;
+    bool enElAgua = false;
+    int waterlessFrames = 0;
     float saltoRecorrido = 0;
     float distanciaSaltoMax = 0;
-    float velocidadSalto = 0;  //Añadir aceleracion, y hacer que velocidad nueva = velocidad anterior + aceleracion. Empezar con una aceleracion inicial, y que se le vayan restando valores. A partir de cierta velocidad, capar. Hay que comprobar que el tope coincida con el planeo.
+    float velocidadSalto = 0;  //Aï¿½adir aceleracion, y hacer que velocidad nueva = velocidad anterior + aceleracion. Empezar con una aceleracion inicial, y que se le vayan restando valores. A partir de cierta velocidad, capar. Hay que comprobar que el tope coincida con el planeo.
     float velocidadLateral = 0;
     float deceleracion = 0.1f;
     float velocidadActual = 0;
@@ -124,7 +128,20 @@ public:
     };
 
     void Actualizar() {
-        //Gestión de desplazamiento lateral
+        //Frames de "inmunidad" al agua
+        if (waterlessFrames > 0) { waterlessFrames--; }
+        //Gestion de wrap vertical
+        if (destRec.y > 500) {
+            destRec.y = -10;
+            enElAire = true;
+            cayendo = true;
+            enElAgua = false;
+            waterlessFrames = 3;
+        }
+        else if (destRec.y < -50) {
+            destRec.y = 450;
+        }
+        //Gestiï¿½n de desplazamiento lateral
         if (cambioMapa > 0) {
             if (cambioMapa == 2) {
 
@@ -153,7 +170,7 @@ public:
 				if (saltoRecorrido > 0) {
 					if (dirCorrer == 1) {  //Salta izquierda
 						if (IsKeyDown(KEY_S)) {
-							//(OPCIONAL) Añadir que decelere en vez de cambiar repentinamente de velocidad
+							//(OPCIONAL) Aï¿½adir que decelere en vez de cambiar repentinamente de velocidad
 							switchOrientacion = 3;
 							destRec.x -= velocidadLateral/3;
                             velocidadLateralActual = velocidadLateral / 3;
@@ -178,7 +195,7 @@ public:
 					}
 					else if (dirCorrer == 2) {  //Salta derecha
 						if (IsKeyDown(KEY_A)) {
-							//(OPCIONAL) Añadir que decelere en vez de cambiar repentinamente de velocidad
+							//(OPCIONAL) Aï¿½adir que decelere en vez de cambiar repentinamente de velocidad
 							switchOrientacion = 2;
 							destRec.x += velocidadLateral/3;
                             velocidadLateralActual = velocidadLateral / 3;
@@ -229,8 +246,8 @@ public:
 			}
 
 			// Se puede disparar en el aire. Las acciones en el aire no se ven limitadas por el disparo, 
-			// pero las del suelo sí. Para mantener la idea if/else de en el aire o en el suelo, 
-			// al del suelo se le ha añaido la restricción opuesta al de en el aire (!enElAire)
+			// pero las del suelo sï¿½. Para mantener la idea if/else de en el aire o en el suelo, 
+			// al del suelo se le ha aï¿½aido la restricciï¿½n opuesta al de en el aire (!enElAire)
 			if (IsKeyPressed(KEY_F) && !disparando && !muriendo) { 
 				//std::cout << "Dispara" << std::endl;
 				int sentido = 1; //Hacia la derecha
@@ -272,12 +289,13 @@ public:
 				}
 			}
 
-			//Gestión de salto
+			//Gestiï¿½n de salto
 			if (IsKeyPressed(KEY_SPACE) && !enElAire && !muriendo) {
 
 				//std::cout << "Salto" << std::endl;
 				if (!disparando) animacionActiva = JUMPING;
 				enElAire = true;
+                if (enElAgua) { enElAgua = false; waterlessFrames = 3; }
 				velocidadActual = velocidadSalto;
 				destRec.y -= velocidadActual;
 				saltoRecorrido += velocidadActual;
@@ -300,7 +318,7 @@ public:
 				destRec.y += velocidadSalto / 2;
 				saltoRecorrido -= velocidadSalto / 2;
 			}
-			else if (enElAire) { //Inicio caída
+			else if (enElAire) { //Inicio caï¿½da
 				if(!disparando && !muriendo) animacionActiva = FALLING;
 				cayendo = true;
 				destRec.y -= velocidadActual;
@@ -397,6 +415,12 @@ public:
     }
 
     void compruebaColision(Plataforma& s) {
+        //Si esta en el agua no comprobamos colision
+        if (enElAgua) {
+            enElAire = false;
+            cayendo = false;
+            return;
+        }
         //Comprobamos si colisiona con la superficie
         if (
             (
@@ -453,7 +477,7 @@ public:
                 break;
             }
         }
-        //Comprobamos si se esta acercando a la superficie desde alguna dirección
+        //Comprobamos si se esta acercando a la superficie desde alguna direcciï¿½n
         else {
             //Izquierda
             if (
