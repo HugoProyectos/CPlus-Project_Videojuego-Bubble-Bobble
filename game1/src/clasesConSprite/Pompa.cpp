@@ -58,7 +58,7 @@ void Pompa::Inicializador(Texture2D spriteSheet, const Rectangle origen, float v
 
 }
 
-sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1, int& j1DebeRebotar, float j1VelLateral, uint8_t& creaAgua) {
+sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua) {
 	sh_Enemigo result = NULL;
 
 	if (disparada == 2) {
@@ -82,7 +82,7 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 			std::cout << "Peto por cadena" << std::endl;
 
 			if (modulo == 2) {
-				creaAgua = sentidoJ1;
+				creaAgua = j1.sentidoJugador;
 			}
 			else {
 				result = extraeEnemigo(true);
@@ -102,35 +102,35 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 			disparada = 0;
 			tVida -= VELOCIDAD_MUERTE;
 			animacionActiva = VACIA;
-
-			if (!muriendoJ1){
-				/////COMPROBACIÓN DE COLISIÓN CON EL JUGADOR
-				bool contactoFrente = ((destRec.x - destRec.width / 2) < (pJ1.x - pJ1.width / 2))
-					&& ((destRec.x + destRec.width / 2) > (pJ1.x - pJ1.width / 2));
-				bool contactoEspalda = ((destRec.x - destRec.width / 2) < (pJ1.x + pJ1.width / 2))
-					&& ((destRec.x + destRec.width / 2) > (pJ1.x + pJ1.width / 2));
-				bool contactoCabeza = (destRec.x - destRec.width / 2) <= (pJ1.x + pJ1.width / 2)
-					&& (destRec.x + destRec.width / 2) >= (pJ1.x + pJ1.width / 2)
-					|| (destRec.x + destRec.width / 2) >= (pJ1.x)
-					&& (destRec.x - destRec.width / 2) < (pJ1.x);
-				if (sentidoJ1 != 2) { //Si J1 mira derecha, hay que cambiar
+			/////COMPROBACIÓN DE COLISIÓN CON EL JUGADOR BUB
+			if (!j1.muriendo){
+				
+				bool contactoFrente = ((destRec.x - destRec.width / 2) < (j1.posicionJugador.x - j1.posicionJugador.width / 2))
+					&& ((destRec.x + destRec.width / 2) > (j1.posicionJugador.x - j1.posicionJugador.width / 2));
+				bool contactoEspalda = ((destRec.x - destRec.width / 2) < (j1.posicionJugador.x + j1.posicionJugador.width / 2))
+					&& ((destRec.x + destRec.width / 2) > (j1.posicionJugador.x + j1.posicionJugador.width / 2));
+				bool contactoCabeza = (destRec.x - destRec.width / 2) <= (j1.posicionJugador.x + j1.posicionJugador.width / 2)
+					&& (destRec.x + destRec.width / 2) >= (j1.posicionJugador.x + j1.posicionJugador.width / 2)
+					|| (destRec.x + destRec.width / 2) >= (j1.posicionJugador.x)
+					&& (destRec.x - destRec.width / 2) < (j1.posicionJugador.x);
+				if (j1.sentidoJugador != 2) { //Si J1 mira derecha, hay que cambiar
 					//std::cout << "RECTIFICANDO" << std::endl;
-					contactoFrente = ((destRec.x - destRec.width / 2) < (pJ1.x + pJ1.width / 2))
-						&& ((destRec.x + destRec.width / 2) > (pJ1.x + pJ1.width / 2));
-					contactoEspalda = ((destRec.x - destRec.width / 2) < (pJ1.x - pJ1.width / 2))
-						&& ((destRec.x + destRec.width / 2) > (pJ1.x - pJ1.width / 2));
-					contactoCabeza = (destRec.x - destRec.width / 2) <= (pJ1.x - pJ1.width / 2)
-						&& (destRec.x + destRec.width / 2) >= (pJ1.x - pJ1.width / 2)
-						|| (destRec.x + destRec.width / 2) >= (pJ1.x)
-						&& (destRec.x - destRec.width / 2) < (pJ1.x);
+					contactoFrente = ((destRec.x - destRec.width / 2) < (j1.posicionJugador.x + j1.posicionJugador.width / 2))
+						&& ((destRec.x + destRec.width / 2) > (j1.posicionJugador.x + j1.posicionJugador.width / 2));
+					contactoEspalda = ((destRec.x - destRec.width / 2) < (j1.posicionJugador.x - j1.posicionJugador.width / 2))
+						&& ((destRec.x + destRec.width / 2) > (j1.posicionJugador.x - j1.posicionJugador.width / 2));
+					contactoCabeza = (destRec.x - destRec.width / 2) <= (j1.posicionJugador.x - j1.posicionJugador.width / 2)
+						&& (destRec.x + destRec.width / 2) >= (j1.posicionJugador.x - j1.posicionJugador.width / 2)
+						|| (destRec.x + destRec.width / 2) >= (j1.posicionJugador.x)
+						&& (destRec.x - destRec.width / 2) < (j1.posicionJugador.x);
 					//std::cout << contactoEspalda<< std::endl;
 				}
 
-				if (((destRec.x - destRec.width / 2) < (pJ1.x + pJ1.width / 2) && (destRec.x + destRec.width / 2) > (pJ1.x + pJ1.width / 2)
-					|| (destRec.x + destRec.width / 2) > (pJ1.x - pJ1.width) && (destRec.x - destRec.width / 2) < (pJ1.x - pJ1.width / 2))
-					&& (pJ1.y + pJ1.height / 2) > (destRec.y - destRec.height / 2) && (pJ1.y + pJ1.height / 2) < (destRec.y + destRec.height / 2)
-					&& cayendoJ1 && animacionActiva != EXPLOTA) { //Choque en caída
-					if (j1DebeRebotar == 0 && !IsKeyDown(KEY_SPACE)) { // Explota la pompa
+				if (((destRec.x - destRec.width / 2) < (j1.posicionJugador.x + j1.posicionJugador.width / 2) && (destRec.x + destRec.width / 2) > (j1.posicionJugador.x + j1.posicionJugador.width / 2)
+					|| (destRec.x + destRec.width / 2) > (j1.posicionJugador.x - j1.posicionJugador.width) && (destRec.x - destRec.width / 2) < (j1.posicionJugador.x - j1.posicionJugador.width / 2))
+					&& (j1.posicionJugador.y + j1.posicionJugador.height / 2) > (destRec.y - destRec.height / 2) && (j1.posicionJugador.y + j1.posicionJugador.height / 2) < (destRec.y + destRec.height / 2)
+					&& j1.jugadorCayendo && animacionActiva != EXPLOTA) { //Choque en caída
+					if (j1.debeRebotar == 0 && !IsKeyDown(KEY_SPACE)) { // Explota la pompa
 						animacionActiva = EXPLOTA;
 						indiceAnimacion = 0;
 						tVida = -1;
@@ -140,13 +140,13 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 						cadena = true; 
 
 						if (modulo == 2) {
-							creaAgua = sentidoJ1;
+							creaAgua = j1.sentidoJugador;
 						}
 						else {
 							result = extraeEnemigo(true);
 						}
 					}
-					else if (IsKeyDown(KEY_SPACE) && (pJ1.y + pJ1.height / 2) < (destRec.y - destRec.height / 4)) { //Debe rebotar sin explotar la pompa
+					else if (IsKeyDown(KEY_SPACE) && (j1.posicionJugador.y + j1.posicionJugador.height / 2) < (destRec.y - destRec.height / 4)) { //Debe rebotar sin explotar la pompa
 						std::cout << "DEBES REBOTAR" << std::endl;
 						//int u; //DEBUG bloqueante
 						//std::cin >> u;
@@ -154,14 +154,14 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 							indiceAnimacion = 1;
 							contadorFrames = 0;
 						}
-						j1DebeRebotar = 1;
+						j1.debeRebotar = 1;
 					}
 
 
 				}
 				else if (contactoEspalda
-					&& ((destRec.y - destRec.width / 2) < (pJ1.y + pJ1.height / 4) && (destRec.y + destRec.height / 2) > (pJ1.y + pJ1.height / 4)
-						|| (destRec.y - destRec.width / 2) < (pJ1.y - pJ1.height / 2) && (destRec.y + destRec.height / 2) > (pJ1.y - pJ1.height / 2))) { //Choca por detrás del jugador (primera linea->horizontal, segunda y tercera->posibilidades verticales)
+					&& ((destRec.y - destRec.width / 2) < (j1.posicionJugador.y + j1.posicionJugador.height / 4) && (destRec.y + destRec.height / 2) > (j1.posicionJugador.y + j1.posicionJugador.height / 4)
+						|| (destRec.y - destRec.width / 2) < (j1.posicionJugador.y - j1.posicionJugador.height / 2) && (destRec.y + destRec.height / 2) > (j1.posicionJugador.y - j1.posicionJugador.height / 2))) { //Choca por detrás del jugador (primera linea->horizontal, segunda y tercera->posibilidades verticales)
 					animacionActiva = EXPLOTA;
 					indiceAnimacion = 0;
 					tVida = -1;
@@ -170,7 +170,7 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					cadena = true;
 
 					if (modulo == 2) {
-						creaAgua = sentidoJ1;
+						creaAgua = j1.sentidoJugador;
 					}
 					else {
 						result = extraeEnemigo(true);
@@ -178,7 +178,7 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 
 					std::cout << "Peto por espalda" << std::endl;
 				}
-				else if ((destRec.y + destRec.height / 2) >= (pJ1.y - pJ1.height / 2) && (destRec.y - destRec.height / 2) <= (pJ1.y - pJ1.height / 2)
+				else if ((destRec.y + destRec.height / 2) >= (j1.posicionJugador.y - j1.posicionJugador.height / 2) && (destRec.y - destRec.height / 2) <= (j1.posicionJugador.y - j1.posicionJugador.height / 2)
 					&& (contactoCabeza)) {	//Choque por arriba
 					animacionActiva = EXPLOTA;
 					indiceAnimacion = 0;
@@ -189,7 +189,7 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 					cadena = true;
 
 					if (modulo == 2) {
-						creaAgua = sentidoJ1;
+						creaAgua = j1.sentidoJugador;
 					}
 					else {
 						result = extraeEnemigo(true);
@@ -197,14 +197,14 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 
 				}
 				else if (contactoFrente
-					&& ((destRec.y - destRec.width / 2) < (pJ1.y + pJ1.height / 4) && (destRec.y + destRec.height / 2) > (pJ1.y + pJ1.height / 4)
-						|| (destRec.y - destRec.width / 2) < (pJ1.y - pJ1.height / 2) && (destRec.y + destRec.height / 2) > (pJ1.y - pJ1.height / 2))) {
+					&& ((destRec.y - destRec.width / 2) < (j1.posicionJugador.y + j1.posicionJugador.height / 4) && (destRec.y + destRec.height / 2) > (j1.posicionJugador.y + j1.posicionJugador.height / 4)
+						|| (destRec.y - destRec.width / 2) < (j1.posicionJugador.y - j1.posicionJugador.height / 2) && (destRec.y + destRec.height / 2) > (j1.posicionJugador.y - j1.posicionJugador.height / 2))) {
 					
-					if (sentidoJ1 == 2) {
-						destRec.x -= j1VelLateral / 2;
+					if (j1.sentidoJugador == 2) {
+						destRec.x -= j1.velLateral / 2;
 					}
 					else {
-						destRec.x += j1VelLateral / 2;
+						destRec.x += j1.velLateral / 2;
 					}
 					if (indiceAnimacion == 0) {
 						indiceAnimacion = 2;
@@ -214,10 +214,119 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 				
 			}
 
-			/////FIN COMPROBACIÓN DE COLISIÓN CON EL JUGADOR
+			/////FIN COMPROBACIÓN DE COLISIÓN CON EL JUGADOR BUB
 
-			//destRec.x -= 1;
 
+			/////COMPROBACIÓN DE COLISIÓN CON EL JUGADOR BOB
+			if (!j2.muriendo) {
+				bool contactoFrente = ((destRec.x - destRec.width / 2) < (j2.posicionJugador.x - j2.posicionJugador.width / 2))
+					&& ((destRec.x + destRec.width / 2) > (j2.posicionJugador.x - j2.posicionJugador.width / 2));
+				bool contactoEspalda = ((destRec.x - destRec.width / 2) < (j2.posicionJugador.x + j2.posicionJugador.width / 2))
+					&& ((destRec.x + destRec.width / 2) > (j2.posicionJugador.x + j2.posicionJugador.width / 2));
+				bool contactoCabeza = (destRec.x - destRec.width / 2) <= (j2.posicionJugador.x + j2.posicionJugador.width / 2)
+					&& (destRec.x + destRec.width / 2) >= (j2.posicionJugador.x + j2.posicionJugador.width / 2)
+					|| (destRec.x + destRec.width / 2) >= (j2.posicionJugador.x)
+					&& (destRec.x - destRec.width / 2) < (j2.posicionJugador.x);
+				if (j2.sentidoJugador != 2) { //Si j2 mira derecha, hay que cambiar
+					//std::cout << "RECTIFICANDO" << std::endl;
+					contactoFrente = ((destRec.x - destRec.width / 2) < (j2.posicionJugador.x + j2.posicionJugador.width / 2))
+						&& ((destRec.x + destRec.width / 2) > (j2.posicionJugador.x + j2.posicionJugador.width / 2));
+					contactoEspalda = ((destRec.x - destRec.width / 2) < (j2.posicionJugador.x - j2.posicionJugador.width / 2))
+						&& ((destRec.x + destRec.width / 2) > (j2.posicionJugador.x - j2.posicionJugador.width / 2));
+					contactoCabeza = (destRec.x - destRec.width / 2) <= (j2.posicionJugador.x - j2.posicionJugador.width / 2)
+						&& (destRec.x + destRec.width / 2) >= (j2.posicionJugador.x - j2.posicionJugador.width / 2)
+						|| (destRec.x + destRec.width / 2) >= (j2.posicionJugador.x)
+						&& (destRec.x - destRec.width / 2) < (j2.posicionJugador.x);
+					//std::cout << contactoEspalda<< std::endl;
+				}
+
+				if (((destRec.x - destRec.width / 2) < (j2.posicionJugador.x + j2.posicionJugador.width / 2) && (destRec.x + destRec.width / 2) > (j2.posicionJugador.x + j2.posicionJugador.width / 2)
+					|| (destRec.x + destRec.width / 2) > (j2.posicionJugador.x - j2.posicionJugador.width) && (destRec.x - destRec.width / 2) < (j2.posicionJugador.x - j2.posicionJugador.width / 2))
+					&& (j2.posicionJugador.y + j2.posicionJugador.height / 2) > (destRec.y - destRec.height / 2) && (j2.posicionJugador.y + j2.posicionJugador.height / 2) < (destRec.y + destRec.height / 2)
+					&& j2.jugadorCayendo && animacionActiva != EXPLOTA) { //Choque en caída
+					if (j2.debeRebotar == 0 && !IsKeyDown(KEY_SPACE)) { // Explota la pompa
+						animacionActiva = EXPLOTA;
+						indiceAnimacion = 0;
+						tVida = -1;
+						std::cout << "Peto por caida" << std::endl;
+
+						//Marca que su explosión debe transmitirse
+						cadena = true;
+
+						if (modulo == 2) {
+							creaAgua = j2.sentidoJugador;
+						}
+						else {
+							result = extraeEnemigo(true);
+						}
+					}
+					else if (IsKeyDown(KEY_SPACE) && (j2.posicionJugador.y + j2.posicionJugador.height / 2) < (destRec.y - destRec.height / 4)) { //Debe rebotar sin explotar la pompa
+						std::cout << "DEBES REBOTAR" << std::endl;
+						//int u; //DEBUG bloqueante
+						//std::cin >> u;
+						if (indiceAnimacion == 0) {
+							indiceAnimacion = 1;
+							contadorFrames = 0;
+						}
+						j2.debeRebotar = 1;
+					}
+
+
+				}
+				else if (contactoEspalda
+					&& ((destRec.y - destRec.width / 2) < (j2.posicionJugador.y + j2.posicionJugador.height / 4) && (destRec.y + destRec.height / 2) > (j2.posicionJugador.y + j2.posicionJugador.height / 4)
+						|| (destRec.y - destRec.width / 2) < (j2.posicionJugador.y - j2.posicionJugador.height / 2) && (destRec.y + destRec.height / 2) > (j2.posicionJugador.y - j2.posicionJugador.height / 2))) { //Choca por detrás del jugador (primera linea->horizontal, segunda y tercera->posibilidades verticales)
+					animacionActiva = EXPLOTA;
+					indiceAnimacion = 0;
+					tVida = -1;
+
+					//Marca que su explosión debe transmitirse
+					cadena = true;
+
+					if (modulo == 2) {
+						creaAgua = j2.sentidoJugador;
+					}
+					else {
+						result = extraeEnemigo(true);
+					}
+
+					std::cout << "Peto por espalda" << std::endl;
+				}
+				else if ((destRec.y + destRec.height / 2) >= (j2.posicionJugador.y - j2.posicionJugador.height / 2) && (destRec.y - destRec.height / 2) <= (j2.posicionJugador.y - j2.posicionJugador.height / 2)
+					&& (contactoCabeza)) {	//Choque por arriba
+					animacionActiva = EXPLOTA;
+					indiceAnimacion = 0;
+					tVida = -1;
+					std::cout << "Peto por cabeza" << std::endl;
+
+					//Marca que su explosión debe transmitirse
+					cadena = true;
+
+					if (modulo == 2) {
+						creaAgua = j2.sentidoJugador;
+					}
+					else {
+						result = extraeEnemigo(true);
+					}
+
+				}
+				else if (contactoFrente
+					&& ((destRec.y - destRec.width / 2) < (j2.posicionJugador.y + j2.posicionJugador.height / 4) && (destRec.y + destRec.height / 2) > (j2.posicionJugador.y + j2.posicionJugador.height / 4)
+						|| (destRec.y - destRec.width / 2) < (j2.posicionJugador.y - j2.posicionJugador.height / 2) && (destRec.y + destRec.height / 2) > (j2.posicionJugador.y - j2.posicionJugador.height / 2))) {
+
+					if (j2.sentidoJugador == 2) {
+						destRec.x -= j2.velLateral / 2;
+					}
+					else {
+						destRec.x += j2.velLateral / 2;
+					}
+					if (indiceAnimacion == 0) {
+						indiceAnimacion = 2;
+						contadorFrames = 0;
+					}
+				}
+			}
+			/////FIN COMPROBACIÓN DE COLISIÓN CON EL JUGADOR BOB
 
 			/////INICIO DESPLAZAMIENTO ESTÁTICO POR EL MAPA
 			//Que vaya hacia arriba poco a poco
@@ -298,6 +407,28 @@ sh_Enemigo Pompa::Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool 
 		};
 	}
 	return result;
+}
+
+Pompa &Pompa::operator=(const Pompa& p) {
+	this->ID = p.ID;
+	this->sprite = p.sprite;
+
+	this->tVida = p.tVida;
+	this->vidaMaxima = p.vidaMaxima;
+	this->velocidadFrames = p.velocidadFrames;
+	
+	this->disparada = p.disparada;
+	this->distanciaDisparo = p.distanciaDisparo;
+	this->animacionActiva = p.animacionActiva;
+	
+	this->velocidadDesplazamiento = p.velocidadDesplazamiento;
+	this->tamano = p.tamano;
+
+	this->destRec = p.destRec;
+	this->srcRec = p.srcRec;
+	this->origin = p.origin; //En principio no lo necesitamosç
+
+	return *this;
 }
 
 void Pompa::Dibujar() {

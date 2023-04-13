@@ -19,6 +19,7 @@ class Bub : public Sprite {
     const int DYING = 5;
     const int TRASLATION = 6;
     const Texture2D spriteBurbuja = LoadTexture("resources/Players/Bobblun/Pompa.png");
+    const Texture2D spriteBurbuja2 = LoadTexture("resources/Players/Bobblun/Pompa2.png");
 
     const int NUM_FILAS = 4; //n�mero de filas en el animation_set
 
@@ -37,9 +38,13 @@ class Bub : public Sprite {
    
 
 public:
+    //Variable de identidad
+    bool eresBub = true;
+
     //VARIABLES DE DESPLAZAMIENTO DE BUB 
     int8_t cambioMapa = 2; //2->Primera Iteraci�n 1->Desplaz�ndose 0->Ya no
-    Vector2 posicionOriginal = { (float)100, (float)GetScreenHeight() - 50 }; 
+    Vector2 posicionOriginalBub = { (float)100, (float)GetScreenHeight() - 50 }; 
+    Vector2 posicionOriginalBob = { (float)GetScreenWidth() - 100, (float)GetScreenHeight() - 50 };
     int cuentaFramesTraslacion = 0; //3 segundos = 3 * 60 frames = 180 frames
     const int LIMITE_FRAMES_TRASLACION = 180; //3 segundos = 3 * 60 frames = 180 frames
     double razonX = 0;
@@ -90,17 +95,22 @@ public:
 
     Bub() = default; //Debe llamarse a Inicializador
 
-    Bub(float tamano, float saltoMax, float velSalto, float velLateral, int _targetFrames, Rectangle destino, AdministradorPompas& adm) {
-        Inicializador(tamano, saltoMax, velSalto, velLateral, _targetFrames, adm);
+    Bub(float tamano, float saltoMax, float velSalto, float velLateral, int _targetFrames, Rectangle destino, AdministradorPompas& adm, bool esBub) {
+        Inicializador(tamano, saltoMax, velSalto, velLateral, _targetFrames, adm, esBub);
 		destRec = destino;
         inicio = destino;
     };
-    void Inicializador(float tamano, float saltoMax, float velSalto,float velLateral, int _targetFrames, AdministradorPompas& adm)
+    void Inicializador(float tamano, float saltoMax, float velSalto,float velLateral, int _targetFrames, AdministradorPompas& adm, bool esBub)
     {
         //
         admin = &adm;
 
-        sprite = LoadTexture("resources/Players/Bobblun/animation_set.png");
+        if (esBub) {
+            sprite = LoadTexture("resources/Players/Bobblun/animation_set.png");
+        } else {
+            this->eresBub = false;
+            sprite = LoadTexture("resources/Players/Bobblun/animation_set2.png");
+        }
         //widthAnimation = standingAnimation.width / fStandingAnimation;
         //heightAnimation = standingAnimation.height;
         targetFrames = _targetFrames;
@@ -161,8 +171,13 @@ public:
                 //velocidadFrames /= 2;
 
                 //Calculamos la distancia a recorrer por iteracion
-                razonX = (posicionOriginal.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
-                razonY = (posicionOriginal.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
+                if (eresBub) {
+                    razonX = (posicionOriginalBub.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
+                    razonY = (posicionOriginalBub.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
+                } else {
+                    razonX = (posicionOriginalBob.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
+                    razonY = (posicionOriginalBob.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
+                }
             }
             destRec.x += razonX;
             destRec.y += razonY;
@@ -184,17 +199,30 @@ public:
                 //std::cout << "DEBERIA CANCELAR" << std::endl;
             }
             /*
-            if (destRec.x <= posicionOriginal.x + 5 && destRec.x >= posicionOriginal.x - 5 && destRec.y <= posicionOriginal.y + 5 && destRec.y >= posicionOriginal.y - 5) {
+            if (destRec.x <= posicionOriginalBub.x + 5 && destRec.x >= posicionOriginalBub.x - 5 && destRec.y <= posicionOriginalBub.y + 5 && destRec.y >= posicionOriginalBub.y - 5) {
                 cambioMapa = -1;
             }*/
         }
 		else if(!muerto){
             float velocidadLateralActual = 0;
             if (cambioMapa == 0) {
-                if (admin->j1DebeRebotar > 0) { //Si rebota sobre una pompa, es como iniciar un nuevo salto
+                if (admin->j1.debeRebotar > 0 && eresBub) { //Si rebota sobre una pompa, es como iniciar un nuevo salto
                     //std::cout << "Me dicen que rebote" << std::endl;
                     saltoRecorrido = 0;
-                    admin->j1DebeRebotar = 0;
+                    admin->j1.debeRebotar = 0;
+                    dirCorrer = 0;
+                    //Copy-paste del inicio del salto
+                    if (!disparando) animacionActiva = JUMPING;
+                    enElAire = true;
+                    cayendo = false;
+                    velocidadActual = velocidadSalto;
+                    destRec.y -= velocidadActual;
+                    saltoRecorrido += velocidadActual;
+                    velocidadActual -= deceleracion;
+                } else if (admin->j2.debeRebotar > 0 && !eresBub) {
+                    //std::cout << "Me dicen que rebote" << std::endl;
+                    saltoRecorrido = 0;
+                    admin->j2.debeRebotar = 0;
                     dirCorrer = 0;
                     //Copy-paste del inicio del salto
                     if (!disparando) animacionActiva = JUMPING;
@@ -299,7 +327,12 @@ public:
                     disparando = true;
                     animacionActiva = SHOOTING;
                     indiceAnimacion = 6; //Es el 0 de la segunda parte de animaciones
-                    Pompa p = Pompa(spriteBurbuja, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa);
+                    Pompa p;
+                    if (eresBub) {
+                        p = Pompa(spriteBurbuja, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa);
+                    } else {
+                        p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa);
+                    }
                     admin->pompas.push_back(p);
                 }
                 else if (!enElAire) {
@@ -392,11 +425,19 @@ public:
                 }
 
                 //Le dice al administrador los datos que necesita saber
-                admin->j1VelLateral = velocidadLateralActual;
-                admin->jugadorCayendo = cayendo;
-                admin->posicionJugador = destRec;
-                admin->sentidoJugador = orientacionActual;
-                admin->muriendo = muriendo;
+                if (eresBub) {
+                    admin->j1.velLateral = velocidadLateralActual;
+                    admin->j1.jugadorCayendo = cayendo;
+                    admin->j1.posicionJugador = destRec;
+                    admin->j1.sentidoJugador = orientacionActual;
+                    admin->j1.muriendo = muriendo;
+                } else {
+                    admin->j2.velLateral = velocidadLateralActual;
+                    admin->j2.jugadorCayendo = cayendo;
+                    admin->j2.posicionJugador = destRec;
+                    admin->j2.sentidoJugador = orientacionActual;
+                    admin->j2.muriendo = muriendo;
+                }
             }
 
 			//Actualizar puntero de animacion

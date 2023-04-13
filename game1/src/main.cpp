@@ -106,7 +106,7 @@ int nivel_1(void)
 
 
     Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32};
-    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
+    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true);
     //bub.destRec.x = 100; bub.destRec.y = 100;
 
     SetTargetFPS(TARGET_FPS);
@@ -238,7 +238,8 @@ int main(void)
     admin.pompas.push_back(p2);
 
     Rectangle destBub = { GetScreenWidth() - 50, 50, 32, 32};//{ 100, GetScreenHeight() - 50, 32, 32 };
-    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
+    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true);
+    Bub bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
 
     
 
@@ -251,8 +252,8 @@ int main(void)
     SetTargetFPS(60);               // Set desired framerate (frames-per-second)
     //--------------------------------------------------------------------------------------
 
-    bub.cayendo = true;
-    bub.enElAire = true;
+    /*bub.cayendo = true;
+    bub.enElAire = true;*/
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -298,8 +299,21 @@ int main(void)
                 bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                 bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
             }
-            else {
+            else if (admin.agua.existe){
                 bub.enElAgua = admin.agua.colisionBub(bub.destRec, bub.waterlessFrames);
+            }
+            
+            bob.Actualizar();
+            for (int i = 0; i < numPlat; i++) {
+                bob.compruebaColision(plataformas.listaPlataforma[i]);
+            }
+            bob.compruebaPared(columnas);
+            if (bob.enElAgua) {
+                bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
+                bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
+            }
+            else if (admin.agua.existe){
+                bob.enElAgua = admin.agua.colisionBub(bob.destRec, bob.waterlessFrames);
             }
             admin.agua.Actualizar(plataformas,columnas);
             admin.actualizaPompas();
@@ -343,6 +357,7 @@ int main(void)
             scores.Dibujar();
             admin.agua.Dibujar();
             bub.Dibujar();
+            bob.Dibujar();
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             

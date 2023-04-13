@@ -10,12 +10,14 @@
 
 class AdministradorPompas{
 public:
-	Rectangle posicionJugador = { -1,-1,-1,-1 };
+	DatosJugador j1,j2;
+
+	/*Rectangle posicionJugador = {-1,-1,-1,-1};
 	bool jugadorCayendo = false;
 	int sentidoJugador = 2; //3->mira a la derecha 2->mira a la izquierda: variable orientacionActual de Bub
 	bool muriendo = false;
 	int j1DebeRebotar = 0; //0->No
-	int j1VelLateral = 0;
+	int j1VelLateral = 0;*/
 	Agua agua = Agua();
 
 	std::vector<Pompa> pompas;
@@ -65,7 +67,7 @@ public:
 					}
 				}
 				uint8_t useless;
-				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo, j1DebeRebotar, j1VelLateral, useless);
+				sh_Enemigo enemigo = pompas.at(i).Actualizar(j1, j2, useless);
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 				}
@@ -89,7 +91,7 @@ public:
 				}
 			} else {
 				uint8_t creaAgua = false;
-				sh_Enemigo enemigo = pompas.at(i).Actualizar(posicionJugador, jugadorCayendo, sentidoJugador, muriendo, j1DebeRebotar, j1VelLateral, creaAgua);
+				sh_Enemigo enemigo = pompas.at(i).Actualizar(j1, j2, creaAgua);
 				if (pompas.at(i).animacionActiva != Pompa::EXPLOTA && i < pompas.size() - 1) {
 
 					for (int j = i + 1; j < pompas.size(); j++) {
@@ -187,7 +189,7 @@ public:
 				i--;
 			}
 			else {
-				enemigos.at(i)->Actualizar(posicionJugador);
+				enemigos.at(i)->Actualizar(j1.posicionJugador);
 				for (int j = 0; j < plataformas.listaPlataforma.size(); j++) {
 					enemigos.at(i)->compruebaSuelo();
 					enemigos.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);

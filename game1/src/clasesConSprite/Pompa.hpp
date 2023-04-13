@@ -101,7 +101,9 @@ public:
 
 	void Inicializador(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
 
-	sh_Enemigo Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1, int& j1DebeRebotar, float j1VelLateral, uint8_t& creaAgua); //3->Derecha, 2->Izquierda
+	sh_Enemigo Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua); //3->Derecha, 2->Izquierda
+
+	Pompa &operator=(const Pompa& p);
 
 	void Dibujar();
 };
