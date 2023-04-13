@@ -1,4 +1,5 @@
 #include "TileAgua.hpp"
+#include "Enemigo.cpp"
 
 tileAgua::tileAgua(Rectangle destino, bool right, Texture2D sprite, int plats) {
 	destRec = destino;
@@ -214,6 +215,53 @@ bool tileAgua::colisionBub(Bub& bub) {
 			)
 		) {
 		bub.enElAgua = true;
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool tileAgua::colisionEnemigo(Enemigo& e) {
+	if (
+		(
+			//Comprobamos colision esquina inferior derecha
+			(((destRec.y + destRec.height) >= (e.destRec.y + e.destRec.height / 2)) &&
+				((e.destRec.y + e.destRec.height / 2) >= (destRec.y))
+				) && (
+					((destRec.x + destRec.width) > (e.destRec.x + e.destRec.width / 2)) &&
+					((e.destRec.x + e.destRec.width / 2) > (destRec.x))
+					)
+			) ||
+		(
+			//Comprobamos colision esquina superior derecha
+			(((destRec.y + destRec.height) >= (e.destRec.y - e.destRec.height / 2)) &&
+				((e.destRec.y - e.destRec.height / 2) >= (destRec.y))
+				) && (
+					((destRec.x + destRec.width) > (e.destRec.x + e.destRec.width / 2)) &&
+					((e.destRec.x + e.destRec.width / 2) > (destRec.x))
+					)
+			) ||
+		(
+			//Comprobamos colision esquina superior izquierda
+			(((destRec.y + destRec.height) >= (e.destRec.y - e.destRec.height / 2)) &&
+				((e.destRec.y - e.destRec.height / 2) >= (destRec.y))
+				) && (
+					((destRec.x + destRec.width) > (e.destRec.x - e.destRec.width / 2)) &&
+					((e.destRec.x - e.destRec.width / 2) > (destRec.x))
+					)
+			) ||
+		(
+			//Comprobamos colision esquina inferior izquierda
+			(((destRec.y + destRec.height) >= (e.destRec.y + e.destRec.height / 2)) &&
+				((e.destRec.y + e.destRec.height / 2) >= (destRec.y))
+				) && (
+					((destRec.x + destRec.width) > (e.destRec.x - e.destRec.width / 2)) &&
+					((e.destRec.x - e.destRec.width / 2) > (destRec.x))
+					)
+			)
+		) {
+		e.muerto = true;
 		return true;
 	}
 	else {

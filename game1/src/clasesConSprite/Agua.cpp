@@ -29,6 +29,12 @@ void Agua::colisionBub(Bub& bub) {
 	}
 }
 
+void Agua::colisionEnemigo(Enemigo& e) {
+	for (int i = 0; i < 10; i++) {
+		(stream[i].colisionEnemigo(e));
+	}
+}
+
 void Agua::Dibujar() {
 	if (existe) {
 		for (int i = 0; i < 10; i++) {

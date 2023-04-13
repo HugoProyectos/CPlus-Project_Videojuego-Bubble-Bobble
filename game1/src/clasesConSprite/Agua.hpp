@@ -16,6 +16,6 @@ public:
 
     void Actualizar(Plataformas& plat,Columnas& col);
     void colisionBub(Bub& bub);
-
+    void colisionEnemigo(Enemigo& e);
     void Dibujar();
 };

@@ -80,6 +80,9 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
+                if (indiceAnimacion == 3) {
+                    borrame = true;
+                }
                 break;
             default:
                 break;
@@ -316,9 +319,10 @@ public:
             cayendo = true;
         }
         else if (muerto) {
+            animacionActiva = 1;
             enElAire = false;
             cayendo = false;
-            borrame = true;
+            
         }
         else {
             enElAire = false;
