@@ -581,7 +581,7 @@ public:
                     )
                 ) {
                 //std::cout << "Choque" << std::endl;
-                switch (s.aproach[0]) {
+                switch (s.aproach[0 + (int)!eresBub]) {
                 case 1:
                     destRec.x = s.left - destRec.width / 2;
                     break;
@@ -622,7 +622,7 @@ public:
                         )
                     ) {
                     //std::cout << "Aproach left" << std::endl;
-                    s.aproach[0] = 1;
+                    s.aproach[0 + (int)!eresBub] = 1;
                 }
                 //Derecha
                 else if (
@@ -647,7 +647,7 @@ public:
                         )
                     ) {
                     //std::cout << "Aproach right" << std::endl;
-                    s.aproach[0] = 2;
+                    s.aproach[0 + (int)!eresBub] = 2;
                 }
                 //Arriba
                 else if (
@@ -672,12 +672,12 @@ public:
                         )
                     ) {
                     //std::cout << "Aproach top" << std::endl;
-                    s.aproach[0] = 3;
+                    s.aproach[0 + (int)!eresBub] = 3;
                 }
                 //Abajo
                 else {
                     //Si no se cumplen anteriores asumimos que se acerca por debajo
-                    s.aproach[0] = 4;
+                    s.aproach[0 + (int)!eresBub] = 4;
                 }
             }
         }

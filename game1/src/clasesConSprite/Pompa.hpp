@@ -55,12 +55,14 @@ class Pompa : public Sprite {
 	sh_Enemigo extraeEnemigo(bool matalo);
 
 public:
+
 	//Indice de animación básicos
 	static const int DISPARO = 0;
 	static const int VACIA = 1;
 	static const int EXPLOTA = 4;
 	static const int NUM_FOTOGRAMAS = 3;
 
+	static uint32_t ID_MAPA;	//Debe actualizarse cada vez que se cambie el mapa
 	static uint32_t ID_GLOBAL;
 	int ID = -1;
 	static void init();

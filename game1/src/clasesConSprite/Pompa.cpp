@@ -2,6 +2,7 @@
 #include "Pompa.hpp"
 
 
+uint32_t Pompa::ID_MAPA = 0;
 uint32_t Pompa::ID_GLOBAL = 0;
 
 sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
@@ -328,41 +329,45 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			}
 			/////FIN COMPROBACIÓN DE COLISIÓN CON EL JUGADOR BOB
 
-			/////INICIO DESPLAZAMIENTO ESTÁTICO POR EL MAPA
-			//Que vaya hacia arriba poco a poco
-			if (!oscilando) {
-				if (destRec.y > 70) {
-					destRec.y += -0.5;
-				}
-				else {
-					if (destRec.x < (GetScreenWidth() / 2) - GetScreenWidth()/30) {
-						destRec.x += 0.5;
-						sentidoLateral = 2;
-					} else if (destRec.x > (GetScreenWidth() / 2) + GetScreenWidth() / 30) {
-						destRec.x -= 0.5;
-						sentidoLateral = 3;
+			/////INICIO DESPLAZAMIENTO POR EL MAPA
+			switch (ID_MAPA) {
+			default:
+				if (!oscilando) {
+					if (destRec.y > 70) {
+						destRec.y += -0.5;
 					}
 					else {
-						oscilando = true;
-					}
-					
-				}
-			}
+						if (destRec.x < (GetScreenWidth() / 2) - GetScreenWidth() / 30) {
+							destRec.x += 0.5;
+							sentidoLateral = 2;
+						}
+						else if (destRec.x > (GetScreenWidth() / 2) + GetScreenWidth() / 30) {
+							destRec.x -= 0.5;
+							sentidoLateral = 3;
+						}
+						else {
+							oscilando = true;
+						}
 
-			if (oscilando) {
-				if (abajo) {
-					destRec.y += 0.5;
-				} else {
-					destRec.y += -0.5;
+					}
 				}
-				contador++;
-				if (contador >= 20) {
-					abajo = !abajo;
-					contador = 0;
+
+				if (oscilando) {
+					if (abajo) {
+						destRec.y += 0.5;
+					}
+					else {
+						destRec.y += -0.5;
+					}
+					contador++;
+					if (contador >= 20) {
+						abajo = !abajo;
+						contador = 0;
+					}
 				}
 			}
-			/////FIN DESPLAZAMIENTO ESTÁTICO POR EL MAPA
 		}
+		/////FIN DESPLAZAMIENTO POR EL MAPA
 
 	}
 	//Actualizar puntero de animacion
