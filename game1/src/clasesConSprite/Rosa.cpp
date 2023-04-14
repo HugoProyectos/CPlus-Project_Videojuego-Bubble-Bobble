@@ -38,12 +38,18 @@ public:
     //Variables lógicas
     int direccionX = 0; //0->izquierda, 1->derecha
     int direccionY = 0; //0->abajo, 1->arriba
+    int colision = 0; //0->No hay colision, 1->colisiona con paredes(debe variar el movimiento vertical), 2->colision techo(varia movimeitno horizontal)
+    int colisionAux = 0;
 
+    float velMax = 0;
+    float velMin = 0;
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
     Rosa(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
+        velMax = 2 * velLateral;
+        velMin = velLateral/2;
         destRec = destino;
         tipo = 1;
         widthAnimation = walkAnimation.width / fWalkAnimation;
@@ -59,7 +65,20 @@ public:
             animacionActiva = 1;
             Caer();
         }
+//        MoverHorizontal(playerPosition);
 
+        else if (colision == 0) {
+            std::cout << "LLL" << std::endl;
+            SeguirJugador(playerPosition);
+        }
+        else if (colision == 1) {
+            std::cout << "HHH" << std::endl;
+            MoverHorizontal(playerPosition);
+        }
+        else if (colision == 2) {
+            std::cout << "VVV" << std::endl;
+            MoverVertical(playerPosition);
+        }
         //Actualizar puntero de animacion
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames)) {
@@ -89,19 +108,77 @@ public:
     }
 
     //funciones de comportamiento
-    void SeguirJugador() {
-        //
-        destRec.x -= velocidadLateral;
-        destRec.y -= velocidadSalto;
-        srcRec.width = pixels;
-    }
-    void MoverVertical() {
-        destRec.y -= velocidadSalto;
+    void SeguirJugador(Rectangle playerPosition) {
+        //El movimiento vertical depende del jugador
+        if (destRec.y > playerPosition.y - 10) {
+            //Estamos por debajo del player, restamos posicion
+            destRec.y -= velocidadLateral;
+        }
+        else if(destRec.y < playerPosition.y + 10) {
+            //Estamos por encima del player, sumamos posicion
+            destRec.y += velocidadLateral;
+        }
+
+        //El movimiento horizontal depende del jugador
+        if (destRec.x > playerPosition.x - 10) {
+            //Estamos por izq del player, restamos posicion
+            destRec.x -= velocidadSalto;
+        }
+        else if (destRec.x < playerPosition.x + 10) {
+            //Estamos por derecha del player, sumamos posicion
+            destRec.x += velocidadLateral;
+        }
+
+
+        //Width
         srcRec.width = pixels;
     }
 
-    void MoverHorizontal() {
-        destRec.x += velocidadLateral;
+    void MoverHorizontal(Rectangle playerPosition) {
+        //El movimiento vertical depende del jugador
+        if (destRec.y > playerPosition.y - 5) {
+            //Estamos por debajo del player, restamos posicion
+            destRec.y -= velocidadLateral;
+        }
+        else if (destRec.y < playerPosition.y + 5) {
+            //Estamos por encima del player, sumamos posicion
+            destRec.y += velocidadLateral;
+        }
+        //El movimiento horizontal depende del sentido
+        if (direccionX == 0) {
+            //Izquierda
+            destRec.x -= velocidadLateral;
+        }
+        else {
+            //Derecha
+            destRec.x += velocidadLateral;
+        }
+
+        //Width
+        srcRec.width = pixels;
+    }
+
+    void MoverVertical(Rectangle playerPosition) {
+        //El movimiento horizontal depende del jugador
+        if (destRec.x > playerPosition.x - 5) {
+            //Estamos por izq del player, restamos posicion
+            destRec.x -= velocidadSalto;
+        }
+        else if (destRec.x < playerPosition.x + 5) {
+            //Estamos por derecha del player, sumamos posicion
+            destRec.x += velocidadLateral;
+        }
+        //El movimiento vertical depende del sentido
+        if (direccionY == 0) {
+            //Abajo
+            destRec.y += velocidadLateral;
+        }
+        else {
+            //Arriba
+            destRec.y -= velocidadLateral;
+        }
+        
+        //Width
         srcRec.width = -pixels;
     }
 
@@ -156,15 +233,19 @@ public:
             ) {
             switch (s.aproach[enemyNum + 1]) {
             case 1:
-                //Izquierda
+                //Derecha
                 destRec.x = s.left - destRec.width / 2;
-                direccionX = 1; //Colisiona izquierda, hora se mueve derecha
+                direccionX = 0; //Colisiona derecha, ahora se mueve izquierda
+                colision = 1;
                 //Se puede añadir un movimiento random en eje Y
                 break;
             case 2:
-                //Derecha
+                //Izquierda
                 destRec.x = s.right + destRec.width / 2;
-                direccionX = 0; //Colisiona derecha, ahora se mueve izquierda
+                direccionX = 1; //Colisiona izquierda, hora se mueve derecha
+                colision = 1;
+
+
                 //Se puede añadir un movimiento random en eje Y
                 break;
             case 3:
@@ -172,12 +253,18 @@ public:
                 destRec.y = s.top - destRec.height / 2;
                 lastGround = s;
                 direccionY = 1; //Colisiona abajo, ahora se mueve arriba
+                colision = 2;
+
+
                 //Se puede añadir un movimiento random en eje X
                 break;
             case 4:
                 //Arriba
                 destRec.y = s.bot + destRec.height / 2;
                 direccionY = 0; //Colisiona arriba, ahora se mueve abajo
+                colision = 2;
+
+
                 //Se puede añadir un movimiento random en eje X
                 break;
             }
@@ -207,6 +294,8 @@ public:
                     )
                 ) {
                 s.aproach[enemyNum + 1] = 1;
+                colision = 1;
+
             }
             //Derecha
             else if (
@@ -231,6 +320,8 @@ public:
                     )
                 ) {
                 s.aproach[enemyNum + 1] = 2;
+                colision = 1;
+
             }
             //Arriba
             else if (
@@ -255,11 +346,34 @@ public:
                     )
                 ) {
                 s.aproach[enemyNum + 1] = 3;
+                colision = 2;
+
             }
             //Abajo
-            else {
+            else if (
+                //Comprobamos colision esquina inferior derecha
+                (
+                    (((s.bot) > (destRec.y - destRec.height / 2 - 5)) &&
+                        ((destRec.y - destRec.height / 2 - 5) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x + destRec.width / 2)) &&
+                            ((destRec.x + destRec.width / 2) > (s.left))
+                            )
+                    )
+                ||
+                //Comprobamos colision esquina inferior izquierda
+                (
+                    (((s.bot) > (destRec.y - destRec.height / 2 - 5)) &&
+                        ((destRec.y - destRec.height / 2 - 5) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x - destRec.width / 2)) &&
+                            ((destRec.x - destRec.width / 2) > (s.left))
+                            )
+                    )
+                ) {
                 //Si no se cumplen anteriores asumimos que se acerca por debajo
                 s.aproach[enemyNum + 1] = 4;
+                colision = 2;
             }
         }
     }
@@ -290,6 +404,7 @@ public:
             // No colisiona con plataforma
             enElAire = true;
             cayendo = true;
+
         }
         else if (muerto) {
             enElAire = false;
@@ -302,14 +417,16 @@ public:
         }
     }
 
-    void compruebaPared(const Columnas& s) {
+    void compruebaPared(const Columnas& s) override {
         //Comprobamos columna derecha
         if (s.left_der < (destRec.x + destRec.width / 2)) {
             destRec.x = s.left_der - destRec.width / 2;
+            direccionX = 0;
         }
         //Comprobamos columna izquierda
         else if (s.right_izq > (destRec.x - destRec.width / 2)) {
             destRec.x = s.right_izq + destRec.width / 2;
+            direccionX = 1;
         }
     }
 };

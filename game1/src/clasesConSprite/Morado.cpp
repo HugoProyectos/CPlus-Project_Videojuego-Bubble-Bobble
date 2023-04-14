@@ -82,6 +82,16 @@ public:
             }
         }
 
+        //Actualizar posicion no salir de la pantalla
+        if (destRec.y > 450) {
+            destRec.y = 40;
+            enElAire = true;
+            cayendo = true;
+        }
+        else if (destRec.y < 20) {
+            destRec.y = 430;
+        }
+
         //Actualizar puntero de animacion
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames)) {
@@ -184,27 +194,27 @@ public:
             ) {
             switch (s.aproach[enemyNum + 1]) {
             case 1:
-                //Izquierda
-                destRec.x = s.left - destRec.width / 2;
-                direccionX = 1; //Colisiona izquierda, hora se mueve derecha
+                //Derecha
+                //destRec.x = s.left - destRec.width / 2;
+                direccionX = 0; //Colisiona derecha, ahora se mueve izquierda
                 //Se puede añadir un movimiento random en eje Y
                 break;
             case 2:
-                //Derecha
-                destRec.x = s.right + destRec.width / 2;
-                direccionX = 0; //Colisiona derecha, ahora se mueve izquierda
+                //Izquierda
+                //destRec.x = s.right + destRec.width / 2;
+                direccionX = 1; //Colisiona izquierda, hora se mueve derecha
                 //Se puede añadir un movimiento random en eje Y
                 break;
             case 3:
                 //Abajo
-                destRec.y = s.top - destRec.height / 2;
+                //destRec.y = s.top - destRec.height / 2;
                 lastGround = s;
                 direccionY = 1; //Colisiona abajo, ahora se mueve arriba
                 //Se puede añadir un movimiento random en eje X
                 break;
             case 4:
                 //Arriba
-                destRec.y = s.bot + destRec.height / 2;
+                //destRec.y = s.bot + destRec.height / 2;
                 direccionY = 0; //Colisiona arriba, ahora se mueve abajo
                 //Se puede añadir un movimiento random en eje X
                 break;
@@ -316,6 +326,7 @@ public:
                 )
             ) {
             // No colisiona con plataforma
+
             enElAire = true;
             cayendo = true;
         }
@@ -334,10 +345,12 @@ public:
         //Comprobamos columna derecha
         if (s.left_der < (destRec.x + destRec.width / 2)) {
             destRec.x = s.left_der - destRec.width / 2;
+            direccionX = 0;
         }
         //Comprobamos columna izquierda
         else if (s.right_izq > (destRec.x - destRec.width / 2)) {
             destRec.x = s.right_izq + destRec.width / 2;
+            direccionX = 1;
         }
     }
 };

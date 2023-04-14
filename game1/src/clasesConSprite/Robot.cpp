@@ -35,6 +35,9 @@ public:
     //Colisiones
     Plataforma lastGround;
 
+    //Lógica
+    int direccionX = 1; //0 para izquierda, 1 para derecha
+
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
@@ -61,11 +64,31 @@ public:
         else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10)) { //Si el personaje esta encima
             Salto();
         }
+        else if (destRec.y != playerPosition.y) {
+            if (direccionX == 0) {
+                //Izquierda
+                MoverIzq();
+            }
+            else {
+                //Derecha
+                MoverDer();
+            }
+        }
         else if (destRec.x > playerPosition.x + 5) { //Si el personaje esta a la izquierda
             MoverIzq();
         }
         else if (destRec.x < playerPosition.x - 5) { //Si el personaje esta a la derecha
             MoverDer();
+        }
+
+        //Actualizar posicion no salir de la pantalla
+        if (destRec.y > 500) {
+            destRec.y = -10;
+            enElAire = true;
+            cayendo = true;
+        }
+        else if (destRec.y < -50) {
+            destRec.y = 450;
         }
 
         //Actualizar puntero de animacion
@@ -103,11 +126,13 @@ public:
     void MoverIzq() {
         destRec.x -= velocidadLateral;
         srcRec.width = pixels;
+        direccionX = 0;
     }
 
     void MoverDer() {
         destRec.x += velocidadLateral;
         srcRec.width = -pixels;
+        direccionX = 1;
     }
 
     void Caer() {
@@ -200,10 +225,16 @@ public:
             ) {
             switch (s.aproach[enemyNum + 1]) {
             case 1:
+                //Derecha
                 destRec.x = s.left - destRec.width / 2;
+                direccionX = 0; //Colisiona derecha, ahora se mueve izquierda
+                //Se puede añadir un movimiento random en eje Y
                 break;
             case 2:
+                //Izquierda
                 destRec.x = s.right + destRec.width / 2;
+                direccionX = 1; //Colisiona izquierda, hora se mueve derecha
+                //Se puede añadir un movimiento random en eje Y
                 break;
             case 3:
                 destRec.y = s.top - destRec.height / 2;
@@ -338,10 +369,14 @@ public:
         //Comprobamos columna derecha
         if (s.left_der < (destRec.x + destRec.width / 2)) {
             destRec.x = s.left_der - destRec.width / 2;
+            direccionX = 0;
+
         }
         //Comprobamos columna izquierda
         else if (s.right_izq > (destRec.x - destRec.width / 2)) {
             destRec.x = s.right_izq + destRec.width / 2;
+            direccionX = 1;
+
         }
     }
 };
