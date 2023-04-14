@@ -330,6 +330,17 @@ public:
             cayendo = false;
         }
     }
+
+    void compruebaPared(const Columnas& s) {
+        //Comprobamos columna derecha
+        if (s.left_der < (destRec.x + destRec.width / 2)) {
+            destRec.x = s.left_der - destRec.width / 2;
+        }
+        //Comprobamos columna izquierda
+        else if (s.right_izq > (destRec.x - destRec.width / 2)) {
+            destRec.x = s.right_izq + destRec.width / 2;
+        }
+    }
 };
 
 typedef std::shared_ptr<Robot> sh_Robot;

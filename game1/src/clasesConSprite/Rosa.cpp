@@ -2,17 +2,17 @@
 #include "Enemigo.cpp"
 
 
-class Morado : public Enemigo {
+class Rosa : public Enemigo {
 public:
 
     //Sprite pixels
     int pixels = 16; //El numero de pixeles del sprite
 
     //Animation
-    Texture2D walkAnimation = LoadTexture("resources/enemyMorado/moradoWalk.png");
-    Texture2D deadAnimation = LoadTexture("resources/enemyMorado/moradoDead.png");
-    Texture2D waterAnimation = LoadTexture("resources/enemyMorado/moradoWater.png");
-    Texture2D angryAnimation = LoadTexture("resources/enemyMorado/moradoAngry.png");
+    Texture2D walkAnimation = LoadTexture("resources/enemyRosa/rosaWalk.png");
+    Texture2D deadAnimation = LoadTexture("resources/enemyRosa/rosaDead.png");
+    Texture2D waterAnimation = LoadTexture("resources/enemyRosa/rosaWater.png");
+    Texture2D angryAnimation = LoadTexture("resources/enemyRosa/rosaAngry.png");
     Texture2D animations[4] = { walkAnimation, deadAnimation, waterAnimation, angryAnimation };
 
     int fWalkAnimation = 2; //Número de fotogramas de la animacion camniar
@@ -42,7 +42,7 @@ public:
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
-    Morado(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino) {
+    Rosa(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         destRec = destino;
         tipo = 1;
@@ -58,28 +58,6 @@ public:
         if (muerto) {
             animacionActiva = 1;
             Caer();
-        }
-        //Si va a la izquierda
-        else if (direccionX == 0) {
-            //Si va hacia abajo
-            if (direccionY == 0) {
-                MoverIzqAbajo();
-            }
-            //Si va hacia arriba
-            else {
-                MoverIzqArriba();
-            }
-        }
-        //Si va hacia la derecha
-        else if (direccionX == 1) {
-            //Si va hacia abajo
-            if (direccionY == 0) {
-                MoverDerAbajo();
-            }
-            //Si va hacia arriba
-            else {
-                MoverDerArriba();
-            }
         }
 
         //Actualizar puntero de animacion
@@ -111,25 +89,19 @@ public:
     }
 
     //funciones de comportamiento
-    void MoverIzqArriba() {
+    void SeguirJugador() {
+        //
         destRec.x -= velocidadLateral;
         destRec.y -= velocidadSalto;
         srcRec.width = pixels;
     }
-    void MoverIzqAbajo() {
-        destRec.x -= velocidadLateral;
-        destRec.y += velocidadSalto;
+    void MoverVertical() {
+        destRec.y -= velocidadSalto;
         srcRec.width = pixels;
     }
 
-    void MoverDerArriba() {
+    void MoverHorizontal() {
         destRec.x += velocidadLateral;
-        destRec.y -= velocidadSalto;
-        srcRec.width = -pixels;
-    }
-    void MoverDerAbajo() {
-        destRec.x += velocidadLateral;
-        destRec.y += velocidadSalto;
         srcRec.width = -pixels;
     }
 
@@ -342,4 +314,4 @@ public:
     }
 };
 
-typedef std::shared_ptr<Morado> sh_Morado;
+typedef std::shared_ptr<Rosa> sh_Rosa;
