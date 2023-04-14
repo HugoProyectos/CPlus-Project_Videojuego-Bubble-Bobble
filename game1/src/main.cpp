@@ -2,6 +2,8 @@
 #include "mapa.cpp"
 #include "AdministradorPompas.cpp"
 #include "clasesConSprite/Bub.cpp"
+
+#include "clasesConSprite/Agua.hpp"
 #include <clasesConSprite/Fantasma.cpp>
 #include <clasesConSprite/Morado.cpp>
 
@@ -80,6 +82,7 @@ int nivel_1(void)
     const int screenHeight = 450;
 
 
+
     InitWindow(screenWidth, screenHeight, "Bubble Bobble");
     SetWindowMinSize(200, 200);
     SetWindowState(FLAG_WINDOW_RESIZABLE);
@@ -108,6 +111,9 @@ int nivel_1(void)
     admin.enemigos.push_back(robot);
     admin.enemigos.push_back(fantasma);
 
+    Texture2D spriteAgua = LoadTexture("resources/agua.png");
+    Rectangle destAgua = { 150, 100, 16, 16 };
+    Agua agua = Agua(destAgua, true, spriteAgua, numPlat);
 
     Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
@@ -172,7 +178,7 @@ int nivel_1(void)
 //------------------------------------------------------------------------------------------
 // Types and Structures Definition
 //------------------------------------------------------------------------------------------
-typedef enum GameScreen { MAIN_MENU, NIVEL_1 } GameScreen;
+typedef enum GameScreen { MAIN_MENU, NIVEL_1, NIVEL_AGUA } GameScreen;
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -207,8 +213,10 @@ int main(void)
 
     // Nivel 1:
     //--------------------------------------------------------------------------------------
+
     Columnas columnas = Columnas("resources/mapa_nivel_5/bloque_grande.png", 40.0f, 0.0f, 1);
     Plataformas plataformas = Plataformas("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt", 40.0f, 0.0f);
+
 
     int numPlat = plataformas.listaPlataforma.size();
 
@@ -225,6 +233,7 @@ int main(void)
     admin.enemigos.push_back(mor);
 
 
+
     destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
     /*
     sh_Enemigo robot2 = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
@@ -233,6 +242,10 @@ int main(void)
 
     Rectangle destBub = { 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin);
+
+    Texture2D spriteAgua = LoadTexture("resources/agua.png");
+    Rectangle destAgua = { 150, 100, 16, 16 };
+    Agua agua = Agua(destAgua, true, spriteAgua, numPlat);
 
     //bub.destRec.x = 100; bub.destRec.y = 100;
 
@@ -286,8 +299,22 @@ int main(void)
                 bub.compruebaColision(plataformas.listaPlataforma[i]);
             }
             bub.compruebaPared(columnas);
+            if (bub.enElAgua) {
+                bub.destRec.x = agua.stream[agua.bubTile].destRec.x;
+                bub.destRec.y = agua.stream[agua.bubTile].destRec.y;
+            }
+            else {
+                agua.colisionBub(bub);
+            }
+            agua.Actualizar(plataformas,columnas);
             admin.actualizaPompas();
+
+            for (int i = 0; i < admin.enemigos.size(); i++) {
+                agua.colisionEnemigo(*admin.enemigos.at(i));
+            }
+            
             admin.actualizaEnemigos(plataformas, columnas);
+
 
             if (IsKeyPressed(KEY_TWO) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
             {
@@ -299,7 +326,12 @@ int main(void)
         default: break;
         }
         //----------------------------------------------------------------------------------
-        //
+
+        if (IsKeyDown(KEY_D)) {
+            char a;
+            std::cin >> a;
+        }
+
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -322,9 +354,11 @@ int main(void)
             columnas.Dibujar();
             plataformas.Dibujar();
             scores.Dibujar();
+            agua.Dibujar();
             bub.Dibujar();
             admin.dibujaPompas();
             admin.dibujaEnemigos();
+            
         } break;
         default: break;
         }
