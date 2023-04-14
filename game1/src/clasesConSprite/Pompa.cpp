@@ -80,9 +80,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			animacionActiva = EXPLOTA;
 			indiceAnimacion = 0;
 			tVida = -1;
-			std::cout << "Peto por cadena" << std::endl;
+			//std::cout << "Peto por cadena" << std::endl;
 
-			if (modulo == 2) {
+			if (modulo == MODULO_AGUA) {
 				creaAgua = j1.sentidoJugador;
 			}
 			else {
@@ -99,9 +99,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			result = extraeEnemigo(false);
 			
 		}
-		else if (tVida > 0) {
+		else if (tVida > 0 || tVida == INFINITA) {
 			disparada = 0;
-			tVida -= VELOCIDAD_MUERTE;
+			if(tVida != INFINITA) tVida -= VELOCIDAD_MUERTE;
 			animacionActiva = VACIA;
 			/////COMPROBACIÓN DE COLISIÓN CON EL JUGADOR BUB
 			if (!j1.muriendo){
@@ -135,12 +135,12 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						animacionActiva = EXPLOTA;
 						indiceAnimacion = 0;
 						tVida = -1;
-						std::cout << "Peto por caida" << std::endl;
+						//std::cout << "Peto por caida" << std::endl;
 						
 						//Marca que su explosión debe transmitirse
 						cadena = true; 
 
-						if (modulo == 2) {
+						if (modulo == MODULO_AGUA) {
 							creaAgua = j1.sentidoJugador;
 						}
 						else {
@@ -148,7 +148,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						}
 					}
 					else if (IsKeyDown(KEY_SPACE) && (j1.posicionJugador.y + j1.posicionJugador.height / 2) < (destRec.y - destRec.height / 4)) { //Debe rebotar sin explotar la pompa
-						std::cout << "DEBES REBOTAR" << std::endl;
+						//std::cout << "DEBES REBOTAR" << std::endl;
 						//int u; //DEBUG bloqueante
 						//std::cin >> u;
 						if (indiceAnimacion == 0) {
@@ -170,26 +170,26 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					//Marca que su explosión debe transmitirse
 					cadena = true;
 
-					if (modulo == 2) {
+					if (modulo == MODULO_AGUA) {
 						creaAgua = j1.sentidoJugador;
 					}
 					else {
 						result = extraeEnemigo(true);
 					}
 
-					std::cout << "Peto por espalda" << std::endl;
+					//std::cout << "Peto por espalda" << std::endl;
 				}
 				else if ((destRec.y + destRec.height / 2) >= (j1.posicionJugador.y - j1.posicionJugador.height / 2) && (destRec.y - destRec.height / 2) <= (j1.posicionJugador.y - j1.posicionJugador.height / 2)
 					&& (contactoCabeza)) {	//Choque por arriba
 					animacionActiva = EXPLOTA;
 					indiceAnimacion = 0;
 					tVida = -1;
-					std::cout << "Peto por cabeza" << std::endl;
+					//std::cout << "Peto por cabeza" << std::endl;
 
 					//Marca que su explosión debe transmitirse
 					cadena = true;
 
-					if (modulo == 2) {
+					if (modulo == MODULO_AGUA) {
 						creaAgua = j1.sentidoJugador;
 					}
 					else {
@@ -249,12 +249,12 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						animacionActiva = EXPLOTA;
 						indiceAnimacion = 0;
 						tVida = -1;
-						std::cout << "Peto por caida" << std::endl;
+						//std::cout << "Peto por caida" << std::endl;
 
 						//Marca que su explosión debe transmitirse
 						cadena = true;
 
-						if (modulo == 2) {
+						if (modulo == MODULO_AGUA) {
 							creaAgua = j2.sentidoJugador;
 						}
 						else {
@@ -262,7 +262,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						}
 					}
 					else if (IsKeyDown(KEY_SPACE) && (j2.posicionJugador.y + j2.posicionJugador.height / 2) < (destRec.y - destRec.height / 4)) { //Debe rebotar sin explotar la pompa
-						std::cout << "DEBES REBOTAR" << std::endl;
+						//std::cout << "DEBES REBOTAR" << std::endl;
 						//int u; //DEBUG bloqueante
 						//std::cin >> u;
 						if (indiceAnimacion == 0) {
@@ -284,26 +284,26 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					//Marca que su explosión debe transmitirse
 					cadena = true;
 
-					if (modulo == 2) {
+					if (modulo == MODULO_AGUA) {
 						creaAgua = j2.sentidoJugador;
 					}
 					else {
 						result = extraeEnemigo(true);
 					}
 
-					std::cout << "Peto por espalda" << std::endl;
+					//std::cout << "Peto por espalda" << std::endl;
 				}
 				else if ((destRec.y + destRec.height / 2) >= (j2.posicionJugador.y - j2.posicionJugador.height / 2) && (destRec.y - destRec.height / 2) <= (j2.posicionJugador.y - j2.posicionJugador.height / 2)
 					&& (contactoCabeza)) {	//Choque por arriba
 					animacionActiva = EXPLOTA;
 					indiceAnimacion = 0;
 					tVida = -1;
-					std::cout << "Peto por cabeza" << std::endl;
+					//std::cout << "Peto por cabeza" << std::endl;
 
 					//Marca que su explosión debe transmitirse
 					cadena = true;
 
-					if (modulo == 2) {
+					if (modulo == MODULO_AGUA) {
 						creaAgua = j2.sentidoJugador;
 					}
 					else {
@@ -331,6 +331,50 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 			/////INICIO DESPLAZAMIENTO POR EL MAPA
 			switch (ID_MAPA) {
+			case 1: //Mapa del agua
+			{
+				if (destRec.x < GetScreenWidth() / 2) {
+					if (destRec.y < (GetScreenHeight() * 0.85) && (destRec.y > (GetScreenHeight() * 0.80) && destRec.x >= 100)) {
+						destRec.x += -0.5;
+					} else if (destRec.y <= 70 && destRec.x < GetScreenWidth() / 2 - 50) {
+						destRec.x += 0.5;
+					} else if (destRec.y > 70 && !oscilando) {
+						destRec.y -= 0.5;
+					} else {
+						oscilando = true;
+					}
+				}
+				else {
+					if ((destRec.y < (GetScreenHeight() * 0.85) && destRec.y > (GetScreenHeight() * 0.80) && destRec.x < GetScreenWidth() - 100)) {
+						destRec.x += 0.5;
+					}
+					else if (destRec.y <= 70 && destRec.x > GetScreenWidth() / 2 + 50) {
+						destRec.x -= 0.5;
+					}
+					else if(destRec.y > 70 && !oscilando){
+						destRec.y -= 0.5;
+					} else {
+						oscilando = true;
+					}
+				}
+
+				if (oscilando) {
+					if (abajo) {
+						destRec.y += 0.5;
+					}
+					else {
+						destRec.y += -0.5;
+					}
+					contador++;
+					if (contador >= 20) {
+						abajo = !abajo;
+						contador = 0;
+					}
+				}
+
+				break;
+			}
+
 			default:
 				if (!oscilando) {
 					if (destRec.y > 70) {
@@ -365,7 +409,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						contador = 0;
 					}
 				}
-			}
+			};
 		}
 		/////FIN DESPLAZAMIENTO POR EL MAPA
 
@@ -434,6 +478,12 @@ Pompa &Pompa::operator=(const Pompa& p) {
 	this->origin = p.origin; //En principio no lo necesitamosç
 
 	return *this;
+}
+
+void Pompa::explota() {
+	animacionActiva = EXPLOTA;
+	indiceAnimacion = 0;
+	tVida = -1;
 }
 
 void Pompa::Dibujar() {

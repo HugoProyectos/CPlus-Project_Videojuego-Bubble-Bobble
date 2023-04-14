@@ -5,7 +5,6 @@
 #include "Robot.cpp"
 #include <iostream> //DEBUG
 
-
 //Valores de módulo acorde a lo que lleva dentro la pompa
 //1->ROBOT
 //2->AGUA
@@ -55,6 +54,9 @@ class Pompa : public Sprite {
 	sh_Enemigo extraeEnemigo(bool matalo);
 
 public:
+	//Para las pompas con agua
+	static const int INFINITA = -25;
+	static const int MODULO_AGUA = 2;
 
 	//Indice de animación básicos
 	static const int DISPARO = 0;
@@ -106,6 +108,9 @@ public:
 	sh_Enemigo Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua); //3->Derecha, 2->Izquierda
 
 	Pompa &operator=(const Pompa& p);
+	void explota();
 
 	void Dibujar();
 };
+
+typedef std::shared_ptr<Pompa> sh_Pompa;

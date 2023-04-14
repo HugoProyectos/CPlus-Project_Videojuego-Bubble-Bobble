@@ -18,8 +18,8 @@ class Bub : public Sprite {
     const int SHOOTING = 4;
     const int DYING = 5;
     const int TRASLATION = 6;
-    const Texture2D spriteBurbuja = LoadTexture("resources/Players/Bobblun/Pompa.png");
-    const Texture2D spriteBurbuja2 = LoadTexture("resources/Players/Bobblun/Pompa2.png");
+    const Texture2D spriteBurbuja = LoadTexture("resources/Players/Bobblun/pompa.png");
+    const Texture2D spriteBurbuja2 = LoadTexture("resources/Players/Bobblun/pompa2.png");
 
     const int NUM_FILAS = 4; //n�mero de filas en el animation_set
 
@@ -147,7 +147,7 @@ public:
         //Frames de "inmunidad" al agua
         if (waterlessFrames > 0) { waterlessFrames--; }
         //Gestion de wrap vertical
-        if (destRec.y > 500) {
+        if (destRec.y > GetScreenHeight() + 50) {
             destRec.y = -10;
             enElAire = true;
             cayendo = true;
@@ -333,7 +333,7 @@ public:
                     } else {
                         p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa);
                     }
-                    admin->pompas.push_back(p);
+                    admin->pompas.push_back(std::make_shared<Pompa>(p));
                 }
                 else if (!enElAire) {
                     if (IsKeyDown(KEY_A) && !muriendo) {

@@ -20,7 +20,7 @@ Agua::Agua(Rectangle destino, bool right, Texture2D sprite, int numPlat)
 void Agua::Actualizar(Plataformas& plat, Columnas& col) {
 	if (existe) {
 		Response next = stream[0].ActualizarHead(plat);
-		if (stream[0].destRec.y < 500) {
+		if (stream[0].destRec.y < GetScreenHeight() + 160) {
 			for (int i = 1; i < 10; i++) {
 				next = stream[i].Actualizar(next);
 			}
