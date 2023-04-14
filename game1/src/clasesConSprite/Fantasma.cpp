@@ -1,30 +1,29 @@
 #pragma once
 #include "Enemigo.cpp"
+#include "Bola.cpp"
+#include "AdministradorPompas.cpp"
+#include <ctime>
 
-
-class Robot : public Enemigo {
+class Fantasma : public Enemigo {
 public:
-
     //Sprite pixels
     int pixels = 16; //El numero de pixeles del sprite
 
     //Animation
-    Texture2D walkAnimation = LoadTexture("resources/enemyRobot/robotWalk.png");
-    Texture2D deadAnimation = LoadTexture("resources/enemyRobot/robotDead.png");
-    Texture2D waterAnimation = LoadTexture("resources/enemyRobot/robotWater.png");
-    Texture2D angryAnimation = LoadTexture("resources/enemyRobot/robotAngry.png");
-    Texture2D animations[4] = { walkAnimation, deadAnimation, waterAnimation, angryAnimation };
+    Texture2D walkAnimation = LoadTexture("resources/enemyFantasma/fantasmaWalk.png");
+    Texture2D deadAnimation = LoadTexture("resources/enemyFantasma/fantasmaMuerte.png");
+    Texture2D ballAnimation = LoadTexture("resources/enemyFantasma/fantasmaBola.png");
+    Texture2D animations[4] = { walkAnimation, deadAnimation, ballAnimation };
 
-    int fWalkAnimation = 4; //Número de fotogramas de la animacion camniar
-    int fDeadAnimation = 4; //Número de fotogramas de la animacion muerte
-    int fWaterAnimation = 4; //Número de fotogramas de la animacion muerte agua
-    int fAngryAnimation = 4; //Número de fotogramas de la animacion enfado
-    int fAnimation[4] = { fWalkAnimation , fDeadAnimation, fWaterAnimation, fAngryAnimation };
+    int fWalkAnimation = 2; //Número de fotogramas de la animacion camniar
+    int fDeadAnimation = 2; //Número de fotogramas de la animacion muerte
+    int fBallAnimation = 4;
+    int fAnimation[4] = { fWalkAnimation , fDeadAnimation, fBallAnimation };
 
     int widthAnimation; // Se actualiza para cada animación activa
     int heightAnimation;
 
-    int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation, 1->DeadAnimation, 2->WaterAniamtion, 3->AngryAnimation
+    int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation, 1->DeadAnimation, 2->BallLeft,
     int indiceAnimacion = 0; //Indica el número de frame actual de la animación activa
 
     //Frames
@@ -32,13 +31,21 @@ public:
     int cuentaFrames = 0;
     int velocidadFrames = 2;
 
+    //Del propio fantasma
+    bool disparando;
+    bool dir;
+    bool hayBola;
     //Colisiones
     Plataforma lastGround;
+    AdministradorPompas* admin;
+
+    clock_t temp;
+
 
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
-    Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino) {
+    Fantasma(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         destRec = destino;
         tipo = 1;
@@ -47,10 +54,18 @@ public:
         targetFrames = _targetFPS;
         enElAire = true;
         cayendo = true;
+        disparando = false;
+        this->admin = &admin;
+        hayBola = false;
     };
 
     // Controlador de comportamiento
     void Actualizar(Rectangle playerPosition) override {
+        
+        if ((clock() - temp) > 5 * CLOCKS_PER_SEC) {
+            hayBola = false;
+        }
+        
         if (muerto) {
             animacionActiva = 1;
             Caer();
@@ -58,14 +73,20 @@ public:
         else if (!saltando && enElAire) {
             CaerLento();
         }
-        else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10)) { //Si el personaje esta encima
+        else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10) && !disparando) { //Si el personaje esta encima
             Salto();
         }
-        else if (destRec.x > playerPosition.x + 5) { //Si el personaje esta a la izquierda
+        else if (destRec.x > playerPosition.x + 100  && !disparando) { //Si el personaje esta a la izquierda      
             MoverIzq();
         }
-        else if (destRec.x < playerPosition.x - 5) { //Si el personaje esta a la derecha
+        else if (destRec.x < playerPosition.x - 100  && !disparando) { //Si el personaje esta a la derecha
             MoverDer();
+        }
+        else if (destRec.x > playerPosition.x + 5 && !hayBola) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
+            BolaIzq();
+        }
+        else if (destRec.x < playerPosition.x - 5 && !hayBola ) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
+            BolaDer();
         }
 
         //Actualizar puntero de animacion
@@ -84,8 +105,18 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
+                break;
+            case 2:
+                indiceAnimacion = (indiceAnimacion + 1) % fAnimation[2];
+                widthAnimation = animations[2].width / fAnimation[2];
+                heightAnimation = animations[2].height;
                 if (indiceAnimacion == 3) {
-                    borrame = true;
+                    disparando = false;
+                    animacionActiva = 0;
+                    sh_Enemigo bola = std::make_shared<Bola>(Bola("resources/enemyFantasma/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir));
+                    admin->enemigos.push_back(bola);
+                    temp = clock();
+                    hayBola = true;
                 }
                 break;
             default:
@@ -115,7 +146,19 @@ public:
     }
 
     void CaerLento() {
-        destRec.y += velocidadSalto/2;
+        destRec.y += velocidadSalto / 2;
+    }
+
+    void BolaIzq() {
+        dir = false;
+        disparando = true;
+        animacionActiva = 2;
+    }
+
+    void BolaDer() {
+        dir = true;
+        disparando = true;
+        animacionActiva = 2;
     }
 
     void Salto() {
@@ -323,10 +366,9 @@ public:
             cayendo = true;
         }
         else if (muerto) {
-            animacionActiva = 1;
             enElAire = false;
             cayendo = false;
-            
+            borrame = true;
         }
         else {
             enElAire = false;
@@ -344,6 +386,8 @@ public:
             destRec.x = s.right_izq + destRec.width / 2;
         }
     }
+
+
 };
 
-typedef std::shared_ptr<Robot> sh_Robot;
+typedef std::shared_ptr<Fantasma> sh_Fantasma;
