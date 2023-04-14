@@ -330,7 +330,7 @@ public:
         }
     }
 
-    void compruebaPared(const Columnas& s) {
+    void compruebaPared(const Columnas& s) override {
         //Comprobamos columna derecha
         if (s.left_der < (destRec.x + destRec.width / 2)) {
             destRec.x = s.left_der - destRec.width / 2;
