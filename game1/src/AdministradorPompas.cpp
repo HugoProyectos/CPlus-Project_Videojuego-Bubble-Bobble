@@ -154,7 +154,7 @@ public:
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo); 
 					if (enemigo->muerto) {
-						(enemigosPorMatar--;
+						enemigosPorMatar--;
 						std::cout << "Quedan " << (int)enemigosPorMatar << " enemigos por matar." << std::endl;
 					}
 				}
