@@ -5,6 +5,10 @@
 #include "Robot.cpp"
 #include <iostream> //DEBUG
 
+//Valores de módulo acorde a lo que lleva dentro la pompa
+//1->ROBOT
+//2->AGUA
+
 // Aquí debajo se pondrán las constantes para especificar 
 // las animaciones de enemigos atrapados en pompas
 const int ROBOT = 5;
@@ -21,16 +25,15 @@ const int FANTASMA = 8;
  * 5,6,7 -> Pompas verde-naranja-rojo (3-3-3) de un enemigo (así con todos)
  */
 class Pompa : public Sprite {
-	const int DISPARO = 0;
-	const int VACIA = 1;
-	const int EXPLOTA = 4;
+	
+	int contadorFrames = -1;
+	const int maxFrames = 10;
 
 	//Índices de color
 	const int VERDE = 0;
 	const int NARANJA = 1;
 	const int ROJO = 2;
 
-	const int NUM_FOTOGRAMAS = 3;
 
 	const int widthAnimation = 16;
 	const int heightAnimation = 16;
@@ -47,7 +50,21 @@ class Pompa : public Sprite {
 	bool abajo = true;
 	uint8_t contador = 0;
 
+	//Abstracción de generación de enemigo al explotar
+	sh_Enemigo extraeEnemigo(bool matalo);
+
 public:
+	//Para las pompas con agua
+	static const int INFINITA = -25;
+	static const int MODULO_AGUA = 2;
+
+	//Indice de animación básicos
+	static const int DISPARO = 0;
+	static const int VACIA = 1;
+	static const int EXPLOTA = 4;
+	static const int NUM_FOTOGRAMAS = 3;
+
+	static uint32_t ID_MAPA;	//Debe actualizarse cada vez que se cambie el mapa
 	static uint32_t ID_GLOBAL;
 	int ID = -1;
 	static void init();
@@ -57,12 +74,17 @@ public:
 	int tVida = 0;
 	bool matame = false;
 
+	//Indica si inicia cadena de explosiones
+	bool cadena = false;
+
+
 	//Enemigo contenido
 	sh_Enemigo enemigoContenido = NULL;
 	int modulo = 0;
 
 	//Desplazamiento
 	float velocidadDesplazamiento = 0;
+	int sentidoLateral = 1; //1-> Sin sentido, 2 -> hacia la izquierda, 3->hacia la derecha
 	//Relacionado con el modo disparo
 	float distanciaRecorrida = 0;
 	float distanciaDisparo = 0;
@@ -83,7 +105,12 @@ public:
 
 	void Inicializador(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
 
-	sh_Enemigo Actualizar(Rectangle pJ1, bool cayendoJ1, int sentidoJ1, bool muriendoJ1);
+	sh_Enemigo Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua); //3->Derecha, 2->Izquierda
+
+	Pompa &operator=(const Pompa& p);
+	void explota();
 
 	void Dibujar();
 };
+
+typedef std::shared_ptr<Pompa> sh_Pompa;

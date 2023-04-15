@@ -26,7 +26,7 @@ public:
     float right = 0;
 
     //Dirección en la que se acerca el personaje
-    int aproach[4];
+    int aproach[30]; //Posiciones 0 y 1 reservadas para Bub y Bob.
 
     Plataforma() = default;
 
