@@ -98,7 +98,7 @@ int nivel_1(void)
     Credits credits = Credits(15, 10, 20, KEY_SIX, false);
     Scores scores = Scores(0, 0, 20, SKYBLUE);
 
-    //int numPlat = plataformas.listaPlataforma.size();
+    int numPlat = plataformas.listaPlataforma.size();
 
     AdministradorPompas admin = AdministradorPompas();
 
@@ -225,7 +225,7 @@ int main(void)
     Controls controls = Controls("config.ini");
     //--------------------------------------------------------------------------------------
     
-    //int numPlat = plataformas.listaPlataforma.size();
+    int numPlat = plataformas.listaPlataforma.size();
 
     AdministradorPompas admin = AdministradorPompas();
     Texture2D spriteAgua = LoadTexture("resources/agua.png");
