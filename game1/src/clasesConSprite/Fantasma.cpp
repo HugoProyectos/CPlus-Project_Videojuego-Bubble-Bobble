@@ -68,7 +68,7 @@ public:
         
         if (muerto) {
             animacionActiva = 1;
-            Caer();
+            //Caer();
         }
         else if (!saltando && enElAire) {
             CaerLento();
@@ -93,6 +93,10 @@ public:
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames)) {
             cuentaFrames = 0;
+            if (muerto) {
+                animacionActiva = 1;
+                //Caer();
+            }
             switch (animacionActiva) {
             case 0:
                 //Actualizar width&height animacion
@@ -105,6 +109,9 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
+                if (indiceAnimacion == 1) {
+                    borrame = true;
+                }
                 break;
             case 2:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[2];
@@ -368,7 +375,7 @@ public:
         else if (muerto) {
             enElAire = false;
             cayendo = false;
-            borrame = true;
+            animacionActiva = 1;
         }
         else {
             enElAire = false;
