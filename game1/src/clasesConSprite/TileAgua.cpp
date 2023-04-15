@@ -261,6 +261,7 @@ bool tileAgua::colisionEnemigo(Enemigo& e) {
 			)
 		) {
 		e.muerto = true;
+		e.muertePorAgua = true;
 		return true;
 	}
 	else {

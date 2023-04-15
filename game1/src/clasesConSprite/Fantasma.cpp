@@ -48,7 +48,7 @@ public:
     Fantasma(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         destRec = destino;
-        tipo = 1;
+        tipo = 3;
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
         targetFrames = _targetFPS;
@@ -248,7 +248,7 @@ public:
                         )
                 )
             ) {
-            switch (s.aproach[enemyNum + 1]) {
+            switch (s.aproach[enemyNum+ 2]) {
             case 1:
                 destRec.x = s.left - destRec.width / 2;
                 break;
@@ -288,7 +288,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 1;
+                s.aproach[enemyNum+ 2] = 1;
             }
             //Derecha
             else if (
@@ -312,7 +312,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 2;
+                s.aproach[enemyNum+ 2] = 2;
             }
             //Arriba
             else if (
@@ -336,12 +336,12 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 3;
+                s.aproach[enemyNum+ 2] = 3;
             }
             //Abajo
             else {
                 //Si no se cumplen anteriores asumimos que se acerca por debajo
-                s.aproach[enemyNum + 1] = 4;
+                s.aproach[enemyNum+ 2] = 4;
             }
         }
     }

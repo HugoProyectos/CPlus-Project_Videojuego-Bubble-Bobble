@@ -14,6 +14,27 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->cayendo = true;
 		enemigoContenido->muerto = matalo;
 		resultado = enemigoContenido;
+	} else if (modulo == 3) {
+		enemigoContenido->destRec = destRec;
+		enemigoContenido->borrame = false;
+		enemigoContenido->enElAire = true;
+		enemigoContenido->cayendo = true;
+		enemigoContenido->muerto = matalo;
+		resultado = enemigoContenido;
+	} else if (modulo == 4) {
+		enemigoContenido->destRec = destRec;
+		enemigoContenido->borrame = false;
+		enemigoContenido->enElAire = true;
+		enemigoContenido->cayendo = true;
+		enemigoContenido->muerto = matalo;
+		resultado = enemigoContenido;
+	} else if (modulo == 5) {
+		enemigoContenido->destRec = destRec;
+		enemigoContenido->borrame = false;
+		enemigoContenido->enElAire = true;
+		enemigoContenido->cayendo = true;
+		enemigoContenido->muerto = matalo;
+		resultado = enemigoContenido;
 	}
 	return resultado;
 }

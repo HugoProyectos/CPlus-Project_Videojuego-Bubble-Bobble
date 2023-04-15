@@ -33,7 +33,7 @@ public:
     Bola(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, bool direccion) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         destRec = destino;
-        tipo = 1;
+        tipo = -2;
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
         targetFrames = _targetFPS;

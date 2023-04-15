@@ -225,36 +225,28 @@ int main(void)
     Rectangle destAgua = { -100, -100, 16, 16 };
     admin.agua = Agua(destAgua, true, spriteAgua, numPlat);
     admin.agua.existe = false;
-    admin.iniciaMapa(1);
+    admin.iniciaMapa(3);
     admin.CambioDeMapa(1);
 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
-    Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
-    
-    Rectangle destRob = { GetScreenWidth()/2, 70, 32, 32};
-    sh_Enemigo robot = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
-    admin.enemigos.push_back(robot);
+    //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
+
 
     Rectangle destRob = { GetScreenWidth() / 2, 70, 32, 32 };
     sh_Enemigo fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
     admin.enemigos.push_back(fantasma);
     sh_Enemigo mor = std::make_shared<Morado>(Morado("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     admin.enemigos.push_back(mor);
-
-
-
     destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
-    /*
     sh_Enemigo robot2 = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     admin.enemigos.push_back(robot2);
-    */
 
     Rectangle destPompa = { 100, GetScreenHeight() - GetScreenHeight()/2, 32, 32 };
-    Pompa p = Pompa(spritePompa, destPompa, 0, 0, false, 1000000);
+    Pompa p = Pompa(spritePompa, destPompa, 0, 0, false, Pompa::INFINITA);
     Rectangle destPompa2 = { 120, GetScreenHeight() - GetScreenHeight() / 2, 32, 32 };
-    Pompa p2 = Pompa(spritePompa, destPompa, 0, 0, false, 1000000);
+    Pompa p2 = Pompa(spritePompa, destPompa, 0, 0, false, Pompa::INFINITA);
     p.modulo = Pompa::MODULO_AGUA;
     p2.modulo = Pompa::MODULO_AGUA;
     p.indiceAnimacion = 2 * Pompa::NUM_FOTOGRAMAS;
@@ -344,10 +336,10 @@ int main(void)
                 admin.agua.Actualizar(plataformas, columnas);
                 admin.actualizaPompas();
                 for (int i = 0; i < admin.enemigos.size(); i++) {
-               		agua.colisionEnemigo(*admin.enemigos.at(i));
+               		admin.agua.colisionEnemigo(*admin.enemigos.at(i));
             	}
             
-                admin.actualizaEnemigos(plataformas);
+                admin.actualizaEnemigos(plataformas, columnas);
 
                 if (IsKeyPressed(KEY_TWO) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
                 {

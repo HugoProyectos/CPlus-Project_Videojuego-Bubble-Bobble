@@ -51,7 +51,7 @@ public:
         velMax = 2 * velLateral;
         velMin = velLateral/2;
         destRec = destino;
-        tipo = 1;
+        tipo = 5;
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
         targetFrames = _targetFPS;

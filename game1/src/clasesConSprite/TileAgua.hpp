@@ -1,6 +1,7 @@
 #pragma once
 #include "Sprite.hpp"
 #include "mapa.cpp"
+#include "Enemigo.cpp"
 #include <iostream> //DEBUG
 
 struct Response {

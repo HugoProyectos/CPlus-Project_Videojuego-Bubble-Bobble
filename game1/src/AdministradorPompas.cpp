@@ -70,7 +70,7 @@ public:
 				//std::cout << "CHECK DISPARADA" << std::endl;
 
 				for (int j = 0; j < enemigos.size(); j++) {
-					if (!enemigos.at(j)->borrame && !enemigos.at(j)->muerto
+					if (!enemigos.at(j)->borrame && !enemigos.at(j)->muerto && (enemigos.at(j)->tipo != -2)
 					&& ((pompas.at(i)->destRec.y + pompas.at(i)->destRec.height / 2) >= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
 					&& (pompas.at(i)->destRec.y - pompas.at(i)->destRec.height / 2) <= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
 					|| (pompas.at(i)->destRec.y + pompas.at(i)->destRec.height / 2) >= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
@@ -95,6 +95,7 @@ public:
 					enemigos.push_back(enemigo);
 					if (enemigo->muerto) {
 						enemigosPorMatar--;
+						std::cout << "Quedan " << enemigosPorMatar << " enemigos por matar." << std::endl;
 					}
 				}
 				if (pompas.at(i)->cadena) {
@@ -153,7 +154,8 @@ public:
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo); 
 					if (enemigo->muerto) {
-						enemigosPorMatar--;
+						(enemigosPorMatar--;
+						std::cout << "Quedan " << (int)enemigosPorMatar << " enemigos por matar." << std::endl;
 					}
 				}
 				else if (creaAgua == 2 && !agua.existe) {
@@ -241,6 +243,10 @@ public:
 			if (enemigos.at(i)->borrame) {
 				//auto aBorrar = pompas.begin() + i;
 				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas
+				if (enemigos.at(i)->muertePorAgua) {
+					enemigosPorMatar--;
+					std::cout << "Quedan " << (int)enemigosPorMatar << " enemigos por matar." << std::endl;
+				}
 				enemigos = eliminaEnemigo(i);
 				i--;
 			}
