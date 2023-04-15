@@ -98,7 +98,7 @@ int nivel_1(void)
     Credits credits = Credits(15, 10, 20, KEY_SIX, false);
     Scores scores = Scores(0, 0, 20, SKYBLUE);
 
-    int numPlat = plataformas.listaPlataforma.size();
+    //int numPlat = plataformas.listaPlataforma.size();
 
     AdministradorPompas admin = AdministradorPompas();
 
@@ -137,7 +137,7 @@ int nivel_1(void)
         bub.Actualizar();
         bub.cayendo = true;
         bub.enElAire = true;
-        for (int i = 0; i < numPlat; i++) {
+        for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
             bub.compruebaColision(plataformas.listaPlataforma[i]);
         }
         bub.compruebaPared(columnas);
@@ -225,7 +225,7 @@ int main(void)
     Controls controls = Controls("config.ini");
     //--------------------------------------------------------------------------------------
     
-    int numPlat = plataformas.listaPlataforma.size();
+    //int numPlat = plataformas.listaPlataforma.size();
 
     AdministradorPompas admin = AdministradorPompas();
     Texture2D spriteAgua = LoadTexture("resources/agua.png");
