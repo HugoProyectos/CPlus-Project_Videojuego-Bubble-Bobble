@@ -233,7 +233,7 @@ int main(void)
     admin.agua = Agua(destAgua, true, spriteAgua, numPlat);
     admin.agua.existe = false;
     admin.iniciaMapa(3);
-    admin.CambioDeMapa(1);
+    admin.CambioDeMapa(0);
 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
@@ -258,7 +258,7 @@ int main(void)
     p2.modulo = Pompa::MODULO_AGUA;
     p.indiceAnimacion = 2 * Pompa::NUM_FOTOGRAMAS;
     p2.indiceAnimacion = 2 * Pompa::NUM_FOTOGRAMAS;
-    admin.pompas.push_back(std::make_shared<Pompa>(p));
+    //admin.pompas.push_back(std::make_shared<Pompa>(p));
     //admin.pompas.push_back(std::make_shared<Pompa>(p2));
 
     Rectangle destBub = { GetScreenWidth() - 50, 50, 32, 32};//{ 100, GetScreenHeight() - 50, 32, 32 };
@@ -372,7 +372,19 @@ int main(void)
                 credits.tecla = controls.coin;
                 tecla_p1 = controls.play1;
                 tecla_p2 = controls.play2;
-                // ...  
+                // ...
+                // Asignamos los controles de los jugadores 
+                /*controls.keys[0] = controls.left_p1;
+                controls.keys[1] = controls.right_p1;
+                controls.keys[2] = controls.jump_p1;
+                controls.keys[3] = controls.spit_p1;
+                controls.keys[4] = controls.left_p2;
+                controls.keys[5] = controls.left_p2;
+                controls.keys[6] = controls.left_p2;
+                controls.keys[7] = controls.left_p2;*/
+                bub.controles = controls;
+                bob.controles = controls;
+                Pompa::controlesJugador = controls;
 
                 currentScreen = MAIN_MENU;
             }
