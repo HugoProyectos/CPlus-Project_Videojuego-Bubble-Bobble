@@ -205,6 +205,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
     Credits credits = Credits(15, 10, 20, KEY_SIX);
     Scores scores = Scores(0, 0, 20, SKYBLUE);
+    ContadorVidas contadorVidas = ContadorVidas("resources/Players/Bobblun/ContadorVida.png", "resources/Players/Bobblun/ContadorVida2.png", 40.0f, 0.0f); 
     //-------------------------------------------------------------------------------------- 
 
     // Main Menu:
@@ -217,7 +218,7 @@ int main(void)
     // Nivel 1:
     //--------------------------------------------------------------------------------------
     Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f);
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f);  
     //--------------------------------------------------------------------------------------
 
     // Controls:
@@ -262,7 +263,7 @@ int main(void)
     //admin.pompas.push_back(std::make_shared<Pompa>(p2));
 
     Rectangle destBub = { GetScreenWidth() - 50, 50, 32, 32};//{ 100, GetScreenHeight() - 50, 32, 32 };
-    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true);
+    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true); 
     Bub bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
 
     
@@ -305,6 +306,7 @@ int main(void)
                 credits.creditos -= 2;
                 scores.hayP1 = true;
                 scores.hayP2 = true;
+                contadorVidas.hayP2 = true;
             }
         } break;
         case NIVEL_1:
@@ -347,11 +349,12 @@ int main(void)
             	}
             
                 admin.actualizaEnemigos(plataformas, columnas);
-
+                contadorVidas.Actualizar(bub.numVidas, bob.numVidas);
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
            		{
                 	credits.creditos -= 1;
                 	scores.hayP2 = true;
+                    contadorVidas.hayP2 = true;
             	}
 
             }
@@ -384,7 +387,7 @@ int main(void)
         if (IsKeyDown(KEY_D)) {
             char a;
             std::cin >> a;
-        }
+        } 
 
         // Draw
         //----------------------------------------------------------------------------------
@@ -409,6 +412,7 @@ int main(void)
             plataformas.Dibujar();
             scores.Dibujar();
             admin.agua.Dibujar();
+            contadorVidas.Dibujar();
             bub.Dibujar();
             bob.Dibujar();
             admin.dibujaPompas();
@@ -433,7 +437,7 @@ int main(void)
     main_menu.Unload();
     columnas.Unload();
     plataformas.Unload();
-    credits.Unload();
+    credits.Unload(); 
     scores.Unload();
 
     CloseWindow();        // Close window and OpenGL context
