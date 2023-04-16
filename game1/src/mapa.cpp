@@ -190,7 +190,7 @@ public:
             DrawRectangle(listaPlataforma[0].left, 0, GetScreenWidth() - listaPlataforma[0].left, tamanoMargenSup, BLACK);
         }
         else {
-            float movimiento_por_frame = altura_bloque * (BLOQUE_PEQUENO_ALTO)/ float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
+            float movimiento_por_frame = altura_bloque * (BLOQUE_PEQUENO_ALTO + 6)/ float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
             this->distancia_ya_movida += movimiento_por_frame;
             for (int i = 0; i < listaPlataforma.size(); i++) {
                 destRect = {
@@ -368,7 +368,7 @@ public:
             DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
         }
         else {
-            float movimiento_por_frame = altura_bloque * (BLOQUE_GRANDE_ALTO) / float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
+            float movimiento_por_frame = altura_bloque * (BLOQUE_GRANDE_ALTO + 3) / float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
             this->distancia_ya_movida += movimiento_por_frame;
             // Columna izquierda
             destRect = { 0, tamanoMargenSup - distancia_ya_movida, anchura_bloque, altura_bloque };
@@ -434,6 +434,7 @@ public:
     Rectangle destRect;
 
     bool hayP2 = false;
+    bool hayCreditos = false;
 
     Rectangle srcRect_push2P_sprites;
     Texture2D push_2P_sprites[2] = {
@@ -480,7 +481,7 @@ public:
         UnloadTexture(imagen_vida_p2);
     };
 
-    void Actualizar(unsigned int vidas_p1, unsigned int vidas_p2) {
+    void Actualizar(unsigned int vidas_p1, unsigned int vidas_p2, unsigned int creditos) {
         this->vidas_p1 = vidas_p1;
         this->vidas_p2 = vidas_p2;
 
@@ -488,6 +489,16 @@ public:
         float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
         float anchura = GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO;
         float altura = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO;
+
+        if (!hayP2) {
+            if (creditos >= 1) {
+                hayCreditos = true;
+            }
+            else {
+                hayCreditos = false;
+            }
+        }
+        
 
     };
 
@@ -511,7 +522,7 @@ public:
         }
 
         // Vidas p2
-        if (hayP2) {
+        if (hayP2) { // Si hay p2 se dibujan las vidas
             destRect = {
                 GetScreenWidth() - anchura_bloque, // Posicion x de la esquina topleft
                 GetScreenHeight() - tamanoMargenInf - altura_bloque, // Posicion y de la esquina topleft
@@ -523,7 +534,7 @@ public:
                 destRect.x -= anchura_bloque;
             }
         }
-        else if (!cargando_siguiente_nivel) {
+        else if (!cargando_siguiente_nivel && hayCreditos) { // Si no hay p2 y hay creditos se muestra el sprite PUSH_2P
             iteraciones++;
             if (iteraciones == frecuencia) {
                 indice = (indice + 1) % 2;
@@ -537,6 +548,18 @@ public:
             };
             DrawTexturePro(push_2P_sprites[indice], srcRect_push2P_sprites, destRect, Vector2{0, 0}, 0.0f, WHITE);
         }
+        else if (cargando_siguiente_nivel) { // Si se está cargando el siguiente nivel 
+            iteraciones++;
+            if (iteraciones == FRAMES_CARGAR_SIGUIENTE_NIVEL) {
+                iteraciones = 0;
+                cargando_siguiente_nivel = false;
+            }
+        }
         
+    }
+
+    void cargar_siguiente_nivel() {
+        cargando_siguiente_nivel = true;
+        iteraciones = 0;
     }
 };

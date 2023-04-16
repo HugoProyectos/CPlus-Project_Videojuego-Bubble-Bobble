@@ -18,7 +18,7 @@ int not_main(void)
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenHeight = 450; 
 
     InitWindow(screenWidth, screenHeight, "Bubble Bobble");
     SetWindowMinSize(200, 200);
@@ -349,7 +349,15 @@ int main(void)
             	}
             
                 admin.actualizaEnemigos(plataformas, columnas);
-                contadorVidas.Actualizar(bub.numVidas, bob.numVidas);
+                contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);  
+
+                if (IsKeyPressed(KEY_THREE))
+                {
+                    columnas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_grande.png", 2);
+                    plataformas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_pequeno.png", "resources/mapa_nivel_3/mapa.txt");
+                    contadorVidas.cargar_siguiente_nivel();
+                }
+
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
            		{
                 	credits.creditos -= 1;
