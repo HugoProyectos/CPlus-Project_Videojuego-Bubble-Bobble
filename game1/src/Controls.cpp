@@ -113,12 +113,12 @@ public:
         ini["P1"]["left"] = std::to_string(this->left_p1);
         ini["P1"]["right"] = std::to_string(this->right_p1);
         ini["P1"]["jump"] = std::to_string(this->jump_p1);
-        ini["P1"]["spit"] = std::to_string(this->jump_p1);
+        ini["P1"]["spit"] = std::to_string(this->spit_p1);
 
         ini["P2"]["left"] = std::to_string(this->left_p2);
         ini["P2"]["right"] = std::to_string(this->right_p2);
         ini["P2"]["jump"] = std::to_string(this->jump_p2);
-        ini["P2"]["spit"] = std::to_string(this->jump_p2);
+        ini["P2"]["spit"] = std::to_string(this->spit_p2);
 
         ini["global"]["play1"] = std::to_string(this->play1);
         ini["global"]["play2"] = std::to_string(this->play2);

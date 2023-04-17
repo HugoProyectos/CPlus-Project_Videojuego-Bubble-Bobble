@@ -174,6 +174,7 @@ public:
                 if (orientacionActual == 3) {
                     srcRec.width *= -1;
                     orientacionActual = 2;
+                    switchOrientacion = 2;
                 }
 
                 destRec.height *= 2;
@@ -495,10 +496,6 @@ public:
                     if (indiceAnimacion >= (fTranslationAnimation + 6)) { 
                         //std::cout << "Im truly in" << std::endl;
                         //Reestablecemos las dimensiones de la animación
-                        /*if (eresBub && orientacionActual == 2) {
-                            srcRec.width *= -1;
-                            orientacionActual = 3;
-                        }*/
                         destRec.height /= 2;
                         destRec.width /= 2;
                         destRec.x += destRec.width / 2;
@@ -509,6 +506,12 @@ public:
                         //Preparamos el personaje para que vuelva a funcionar
                         animacionActiva = STANDING;
                         indiceAnimacion = 0;
+                        if (eresBub && orientacionActual == 2) {
+                            switchOrientacion = 3;
+                            orientacionActual = 2;
+                            dirCorrer = 2;
+                            dirAir = 2;
+                        }
                         enElAire = true;
                         cayendo = true;
                         cambioMapa = 0;

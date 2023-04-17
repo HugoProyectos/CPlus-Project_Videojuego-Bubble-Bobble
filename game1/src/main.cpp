@@ -380,6 +380,7 @@ int main(void)
             controls.Actualizar();
             if (IsKeyPressed(KEY_ENTER)) {
                 // ASIGNAR TODOS LOS BOTONES
+                controls.guardarControlesNuevos();
                 credits.tecla = controls.coin;
                 tecla_p1 = controls.play1;
                 tecla_p2 = controls.play2;
