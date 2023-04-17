@@ -379,11 +379,17 @@ int main(void)
                 controls.keys[2] = controls.jump_p1;
                 controls.keys[3] = controls.spit_p1;
                 controls.keys[4] = controls.left_p2;
-                controls.keys[5] = controls.left_p2;
-                controls.keys[6] = controls.left_p2;
-                controls.keys[7] = controls.left_p2;*/
-                bub.controles = controls;
-                bob.controles = controls;
+                controls.keys[5] = controls.right_p2;
+                controls.keys[6] = controls.jump_p2;
+                controls.keys[7] = controls.spit_p2;*/
+                bub.left = controls.left_p1;
+                bub.right = controls.right_p1;
+                bub.jump = controls.jump_p1;
+                bub.shoot = controls.spit_p1;
+                bob.left = controls.left_p2;
+                bob.right = controls.right_p2;
+                bob.jump = controls.jump_p2;
+                bob.shoot = controls.spit_p2;
                 Pompa::controlesJugador = controls;
 
                 currentScreen = MAIN_MENU;

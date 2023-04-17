@@ -41,7 +41,11 @@ class Bub : public Sprite {
 public:
     //Variable de controles
     Controls controles;
-
+    unsigned int left;
+    unsigned int right;
+    unsigned int jump;
+    unsigned int shoot;
+    
     //Variable de identidad
     bool eresBub = true;
 
@@ -165,6 +169,13 @@ public:
         //Gesti�n de desplazamiento lateral
         if (cambioMapa > 0) {
             if (cambioMapa == 2) {
+                switchOrientacion = 1;
+                //Reiniciamos su orientación
+                if (orientacionActual == 3) {
+                    srcRec.width *= -1;
+                    orientacionActual = 2;
+                }
+
                 destRec.height *= 2;
                 destRec.width *= 2;
                 srcRec.height *= 2;
@@ -241,7 +252,7 @@ public:
                 if (enElAire) {
                     if (saltoRecorrido > 0) {
                         if (dirCorrer == 1) {  //Salta izquierda
-                            if (IsKeyDown(controles.keys[1 + (int)!eresBub * 4])) { //if (IsKeyDown(KEY_S)) {
+                            if (IsKeyDown(right)) { //if (IsKeyDown(KEY_S)) {
                                 //(OPCIONAL) A�adir que decelere en vez de cambiar repentinamente de velocidad
                                 switchOrientacion = 3;
                                 destRec.x -= velocidadLateral / 3;
@@ -249,7 +260,7 @@ public:
                                 dirAir = 2;
                             }
                             else {
-                                if (IsKeyDown(controles.keys[0 + (int)!eresBub * 4])) { //if (IsKeyDown(KEY_A)) {
+                                if (IsKeyDown(left)) { //if (IsKeyDown(KEY_A)) {
                                     switchOrientacion = 2;
                                     dirAir = 1;
                                     destRec.x -= velocidadLateral;
@@ -266,7 +277,7 @@ public:
                             }
                         }
                         else if (dirCorrer == 2) {  //Salta derecha
-                            if (IsKeyDown(controles.keys[0 + (int)!eresBub * 4])) { //if (IsKeyDown(KEY_A)) {
+                            if (IsKeyDown(left)) { //if (IsKeyDown(KEY_A)) {
                                 //(OPCIONAL) A�adir que decelere en vez de cambiar repentinamente de velocidad
                                 switchOrientacion = 2;
                                 destRec.x += velocidadLateral / 3;
@@ -274,7 +285,7 @@ public:
                                 dirAir = 1;
                             }
                             else {
-                                if (IsKeyDown(IsKeyDown(controles.keys[1 + (int)!eresBub * 4]))) { //if (IsKeyDown(KEY_S)) {
+                                if (IsKeyDown(right)) { //if (IsKeyDown(KEY_S)) {
                                     switchOrientacion = 3;
                                     dirAir = 2;
                                     destRec.x += velocidadLateral;
@@ -291,12 +302,12 @@ public:
                             }
                         }
                         else {
-                            if (IsKeyDown(controles.keys[0 + (int)!eresBub * 4])) { //if (IsKeyDown(KEY_A)) {
+                            if (IsKeyDown(left)) { //if (IsKeyDown(KEY_A)) {
                                 switchOrientacion = 2;
                                 destRec.x -= velocidadLateral / 2;
                                 velocidadLateralActual = velocidadLateral / 2;
                             }
-                            else if (IsKeyDown(IsKeyDown(controles.keys[1 + (int)!eresBub * 4]))) { //if (IsKeyDown(KEY_S)) {
+                            else if (IsKeyDown(right)) { //if (IsKeyDown(KEY_S)) {
                                 switchOrientacion = 3;
                                 destRec.x += velocidadLateral / 2;
                                 velocidadLateralActual = velocidadLateral / 2;
@@ -304,13 +315,13 @@ public:
                         }
                     }
                     else {
-                        if (IsKeyDown(controles.keys[0 + (int)!eresBub * 4])) { //if (IsKeyDown(KEY_A)) {
+                        if (IsKeyDown(left)) { //if (IsKeyDown(KEY_A)) {
                             if (!disparando && !muriendo) animacionActiva = MOVING;
                             switchOrientacion = 2;
                             destRec.x -= velocidadLateral / 2;
                             velocidadLateralActual = velocidadLateral / 2;
                         }
-                        else if (IsKeyDown(IsKeyDown(controles.keys[1 + (int)!eresBub * 4]))) {//if (IsKeyDown(KEY_S)) {
+                        else if (IsKeyDown(right)) {//if (IsKeyDown(KEY_S)) {
                             if (!disparando && !muriendo) animacionActiva = MOVING;
                             switchOrientacion = 3;
                             destRec.x += velocidadLateral / 2;
@@ -322,7 +333,7 @@ public:
                 // Se puede disparar en el aire. Las acciones en el aire no se ven limitadas por el disparo, 
                 // pero las del suelo s�. Para mantener la idea if/else de en el aire o en el suelo, 
                 // al del suelo se le ha a�aido la restricci�n opuesta al de en el aire (!enElAire)
-                if (IsKeyPressed(controles.keys[3 + (int)!eresBub * 4]) && !disparando && !muriendo) { //if (IsKeyDown(KEY_F)) {
+                if (IsKeyPressed(shoot) && !disparando && !muriendo) { //if (IsKeyDown(KEY_F)) {
                     //std::cout << "Dispara" << std::endl;
                     int sentido = 1; //Hacia la derecha
                     if (orientacionActual == 2) { //Si es hacia la izquierda
@@ -340,7 +351,7 @@ public:
                     admin->pompas.push_back(std::make_shared<Pompa>(p));
                 }
                 else if (!enElAire) {
-                    if (IsKeyDown(controles.keys[0 + (int)!eresBub * 4]) && !muriendo) { //if (IsKeyDown(KEY_A)) {
+                    if (IsKeyDown(left) && !muriendo) { //if (IsKeyDown(KEY_A)) {
                         if (!disparando) animacionActiva = MOVING;
                         switchOrientacion = 2;
                         //std::cout << "Muevo Izquierda, orientacion: " << switchOrientacion << std::endl;
@@ -352,7 +363,7 @@ public:
                         dirAir = 1;
                         compruebaSuelo(lastGround);
                     }
-                    else if (IsKeyDown(IsKeyDown(controles.keys[1 + (int)!eresBub * 4])) && !muriendo) { //if (IsKeyDown(KEY_S)) {
+                    else if (IsKeyDown(right) && !muriendo) { //if (IsKeyDown(KEY_S)) {
                         if (!disparando) animacionActiva = MOVING;
                         switchOrientacion = 3;
                         //std::cout << "Muevo Derecha, orientacion: " << switchOrientacion << std::endl;
@@ -374,7 +385,7 @@ public:
                 }
 
                 //Gesti�n de salto
-                if (IsKeyPressed(controles.keys[2 + (int)!eresBub * 3]) && !enElAire && !muriendo) { //if (IsKeyDown(KEY_SPACE)) {
+                if (IsKeyPressed(jump) && !enElAire && !muriendo) { //if (IsKeyDown(KEY_SPACE)) {
 
                     //std::cout << "Salto" << std::endl;
                     if (!disparando) animacionActiva = JUMPING;
@@ -479,11 +490,15 @@ public:
                     }
                     break; 
                 case 6:
-                    indiceAnimacion++;
+                    indiceAnimacion++;//Animacion de traslacion
                     //std::cout << "Im in" << std::endl;
-                    if (indiceAnimacion >= (fTranslationAnimation + 6)) { //Animacion de traslacion
+                    if (indiceAnimacion >= (fTranslationAnimation + 6)) { 
                         //std::cout << "Im truly in" << std::endl;
                         //Reestablecemos las dimensiones de la animación
+                        /*if (eresBub && orientacionActual == 2) {
+                            srcRec.width *= -1;
+                            orientacionActual = 3;
+                        }*/
                         destRec.height /= 2;
                         destRec.width /= 2;
                         destRec.x += destRec.width / 2;
