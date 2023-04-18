@@ -71,11 +71,11 @@ public:
             std::cout << "LLL" << std::endl;
             SeguirJugador(playerPosition);
         }
-        else if (colision == 1) {
+        else if (colision == 2) {
             std::cout << "HHH" << std::endl;
             MoverHorizontal(playerPosition);
         }
-        else if (colision == 2) {
+        else if (colision == 1) {
             std::cout << "VVV" << std::endl;
             MoverVertical(playerPosition);
         }
@@ -100,6 +100,7 @@ public:
                 break;
             }
         }
+        colision = 0;
     }
 
     void Dibujar() override {
@@ -112,20 +113,24 @@ public:
         //El movimiento vertical depende del jugador
         if (destRec.y > playerPosition.y - 10) {
             //Estamos por debajo del player, restamos posicion
+            direccionY = 0;
             destRec.y -= velocidadLateral;
         }
         else if(destRec.y < playerPosition.y + 10) {
             //Estamos por encima del player, sumamos posicion
+            direccionY = 1;
             destRec.y += velocidadLateral;
         }
 
         //El movimiento horizontal depende del jugador
         if (destRec.x > playerPosition.x - 10) {
             //Estamos por izq del player, restamos posicion
+            direccionX = 0;
             destRec.x -= velocidadSalto;
         }
         else if (destRec.x < playerPosition.x + 10) {
             //Estamos por derecha del player, sumamos posicion
+            direccionX = 1;
             destRec.x += velocidadLateral;
         }
 
@@ -171,15 +176,15 @@ public:
         //El movimiento vertical depende del sentido
         if (direccionY == 0) {
             //Abajo
-            destRec.y += velocidadLateral;
+            destRec.y -= velocidadLateral;
         }
         else {
             //Arriba
-            destRec.y -= velocidadLateral;
+            destRec.y += velocidadLateral;
         }
         
         //Width
-        srcRec.width = -pixels;
+        srcRec.width = pixels;
     }
 
     void Caer() {
