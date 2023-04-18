@@ -6,9 +6,10 @@
 
 class Enemigo : public Sprite {
 public:
-    int tipo = -1; // 1->Robot
+    int tipo = -1; // 1->Robot 2-> Agua NO USAR 3->Fantasma 4-> Monsta 5-> Rosa
     bool borrame = false; //Eliminarlo de la lista
     bool muerto = false; //Iniciar animacion de muerte
+    bool muertePorAgua = false;
     
     bool saltando = false;
     bool finSaltando = false;

@@ -69,7 +69,7 @@ int demo(void)
         bub.Dibujar();
         admin.dibujaPompas();
         admin.dibujaEnemigos();
-
+        DrawLine(0,int(Bub.y + Bub.height / 4),screenWidth,int(Bub.y + Bub.height / 4),GRAY);
         DrawLine((int)bub.destRec.x - (int)bub.destRec.width/2, 0, (int)bub.destRec.x - (int)bub.destRec.width / 2, screenHeight, GRAY);
         DrawLine(0, (int)bub.destRec.y - (int)bub.destRec.height / 2, screenWidth, (int)bub.destRec.y - (int)bub.destRec.height / 2, GRAY);
         DrawLine((int)bub.destRec.x + (int)bub.destRec.width / 2, 0, (int)bub.destRec.x + (int)bub.destRec.width / 2, screenHeight, GRAY);

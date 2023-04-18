@@ -3,11 +3,13 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <algorithm> // for std::copy
 
 #define BLOQUE_PEQUENO_ANCHO 32
 #define BLOQUE_PEQUENO_ALTO 26
 #define BLOQUE_GRANDE_ANCHO 16
 #define BLOQUE_GRANDE_ALTO 13
+#define FRAMES_CARGAR_SIGUIENTE_NIVEL 120
 
 class Plataforma {
 public:
@@ -26,7 +28,7 @@ public:
     float right = 0;
 
     //Dirección en la que se acerca el personaje
-    int aproach[4];
+    int aproach[30]; //Posiciones 0 y 1 reservadas para Bub y Bob.
 
     Plataforma() = default;
 
@@ -48,20 +50,26 @@ public:
         this->bot = this->top + altura;
     }
 
-    ~Plataforma(){}
+    ~Plataforma() {}
 
-    void Unload(){}
+    void Unload() {}
 
     void Actualizar(float ratioMargenSup, float ratioMargenInf)
     {
-        this->left = (positionX - 1 + 2) * GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO;
         float tamanoMargenSup = ratioMargenSup != 0 ? GetScreenHeight() / ratioMargenSup : 0;
         float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
-        this->top = tamanoMargenSup + (positionY - 1) * (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO;
         float anchura = GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO * this->tamanoX;
         float altura = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO * this->tamanoY;
+        this->left = (positionX - 1 + 2) * GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO;
+        this->top = tamanoMargenSup + (positionY - 1) * (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO;
         this->right = this->left + anchura;
         this->bot = this->top + altura;
+        if (this->positionY == 1) {
+            this->top -= (altura * 4);
+        }
+        else if (this->positionY == BLOQUE_PEQUENO_ALTO) {
+            this->bot += (altura * 2);
+        }
     }
 
     void Dibujar() {
@@ -85,8 +93,14 @@ public:
     float ratioMargenSup = 0;
     float ratioMargenInf = 0;
 
+    // Variables para cargar siguiente nivel
+    bool cargando_nivel_siguiente = false;
+    Texture2D bloque_pequeno_siguiente; 
+    std::vector<Plataforma> listaPlataformaSiguiente;
+    float distancia_ya_movida = 0;
+
     Plataformas() = default;
-    
+
     Plataformas(std::string ruta_bloque_pequeno, std::string ruta_ubicacion_bloques, float margenSuperior, float margenInferior) {
         Inicializador(ruta_bloque_pequeno, ruta_ubicacion_bloques, margenSuperior, margenInferior);
     }
@@ -151,23 +165,105 @@ public:
         float altura_bloque = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO;
         float anchura_bloque = GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO;
 
-        for (int i = 0; i < listaPlataforma.size(); i++) {
-            destRect = {
-                listaPlataforma[i].left, // Posicion x de la esquina topleft
-                listaPlataforma[i].top, // Posicion y de la esquina topleft
-                anchura_bloque,  // anchura bloque
-                altura_bloque // altura bloque
-            };
-            for (int tamanoX = 0; tamanoX < listaPlataforma[i].tamanoX; tamanoX++) {
-                for (int tamanoY = 0; tamanoY < listaPlataforma[i].tamanoY; tamanoY++) {
-                    DrawTexturePro(bloque_pequeno, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
-                    destRect.y += altura_bloque;
+        if (!cargando_nivel_siguiente) {
+            for (int i = 0; i < listaPlataforma.size(); i++) {
+                destRect = {
+                    listaPlataforma[i].left, // Posicion x de la esquina topleft
+                    listaPlataforma[i].top, // Posicion y de la esquina topleft
+                    anchura_bloque,  // anchura bloque
+                    altura_bloque // altura bloque
+                };
+                for (int tamanoX = 0; tamanoX < listaPlataforma[i].tamanoX; tamanoX++) {
+                    int bloques_a_dibujar = listaPlataforma[i].tamanoY;
+                    // Si es el bloque de mas arriba se ponen 4 bloques mas encima
+                    if (listaPlataforma[i].positionY == 1) {
+                        bloques_a_dibujar += 4;
+                    }
+                    for (int tamanoY = 0; tamanoY < bloques_a_dibujar; tamanoY++) {
+                        DrawTexturePro(bloque_pequeno, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+                        destRect.y += altura_bloque;
+                    }
+                    destRect.y = listaPlataforma[i].top;
+                    destRect.x += anchura_bloque;
                 }
-                destRect.y = listaPlataforma[i].top;
-                destRect.x += anchura_bloque;
+            }
+            DrawRectangle(listaPlataforma[0].left, 0, GetScreenWidth() - listaPlataforma[0].left, tamanoMargenSup, BLACK);
+        }
+        else {
+            float movimiento_por_frame = altura_bloque * (BLOQUE_PEQUENO_ALTO)/ float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
+            this->distancia_ya_movida += movimiento_por_frame;
+            for (int i = 0; i < listaPlataforma.size(); i++) {
+                destRect = {
+                    listaPlataforma[i].left, // Posicion x de la esquina topleft
+                    listaPlataforma[i].top - distancia_ya_movida, // Posicion y de la esquina topleft
+                    anchura_bloque,  // anchura bloque
+                    altura_bloque // altura bloque
+                };
+                for (int tamanoX = 0; tamanoX < listaPlataforma[i].tamanoX; tamanoX++) {
+                    int bloques_a_dibujar = listaPlataforma[i].tamanoY;
+                    // Si es el bloque de mas abajo se ponen 2 bloques mas debajo
+                    if (listaPlataforma[i].positionY == BLOQUE_PEQUENO_ALTO) {
+                        bloques_a_dibujar += 2;
+                    }
+                    if (listaPlataforma[i].positionY == 1) {
+                        bloques_a_dibujar += 4;
+                    }
+                    for (int tamanoY = 0; tamanoY < bloques_a_dibujar; tamanoY++) {
+                        DrawTexturePro(bloque_pequeno, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+                        destRect.y += altura_bloque;
+                    }
+                    destRect.y = listaPlataforma[i].top - distancia_ya_movida;
+                    destRect.x += anchura_bloque;
+                }
+            }
+            for (int i = 0; i < listaPlataformaSiguiente.size(); i++) {
+                destRect = {
+                    listaPlataformaSiguiente[i].left, // Posicion x de la esquina topleft
+                    listaPlataformaSiguiente[i].top + (GetScreenHeight() - tamanoMargenInf - tamanoMargenSup + (altura_bloque * 6)) - distancia_ya_movida, // Posicion y de la esquina topleft
+                    anchura_bloque,  // anchura bloque
+                    altura_bloque // altura bloque
+                };
+                for (int tamanoX = 0; tamanoX < listaPlataformaSiguiente[i].tamanoX; tamanoX++) {
+                    int bloques_a_dibujar = listaPlataformaSiguiente[i].tamanoY;
+                    // Si es el bloque de mas arriba se ponen 4 bloques mas encima
+                    if (listaPlataformaSiguiente[i].positionY == 1) {
+                        bloques_a_dibujar += 4;
+                    }
+                    for (int tamanoY = 0; tamanoY < bloques_a_dibujar; tamanoY++) {
+                        DrawTexturePro(bloque_pequeno_siguiente, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+                        destRect.y += altura_bloque;
+                    }
+                    destRect.y = listaPlataformaSiguiente[i].top + (GetScreenHeight() - tamanoMargenInf - tamanoMargenSup + (altura_bloque * 6)) - distancia_ya_movida;
+                    destRect.x += anchura_bloque;
+                }
+            }
+            DrawRectangle(listaPlataforma[0].left, 0, GetScreenWidth() - listaPlataforma[0].left, tamanoMargenSup, BLACK);
+
+            // Resetear valores a la normalidad
+            if (distancia_ya_movida >= altura_bloque * (BLOQUE_PEQUENO_ALTO + 6)) {
+                this->cargando_nivel_siguiente = false;
+                this->bloque_pequeno = this->bloque_pequeno_siguiente;
+                this->distancia_ya_movida = 0;
+
+                this->listaPlataforma.assign(this->listaPlataformaSiguiente.begin(), this->listaPlataformaSiguiente.end());
+                this->listaPlataforma.resize(this->listaPlataformaSiguiente.size());
             }
         }
 
+        
+
+    }
+
+    void CargarSiguienteNivel(std::string ruta_bloque_pequeno_siguiente, std::string ruta_ubicacion_bloques_siguiente) {
+        this->cargando_nivel_siguiente = true;
+        this->bloque_pequeno_siguiente = LoadTexture(ruta_bloque_pequeno_siguiente.c_str());
+
+        // Crear una plataforma por cada linea de ruta_ubicacion_bloques
+        this->listaPlataformaSiguiente = this->leerArchivo(ruta_ubicacion_bloques_siguiente);
+        // Se actualiza para poder tener los valores top y bot correctos
+        for (int i = 0; i < listaPlataformaSiguiente.size(); i++) {
+            listaPlataformaSiguiente[i].Actualizar(ratioMargenSup, ratioMargenInf);
+        }
     }
 };
 
@@ -188,6 +284,11 @@ public:
     float right_izq = 0;
     float right_der = 0;
 
+    // Variables para cargar siguiente nivel
+    bool cargando_nivel_siguiente = false;
+    Texture2D bloque_grande_siguiente;
+    std::string numeroNivelSiguiente = "";
+    float distancia_ya_movida = 0;
 
     std::string numeroNivel = "";
 
@@ -225,8 +326,8 @@ public:
         float altura_bloque = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_GRANDE_ALTO;
         float anchura_bloque = GetScreenWidth() / (float)BLOQUE_GRANDE_ANCHO;
 
-        this->top = tamanoMargenSup;
-        this->bot = tamanoMargenSup + altura_bloque * BLOQUE_GRANDE_ALTO;
+        this->top = tamanoMargenSup - altura_bloque;
+        this->bot = tamanoMargenSup + altura_bloque * (BLOQUE_GRANDE_ALTO + 2);
 
         // Left y right de la columna de la izquierda
         this->left_izq = 0;
@@ -244,25 +345,78 @@ public:
         float altura_bloque = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_GRANDE_ALTO;
         float anchura_bloque = GetScreenWidth() / (float)BLOQUE_GRANDE_ANCHO;
 
-        // Columna izquierda
-        destRect = { 0, tamanoMargenSup, anchura_bloque, altura_bloque };
-        for (int i = 0; i < BLOQUE_GRANDE_ALTO; i++)
-        {
-            DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
-            destRect.y += altura_bloque;
-        }
+        if (!cargando_nivel_siguiente) {
+            
+            // Columna izquierda
+            destRect = { 0, tamanoMargenSup, anchura_bloque, altura_bloque };
+            for (int i = 0; i < BLOQUE_GRANDE_ALTO; i++)
+            {
+                DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+                destRect.y += altura_bloque;
+            }
 
-        // Columna derecha
-        destRect = {(GetScreenWidth() - anchura_bloque), tamanoMargenSup, anchura_bloque, altura_bloque};
-        for (int i = 0; i < BLOQUE_GRANDE_ALTO; i++)
-        {
-            DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
-            destRect.y += altura_bloque;
-        }
+            // Columna derecha
+            destRect = { (GetScreenWidth() - anchura_bloque), tamanoMargenSup, anchura_bloque, altura_bloque };
+            for (int i = 0; i < BLOQUE_GRANDE_ALTO; i++)
+            {
+                DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+                destRect.y += altura_bloque;
+            }
 
-        // Poner nº de nivel
-        int tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
-        DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
+            // Poner nº de nivel
+            int tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
+            DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
+        }
+        else {
+            float movimiento_por_frame = altura_bloque * (BLOQUE_GRANDE_ALTO) / float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
+            this->distancia_ya_movida += movimiento_por_frame;
+            // Columna izquierda
+            destRect = { 0, tamanoMargenSup - distancia_ya_movida, anchura_bloque, altura_bloque };
+            for (int i = 0; i < (BLOQUE_GRANDE_ALTO + 1); i++)
+            {
+                DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+                destRect.y += altura_bloque;
+            }
+            for (int i = 0; i < (BLOQUE_GRANDE_ALTO + 2); i++)
+            {
+                DrawTexturePro(bloque_grande_siguiente, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+                destRect.y += altura_bloque;
+            }
+            DrawRectangle(0, 0, anchura_bloque, tamanoMargenSup, BLACK);
+
+            // Columna derecha
+            destRect = { (GetScreenWidth() - anchura_bloque), tamanoMargenSup - distancia_ya_movida, anchura_bloque, altura_bloque };
+            for (int i = 0; i < (BLOQUE_GRANDE_ALTO + 1); i++)
+            {
+                DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+                destRect.y += altura_bloque;
+            }
+            for (int i = 0; i < (BLOQUE_GRANDE_ALTO + 2); i++)
+            {
+                DrawTexturePro(bloque_grande_siguiente, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+                destRect.y += altura_bloque;
+            }
+            DrawRectangle(GetScreenWidth() - anchura_bloque, 0, GetScreenWidth(), tamanoMargenSup, BLACK);
+
+            // Poner nº de nivel
+            int tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
+            DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
+
+            // Resetear valores a la normalidad
+            if (distancia_ya_movida >= altura_bloque * (BLOQUE_GRANDE_ALTO + 3)) {
+                this->cargando_nivel_siguiente = false;
+                this->bloque_grande = this->bloque_grande_siguiente;
+                this->distancia_ya_movida = 0;
+                this->numeroNivel = this->numeroNivelSiguiente;
+            }
+        }
+        
+    }
+
+    void CargarSiguienteNivel(std::string ruta_bloque_grande_siguiente, unsigned int numeroNivelSiguiente) {
+        this->cargando_nivel_siguiente = true;
+        this->bloque_grande_siguiente = LoadTexture(ruta_bloque_grande_siguiente.c_str());
+        this->numeroNivelSiguiente = std::to_string(numeroNivelSiguiente);
     }
 };
 

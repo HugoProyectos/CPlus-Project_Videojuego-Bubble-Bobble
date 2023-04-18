@@ -223,7 +223,7 @@ public:
                         )
                 )
             ) {
-            switch (s.aproach[enemyNum + 1]) {
+            switch (s.aproach[enemyNum + 2]) {
             case 1:
                 //Derecha
                 destRec.x = s.left - destRec.width / 2;
@@ -269,7 +269,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 1;
+                s.aproach[enemyNum + 2] = 1;
             }
             //Derecha
             else if (
@@ -293,7 +293,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 2;
+                s.aproach[enemyNum + 2] = 2;
             }
             //Arriba
             else if (
@@ -317,12 +317,12 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 3;
+                s.aproach[enemyNum + 2] = 3;
             }
             //Abajo
             else {
                 //Si no se cumplen anteriores asumimos que se acerca por debajo
-                s.aproach[enemyNum + 1] = 4;
+                s.aproach[enemyNum + 2] = 4;
             }
         }
     }

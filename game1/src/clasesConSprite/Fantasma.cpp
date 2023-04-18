@@ -15,6 +15,10 @@ public:
     Texture2D ballAnimation = LoadTexture("resources/enemyFantasma/fantasmaBola.png");
     Texture2D animations[4] = { walkAnimation, deadAnimation, ballAnimation };
 
+    //sh_Enemigo bola = std::make_shared<Bola>(Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir));
+
+    int indexBolas = 0;
+    
     int fWalkAnimation = 2; //Número de fotogramas de la animacion camniar
     int fDeadAnimation = 2; //Número de fotogramas de la animacion muerte
     int fBallAnimation = 4;
@@ -35,9 +39,13 @@ public:
     bool disparando;
     bool dir;
     bool hayBola;
+
+    sh_Enemigo bolas[3];
+    int i = 0;
     //Colisiones
     Plataforma lastGround;
     AdministradorPompas* admin;
+    int IDBola = 0;
 
     clock_t temp;
 
@@ -48,7 +56,7 @@ public:
     Fantasma(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         destRec = destino;
-        tipo = 1;
+        tipo = 3;
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
         targetFrames = _targetFPS;
@@ -57,6 +65,7 @@ public:
         disparando = false;
         this->admin = &admin;
         hayBola = false;
+
     };
 
     // Controlador de comportamiento
@@ -68,7 +77,7 @@ public:
         
         if (muerto) {
             animacionActiva = 1;
-            Caer();
+            //Caer();
         }
         else if (!saltando && enElAire) {
             CaerLento();
@@ -93,6 +102,10 @@ public:
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames)) {
             cuentaFrames = 0;
+            if (muerto) {
+                animacionActiva = 1;
+                Caer();
+            }
             switch (animacionActiva) {
             case 0:
                 //Actualizar width&height animacion
@@ -105,6 +118,9 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
+                if (indiceAnimacion == 1) {
+                    borrame = true;
+                }
                 break;
             case 2:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[2];
@@ -113,8 +129,12 @@ public:
                 if (indiceAnimacion == 3) {
                     disparando = false;
                     animacionActiva = 0;
-                    sh_Enemigo bola = std::make_shared<Bola>(Bola("resources/enemyFantasma/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir));
-                    admin->enemigos.push_back(bola);
+                    Bola b;
+                    b =Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir, IDBola);
+                    admin->enemigos.push_back(std::make_shared<Bola>(b));
+                    i = (i + 1) % 3;
+                    IDBola++;
+                    indexBolas = (indexBolas + 1) % 3; 
                     temp = clock();
                     hayBola = true;
                 }
@@ -241,7 +261,7 @@ public:
                         )
                 )
             ) {
-            switch (s.aproach[enemyNum + 1]) {
+            switch (s.aproach[enemyNum+ 2]) {
             case 1:
                 destRec.x = s.left - destRec.width / 2;
                 break;
@@ -281,7 +301,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 1;
+                s.aproach[enemyNum+ 2] = 1;
             }
             //Derecha
             else if (
@@ -305,7 +325,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 2;
+                s.aproach[enemyNum+ 2] = 2;
             }
             //Arriba
             else if (
@@ -329,12 +349,12 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 3;
+                s.aproach[enemyNum+ 2] = 3;
             }
             //Abajo
             else {
                 //Si no se cumplen anteriores asumimos que se acerca por debajo
-                s.aproach[enemyNum + 1] = 4;
+                s.aproach[enemyNum+ 2] = 4;
             }
         }
     }
@@ -368,7 +388,7 @@ public:
         else if (muerto) {
             enElAire = false;
             cayendo = false;
-            borrame = true;
+            animacionActiva = 1;
         }
         else {
             enElAire = false;

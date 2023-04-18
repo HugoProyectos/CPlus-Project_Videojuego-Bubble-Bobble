@@ -7,14 +7,15 @@ public:
     int pixels = 16; //El numero de pixeles del sprite
 
     //Animation
-    Texture2D walkAnimation = LoadTexture("resources/enemyFantasma/bolas.png");
-    Texture2D deadAnimation = LoadTexture("resources/enemyFantasma/bolasMuerte.png");
+    Texture2D walkAnimation = LoadTexture("resources/enemyBola/bolas.png");
+    Texture2D deadAnimation = LoadTexture("resources/enemyBola/bolasMuerte.png");
     int fWalkAnimation = 4; //Número de fotogramas de la animacion camniar
     int fDeadAnimation = 4; //Número de fotogramas de la animacion camniar
     int widthAnimation; // Se actualiza para cada animación activa
     int heightAnimation;
     Texture2D animations[2] = { walkAnimation, deadAnimation };
     int fAnimation[2] = { fWalkAnimation, fDeadAnimation };
+    int ID;
 
 
     int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation, 1->DeadAnimation, 2->BallLeft,
@@ -29,11 +30,12 @@ public:
     Plataforma lastGround;
     clock_t temp;
 
+    Bola() = default;
 
-    Bola(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, bool direccion) {
+    Bola(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, bool direccion, int ID) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         destRec = destino;
-        tipo = 1;
+        tipo = -2;
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
         targetFrames = _targetFPS;
@@ -41,6 +43,8 @@ public:
         cayendo = false;
         this->direccion = direccion;
         temp = clock();
+        this->ID = ID;
+        borrame = false;
     };
 
     void Actualizar(Rectangle playerPosition) override {
@@ -141,11 +145,9 @@ public:
             switch (s.aproach[enemyNum + 1]) {
             case 1:
                 destRec.x = s.left - destRec.width / 2;
-                borrame = true;
                 break;
             case 2:
                 destRec.x = s.right + destRec.width / 2;
-                borrame = true;
                 break;
             case 3:
                 destRec.y = s.top - destRec.height / 2;
@@ -265,8 +267,7 @@ public:
         else if (muerto) {
             enElAire = false;
             cayendo = false;
-            borrame = true;
-            UnloadTexture(walkAnimation);
+            animacionActiva = 1;
         }
     }
 
