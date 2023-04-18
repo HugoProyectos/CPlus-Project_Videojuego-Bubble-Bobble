@@ -189,7 +189,7 @@ int main(void)
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenHeight = 450;//600;//800;
 
     InitWindow(screenWidth, screenHeight, "Bubble Bobble");
     SetWindowMinSize(200, 200);
