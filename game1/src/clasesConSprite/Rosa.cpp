@@ -79,15 +79,12 @@ public:
             enfadado = false;
         }
         else if (colision == 0) {
-            std::cout << "LLL" << std::endl;
             SeguirJugador(playerPosition);
         }
         else if (colision == 2) {
-            std::cout << "HHH" << std::endl;
             MoverHorizontal(playerPosition);
         }
         else if (colision == 1) {
-            std::cout << "VVV" << std::endl;
             MoverVertical(playerPosition);
         }
         //Actualizar puntero de animacion
@@ -150,12 +147,12 @@ public:
         }
 
         //El movimiento horizontal depende del jugador
-        if (destRec.x > playerPosition.x - 25) {
+        if (destRec.x > playerPosition.x + 10) {
             //Estamos por izq del player, restamos posicion
             direccionX = 0;
             destRec.x -= velocidadLateral;
         }
-        else if (destRec.x < playerPosition.x + 25) {
+        else if (destRec.x < playerPosition.x - 10) {
             //Estamos por derecha del player, sumamos posicion
             direccionX = 1;
             destRec.x += velocidadLateral;

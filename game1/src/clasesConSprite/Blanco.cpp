@@ -120,13 +120,13 @@ public:
     void Mover(Rectangle playerPosition) {
         if (sentidoX != 0) {
             //El movimiento horizontal depende del jugador
-            if (destRec.x > playerPosition.x - 5) {
+            if (destRec.x > playerPosition.x + 10) {
                 //Estamos por izq del player, restamos posicion
                 destRec.x -= velocidadLateral;
                 srcRec.width = pixels;
 
             }
-            else if (destRec.x < playerPosition.x + 5) {
+            else if (destRec.x < playerPosition.x - 10) {
                 //Estamos por derecha del player, sumamos posicion
                 destRec.x += velocidadLateral;
                 srcRec.width = -pixels;

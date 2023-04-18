@@ -235,7 +235,7 @@ int main(void)
     Rectangle destAgua = { -100, -100, 16, 16 };
     admin.agua = Agua(destAgua, true, spriteAgua, numPlat);
     admin.agua.existe = false;
-    admin.iniciaMapa(3);
+    admin.iniciaMapa(3, 1200);
     admin.CambioDeMapa(0);
 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
@@ -245,7 +245,7 @@ int main(void)
 
 
     Rectangle destRob = { GetScreenWidth() / 2, 70, 32, 32 };
-    sh_Enemigo fantasma = std::make_shared<Blanco>(Blanco("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
+    sh_Enemigo fantasma = std::make_shared<Rosa>(Rosa("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     admin.enemigos.push_back(fantasma);
 
     /*
