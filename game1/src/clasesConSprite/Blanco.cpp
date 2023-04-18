@@ -66,13 +66,11 @@ public:
                         //Se mueve a la izquierda
                         sentidoX = -1;
                         sentidoY = 0;
-                        srcRec.width = pixels;
                     }
                     else{
                         //Se mueve a la derecha
                         sentidoX = 1;
                         sentidoY = 0;
-                        srcRec.width = -pixels;
                     }
                 }
                 else {
@@ -125,10 +123,14 @@ public:
             if (destRec.x > playerPosition.x - 5) {
                 //Estamos por izq del player, restamos posicion
                 destRec.x -= velocidadLateral;
+                srcRec.width = pixels;
+
             }
             else if (destRec.x < playerPosition.x + 5) {
                 //Estamos por derecha del player, sumamos posicion
                 destRec.x += velocidadLateral;
+                srcRec.width = -pixels;
+
             }
         }
         else if (sentidoY != 0) {
