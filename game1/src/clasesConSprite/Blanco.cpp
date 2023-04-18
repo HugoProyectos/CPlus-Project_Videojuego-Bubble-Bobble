@@ -143,8 +143,6 @@ public:
                 destRec.y += velocidadLateral;
             }
         }
-
-        //Comprobar que no se sale de los bordes del mapa
     }
 
     void compruebaColision(Plataforma& s, int enemyNum) override {
