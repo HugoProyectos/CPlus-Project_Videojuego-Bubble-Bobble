@@ -241,9 +241,12 @@ int main(void)
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
 
 
-    Rectangle destRob = { GetScreenWidth() / 2, 70, 32, 32 };
+    
+    Rectangle destRob = { GetScreenWidth() / 2, 30, 32, 32 };
     sh_Enemigo fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
     admin.enemigos.push_back(fantasma);
+
+    
 
     /*
     sh_Enemigo mor = std::make_shared<Morado>(Morado("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
@@ -349,6 +352,7 @@ int main(void)
             	}
             
                 admin.actualizaEnemigos(plataformas, columnas);
+                admin.actualizaFrutas(plataformas);
 
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
            		{
@@ -415,6 +419,7 @@ int main(void)
             bob.Dibujar();
             admin.dibujaPompas();
             admin.dibujaEnemigos();
+            admin.dibujaFrutas();
             
         } break;
         case CONTROLS_MENU:
