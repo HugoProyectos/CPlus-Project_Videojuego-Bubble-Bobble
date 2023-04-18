@@ -39,11 +39,19 @@ public:
     int direccionX = 0; //0->izquierda, 1->derecha
     int direccionY = 0; //0->abajo, 1->arriba
 
+    float random = 100;
+
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
+
+
     Morado(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
+        if (enfadado) {
+            animacionActiva = 3;
+            velocidadLateral *= 2;
+        }
         destRec = destino;
         tipo = 4;
         widthAnimation = walkAnimation.width / fWalkAnimation;
@@ -52,6 +60,11 @@ public:
         enElAire = true;
         cayendo = true;
     };
+
+    void enfadar() {
+        animacionActiva = 3;
+        velocidadLateral *= 2;
+    }
 
     // Controlador de comportamiento
     void Actualizar(Rectangle playerPosition) override {
@@ -108,6 +121,21 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
+                if (indiceAnimacion == 3) {
+                    borrame = true;
+                }
+                break;
+            case 2:
+                //Actualizar width&height animacion
+                indiceAnimacion = (indiceAnimacion + 1) % fAnimation[2];
+                widthAnimation = waterAnimation.width / fAnimation[2];
+                heightAnimation = waterAnimation.height;
+                break;
+            case 3:
+                //Actualizar width&height animacion
+                indiceAnimacion = (indiceAnimacion + 1) % fAnimation[3];
+                widthAnimation = angryAnimation.width / fAnimation[3];
+                heightAnimation = angryAnimation.height;
                 break;
             default:
                 break;
