@@ -18,7 +18,7 @@ int not_main(void)
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenHeight = 450; 
 
     InitWindow(screenWidth, screenHeight, "Bubble Bobble");
     SetWindowMinSize(200, 200);
@@ -189,7 +189,7 @@ int main(void)
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenHeight = 450;//600;//800;
 
     InitWindow(screenWidth, screenHeight, "Bubble Bobble");
     SetWindowMinSize(200, 200);
@@ -205,6 +205,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
     Credits credits = Credits(15, 10, 20, KEY_SIX);
     Scores scores = Scores(0, 0, 20, SKYBLUE);
+    ContadorVidas contadorVidas = ContadorVidas("resources/Players/Bobblun/ContadorVida.png", "resources/Players/Bobblun/ContadorVida2.png", 40.0f, 0.0f); 
     //-------------------------------------------------------------------------------------- 
 
     // Main Menu:
@@ -217,7 +218,7 @@ int main(void)
     // Nivel 1:
     //--------------------------------------------------------------------------------------
     Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f);
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f);  
     //--------------------------------------------------------------------------------------
 
     // Controls:
@@ -233,7 +234,7 @@ int main(void)
     admin.agua = Agua(destAgua, true, spriteAgua, numPlat);
     admin.agua.existe = false;
     admin.iniciaMapa(3);
-    admin.CambioDeMapa(1);
+    admin.CambioDeMapa(0);
 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
@@ -260,11 +261,11 @@ int main(void)
     p2.modulo = Pompa::MODULO_AGUA;
     p.indiceAnimacion = 2 * Pompa::NUM_FOTOGRAMAS;
     p2.indiceAnimacion = 2 * Pompa::NUM_FOTOGRAMAS;
-    admin.pompas.push_back(std::make_shared<Pompa>(p));
+    //admin.pompas.push_back(std::make_shared<Pompa>(p));
     //admin.pompas.push_back(std::make_shared<Pompa>(p2));
 
     Rectangle destBub = { GetScreenWidth() - 50, 50, 32, 32};//{ 100, GetScreenHeight() - 50, 32, 32 };
-    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true);
+    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true); 
     Bub bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
 
     
@@ -307,6 +308,7 @@ int main(void)
                 credits.creditos -= 2;
                 scores.hayP1 = true;
                 scores.hayP2 = true;
+                contadorVidas.hayP2 = true;
             }
         } break;
         case NIVEL_1:
@@ -349,11 +351,20 @@ int main(void)
             	}
             
                 admin.actualizaEnemigos(plataformas, columnas);
+                contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);  
+
+                if (IsKeyPressed(KEY_THREE))
+                {
+                    columnas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_grande.png", 2);
+                    plataformas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_pequeno.png", "resources/mapa_nivel_3/mapa.txt");
+                    contadorVidas.cargar_siguiente_nivel();
+                }
 
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
            		{
                 	credits.creditos -= 1;
                 	scores.hayP2 = true;
+                    contadorVidas.hayP2 = true;
             	}
 
             }
@@ -371,10 +382,29 @@ int main(void)
             controls.Actualizar();
             if (IsKeyPressed(KEY_ENTER)) {
                 // ASIGNAR TODOS LOS BOTONES
+                controls.guardarControlesNuevos();
                 credits.tecla = controls.coin;
                 tecla_p1 = controls.play1;
                 tecla_p2 = controls.play2;
-                // ...  
+                // ...
+                // Asignamos los controles de los jugadores 
+                /*controls.keys[0] = controls.left_p1;
+                controls.keys[1] = controls.right_p1;
+                controls.keys[2] = controls.jump_p1;
+                controls.keys[3] = controls.spit_p1;
+                controls.keys[4] = controls.left_p2;
+                controls.keys[5] = controls.right_p2;
+                controls.keys[6] = controls.jump_p2;
+                controls.keys[7] = controls.spit_p2;*/
+                bub.left = controls.left_p1;
+                bub.right = controls.right_p1;
+                bub.jump = controls.jump_p1;
+                bub.shoot = controls.spit_p1;
+                bob.left = controls.left_p2;
+                bob.right = controls.right_p2;
+                bob.jump = controls.jump_p2;
+                bob.shoot = controls.spit_p2;
+                Pompa::controlesJugador = controls;
 
                 currentScreen = MAIN_MENU;
             }
@@ -386,7 +416,7 @@ int main(void)
         if (IsKeyDown(KEY_D)) {
             char a;
             std::cin >> a;
-        }
+        } 
 
         // Draw
         //----------------------------------------------------------------------------------
@@ -411,6 +441,7 @@ int main(void)
             plataformas.Dibujar();
             scores.Dibujar();
             admin.agua.Dibujar();
+            contadorVidas.Dibujar();
             bub.Dibujar();
             bob.Dibujar();
             admin.dibujaPompas();
@@ -435,7 +466,7 @@ int main(void)
     main_menu.Unload();
     columnas.Unload();
     plataformas.Unload();
-    credits.Unload();
+    credits.Unload(); 
     scores.Unload();
 
     CloseWindow();        // Close window and OpenGL context

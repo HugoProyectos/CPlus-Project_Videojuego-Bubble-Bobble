@@ -190,7 +190,7 @@ public:
             DrawRectangle(listaPlataforma[0].left, 0, GetScreenWidth() - listaPlataforma[0].left, tamanoMargenSup, BLACK);
         }
         else {
-            float movimiento_por_frame = altura_bloque * (BLOQUE_PEQUENO_ALTO)/ float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
+            float movimiento_por_frame = altura_bloque * (BLOQUE_PEQUENO_ALTO + 6)/ float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
             this->distancia_ya_movida += movimiento_por_frame;
             for (int i = 0; i < listaPlataforma.size(); i++) {
                 destRect = {
@@ -368,7 +368,7 @@ public:
             DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
         }
         else {
-            float movimiento_por_frame = altura_bloque * (BLOQUE_GRANDE_ALTO) / float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
+            float movimiento_por_frame = altura_bloque * (BLOQUE_GRANDE_ALTO + 3) / float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
             this->distancia_ya_movida += movimiento_por_frame;
             // Columna izquierda
             destRect = { 0, tamanoMargenSup - distancia_ya_movida, anchura_bloque, altura_bloque };
@@ -420,66 +420,146 @@ public:
     }
 };
 
-/*
 
-//cambiar nombre de "not_main" a "main" para que el depurador entre aquí.
-//Se mueve con A y S, y se salta con el espacio
-int main2(void)
-{
-    // Initialization
-    //--------------------------------------------------------------------------------------
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+class ContadorVidas {
+public:
 
+    Texture2D imagen_vida_p1;
+    Texture2D imagen_vida_p2;
 
-    InitWindow(screenWidth, screenHeight, "Bubble Bobble");
-    SetWindowMinSize(200, 200);
-    SetWindowState(FLAG_WINDOW_RESIZABLE);
+    unsigned int vidas_p1 = 0;
+    unsigned int vidas_p2 = 0;
 
-    InitAudioDevice();
-    // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
+    Rectangle srcRect;
+    Rectangle destRect;
 
-    // Cargo el fondo
-    //Mapa mapa = Mapa("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/bloque_grande.png", "resources/mapa_nivel_1/mapa_nivel_1_v2.txt");
-    Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 20.0f, 0.0f);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa_nivel_1_v2.txt", 20.0f, 0.0f);
-    Scores scores = Scores(0, 0, 20, SKYBLUE);
+    bool hayP2 = false;
+    bool hayCreditos = false;
 
-    SetTargetFPS(60);
-    // Main game loop
-    std::cout << "Inicia bucle" << std::endl;
-    while (!WindowShouldClose())    // Detect window close button or ESC key
-    {
-        // Update
-        //----------------------------------------------------------------------------------
-        columnas.Actualizar();
-        plataformas.Actualizar();
-        scores.Actualizar();
-        //----------------------------------------------------------------------------------
+    Rectangle srcRect_push2P_sprites;
+    Texture2D push_2P_sprites[2] = {
+        LoadTexture("resources/Push2P/Push2P_1.png"),
+        LoadTexture("resources/Push2P/Push2P_2.png")
+    };
 
+    // Cambiar esta variable mientras dure el cambio de nivel para que no se vea el sprite de PUSH_2P
+    bool cargando_siguiente_nivel = false;
 
-        // Draw
-        //----------------------------------------------------------------------------------
-        BeginDrawing();
-        ClearBackground(BLACK);
+    unsigned int frecuencia = 45;
+    unsigned int iteraciones = 0;
+    unsigned int indice = 0;
 
-        columnas.Dibujar();
-        plataformas.Dibujar();
-        scores.Dibujar();
+    float ratioMargenSup = 0;
+    float ratioMargenInf = 0;
 
-        EndDrawing();
-        //----------------------------------------------------------------------------------
+    ContadorVidas() = default;
+
+    ContadorVidas(std::string ruta_imagen_vida_p1, std::string ruta_imagen_vida_p2, float margenSuperior, float margenInferior) {
+        Inicializador(ruta_imagen_vida_p1, ruta_imagen_vida_p2, margenSuperior, margenInferior);
     }
 
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-    columnas.Unload();
-    plataformas.Unload();
-    scores.Unload();
+    void Inicializador(std::string ruta_imagen_vida_p1, std::string ruta_imagen_vida_p2, float margenSuperior, float margenInferior)
+    {
+        // Guardar imagenes
+        this->imagen_vida_p1 = LoadTexture(ruta_imagen_vida_p1.c_str());
+        this->imagen_vida_p2 = LoadTexture(ruta_imagen_vida_p2.c_str());
 
-    CloseAudioDevice();
-    CloseWindow();                // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
+        srcRect = { 0.0f, 0.0f, (float)imagen_vida_p1.width, (float)imagen_vida_p1.height };
+        srcRect_push2P_sprites = { 0.0f, 0.0f, (float)push_2P_sprites[0].width, (float)push_2P_sprites[0].height };
 
-    return 0;
-}*/
+        this->ratioMargenSup = margenSuperior != 0 ? GetScreenHeight() / margenSuperior : 0;
+        this->ratioMargenInf = margenInferior != 0 ? GetScreenHeight() / margenInferior : 0;
+    }
+
+    ~ContadorVidas() {
+        UnloadTexture(imagen_vida_p1);
+        UnloadTexture(imagen_vida_p2);
+    }
+
+    void Unload() {
+        UnloadTexture(imagen_vida_p1);
+        UnloadTexture(imagen_vida_p2);
+    };
+
+    void Actualizar(unsigned int vidas_p1, unsigned int vidas_p2, unsigned int creditos) {
+        this->vidas_p1 = vidas_p1;
+        this->vidas_p2 = vidas_p2;
+
+        float tamanoMargenSup = ratioMargenSup != 0 ? GetScreenHeight() / ratioMargenSup : 0;
+        float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
+        float anchura = GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO;
+        float altura = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO;
+
+        if (!hayP2) {
+            if (creditos >= 1) {
+                hayCreditos = true;
+            }
+            else {
+                hayCreditos = false;
+            }
+        }
+        
+
+    };
+
+    void Dibujar() {
+        float tamanoMargenSup = ratioMargenSup != 0 ? GetScreenHeight() / ratioMargenSup : 0;
+        float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
+        // Destination rectangle (screen rectangle where drawing part of texture)
+        float altura_bloque = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO;
+        float anchura_bloque = GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO;
+
+        // Vidas p1
+        destRect = {
+            0, // Posicion x de la esquina topleft
+            GetScreenHeight() - tamanoMargenInf - altura_bloque, // Posicion y de la esquina topleft
+            anchura_bloque,  // anchura bloque
+            altura_bloque // altura bloque
+        };
+        for (int i = 0; i < this->vidas_p1; i++) {
+            DrawTexturePro(imagen_vida_p1, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+            destRect.x += anchura_bloque;
+        }
+
+        // Vidas p2
+        if (hayP2) { // Si hay p2 se dibujan las vidas
+            destRect = {
+                GetScreenWidth() - anchura_bloque, // Posicion x de la esquina topleft
+                GetScreenHeight() - tamanoMargenInf - altura_bloque, // Posicion y de la esquina topleft
+                anchura_bloque,  // anchura bloque
+                altura_bloque // altura bloque
+            };
+            for (int i = 0; i < this->vidas_p2; i++) {
+                DrawTexturePro(imagen_vida_p2, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+                destRect.x -= anchura_bloque;
+            }
+        }
+        else if (!cargando_siguiente_nivel && hayCreditos) { // Si no hay p2 y hay creditos se muestra el sprite PUSH_2P
+            iteraciones++;
+            if (iteraciones == frecuencia) {
+                indice = (indice + 1) % 2;
+                iteraciones = 0;
+            }
+            destRect = {
+                GetScreenWidth() - anchura_bloque * 7,
+                GetScreenHeight() - tamanoMargenInf - altura_bloque * 5,
+                anchura_bloque * 4,
+                altura_bloque * 4
+            };
+            DrawTexturePro(push_2P_sprites[indice], srcRect_push2P_sprites, destRect, Vector2{0, 0}, 0.0f, WHITE);
+        }
+        else if (cargando_siguiente_nivel) { // Si se está cargando el siguiente nivel 
+            iteraciones++;
+            if (iteraciones == FRAMES_CARGAR_SIGUIENTE_NIVEL) {
+                iteraciones = 0;
+                cargando_siguiente_nivel = false;
+            }
+        }
+        
+    }
+
+    void cargar_siguiente_nivel() {
+        cargando_siguiente_nivel = true;
+        iteraciones = 0;
+    }
+};
