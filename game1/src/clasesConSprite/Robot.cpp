@@ -30,7 +30,7 @@ public:
     //Frames
     int targetFrames;
     int cuentaFrames = 0;
-    int velocidadFrames = 2;
+    int velocidadFrames = 4;
 
     //Colisiones
     Plataforma lastGround;
@@ -66,6 +66,10 @@ public:
         if (muerto) {
             animacionActiva = 1;
             Caer();
+        }
+        else if (enfadado) {
+            enfadar();
+            enfadado = false;
         }
         else if (!saltando && enElAire) {
             CaerLento();

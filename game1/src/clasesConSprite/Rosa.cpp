@@ -30,7 +30,7 @@ public:
     //Frames
     int targetFrames;
     int cuentaFrames = 0;
-    int velocidadFrames = 2;
+    int velocidadFrames = 4;
 
     //Colisiones
     Plataforma lastGround;
@@ -74,8 +74,10 @@ public:
             animacionActiva = 1;
             Caer();
         }
-//        MoverHorizontal(playerPosition);
-
+        else if (enfadado) {
+            enfadar();
+            enfadado = false;
+        }
         else if (colision == 0) {
             std::cout << "LLL" << std::endl;
             SeguirJugador(playerPosition);

@@ -30,7 +30,7 @@ public:
     //Frames
     int targetFrames;
     int cuentaFrames = 0;
-    int velocidadFrames = 2;
+    int velocidadFrames = 4;
 
     //Colisiones
     Plataforma lastGround;
@@ -39,7 +39,6 @@ public:
     int direccionX = 0; //0->izquierda, 1->derecha
     int direccionY = 0; //0->abajo, 1->arriba
 
-    float random = 100;
 
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
@@ -71,6 +70,10 @@ public:
         if (muerto) {
             animacionActiva = 1;
             Caer();
+        }
+        else if (enfadado) {
+            enfadar();
+            enfadado = false;
         }
         //Si va a la izquierda
         else if (direccionX == 0) {

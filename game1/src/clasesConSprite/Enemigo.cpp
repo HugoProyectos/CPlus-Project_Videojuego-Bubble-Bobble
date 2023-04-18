@@ -16,7 +16,7 @@ public:
     bool enElAire = false;
     bool cayendo = false;
     bool golpeado = false;
-    bool enfadado = true;
+    bool enfadado = false;
     float velocidadLateral = 0;
     float velocidadSalto = 0;
     float saltoRecorrido = 0;
