@@ -37,6 +37,10 @@ public:
 
     bool mostrar_gameover = false;
 
+    bool hayP2 = false;
+    unsigned int ronda = 0;
+    bool clear = false;
+
     std::string texto_gameover = "GAME OVER";
 
     GameOver() = default; //Debe llamarsse a Inicializador
@@ -85,7 +89,7 @@ public:
 
     };
 
-    void Dibujar(unsigned int ronda, bool hayP2, bool clear) {
+    void Dibujar() {
         float tamanoMargenSup = ratioMargenSup != 0 ? GetScreenHeight() / ratioMargenSup : 0;
         float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
         float tamanoPantalla = (float)GetScreenHeight() - tamanoMargenSup - tamanoMargenInf;

@@ -35,7 +35,7 @@ int main(void)
 
     InitAudioDevice();
 
-    GameScreen currentScreen = GAME_OVER;
+    GameScreen currentScreen = CONTROLS_MENU;
 
     // TODO: Initialize all required variables and load all required data here!
     // 
@@ -157,7 +157,7 @@ int main(void)
             // Wait for 2 seconds (120 frames) before jumping to TITLE screen
             if (IsKeyPressed(tecla_p1) && credits.creditos >= 1)
             {
-                currentScreen = NIVEL_5;
+                currentScreen = NIVEL_1;
                 credits.creditos -= 1;
                 admin.scores.hayP1 = true;
             }
@@ -167,6 +167,7 @@ int main(void)
                 admin.scores.hayP1 = true;
                 admin.scores.hayP2 = true;
                 contadorVidas.hayP2 = true;
+                gameover.hayP2 = true;
                 //bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
             }
         } break;
@@ -216,12 +217,22 @@ int main(void)
                 admin.actualizaFrutas(plataformas);
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);  
+                
+                if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
+                    gameover.ronda = 1;
+                    currentScreen = GAME_OVER;
+                }
+                else if (gameover.hayP2 && bub.muerto && bob.muerto && bub.numVidas == 0 && bob.numVidas == 0) {
+                    gameover.ronda = 1;
+                    currentScreen = GAME_OVER;
+                }
 
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
            		{
                 	credits.creditos -= 1;
                     admin.scores.hayP2 = true;
                     contadorVidas.hayP2 = true;
+                    gameover.hayP2 = true;
                     //bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
             	}
                   
@@ -231,6 +242,7 @@ int main(void)
                 admin.CambioDeMapa(1);
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_grande.png", 2);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_pequeno.png", "resources/mapa_nivel_2/mapa.txt");
+                contadorVidas.cargar_siguiente_nivel();
                 bub.cambioMapa = 2; 
                 bob.cambioMapa = 2;
                 bub.nivel = 1;
@@ -301,10 +313,22 @@ int main(void)
 
                 admin.actualizaEnemigos(plataformas, columnas);
 
+                contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
+
+                if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
+                    gameover.ronda = 1;
+                    currentScreen = GAME_OVER;
+                }
+                else if (gameover.hayP2 && bub.muerto && bob.muerto && bub.numVidas == 0 && bob.numVidas == 0) {
+                    gameover.ronda = 1;
+                    currentScreen = GAME_OVER;
+                }
+
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
                 {
                     credits.creditos -= 1;
                     admin.scores.hayP2 = true;
+                    gameover.hayP2 = true;
                 }
 
             }
@@ -313,6 +337,7 @@ int main(void)
                 admin.CambioDeMapa(2); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_grande.png", 3);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_pequeno.png", "resources/mapa_nivel_3/mapa.txt");
+                contadorVidas.cargar_siguiente_nivel();
                 bub.cambioMapa = 2; // TODO
                 bob.cambioMapa = 2; // TODO
                 bub.nivel = 2;
@@ -384,10 +409,22 @@ int main(void)
 
                 admin.actualizaEnemigos(plataformas, columnas);
 
+                contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
+
+                if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
+                    gameover.ronda = 1;
+                    currentScreen = GAME_OVER;
+                }
+                else if (gameover.hayP2 && bub.muerto && bob.muerto && bub.numVidas == 0 && bob.numVidas == 0) {
+                    gameover.ronda = 1;
+                    currentScreen = GAME_OVER;
+                }
+
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
                 {
                     credits.creditos -= 1;
                     admin.scores.hayP2 = true;
+                    gameover.hayP2 = true;
                 }
 
             }
@@ -396,6 +433,7 @@ int main(void)
                 admin.CambioDeMapa(2); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_4/bloque_grande.png", 4);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_4/bloque_pequeno.png", "resources/mapa_nivel_4/mapa.txt");
+                contadorVidas.cargar_siguiente_nivel();
                 bub.cambioMapa = 2; // TODO
                 bob.cambioMapa = 2; // TODO
                 bub.nivel = 3;
@@ -473,10 +511,22 @@ int main(void)
 
                 admin.actualizaEnemigos(plataformas, columnas);
 
+                contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
+
+                if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
+                    gameover.ronda = 1;
+                    currentScreen = GAME_OVER;
+                }
+                else if (gameover.hayP2 && bub.muerto && bob.muerto && bub.numVidas == 0 && bob.numVidas == 0) {
+                    gameover.ronda = 1;
+                    currentScreen = GAME_OVER;
+                }
+
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
                 {
                     credits.creditos -= 1;
                     admin.scores.hayP2 = true;
+                    gameover.hayP2 = true;
                 }
 
             }
@@ -485,6 +535,7 @@ int main(void)
                 admin.CambioDeMapa(2); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_grande.png", 5);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt");
+                contadorVidas.cargar_siguiente_nivel();
                 bub.cambioMapa = 2; // TODO
                 bob.cambioMapa = 2; // TODO
                 bub.nivel = 4;
@@ -554,26 +605,29 @@ int main(void)
 
                 admin.actualizaEnemigos(plataformas, columnas);
 
+                contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
+
+                if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
+                    gameover.ronda = 1;
+                    currentScreen = GAME_OVER;
+                }
+                else if (gameover.hayP2 && bub.muerto && bob.muerto && bub.numVidas == 0 && bob.numVidas == 0) {
+                    gameover.ronda = 1;
+                    currentScreen = GAME_OVER;
+                }
+
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
                 {
                     credits.creditos -= 1;
                     admin.scores.hayP2 = true;
+                    gameover.hayP2 = true;
                 }
 
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(1); // TODO
-                admin.CambioDeMapa(2); // TODO
-                columnas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_grande.png", 2);
-                plataformas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_pequeno.png", "resources/mapa_nivel_3/mapa.txt");
-                bub.cambioMapa = 2; // TODO
-                bob.cambioMapa = 2; // TODO
-                jugando_nivel = false;
-
-            }
-            else {
-                currentScreen = NIVEL_5;
-                jugando_nivel = true;
+                gameover.ronda = 5;
+                gameover.clear = true;
+                currentScreen = GAME_OVER;
             }
         } break;
         case CONTROLS_MENU:
@@ -610,10 +664,18 @@ int main(void)
         } break;
         case GAME_OVER:
         { 
-            scores.Actualizar(); 
+            admin.scores.Actualizar(); 
             credits.Actualizar(); 
             if (gameover.Actualizar()) {
                 currentScreen = MAIN_MENU; 
+                admin.scores.hayP1 = false;
+                bub.numVidas = 2;
+                if (admin.scores.hayP2) {
+                    admin.scores.hayP2 = false;
+                    bob.numVidas = 2;
+                }
+                admin.scores.puntuacion1 = 0;
+                admin.scores.puntuacion2 = 0;
             }
         } break;
         default: break;
@@ -668,6 +730,7 @@ int main(void)
             plataformas.Dibujar();
             admin.scores.Dibujar();
             admin.agua.Dibujar();
+            contadorVidas.Dibujar();
             if (!bub.muerto) {
                 bub.Dibujar();
             }
@@ -685,6 +748,7 @@ int main(void)
             plataformas.Dibujar();
             admin.scores.Dibujar();
             admin.agua.Dibujar();
+            contadorVidas.Dibujar();
             if (!bub.muerto) {
                 bub.Dibujar();
             }
@@ -702,6 +766,7 @@ int main(void)
             plataformas.Dibujar();
             admin.scores.Dibujar();
             admin.agua.Dibujar();
+            contadorVidas.Dibujar();
             if (!bub.muerto) {
                 bub.Dibujar();
             }
@@ -719,6 +784,7 @@ int main(void)
             plataformas.Dibujar();
             admin.scores.Dibujar();
             admin.agua.Dibujar();
+            contadorVidas.Dibujar();
             if (!bub.muerto) {
                 bub.Dibujar();
             }
@@ -735,8 +801,8 @@ int main(void)
         } break;
         case GAME_OVER:
         {  
-            scores.Dibujar();
-            gameover.Dibujar(10, true, true);   
+            admin.scores.Dibujar();
+            gameover.Dibujar();   
         } break;
         default: break;
         }
@@ -752,8 +818,7 @@ int main(void)
     main_menu.Unload();
     columnas.Unload();
     plataformas.Unload();
-    credits.Unload();
-    scores.Unload();     
+    credits.Unload(); 
     admin.scores.Unload();
 
     CloseWindow();        // Close window and OpenGL context
