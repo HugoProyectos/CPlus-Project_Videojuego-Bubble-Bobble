@@ -179,7 +179,7 @@ int nivel_1(void)
 //------------------------------------------------------------------------------------------
 // Types and Structures Definition
 //------------------------------------------------------------------------------------------
-typedef enum GameScreen { MAIN_MENU, NIVEL_1, CONTROLS_MENU } GameScreen;
+typedef enum GameScreen { MAIN_MENU, NIVEL_1, NIVEL_2, NIVEL_3, NIVEL_4, NIVEL_5, CONTROLS_MENU } GameScreen;
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -216,8 +216,8 @@ int main(void)
 
     // Nivel 1:
     //--------------------------------------------------------------------------------------
-    Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f);
+    Columnas columnas = Columnas("resources/mapa_nivel_5/bloque_grande.png", 40.0f, 0.0f, 1);
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt", 40.0f, 0.0f);
     //--------------------------------------------------------------------------------------
 
     // Controls:
@@ -225,12 +225,12 @@ int main(void)
     Controls controls = Controls("config.ini");
     //--------------------------------------------------------------------------------------
     
-    int numPlat = plataformas.listaPlataforma.size();
+    //int numPlat = plataformas.listaPlataforma.size();
 
     AdministradorPompas admin = AdministradorPompas();
     Texture2D spriteAgua = LoadTexture("resources/agua.png");
     Rectangle destAgua = { -100, -100, 16, 16 };
-    admin.agua = Agua(destAgua, true, spriteAgua, numPlat);
+    admin.agua = Agua(destAgua, true, spriteAgua, plataformas.listaPlataforma.size());
     admin.agua.existe = false;
     admin.iniciaMapa(3);
     admin.CambioDeMapa(1);
@@ -266,6 +266,7 @@ int main(void)
     Bub bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
 
     
+    bool jugando_nivel = true;
 
     //bub.destRec.x = 100; bub.destRec.y = 100;
 
@@ -310,13 +311,13 @@ int main(void)
         case NIVEL_1:
         {
             // TODO: Update NIVEL_1 screen variables here!
-            if (!admin.cambiaNivel) {
+            if (!admin.cambiaNivel && jugando_nivel) {
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
                 scores.Actualizar();
                 bub.Actualizar();
-                for (int i = 0; i < numPlat; i++) {
+                for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
                     bub.compruebaColision(plataformas.listaPlataforma[i]);
                 }
                 bub.compruebaPared(columnas);
@@ -329,7 +330,7 @@ int main(void)
                 }
 
                 bob.Actualizar();
-                for (int i = 0; i < numPlat; i++) {
+                for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
                     bob.compruebaColision(plataformas.listaPlataforma[i]);
                 }
                 bob.compruebaPared(columnas);
@@ -355,13 +356,271 @@ int main(void)
             	}
 
             }
-            else {
+            else if (admin.cambiaNivel) {
                 admin.iniciaMapa(1);
                 admin.CambioDeMapa(2);
-                //currentScreen = NIVEL_2;
-                bub.cambioMapa = 2;
+                columnas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_grande.png", 2);
+                plataformas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_pequeno.png", "resources/mapa_nivel_2/mapa.txt");
+                bub.cambioMapa = 2; 
                 bob.cambioMapa = 2;
+                jugando_nivel = false;
 
+            }
+            else {
+                currentScreen = NIVEL_2;
+                jugando_nivel = true;
+            }
+        } break;
+        case NIVEL_2:
+        {
+            // TODO: Update NIVEL_2 screen variables here!
+            if (!admin.cambiaNivel && jugando_nivel) {
+                columnas.Actualizar();
+                plataformas.Actualizar();
+                credits.Actualizar();
+                scores.Actualizar();
+                bub.Actualizar();
+                for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
+                    bub.compruebaColision(plataformas.listaPlataforma[i]);
+                }
+                bub.compruebaPared(columnas);
+                if (bub.enElAgua) {
+                    bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
+                    bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
+                }
+                else if (admin.agua.existe) {
+                    bub.enElAgua = admin.agua.colisionBub(bub.destRec, bub.waterlessFrames);
+                }
+
+                bob.Actualizar();
+                for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
+                    bob.compruebaColision(plataformas.listaPlataforma[i]);
+                }
+                bob.compruebaPared(columnas);
+                if (bob.enElAgua) {
+                    bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
+                    bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
+                }
+                else if (admin.agua.existe) {
+                    bob.enElAgua = admin.agua.colisionBub(bob.destRec, bob.waterlessFrames);
+                }
+                admin.agua.Actualizar(plataformas, columnas);
+                admin.actualizaPompas();
+                for (int i = 0; i < admin.enemigos.size(); i++) {
+                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                }
+
+                admin.actualizaEnemigos(plataformas, columnas);
+
+                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
+                {
+                    credits.creditos -= 1;
+                    scores.hayP2 = true;
+                }
+
+            }
+            else if (admin.cambiaNivel) {
+                admin.iniciaMapa(1); // TODO
+                admin.CambioDeMapa(2); // TODO
+                columnas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_grande.png", 3);
+                plataformas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_pequeno.png", "resources/mapa_nivel_3/mapa.txt");
+                bub.cambioMapa = 2; // TODO
+                bob.cambioMapa = 2; // TODO
+                jugando_nivel = false;
+
+            }
+            else {
+                currentScreen = NIVEL_3;
+                jugando_nivel = true;
+            }
+        } break;
+        case NIVEL_3:
+        {
+            // TODO: Update NIVEL_3 screen variables here!
+            if (!admin.cambiaNivel && jugando_nivel) {
+                columnas.Actualizar();
+                plataformas.Actualizar();
+                credits.Actualizar();
+                scores.Actualizar();
+                bub.Actualizar();
+                for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
+                    bub.compruebaColision(plataformas.listaPlataforma[i]);
+                }
+                bub.compruebaPared(columnas);
+                if (bub.enElAgua) {
+                    bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
+                    bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
+                }
+                else if (admin.agua.existe) {
+                    bub.enElAgua = admin.agua.colisionBub(bub.destRec, bub.waterlessFrames);
+                }
+
+                bob.Actualizar();
+                for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
+                    bob.compruebaColision(plataformas.listaPlataforma[i]);
+                }
+                bob.compruebaPared(columnas);
+                if (bob.enElAgua) {
+                    bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
+                    bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
+                }
+                else if (admin.agua.existe) {
+                    bob.enElAgua = admin.agua.colisionBub(bob.destRec, bob.waterlessFrames);
+                }
+                admin.agua.Actualizar(plataformas, columnas);
+                admin.actualizaPompas();
+                for (int i = 0; i < admin.enemigos.size(); i++) {
+                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                }
+
+                admin.actualizaEnemigos(plataformas, columnas);
+
+                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
+                {
+                    credits.creditos -= 1;
+                    scores.hayP2 = true;
+                }
+
+            }
+            else if (admin.cambiaNivel) {
+                admin.iniciaMapa(1); // TODO
+                admin.CambioDeMapa(2); // TODO
+                columnas.CargarSiguienteNivel("resources/mapa_nivel_4/bloque_grande.png", 4);
+                plataformas.CargarSiguienteNivel("resources/mapa_nivel_4/bloque_pequeno.png", "resources/mapa_nivel_4/mapa.txt");
+                bub.cambioMapa = 2; // TODO
+                bob.cambioMapa = 2; // TODO
+                jugando_nivel = false;
+
+            }
+            else {
+                currentScreen = NIVEL_4;
+                jugando_nivel = true;
+            }
+        } break;
+        case NIVEL_4:
+        {
+            // TODO: Update NIVEL_4 screen variables here!
+            if (!admin.cambiaNivel && jugando_nivel) {
+                columnas.Actualizar();
+                plataformas.Actualizar();
+                credits.Actualizar();
+                scores.Actualizar();
+                bub.Actualizar();
+                for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
+                    bub.compruebaColision(plataformas.listaPlataforma[i]);
+                }
+                bub.compruebaPared(columnas);
+                if (bub.enElAgua) {
+                    bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
+                    bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
+                }
+                else if (admin.agua.existe) {
+                    bub.enElAgua = admin.agua.colisionBub(bub.destRec, bub.waterlessFrames);
+                }
+
+                bob.Actualizar();
+                for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
+                    bob.compruebaColision(plataformas.listaPlataforma[i]);
+                }
+                bob.compruebaPared(columnas);
+                if (bob.enElAgua) {
+                    bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
+                    bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
+                }
+                else if (admin.agua.existe) {
+                    bob.enElAgua = admin.agua.colisionBub(bob.destRec, bob.waterlessFrames);
+                }
+                admin.agua.Actualizar(plataformas, columnas);
+                admin.actualizaPompas();
+                for (int i = 0; i < admin.enemigos.size(); i++) {
+                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                }
+
+                admin.actualizaEnemigos(plataformas, columnas);
+
+                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
+                {
+                    credits.creditos -= 1;
+                    scores.hayP2 = true;
+                }
+
+            }
+            else if (admin.cambiaNivel) {
+                admin.iniciaMapa(1); // TODO
+                admin.CambioDeMapa(2); // TODO
+                columnas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_grande.png", 5);
+                plataformas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt");
+                bub.cambioMapa = 2; // TODO
+                bob.cambioMapa = 2; // TODO
+                jugando_nivel = false;
+
+            }
+            else {
+                currentScreen = NIVEL_5;
+                jugando_nivel = true;
+            }
+        } break;
+        case NIVEL_5:
+        {
+            // TODO: Update NIVEL_5 screen variables here!
+            if (!admin.cambiaNivel && jugando_nivel) {
+                columnas.Actualizar();
+                plataformas.Actualizar();
+                credits.Actualizar();
+                scores.Actualizar();
+                bub.Actualizar();
+                for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
+                    bub.compruebaColision(plataformas.listaPlataforma[i]);
+                }
+                bub.compruebaPared(columnas);
+                if (bub.enElAgua) {
+                    bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
+                    bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
+                }
+                else if (admin.agua.existe) {
+                    bub.enElAgua = admin.agua.colisionBub(bub.destRec, bub.waterlessFrames);
+                }
+
+                bob.Actualizar();
+                for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
+                    bob.compruebaColision(plataformas.listaPlataforma[i]);
+                }
+                bob.compruebaPared(columnas);
+                if (bob.enElAgua) {
+                    bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
+                    bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
+                }
+                else if (admin.agua.existe) {
+                    bob.enElAgua = admin.agua.colisionBub(bob.destRec, bob.waterlessFrames);
+                }
+                admin.agua.Actualizar(plataformas, columnas);
+                admin.actualizaPompas();
+                for (int i = 0; i < admin.enemigos.size(); i++) {
+                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                }
+
+                admin.actualizaEnemigos(plataformas, columnas);
+
+                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
+                {
+                    credits.creditos -= 1;
+                    scores.hayP2 = true;
+                }
+
+            }
+            else if (admin.cambiaNivel) {
+                admin.iniciaMapa(1); // TODO
+                admin.CambioDeMapa(2); // TODO
+                columnas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_grande.png", 2);
+                plataformas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_pequeno.png", "resources/mapa_nivel_3/mapa.txt");
+                bub.cambioMapa = 2; // TODO
+                bob.cambioMapa = 2; // TODO
+                jugando_nivel = false;
+
+            }
+            else {
+                currentScreen = NIVEL_5;
+                jugando_nivel = true;
             }
         } break;
         case CONTROLS_MENU:
@@ -369,6 +628,7 @@ int main(void)
             controls.Actualizar();
             if (IsKeyPressed(KEY_ENTER)) {
                 // ASIGNAR TODOS LOS BOTONES
+                controls.actualizarControles();
                 credits.tecla = controls.coin;
                 tecla_p1 = controls.play1;
                 tecla_p2 = controls.play2;
@@ -414,6 +674,58 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             
+        } break;
+        case NIVEL_2:
+        {
+            // TODO: Draw NIVEL_2 screen here!
+            columnas.Dibujar();
+            plataformas.Dibujar();
+            scores.Dibujar();
+            admin.agua.Dibujar();
+            bub.Dibujar();
+            bob.Dibujar();
+            admin.dibujaPompas();
+            admin.dibujaEnemigos();
+
+        } break;
+        case NIVEL_3:
+        {
+            // TODO: Draw NIVEL_2 screen here!
+            columnas.Dibujar();
+            plataformas.Dibujar();
+            scores.Dibujar();
+            admin.agua.Dibujar();
+            bub.Dibujar();
+            bob.Dibujar();
+            admin.dibujaPompas();
+            admin.dibujaEnemigos();
+
+        } break;
+        case NIVEL_4:
+        {
+            // TODO: Draw NIVEL_2 screen here!
+            columnas.Dibujar();
+            plataformas.Dibujar();
+            scores.Dibujar();
+            admin.agua.Dibujar();
+            bub.Dibujar();
+            bob.Dibujar();
+            admin.dibujaPompas();
+            admin.dibujaEnemigos();
+
+        } break;
+        case NIVEL_5:
+        {
+            // TODO: Draw NIVEL_2 screen here!
+            columnas.Dibujar();
+            plataformas.Dibujar();
+            scores.Dibujar();
+            admin.agua.Dibujar();
+            bub.Dibujar();
+            bob.Dibujar();
+            admin.dibujaPompas();
+            admin.dibujaEnemigos();
+
         } break;
         case CONTROLS_MENU:
         {

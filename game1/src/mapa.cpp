@@ -255,15 +255,18 @@ public:
     }
 
     void CargarSiguienteNivel(std::string ruta_bloque_pequeno_siguiente, std::string ruta_ubicacion_bloques_siguiente) {
-        this->cargando_nivel_siguiente = true;
-        this->bloque_pequeno_siguiente = LoadTexture(ruta_bloque_pequeno_siguiente.c_str());
+        if (this->cargando_nivel_siguiente == false) {
+            this->cargando_nivel_siguiente = true;
+            this->bloque_pequeno_siguiente = LoadTexture(ruta_bloque_pequeno_siguiente.c_str());
 
-        // Crear una plataforma por cada linea de ruta_ubicacion_bloques
-        this->listaPlataformaSiguiente = this->leerArchivo(ruta_ubicacion_bloques_siguiente);
-        // Se actualiza para poder tener los valores top y bot correctos
-        for (int i = 0; i < listaPlataformaSiguiente.size(); i++) {
-            listaPlataformaSiguiente[i].Actualizar(ratioMargenSup, ratioMargenInf);
+            // Crear una plataforma por cada linea de ruta_ubicacion_bloques
+            this->listaPlataformaSiguiente = this->leerArchivo(ruta_ubicacion_bloques_siguiente);
+            // Se actualiza para poder tener los valores top y bot correctos
+            for (int i = 0; i < listaPlataformaSiguiente.size(); i++) {
+                listaPlataformaSiguiente[i].Actualizar(ratioMargenSup, ratioMargenInf);
+            }
         }
+        
     }
 };
 
@@ -414,9 +417,11 @@ public:
     }
 
     void CargarSiguienteNivel(std::string ruta_bloque_grande_siguiente, unsigned int numeroNivelSiguiente) {
-        this->cargando_nivel_siguiente = true;
-        this->bloque_grande_siguiente = LoadTexture(ruta_bloque_grande_siguiente.c_str());
-        this->numeroNivelSiguiente = std::to_string(numeroNivelSiguiente);
+        if (this->cargando_nivel_siguiente == false){
+            this->cargando_nivel_siguiente = true;
+            this->bloque_grande_siguiente = LoadTexture(ruta_bloque_grande_siguiente.c_str());
+            this->numeroNivelSiguiente = std::to_string(numeroNivelSiguiente);
+        }
     }
 };
 
