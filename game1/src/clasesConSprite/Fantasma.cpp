@@ -78,7 +78,7 @@ public:
         
         if (muerto) {
             animacionActiva = 1;
-            //Caer();
+            Caer();
         }
         else if (!saltando && enElAire) {
             CaerLento();
@@ -123,10 +123,6 @@ public:
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames)) {
             cuentaFrames = 0;
-            if (muerto) {
-                animacionActiva = 1;
-                Caer();
-            }
             switch (animacionActiva) {
             case 0:
                 //Actualizar width&height animacion

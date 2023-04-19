@@ -254,7 +254,7 @@ int main(void)
 
     admin.enemigos.push_back(rosa);
 
-    
+    /*
 
     destRob = { (float)GetScreenWidth() / 2, 60, 32, 32 };
     sh_Enemigo mor = std::make_shared<Morado>(Morado("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
@@ -262,6 +262,7 @@ int main(void)
     destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
     sh_Enemigo robot2 = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     admin.enemigos.push_back(robot2);
+    */
 
     Rectangle destPompa = { 100, GetScreenHeight() - GetScreenHeight()/2, 32, 32 };
     Pompa p = Pompa(spritePompa, destPompa, 0, 0, false, Pompa::INFINITA);
