@@ -531,6 +531,7 @@ public:
                         }
                         enElAire = true;
                         cayendo = true;
+                        disparando = false;
                         cambioMapa = 0;
                         cuentaFramesTraslacion = 0;
                     }

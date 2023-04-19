@@ -23,7 +23,7 @@ public:
 	//Gestión de cambio de nivel
 	bool cambiaNivel = false;
 	uint32_t contadorFrames = 0;
-	const uint32_t CUENTA_MAXIMA_FIN_NIVEL = 60 * 15;
+	const uint32_t CUENTA_MAXIMA_FIN_NIVEL = 60 * 10;
 	uint8_t enemigosPorMatar = 0;
 	
 	/*Rectangle posicionJugador = {-1,-1,-1,-1};
