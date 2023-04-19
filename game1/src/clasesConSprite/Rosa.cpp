@@ -180,9 +180,11 @@ public:
                 destRec.y += 0.1;
             }
             else {
-                destRec.y += velocidadLateral;
+                    destRec.y += velocidadLateral;
             }
-            
+        }
+        else {
+            destRec.y -= velocidadLateral;
         }
         //El movimiento horizontal depende del sentido
         if (direccionX == 0) {
