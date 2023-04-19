@@ -30,8 +30,10 @@ public:
     bool muerto;
 	bool borrame;
     bool enElAire;
+    bool eliminame;
 	Plataforma lastGround;
     int alturaMax;
+    clock_t temp;
 
 	Frutas() = default;
 
@@ -61,6 +63,7 @@ public:
         enElAire = true;
         destRec = destino;
         alturaMax = destRec.y - 5;
+        eliminame = false;
 	}
 
 	~Frutas() {
@@ -77,6 +80,13 @@ public:
 	}
 
     void Actualizar() {
+
+        if (eliminame) {
+            if ((clock() - temp) > 2 * CLOCKS_PER_SEC) {
+                borrame = true;
+            }
+        }
+        
         
 
         if (muerto) {
@@ -101,9 +111,6 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
-                if (indiceAnimacion == (fAnimation[1] - 1) ) {
-                    borrame = true;
-                }
                 break;
             default:
                 break;
@@ -119,6 +126,10 @@ public:
     void Asciende() {
         if( (destRec.y - velCaida / 2) > alturaMax ){
             destRec.y -= velCaida / 2;
+        }
+        else if (!eliminame) {
+            eliminame = true;
+            temp = clock();
         }
     }
 

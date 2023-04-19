@@ -211,13 +211,6 @@ public:
 				for (int i = 0; i < pompas.size(); i++) {
 					pompas.at(i)->explota();
 				}
-				// Frutas --------
-				/*
-				for (int i = 0; i < frutas.size(); i++) {
-					frutas.at(i)->Unload();
-				}
-				*/
-				//----------------
 			}
 			contadorFrames++;
 			if (contadorFrames >= CUENTA_MAXIMA) {
@@ -259,6 +252,16 @@ public:
 		return auxiliar;
 	}
 
+	std::vector<sh_Frutas> eliminaFruta(int i) {
+		std::vector<sh_Frutas> aux;
+		for (int j = 0; j < frutas.size(); j++) {
+			if (j != i) {
+				aux.push_back(frutas.at(j));
+			}
+		}
+		return aux;
+	}
+
 	void actualizaEnemigos(Plataformas& plataformas, Columnas& columnas) {
 		for (int i = 0; i < enemigos.size(); i++) {
 			if (enemigos.at(i)->borrame) {
@@ -287,10 +290,16 @@ public:
 
 	void actualizaFrutas(Plataformas& plataformas) {
 		for (int i = 0; i < frutas.size(); i++) {
-			frutas.at(i)->Actualizar();
-			for (int j = 0; j < plataformas.listaPlataforma.size(); j++) {
-				frutas.at(i)->compruebaSuelo();
-				frutas.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
+			if (frutas.at(i)->borrame) {
+				frutas = eliminaFruta(i);
+				i--;
+			}
+			else {
+				frutas.at(i)->Actualizar();
+				for (int j = 0; j < plataformas.listaPlataforma.size(); j++) {
+					frutas.at(i)->compruebaSuelo();
+					frutas.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
+				}
 			}
 		}
 	}
