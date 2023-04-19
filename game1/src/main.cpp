@@ -7,6 +7,7 @@
 #include "clasesConSprite/Agua.hpp"
 #include <clasesConSprite/Fantasma.cpp>
 #include <clasesConSprite/Morado.cpp>
+#include "GameOver.cpp"
 #include <clasesConSprite/Rosa.cpp>
 #include <clasesConSprite/Blanco.cpp>
 
@@ -16,7 +17,7 @@ const int TARGET_FPS = 60;
 //------------------------------------------------------------------------------------------
 // Types and Structures Definition
 //------------------------------------------------------------------------------------------
-typedef enum GameScreen { MAIN_MENU, NIVEL_1, NIVEL_2, NIVEL_3, NIVEL_4, NIVEL_5, CONTROLS_MENU } GameScreen;
+typedef enum GameScreen { MAIN_MENU, NIVEL_1, NIVEL_2, NIVEL_3, NIVEL_4, NIVEL_5, CONTROLS_MENU, GAME_OVER } GameScreen;
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -34,7 +35,7 @@ int main(void)
 
     InitAudioDevice();
 
-    GameScreen currentScreen = CONTROLS_MENU;
+    GameScreen currentScreen = GAME_OVER;
 
     // TODO: Initialize all required variables and load all required data here!
     // 
@@ -48,8 +49,8 @@ int main(void)
     // Main Menu:
     //--------------------------------------------------------------------------------------
     MainMenu main_menu = MainMenu(10, 40, 70);
-    unsigned int tecla_p1;
-    unsigned int tecla_p2;
+    unsigned int tecla_p1 = KEY_ONE;
+    unsigned int tecla_p2 = KEY_TWO;
     //--------------------------------------------------------------------------------------
 
     // Nivel 1:
@@ -61,6 +62,11 @@ int main(void)
     // Controls:
     //--------------------------------------------------------------------------------------
     Controls controls = Controls("config.ini");
+    //--------------------------------------------------------------------------------------
+
+    // GameOver:
+    //--------------------------------------------------------------------------------------
+    GameOver gameover = GameOver(300, 40.0f, 0.0f);
     //--------------------------------------------------------------------------------------
     
     //int numPlat = plataformas.listaPlataforma.size();
@@ -77,7 +83,7 @@ int main(void)
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
-
+     
 
 
     
@@ -218,7 +224,7 @@ int main(void)
                     contadorVidas.hayP2 = true;
                     //bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
             	}
-
+                  
             }
             else if (admin.cambiaNivel) {
                 admin.iniciaMapa(4, 1200);
@@ -602,6 +608,14 @@ int main(void)
                 currentScreen = MAIN_MENU;
             }
         } break;
+        case GAME_OVER:
+        { 
+            scores.Actualizar(); 
+            credits.Actualizar(); 
+            if (gameover.Actualizar()) {
+                currentScreen = MAIN_MENU; 
+            }
+        } break;
         default: break;
         }
         //----------------------------------------------------------------------------------
@@ -616,7 +630,7 @@ int main(void)
         BeginDrawing();
 
         ClearBackground(BLACK);
-
+          
         switch (currentScreen)
         {
         case MAIN_MENU:
@@ -624,14 +638,16 @@ int main(void)
             // TODO: Draw MAIN_MENU screen here!
             main_menu.Dibujar();
             credits.Dibujar();
+            //scores.Dibujar();
             admin.scores.Dibujar();
 
         } break;
         case NIVEL_1:
         {
-            // TODO: Draw NIVEL_1 screen here!
+            // TODO: Draw NIVEL_1 screen here! 
             columnas.Dibujar();
             plataformas.Dibujar();
+            //scores.Dibujar();   
             admin.scores.Dibujar();
             admin.agua.Dibujar();
             contadorVidas.Dibujar();
@@ -644,7 +660,6 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
-            
         } break;
         case NIVEL_2:
         {
@@ -716,11 +731,16 @@ int main(void)
         } break;
         case CONTROLS_MENU:
         {
-            controls.Dibujar();
+            controls.Dibujar(); 
+        } break;
+        case GAME_OVER:
+        {  
+            scores.Dibujar();
+            gameover.Dibujar(10, true, true);   
         } break;
         default: break;
         }
-
+         
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
@@ -732,7 +752,8 @@ int main(void)
     main_menu.Unload();
     columnas.Unload();
     plataformas.Unload();
-    credits.Unload(); 
+    credits.Unload();
+    scores.Unload();     
     admin.scores.Unload();
 
     CloseWindow();        // Close window and OpenGL context
