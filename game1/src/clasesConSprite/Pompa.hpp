@@ -3,6 +3,7 @@
 #include <string>
 #include <cmath>
 #include "Robot.cpp"
+#include "../Controls.cpp"
 #include <iostream> //DEBUG
 
 //Valores de módulo acorde a lo que lleva dentro la pompa
@@ -54,6 +55,9 @@ class Pompa : public Sprite {
 	sh_Enemigo extraeEnemigo(bool matalo);
 
 public:
+	//Controles del jugador
+	static Controls controlesJugador;
+
 	//Para las pompas con agua
 	static const int INFINITA = -25;
 	static const int MODULO_AGUA = 2;

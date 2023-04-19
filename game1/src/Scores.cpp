@@ -117,4 +117,18 @@ public:
         
         
     }
+
+    void SumarPuntuacionP1(unsigned int puntuacion_a_sumar) {
+        this->puntuacion1 += puntuacion_a_sumar;
+        if (puntuacion1 > puntuacion_maxima) {
+            puntuacion_maxima = puntuacion1;
+        }
+    }
+
+    void SumarPuntuacionP2(unsigned int puntuacion_a_sumar) {
+        this->puntuacion2 += puntuacion_a_sumar;
+        if (puntuacion2 > puntuacion_maxima) {
+            puntuacion_maxima = puntuacion2;
+        }
+    }
 };

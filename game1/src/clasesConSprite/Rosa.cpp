@@ -30,7 +30,7 @@ public:
     //Frames
     int targetFrames;
     int cuentaFrames = 0;
-    int velocidadFrames = 2;
+    int velocidadFrames = 4;
 
     //Colisiones
     Plataforma lastGround;
@@ -48,8 +48,12 @@ public:
 
     Rosa(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
+        if (enfadado) {
+            animacionActiva = 3;
+            velocidadLateral *= 2;
+        }
         velMax = 2 * velLateral;
-        velMin = velLateral/2;
+        velMin = velLateral / 2;
         destRec = destino;
         tipo = 5;
         widthAnimation = walkAnimation.width / fWalkAnimation;
@@ -59,24 +63,28 @@ public:
         cayendo = true;
     };
 
+    void enfadar() {
+        animacionActiva = 3;
+        velocidadLateral *= 2;
+    }
+
     // Controlador de comportamiento
     void Actualizar(Rectangle playerPosition) override {
         if (muerto) {
             animacionActiva = 1;
             Caer();
         }
-//        MoverHorizontal(playerPosition);
-
+        else if (enfadado) {
+            enfadar();
+            enfadado = false;
+        }
         else if (colision == 0) {
-            std::cout << "LLL" << std::endl;
             SeguirJugador(playerPosition);
         }
-        else if (colision == 1) {
-            std::cout << "HHH" << std::endl;
+        else if (colision == 2) {
             MoverHorizontal(playerPosition);
         }
-        else if (colision == 2) {
-            std::cout << "VVV" << std::endl;
+        else if (colision == 1) {
             MoverVertical(playerPosition);
         }
         //Actualizar puntero de animacion
@@ -95,11 +103,28 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
+                if (indiceAnimacion == 3) {
+                    borrame = true;
+                }
+                break;
+            case 2:
+                //Actualizar width&height animacion
+                indiceAnimacion = (indiceAnimacion + 1) % fAnimation[2];
+                widthAnimation = waterAnimation.width / fAnimation[2];
+                heightAnimation = waterAnimation.height;
+                break;
+            case 3:
+                //Actualizar width&height animacion
+                indiceAnimacion = (indiceAnimacion + 1) % fAnimation[3];
+                widthAnimation = angryAnimation.width / fAnimation[3];
+                heightAnimation = angryAnimation.height;
                 break;
             default:
                 break;
             }
         }
+        colision = 0;
+        colisionAux = 0;
     }
 
     void Dibujar() override {
@@ -110,22 +135,26 @@ public:
     //funciones de comportamiento
     void SeguirJugador(Rectangle playerPosition) {
         //El movimiento vertical depende del jugador
-        if (destRec.y > playerPosition.y - 10) {
+        if (destRec.y > playerPosition.y + 10) {
             //Estamos por debajo del player, restamos posicion
+            direccionY = 0;
             destRec.y -= velocidadLateral;
         }
-        else if(destRec.y < playerPosition.y + 10) {
+        else if (destRec.y < playerPosition.y - 10) {
             //Estamos por encima del player, sumamos posicion
+            direccionY = 1;
             destRec.y += velocidadLateral;
         }
 
         //El movimiento horizontal depende del jugador
-        if (destRec.x > playerPosition.x - 10) {
+        if (destRec.x > playerPosition.x + 10) {
             //Estamos por izq del player, restamos posicion
-            destRec.x -= velocidadSalto;
+            direccionX = 0;
+            destRec.x -= velocidadLateral;
         }
-        else if (destRec.x < playerPosition.x + 10) {
+        else if (destRec.x < playerPosition.x - 10) {
             //Estamos por derecha del player, sumamos posicion
+            direccionX = 1;
             destRec.x += velocidadLateral;
         }
 
@@ -136,13 +165,26 @@ public:
 
     void MoverHorizontal(Rectangle playerPosition) {
         //El movimiento vertical depende del jugador
-        if (destRec.y > playerPosition.y - 5) {
+        if (destRec.y > playerPosition.y + 10) {
             //Estamos por debajo del player, restamos posicion
-            destRec.y -= velocidadLateral;
+            if (colisionAux == 4) {
+                destRec.y -= 0.1;
+            }
+            else {
+                destRec.y -= velocidadLateral;
+            }
         }
-        else if (destRec.y < playerPosition.y + 5) {
+        else if (destRec.y < playerPosition.y - 10) {
             //Estamos por encima del player, sumamos posicion
-            destRec.y += velocidadLateral;
+            if (colisionAux == 3) {
+                destRec.y += 0.1;
+            }
+            else {
+                destRec.y += velocidadLateral;
+            }
+        }
+        else {
+            destRec.y -= velocidadLateral;
         }
         //El movimiento horizontal depende del sentido
         if (direccionX == 0) {
@@ -160,26 +202,36 @@ public:
 
     void MoverVertical(Rectangle playerPosition) {
         //El movimiento horizontal depende del jugador
-        if (destRec.x > playerPosition.x - 5) {
+        if (destRec.x > playerPosition.x + 10) {
             //Estamos por izq del player, restamos posicion
-            destRec.x -= velocidadSalto;
+            if (colisionAux == 1) {
+                destRec.x -= 0.1;
+            }
+            else {
+                destRec.x -= velocidadLateral;
+            }
         }
-        else if (destRec.x < playerPosition.x + 5) {
+        else if (destRec.x < playerPosition.x - 10) {
             //Estamos por derecha del player, sumamos posicion
-            destRec.x += velocidadLateral;
+            if (colisionAux == 2) {
+                destRec.x += 0.1;
+            }
+            else {
+                destRec.x += velocidadLateral;
+            }
         }
         //El movimiento vertical depende del sentido
         if (direccionY == 0) {
             //Abajo
-            destRec.y += velocidadLateral;
+            destRec.y -= velocidadLateral;
         }
         else {
             //Arriba
-            destRec.y -= velocidadLateral;
+            destRec.y += velocidadLateral;
         }
-        
+
         //Width
-        srcRec.width = -pixels;
+        srcRec.width = pixels;
     }
 
     void Caer() {
@@ -187,7 +239,7 @@ public:
     }
 
     void CaerLento() {
-        destRec.y += velocidadSalto/2;
+        destRec.y += velocidadSalto / 2;
     }
 
     //Comprobacion de colisiones
@@ -231,7 +283,7 @@ public:
                         )
                 )
             ) {
-            switch (s.aproach[enemyNum + 1]) {
+            switch (s.aproach[enemyNum + 2]) {
             case 1:
                 //Derecha
                 destRec.x = s.left - destRec.width / 2;
@@ -293,7 +345,8 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 1;
+                s.aproach[enemyNum + 2] = 1;
+                colisionAux = 1;
                 colision = 1;
 
             }
@@ -319,7 +372,8 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 2;
+                s.aproach[enemyNum + 2] = 2;
+                colisionAux = 2;
                 colision = 1;
 
             }
@@ -345,7 +399,8 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 3;
+                s.aproach[enemyNum + 2] = 3;
+                colisionAux = 3;
                 colision = 2;
 
             }
@@ -372,7 +427,8 @@ public:
                     )
                 ) {
                 //Si no se cumplen anteriores asumimos que se acerca por debajo
-                s.aproach[enemyNum + 1] = 4;
+                s.aproach[enemyNum + 2] = 4;
+                colisionAux = 4;
                 colision = 2;
             }
         }

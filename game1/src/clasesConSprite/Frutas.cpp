@@ -1,71 +1,113 @@
 #pragma once
-#include "Enemigo.cpp"
-#include <ctime>
-class Bola : public Enemigo {
+#include "Sprite.hpp"
+#include "Suelo.cpp"
+#include "mapa.cpp"
+#include "../Scores.cpp"
+#include <iostream>
+
+class Frutas : public Sprite {
+
+
 public:
-    //Sprite pixels
-    int pixels = 16; //El numero de pixeles del sprite
-
-    //Animation
-    Texture2D walkAnimation = LoadTexture("resources/enemyBola/bolas.png");
-    Texture2D deadAnimation = LoadTexture("resources/enemyBola/bolasMuerte.png");
-    int fWalkAnimation = 4; //Número de fotogramas de la animacion camniar
-    int fDeadAnimation = 4; //Número de fotogramas de la animacion camniar
-    int widthAnimation; // Se actualiza para cada animación activa
-    int heightAnimation;
-    Texture2D animations[2] = { walkAnimation, deadAnimation };
-    int fAnimation[2] = { fWalkAnimation, fDeadAnimation };
-    int ID;
-
-
-    int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation, 1->DeadAnimation, 2->BallLeft,
-    int indiceAnimacion = 0; //Indica el número de frame actual de la animación activa
-
-    //Frames
-    int targetFrames;
-    int cuentaFrames = 0;
-    int velocidadFrames = 2;
-
-    bool direccion; // izquierda false derecha true
-    Plataforma lastGround;
+	// Animacion y sprites -------------------------------------------------------
+	std::string path = "resources/frutas/";
+    Texture2D walkAnimation = LoadTexture("resources/frutas/cereza.png");
+    Texture2D deadAnimation = LoadTexture("resources/frutas/500.png");
+	Texture2D animations[2] = { walkAnimation, deadAnimation };
+	int fWalkAnimation = 1; 
+	int fDeadAnimation = 1;
+	int fAnimation[2] = { fWalkAnimation , fDeadAnimation };
+	int widthAnimation; 
+	int heightAnimation;
+	int animacionActiva = 0; 
+	int indiceAnimacion = 0; 
+	int targetFrames;
+	int cuentaFrames = 0;
+	int velocidadFrames = 2;
+	int pixels = 16;
+	//----------------------------------------------------------------------------
+	int velCaida;
+	unsigned int puntuacion;
+    bool muerto;
+	bool borrame;
+    bool enElAire;
+    bool eliminame;
+	Plataforma lastGround;
+    int alturaMax;
     clock_t temp;
+    Scores* score;
 
-    Bola() = default;
+	Frutas() = default;
 
-    Bola(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, bool direccion, int ID) {
-        Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
-        destRec = destino;
-        tipo = -2;
-        widthAnimation = walkAnimation.width / fWalkAnimation;
-        heightAnimation = walkAnimation.height;
-        targetFrames = _targetFPS;
-        enElAire = true;
-        cayendo = false;
-        this->direccion = direccion;
-        temp = clock();
-        this->ID = ID;
-        borrame = false;
-    };
+	Frutas(std::string rutaTextura, int velCaida, float tamano, unsigned int puntuacion, int targetFrames, Rectangle destino, Scores& score) {
+        this->score = &score;
+		Inicializador(rutaTextura, velCaida, tamano, puntuacion, targetFrames, destino);
+	}
 
-    void Actualizar(Rectangle playerPosition) override {
-
-
-        if (!direccion && animacionActiva == 0) { //Si el personaje esta a la izquierda
-            MoverIzq();
-        }
-        else if (direccion && animacionActiva == 0) { //Si el personaje esta a la derecha
-            MoverDer();
-        }
-
+	void Inicializador(std::string fruta, int velCaida ,float tamano, unsigned int puntuacion, int targetFrames, Rectangle destino) {
+		/*
+        sprite = LoadTexture((path.assign(fruta).assign(".png")).c_str());
+		walkAnimation = LoadTexture((path.assign(fruta).assign(".png")).c_str());
+		deadAnimation = LoadTexture(( path.assign(( std::to_string(puntuacion) )).assign(".png")).c_str() );
+        */
+        sprite = LoadTexture(fruta.c_str());
         
 
+		frameWidth = 16;
+		frameHeight = 16;
+        this->targetFrames = targetFrames;
+		srcRec = { 0.0f, 0.0f, (float)frameWidth, (float)frameHeight };
+		this->tamano = tamano;
+		destRec = { GetScreenWidth() / 2.0f - 50, GetScreenHeight() / 2.0f - 20, (float)frameWidth * tamano, (float)frameHeight * tamano }; 
+		origin = { (float)frameWidth * tamano / 2, (float)frameHeight * tamano / 2 }; 
+		this->velCaida = velCaida;
+        muerto = false;
+        borrame = false;
+        enElAire = true;
+        destRec = destino;
+        alturaMax = destRec.y - 5;
+        eliminame = false;
+        this->puntuacion = puntuacion;
+	}
+
+	~Frutas() {
+		UnloadTexture(sprite);
+	};
+
+	void Unload() {
+		UnloadTexture(sprite);
+	};
+
+	void Dibujar() {
+		srcRec.x = (float)widthAnimation * (float)indiceAnimacion;
+		DrawTexturePro(animations[animacionActiva], srcRec, destRec, origin, 0.0f, WHITE);
+	}
+
+    void Actualizar() {
+
+        if (eliminame) {
+            if ((clock() - temp) > 2 * CLOCKS_PER_SEC) {
+                borrame = true;
+                score->SumarPuntuacionP1((unsigned int)puntuacion);
+            }
+        }
+        
+        
+
+        if (muerto) {
+            animacionActiva = 1;
+            Asciende();
+        }
+
+        if (enElAire && !muerto) {
+            CaerLento();
+        }
 
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames)) {
             cuentaFrames = 0;
             switch (animacionActiva) {
             case 0:
-                //Actualizar width&height animacion
                 indiceAnimacion = (indiceAnimacion + 1) % fWalkAnimation;
                 widthAnimation = walkAnimation.width / fWalkAnimation;
                 heightAnimation = walkAnimation.height;
@@ -74,35 +116,29 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
-                if (indiceAnimacion == 3) {
-                    borrame = true;
-                }
                 break;
             default:
                 break;
             }
         }
-
-        
     }
 
-    void Dibujar() override {
-        srcRec.x = (float)widthAnimation * (float)indiceAnimacion;
-        DrawTexturePro(animations[animacionActiva], srcRec, destRec, origin, 0.0f, WHITE);
+	void CaerLento() {
+        velCaida = 2;
+		destRec.y += velCaida / 2;
+	}
+
+    void Asciende() {
+        if( (destRec.y - velCaida / 2) > alturaMax ){
+            destRec.y -= velCaida / 2;
+        }
+        else if (!eliminame) {
+            eliminame = true;
+            temp = clock();
+        }
     }
 
-    void MoverIzq() {
-        destRec.x -= velocidadLateral;
-        srcRec.width = pixels;
-    }
-
-    void MoverDer() {
-        destRec.x += velocidadLateral;
-        srcRec.width = -pixels;
-    }
-
-
-    void compruebaColision(Plataforma& s, int enemyNum) override {
+    void compruebaColision(Plataforma& s, int enemyNum) {
         //Comprobamos si colisiona con la superficie
         if (
             (
@@ -142,7 +178,7 @@ public:
                         )
                 )
             ) {
-            switch (s.aproach[enemyNum + 1]) {
+            switch (s.aproach[enemyNum + 2]) {
             case 1:
                 destRec.x = s.left - destRec.width / 2;
                 break;
@@ -152,8 +188,6 @@ public:
             case 3:
                 destRec.y = s.top - destRec.height / 2;
                 enElAire = false;
-                cayendo = false;
-                saltoRecorrido = 0;
                 lastGround = s;
                 break;
             }
@@ -182,7 +216,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 1;
+                s.aproach[enemyNum + 2] = 1;
             }
             //Derecha
             else if (
@@ -206,7 +240,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 2;
+                s.aproach[enemyNum + 2] = 2;
             }
             //Arriba
             else if (
@@ -230,18 +264,17 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 3;
+                s.aproach[enemyNum + 2] = 3;
             }
             //Abajo
             else {
                 //Si no se cumplen anteriores asumimos que se acerca por debajo
-                s.aproach[enemyNum + 1] = 4;
+                s.aproach[enemyNum + 2] = 4;
             }
         }
     }
 
-    //Comprobacion de si debe caer
-    void compruebaSuelo() override {
+    void compruebaSuelo()  {
         if (
             !(
                 //Comprobamos colision esquina inferior derecha
@@ -262,26 +295,19 @@ public:
                         )
                 )
             ) {
-
+            // No colisiona con plataforma
+            enElAire = true;
         }
         else if (muerto) {
             enElAire = false;
-            cayendo = false;
             animacionActiva = 1;
+        }
+        else {
+            enElAire = false;
         }
     }
 
-    void compruebaPared(const Columnas& s) override {
-        //Comprobamos columna derecha
-        if (s.left_der < (destRec.x + destRec.width / 2)) {
-            velocidadLateral = 0;
-            animacionActiva = 1;
-        }
-        //Comprobamos columna izquierda
-        else if (s.right_izq > (destRec.x - destRec.width / 2)) {
-            velocidadLateral = 0;
-            animacionActiva = 1;
-        }
-    }
 
 };
+
+typedef std::shared_ptr<Frutas> sh_Frutas;

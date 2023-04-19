@@ -15,6 +15,10 @@ public:
     Texture2D ballAnimation = LoadTexture("resources/enemyFantasma/fantasmaBola.png");
     Texture2D animations[4] = { walkAnimation, deadAnimation, ballAnimation };
 
+    //sh_Enemigo bola = std::make_shared<Bola>(Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir));
+
+    int indexBolas = 0;
+    
     int fWalkAnimation = 2; //Número de fotogramas de la animacion camniar
     int fDeadAnimation = 2; //Número de fotogramas de la animacion muerte
     int fBallAnimation = 4;
@@ -35,11 +39,16 @@ public:
     bool disparando;
     bool dir;
     bool hayBola;
+
+    sh_Enemigo bolas[3];
+    int i = 0;
     //Colisiones
     Plataforma lastGround;
     AdministradorPompas* admin;
+    int IDBola = 0;
 
     clock_t temp;
+    int direccionX = 1;
 
 
     //Muerto -> Ahora esta en Enemigo
@@ -57,6 +66,7 @@ public:
         disparando = false;
         this->admin = &admin;
         hayBola = false;
+
     };
 
     // Controlador de comportamiento
@@ -68,13 +78,23 @@ public:
         
         if (muerto) {
             animacionActiva = 1;
-            //Caer();
+            Caer();
         }
         else if (!saltando && enElAire) {
             CaerLento();
         }
         else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10) && !disparando) { //Si el personaje esta encima
             Salto();
+        }
+        else if (destRec.y != playerPosition.y) {
+            if (direccionX == 0) {
+                //Izquierda
+                MoverIzq();
+            }
+            else {
+                //Derecha
+                MoverDer();
+            }
         }
         else if (destRec.x > playerPosition.x + 100  && !disparando) { //Si el personaje esta a la izquierda      
             MoverIzq();
@@ -89,14 +109,20 @@ public:
             BolaDer();
         }
 
+        //Actualizar posicion no salir de la pantalla
+        if (destRec.y > 500) {
+            destRec.y = -10;
+            enElAire = true;
+            cayendo = true;
+        }
+        else if (destRec.y < -50) {
+            destRec.y = 450;
+        }
+
         //Actualizar puntero de animacion
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames)) {
             cuentaFrames = 0;
-            if (muerto) {
-                animacionActiva = 1;
-                //Caer();
-            }
             switch (animacionActiva) {
             case 0:
                 //Actualizar width&height animacion
@@ -120,8 +146,12 @@ public:
                 if (indiceAnimacion == 3) {
                     disparando = false;
                     animacionActiva = 0;
-                    sh_Enemigo bola = std::make_shared<Bola>(Bola("resources/enemyFantasma/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir));
-                    admin->enemigos.push_back(bola);
+                    Bola b;
+                    b =Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir, IDBola);
+                    admin->enemigos.push_back(std::make_shared<Bola>(b));
+                    i = (i + 1) % 3;
+                    IDBola++;
+                    indexBolas = (indexBolas + 1) % 3; 
                     temp = clock();
                     hayBola = true;
                 }
@@ -141,11 +171,13 @@ public:
     void MoverIzq() {
         destRec.x -= velocidadLateral;
         srcRec.width = pixels;
+        direccionX = 0;
     }
 
     void MoverDer() {
         destRec.x += velocidadLateral;
         srcRec.width = -pixels;
+        direccionX = 1;
     }
 
     void Caer() {
@@ -248,12 +280,18 @@ public:
                         )
                 )
             ) {
-            switch (s.aproach[enemyNum+ 2]) {
+            switch (s.aproach[enemyNum + 2]) {
             case 1:
+                //Derecha
                 destRec.x = s.left - destRec.width / 2;
+                direccionX = 0; //Colisiona derecha, ahora se mueve izquierda
+                //Se puede añadir un movimiento random en eje Y
                 break;
             case 2:
+                //Izquierda
                 destRec.x = s.right + destRec.width / 2;
+                direccionX = 1; //Colisiona izquierda, hora se mueve derecha
+                //Se puede añadir un movimiento random en eje Y
                 break;
             case 3:
                 destRec.y = s.top - destRec.height / 2;
@@ -288,7 +326,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum+ 2] = 1;
+                s.aproach[enemyNum + 2] = 1;
             }
             //Derecha
             else if (
@@ -312,7 +350,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum+ 2] = 2;
+                s.aproach[enemyNum + 2] = 2;
             }
             //Arriba
             else if (
@@ -336,12 +374,12 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum+ 2] = 3;
+                s.aproach[enemyNum + 2] = 3;
             }
             //Abajo
             else {
                 //Si no se cumplen anteriores asumimos que se acerca por debajo
-                s.aproach[enemyNum+ 2] = 4;
+                s.aproach[enemyNum + 2] = 4;
             }
         }
     }
@@ -373,9 +411,10 @@ public:
             cayendo = true;
         }
         else if (muerto) {
+            animacionActiva = 1;
             enElAire = false;
             cayendo = false;
-            animacionActiva = 1;
+
         }
         else {
             enElAire = false;
@@ -387,10 +426,12 @@ public:
         //Comprobamos columna derecha
         if (s.left_der < (destRec.x + destRec.width / 2)) {
             destRec.x = s.left_der - destRec.width / 2;
+            direccionX = 0;
         }
         //Comprobamos columna izquierda
         else if (s.right_izq > (destRec.x - destRec.width / 2)) {
             destRec.x = s.right_izq + destRec.width / 2;
+            direccionX = 1;
         }
     }
 

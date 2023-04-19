@@ -21,10 +21,10 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 		//std::cout << "Chekeo de generación de pompas" << std::endl;
 		contadorCiclos = 0;
 		switch (idMapa) {
-		case 1: //Mapa del agua
+		case 4: //Mapa del agua
 		{
 			Pompa p;
-			Rectangle r[2] = { { GetScreenWidth() / 2 - 50, GetScreenHeight() + 32, 32, 32}, { GetScreenWidth() / 2 + 50, GetScreenHeight() + 32, 32, 32 } };
+			Rectangle r[2] = { { GetScreenWidth() / 2 - 150, GetScreenHeight() + 32, 32, 32}, { GetScreenWidth() / 2 + 150, GetScreenHeight() + 32, 32, 32 } };
 			//resultado.push_back(std::make_shared<Pompa>(p1));
 			//resultado.push_back(std::make_shared<Pompa>(p2));
 			int numRand = rand() % 100;
