@@ -209,7 +209,7 @@ int main(void)
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);  
 
-                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
+                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
            		{
                 	credits.creditos -= 1;
                     admin.scores.hayP2 = true;
@@ -256,7 +256,7 @@ int main(void)
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
-                scores.Actualizar();
+                admin.scores.Actualizar();
                 bub.Actualizar();
                 for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
                     bub.compruebaColision(plataformas.listaPlataforma[i]);
@@ -291,10 +291,10 @@ int main(void)
 
                 admin.actualizaEnemigos(plataformas, columnas);
 
-                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
+                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
                 {
                     credits.creditos -= 1;
-                    scores.hayP2 = true;
+                    admin.scores.hayP2 = true;
                 }
 
             }
@@ -337,7 +337,7 @@ int main(void)
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
-                scores.Actualizar();
+                admin.scores.Actualizar();
                 bub.Actualizar();
                 for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
                     bub.compruebaColision(plataformas.listaPlataforma[i]);
@@ -372,10 +372,10 @@ int main(void)
 
                 admin.actualizaEnemigos(plataformas, columnas);
 
-                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
+                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
                 {
                     credits.creditos -= 1;
-                    scores.hayP2 = true;
+                    admin.scores.hayP2 = true;
                 }
 
             }
@@ -424,7 +424,7 @@ int main(void)
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
-                scores.Actualizar();
+                admin.scores.Actualizar();
                 bub.Actualizar();
                 for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
                     bub.compruebaColision(plataformas.listaPlataforma[i]);
@@ -459,10 +459,10 @@ int main(void)
 
                 admin.actualizaEnemigos(plataformas, columnas);
 
-                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
+                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
                 {
                     credits.creditos -= 1;
-                    scores.hayP2 = true;
+                    admin.scores.hayP2 = true;
                 }
 
             }
@@ -503,7 +503,7 @@ int main(void)
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
-                scores.Actualizar();
+                admin.scores.Actualizar();
                 bub.Actualizar();
                 for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
                     bub.compruebaColision(plataformas.listaPlataforma[i]);
@@ -538,10 +538,10 @@ int main(void)
 
                 admin.actualizaEnemigos(plataformas, columnas);
 
-                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
+                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
                 {
                     credits.creditos -= 1;
-                    scores.hayP2 = true;
+                    admin.scores.hayP2 = true;
                 }
 
             }
@@ -641,10 +641,14 @@ int main(void)
             // TODO: Draw NIVEL_2 screen here!
             columnas.Dibujar();
             plataformas.Dibujar();
-            scores.Dibujar();
+            admin.scores.Dibujar();
             admin.agua.Dibujar();
-            bub.Dibujar();
-            bob.Dibujar();
+            if (!bub.muerto) {
+                bub.Dibujar();
+            }
+            if (contadorVidas.hayP2 && !bob.muerto) {
+                bob.Dibujar();
+            }
             admin.dibujaPompas();
             admin.dibujaEnemigos();
 
@@ -654,10 +658,14 @@ int main(void)
             // TODO: Draw NIVEL_2 screen here!
             columnas.Dibujar();
             plataformas.Dibujar();
-            scores.Dibujar();
+            admin.scores.Dibujar();
             admin.agua.Dibujar();
-            bub.Dibujar();
-            bob.Dibujar();
+            if (!bub.muerto) {
+                bub.Dibujar();
+            }
+            if (contadorVidas.hayP2 && !bob.muerto) {
+                bob.Dibujar();
+            }
             admin.dibujaPompas();
             admin.dibujaEnemigos();
 
@@ -667,10 +675,14 @@ int main(void)
             // TODO: Draw NIVEL_2 screen here!
             columnas.Dibujar();
             plataformas.Dibujar();
-            scores.Dibujar();
+            admin.scores.Dibujar();
             admin.agua.Dibujar();
-            bub.Dibujar();
-            bob.Dibujar();
+            if (!bub.muerto) {
+                bub.Dibujar();
+            }
+            if (contadorVidas.hayP2 && !bob.muerto) {
+                bob.Dibujar();
+            }
             admin.dibujaPompas();
             admin.dibujaEnemigos();
 
@@ -680,10 +692,14 @@ int main(void)
             // TODO: Draw NIVEL_2 screen here!
             columnas.Dibujar();
             plataformas.Dibujar();
-            scores.Dibujar();
+            admin.scores.Dibujar();
             admin.agua.Dibujar();
-            bub.Dibujar();
-            bob.Dibujar();
+            if (!bub.muerto) {
+                bub.Dibujar();
+            }
+            if (contadorVidas.hayP2 && !bob.muerto) {
+                bob.Dibujar();
+            }
             admin.dibujaPompas();
             admin.dibujaEnemigos();
 
