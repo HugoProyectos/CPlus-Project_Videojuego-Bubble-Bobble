@@ -440,6 +440,23 @@ public:
                     }
                 }
 
+                // Comprueba que se come la fruta
+                for (int i = 0; i < admin->frutas.size(); i++) {
+                    if (!admin->frutas.at(i)->borrame && !admin->frutas.at(i)->muerto && !muriendo
+                        && ((destRec.y + destRec.height / 2) >= (admin->frutas.at(i)->destRec.y + admin->frutas.at(i)->destRec.height / 2)
+                            && (destRec.y - destRec.height / 2) <= (admin->frutas.at(i)->destRec.y + admin->frutas.at(i)->destRec.height / 2)
+                            || (destRec.y + destRec.height / 2) >= (admin->frutas.at(i)->destRec.y - admin->frutas.at(i)->destRec.height / 2)
+                            && (destRec.y - destRec.height / 2) <= (admin->frutas.at(i)->destRec.y - admin->frutas.at(i)->destRec.height / 2))
+                        && ((destRec.x + destRec.width / 2 - 2) >= (admin->frutas.at(i)->destRec.x - admin->frutas.at(i)->destRec.width / 2)
+                            && (destRec.x - destRec.width / 2 + 2) <= (admin->frutas.at(i)->destRec.x - admin->frutas.at(i)->destRec.width / 2)
+                            || (destRec.x + destRec.width / 2 - 2) >= (admin->frutas.at(i)->destRec.x + admin->frutas.at(i)->destRec.width / 2)
+                            && (destRec.x - destRec.width / 2 + 2) <= (admin->frutas.at(i)->destRec.x + admin->frutas.at(i)->destRec.width / 2))) 
+                    { //Colisiona con fruta
+                        
+                        admin->frutas.at(i)->muerto = true;
+                    }
+                }
+
                 //Le dice al administrador los datos que necesita saber
                 if (eresBub) {
                     admin->j1.velLateral = velocidadLateralActual;

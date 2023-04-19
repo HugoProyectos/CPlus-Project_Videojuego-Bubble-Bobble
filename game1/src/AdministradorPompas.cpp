@@ -3,10 +3,13 @@
 #include "clasesConSprite/Pompa.hpp"
 #include "clasesConSprite/Enemigo.cpp"
 #include "clasesConSprite/Agua.hpp"
+#include "clasesConSprite/Frutas.cpp"
 #include <vector>
 #include "GeneradorPompas.hpp"
 #include <iostream> //Para debuggear
 #include <clasesConSprite/Blanco.cpp>
+
+
 
 
 
@@ -35,6 +38,10 @@ public:
 
 	std::vector<sh_Pompa> pompas;
 	std::vector<sh_Enemigo> enemigos;
+	
+	// Frutas -------
+	std::vector<sh_Frutas> frutas;
+	//---------------
 	
 	AdministradorPompas() = default;
 
@@ -258,8 +265,25 @@ public:
 			if (j != i) {
 				auxiliar.push_back(enemigos.at(j));
 			}
+			else {
+				if (!enemigos.at(j)->muertePorAgua && enemigos.at(j)->muerto) {
+					Frutas f = Frutas();
+					f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, 500, 60, enemigos.at(j)->destRec);
+					frutas.push_back(std::make_shared<Frutas>(f));
+				}
+			}
 		}
 		return auxiliar;
+	}
+
+	std::vector<sh_Frutas> eliminaFruta(int i) {
+		std::vector<sh_Frutas> aux;
+		for (int j = 0; j < frutas.size(); j++) {
+			if (j != i) {
+				aux.push_back(frutas.at(j));
+			}
+		}
+		return aux;
 	}
 
 	void actualizaEnemigos(Plataformas& plataformas, Columnas& columnas) {
@@ -288,9 +312,31 @@ public:
 		}
 	};
 
+	void actualizaFrutas(Plataformas& plataformas) {
+		for (int i = 0; i < frutas.size(); i++) {
+			if (frutas.at(i)->borrame) {
+				frutas = eliminaFruta(i);
+				i--;
+			}
+			else {
+				frutas.at(i)->Actualizar();
+				for (int j = 0; j < plataformas.listaPlataforma.size(); j++) {
+					frutas.at(i)->compruebaSuelo();
+					frutas.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
+				}
+			}
+		}
+	}
+
 	void dibujaEnemigos() {
 		for (int i = 0; i < enemigos.size(); i++) {
 			enemigos[i]->Dibujar();
 		}
 	};
+
+	void dibujaFrutas() {
+		for (int i = 0; i < frutas.size(); i++) {
+			frutas[i]->Dibujar();
+		}
+	}
 };

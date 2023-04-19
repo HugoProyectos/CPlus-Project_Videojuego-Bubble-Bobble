@@ -48,6 +48,7 @@ public:
     int IDBola = 0;
 
     clock_t temp;
+    int direccionX = 1;
 
 
     //Muerto -> Ahora esta en Enemigo
@@ -85,6 +86,16 @@ public:
         else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10) && !disparando) { //Si el personaje esta encima
             Salto();
         }
+        else if (destRec.y != playerPosition.y) {
+            if (direccionX == 0) {
+                //Izquierda
+                MoverIzq();
+            }
+            else {
+                //Derecha
+                MoverDer();
+            }
+        }
         else if (destRec.x > playerPosition.x + 100  && !disparando) { //Si el personaje esta a la izquierda      
             MoverIzq();
         }
@@ -96,6 +107,16 @@ public:
         }
         else if (destRec.x < playerPosition.x - 5 && !hayBola ) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
             BolaDer();
+        }
+
+        //Actualizar posicion no salir de la pantalla
+        if (destRec.y > 500) {
+            destRec.y = -10;
+            enElAire = true;
+            cayendo = true;
+        }
+        else if (destRec.y < -50) {
+            destRec.y = 450;
         }
 
         //Actualizar puntero de animacion
@@ -154,11 +175,13 @@ public:
     void MoverIzq() {
         destRec.x -= velocidadLateral;
         srcRec.width = pixels;
+        direccionX = 0;
     }
 
     void MoverDer() {
         destRec.x += velocidadLateral;
         srcRec.width = -pixels;
+        direccionX = 1;
     }
 
     void Caer() {
@@ -261,12 +284,18 @@ public:
                         )
                 )
             ) {
-            switch (s.aproach[enemyNum+ 2]) {
+            switch (s.aproach[enemyNum + 2]) {
             case 1:
+                //Derecha
                 destRec.x = s.left - destRec.width / 2;
+                direccionX = 0; //Colisiona derecha, ahora se mueve izquierda
+                //Se puede añadir un movimiento random en eje Y
                 break;
             case 2:
+                //Izquierda
                 destRec.x = s.right + destRec.width / 2;
+                direccionX = 1; //Colisiona izquierda, hora se mueve derecha
+                //Se puede añadir un movimiento random en eje Y
                 break;
             case 3:
                 destRec.y = s.top - destRec.height / 2;
@@ -301,7 +330,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum+ 2] = 1;
+                s.aproach[enemyNum + 2] = 1;
             }
             //Derecha
             else if (
@@ -325,7 +354,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum+ 2] = 2;
+                s.aproach[enemyNum + 2] = 2;
             }
             //Arriba
             else if (
@@ -349,12 +378,12 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum+ 2] = 3;
+                s.aproach[enemyNum + 2] = 3;
             }
             //Abajo
             else {
                 //Si no se cumplen anteriores asumimos que se acerca por debajo
-                s.aproach[enemyNum+ 2] = 4;
+                s.aproach[enemyNum + 2] = 4;
             }
         }
     }
@@ -386,9 +415,10 @@ public:
             cayendo = true;
         }
         else if (muerto) {
+            animacionActiva = 1;
             enElAire = false;
             cayendo = false;
-            animacionActiva = 1;
+
         }
         else {
             enElAire = false;
@@ -400,10 +430,12 @@ public:
         //Comprobamos columna derecha
         if (s.left_der < (destRec.x + destRec.width / 2)) {
             destRec.x = s.left_der - destRec.width / 2;
+            direccionX = 0;
         }
         //Comprobamos columna izquierda
         else if (s.right_izq > (destRec.x - destRec.width / 2)) {
             destRec.x = s.right_izq + destRec.width / 2;
+            direccionX = 1;
         }
     }
 
