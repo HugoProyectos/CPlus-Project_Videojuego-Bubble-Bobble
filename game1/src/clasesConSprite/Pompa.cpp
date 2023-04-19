@@ -360,54 +360,82 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			/////FIN COMPROBACIÓN DE COLISIÓN CON EL JUGADOR BOB
 
 			/////INICIO DESPLAZAMIENTO POR EL MAPA
+			double screenHeight = GetScreenHeight();
+			double screenWidth = GetScreenWidth();
 			switch (ID_MAPA) {
 			case 4: //Mapa del agua
 			{
-				if (destRec.x < GetScreenWidth() / 2) {
-					if (destRec.y < (GetScreenHeight() * 0.85) && (destRec.y > (GetScreenHeight() * 0.80) && destRec.x >= 100)) {
-						destRec.x -= 0.5;
+				if (destRec.x < screenWidth / 2) {
+					if (destRec.y < (screenHeight * 0.85) && (destRec.y > (screenHeight * 0.80) && destRec.x >= 130)) {
+						destRec.x -= 1;
+						//std::cout << "Ruta 1" << std::endl;
 					}
-					else if (destRec.y <= (GetScreenHeight() * 0.75) && destRec.y <= (GetScreenHeight() * 0.70) && destRec.x < GetScreenWidth() / 2 - 30) {
-						destRec.x += 0.5;
+					else if (destRec.y <= (screenHeight * 0.70) && destRec.y > (screenHeight * 0.65) && destRec.x < screenWidth / 2 - 30) {
+						destRec.x += 1;
+						//std::cout << "Ruta 2" << std::endl;
 					}
-					else if (destRec.y <= (GetScreenHeight() * 0.55) && destRec.y <= (GetScreenHeight() * 0.50) && destRec.x >= 100) {
-						destRec.x -= 0.5;
+					else if (destRec.y <= (screenHeight * 0.55) && destRec.y > (screenHeight * 0.50) && destRec.x >= 130) {
+						destRec.x -= 1;
+						//std::cout << "Ruta 3" << std::endl;
 					}
-					else if (destRec.y <= (GetScreenHeight() * 0.35) && destRec.y <= (GetScreenHeight() * 0.30) && destRec.x < GetScreenWidth() / 2 - 30) {
-						destRec.x += 0.5;
+					else if (destRec.y <= (screenHeight * 0.35) && destRec.y > (screenHeight * 0.30) && destRec.x < screenWidth / 2 - 30) {
+						destRec.x += 1;
+						oscilando = false;
+						//std::cout << "Ruta 4" << std::endl;
 					}
 					else if (destRec.y > 70 && !oscilando) {
 						destRec.y -= 0.5;
+						//std::cout << "Ruta Arriba" << std::endl;
 					} else {
 						oscilando = true;
+						//std::cout << "Oscilas" << std::endl;
 					}
 				}
 				else {
-					if ((destRec.y < (GetScreenHeight() * 0.85) && destRec.y > (GetScreenHeight() * 0.80) && destRec.x < GetScreenWidth() - 100)) {
-						destRec.x += 0.5;
+					if (destRec.y < (screenHeight * 0.85) && (destRec.y > (screenHeight * 0.80) && destRec.x <= screenWidth - 130)) {
+						destRec.x += 1;
+						//std::cout << "Ruta 1" << std::endl;
 					}
-					else if (destRec.y <= 70 && destRec.x > GetScreenWidth() / 2 + 50) {
-						destRec.x -= 0.5;
+					else if (destRec.y <= (screenHeight * 0.70) && destRec.y > (screenHeight * 0.65) && destRec.x > screenWidth / 2 + 30) {
+						destRec.x -= 1;
+						//std::cout << "Ruta 2" << std::endl;
 					}
-					else if(destRec.y > 70 && !oscilando){
+					else if (destRec.y <= (screenHeight * 0.55) && destRec.y > (screenHeight * 0.50) && destRec.x <= screenWidth - 130) {
+						destRec.x += 1;
+						//std::cout << "Ruta 3" << std::endl;
+					}
+					else if (destRec.y <= (screenHeight * 0.35) && destRec.y > (screenHeight * 0.30) && destRec.x > screenWidth / 2 + 30) {
+						destRec.x -= 1;
+						//std::cout << "Ruta 4" << std::endl;
+					}
+					else if (destRec.y > 70 && !oscilando) {
 						destRec.y -= 0.5;
-					} else {
+						oscilando = false;
+						//std::cout << "Ruta Arriba" << std::endl;
+					}
+					else {
+						//std::cout << destRec.y << std::endl;
 						oscilando = true;
+						//std::cout << "Oscilas" << std::endl;
 					}
 				}
 
 				if (oscilando) {
-					if (destRec.x <= GetScreenWidth() / 4 + 30 && destRec.y > 40) {
+					if (destRec.x <= screenWidth / 4 && destRec.y < 100) {
 						destRec.y += 0.5;
+						//std::cout << "Abajo" << std::endl;
 					}
-					else if (destRec.x <= GetScreenWidth() * 3 / 4 - 30 && destRec.y < 20) {
+					else if (destRec.x >= screenWidth * 3 / 4 && destRec.y > 70) {
 						destRec.y -= 0.5;
+						//std::cout << "Arriba" << std::endl;
 					}
-					else if (destRec.y > 40) {
-						destRec.x -= 0.5;
+					else if (destRec.y >= 95) {
+						destRec.x += 0.5;
+						//std::cout << "Derecha" << std::endl;
 					}
 					else {
-						destRec.x += 0.5;
+						destRec.x -= 0.5;
+						//std::cout << "Izquierda" << std::endl;
 					}
 					/*contador++;
 					if (contador >= 20) {
