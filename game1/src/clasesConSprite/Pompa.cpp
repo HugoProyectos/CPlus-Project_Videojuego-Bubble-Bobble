@@ -361,7 +361,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 			/////INICIO DESPLAZAMIENTO POR EL MAPA
 			switch (ID_MAPA) {
-			case 1: //Mapa del agua
+			/*case 1: //Mapa del agua
 			{
 				if (destRec.x < GetScreenWidth() / 2) {
 					if (destRec.y < (GetScreenHeight() * 0.85) && (destRec.y > (GetScreenHeight() * 0.80) && destRec.x >= 100)) {
@@ -403,11 +403,11 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 				}
 
 				break;
-			}
+			}*/
 
 			default:
 				if (!oscilando) {
-					if (destRec.y > 70) {
+					if (destRec.y > 80) {
 						destRec.y += -0.5;
 					}
 					else {
@@ -439,7 +439,14 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						contador = 0;
 					}
 				}
+
+				
 			};
+
+			//Evitar que la pompa se salga por arriba
+			if (destRec.y < 60) {
+				destRec.y = 60;
+			}
 		}
 		/////FIN DESPLAZAMIENTO POR EL MAPA
 
