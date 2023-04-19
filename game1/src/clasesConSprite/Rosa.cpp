@@ -53,7 +53,7 @@ public:
             velocidadLateral *= 2;
         }
         velMax = 2 * velLateral;
-        velMin = velLateral/2;
+        velMin = velLateral / 2;
         destRec = destino;
         tipo = 5;
         widthAnimation = walkAnimation.width / fWalkAnimation;
@@ -140,7 +140,7 @@ public:
             direccionY = 0;
             destRec.y -= velocidadLateral;
         }
-        else if(destRec.y < playerPosition.y - 10) {
+        else if (destRec.y < playerPosition.y - 10) {
             //Estamos por encima del player, sumamos posicion
             direccionY = 1;
             destRec.y += velocidadLateral;
@@ -180,7 +180,7 @@ public:
                 destRec.y += 0.1;
             }
             else {
-                    destRec.y += velocidadLateral;
+                destRec.y += velocidadLateral;
             }
         }
         else {
@@ -204,7 +204,7 @@ public:
         //El movimiento horizontal depende del jugador
         if (destRec.x > playerPosition.x + 10) {
             //Estamos por izq del player, restamos posicion
-            if(colisionAux == 1){
+            if (colisionAux == 1) {
                 destRec.x -= 0.1;
             }
             else {
@@ -229,7 +229,7 @@ public:
             //Arriba
             destRec.y += velocidadLateral;
         }
-        
+
         //Width
         srcRec.width = pixels;
     }
@@ -239,7 +239,7 @@ public:
     }
 
     void CaerLento() {
-        destRec.y += velocidadSalto/2;
+        destRec.y += velocidadSalto / 2;
     }
 
     //Comprobacion de colisiones

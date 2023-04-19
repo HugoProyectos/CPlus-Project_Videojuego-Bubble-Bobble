@@ -238,7 +238,7 @@ public:
 					hurryUp = true;
 					//Crear a Skull y añadirlo a enemigos.
 					Rectangle destRob = { GetScreenWidth() / 2, 70, 32, 32 };
-					sh_Enemigo skull = std::make_shared<Blanco>(Blanco("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 2.0f, 60.0, destRob));
+					sh_Enemigo skull = std::make_shared<Blanco>(Blanco("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 2.0f, 60.0, destRob,j1,j2));
 					enemigos.push_back(skull);
 					contadorSkull++;
 				}
