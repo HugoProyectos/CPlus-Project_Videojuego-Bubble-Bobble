@@ -7,6 +7,7 @@
 #include <vector>
 #include "GeneradorPompas.hpp"
 #include <iostream> //Para debuggear
+#include <clasesConSprite/Blanco.cpp>
 
 
 
@@ -14,10 +15,15 @@
 
 class AdministradorPompas{
 public:
+	//Gestión de tiempo de mapa
+	uint32_t contadorSkull = 0;
+	uint32_t limiteContadorSkull = 60 * 90;
+	bool hurryUp = false; //Se podrá usar para saber cuando mostrar el mensaje de hurry up
+
 	//Gestión de cambio de nivel
 	bool cambiaNivel = false;
 	uint32_t contadorFrames = 0;
-	const uint32_t CUENTA_MAXIMA = 60 * 15;
+	const uint32_t CUENTA_MAXIMA_FIN_NIVEL = 60 * 15;
 	uint8_t enemigosPorMatar = 0;
 	
 	/*Rectangle posicionJugador = {-1,-1,-1,-1};
@@ -40,10 +46,13 @@ public:
 	AdministradorPompas() = default;
 
 	//Funciones a llamar cuando se cambia de mapa
-	void iniciaMapa(int numEnemigos) {
+	void iniciaMapa(int numEnemigos, uint32_t cuentaAtras = 100) {
 		cambiaNivel = false;
 		contadorFrames = 0;
 		enemigosPorMatar = numEnemigos;
+		limiteContadorSkull = cuentaAtras;
+		contadorSkull = 0;
+		hurryUp = false;
 		pompas.clear();
 	}
 
@@ -211,14 +220,29 @@ public:
 				for (int i = 0; i < pompas.size(); i++) {
 					pompas.at(i)->explota();
 				}
+				//Para borrar a SKULL
+				enemigos.clear();
 			}
 			contadorFrames++;
-			if (contadorFrames >= CUENTA_MAXIMA) {
+			if (contadorFrames >= CUENTA_MAXIMA_FIN_NIVEL) {
 				std::cout << "FIN DE MAPA" << std::endl;
 				cambiaNivel = true;
 			}
 		}
 		if (enemigosPorMatar > 0) {
+			//Contador de aparición de SKULL (Monsta blanco)
+			if (contadorSkull < limiteContadorSkull) {
+				contadorSkull++;
+			} else {
+				if (contadorSkull == limiteContadorSkull) {
+					hurryUp = true;
+					//Crear a Skull y añadirlo a enemigos.
+					Rectangle destRob = { GetScreenWidth() / 2, 70, 32, 32 };
+					sh_Enemigo skull = std::make_shared<Blanco>(Blanco("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 2.0f, 60.0, destRob));
+					enemigos.push_back(skull);
+					contadorSkull++;
+				}
+			}
 			//Genera pompas del mapa
 			std::vector<sh_Pompa> pompasGeneradas = generador.generarPompa();
 			for (int i = 0; i < pompasGeneradas.size(); i++) {
