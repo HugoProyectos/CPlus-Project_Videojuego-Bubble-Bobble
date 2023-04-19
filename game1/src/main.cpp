@@ -237,6 +237,7 @@ int main(void)
     admin.agua.existe = false;
     admin.iniciaMapa(3, 1200);
     admin.CambioDeMapa(0);
+    admin.puntuaciones = &scores;
 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
@@ -415,10 +416,10 @@ int main(void)
         }
         //----------------------------------------------------------------------------------
 
-        if (IsKeyDown(KEY_D)) {
+        /*if (IsKeyDown(KEY_D)) {
             char a;
             std::cin >> a;
-        } 
+        }*/ 
 
         // Draw
         //----------------------------------------------------------------------------------
@@ -447,7 +448,7 @@ int main(void)
             bub.Dibujar();
             bob.Dibujar();
             admin.dibujaPompas();
-            admin.dibujaEnemigos();
+            //admin.dibujaEnemigos();
             
         } break;
         case CONTROLS_MENU:

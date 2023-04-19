@@ -7,11 +7,15 @@
 #include "GeneradorPompas.hpp"
 #include <iostream> //Para debuggear
 #include <clasesConSprite/Blanco.cpp>
+#include <Scores.cpp>
 
 
 
 class AdministradorPompas{
 public:
+	//Referencia a variable de puntuación
+	Scores *puntuaciones;
+
 	//Gestión de tiempo de mapa
 	uint32_t contadorSkull = 0;
 	uint32_t limiteContadorSkull = 60 * 90;
@@ -67,7 +71,6 @@ public:
 	}
 
 	void actualizaPompas() {
-
 		//Actualiza el estado de las pompas
 		for (int i = 0; i < pompas.size(); i++) {
 			if (pompas.at(i)->matame) {
@@ -99,7 +102,7 @@ public:
 					}
 				}
 				uint8_t useless;
-				sh_Enemigo enemigo = pompas.at(i)->Actualizar(j1, j2, useless);
+				sh_Enemigo enemigo = pompas.at(i)->Actualizar(j1, j2, useless, puntuaciones);
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 					if (enemigo->muerto) {
@@ -127,7 +130,7 @@ public:
 				}
 			} else {
 				uint8_t creaAgua = false;
-				sh_Enemigo enemigo = pompas.at(i)->Actualizar(j1, j2, creaAgua);
+				sh_Enemigo enemigo = pompas.at(i)->Actualizar(j1, j2, creaAgua, puntuaciones);
 				if (pompas.at(i)->animacionActiva != Pompa::EXPLOTA && i < pompas.size() - 1) {
 
 					for (int j = i + 1; j < pompas.size(); j++) {
@@ -194,6 +197,7 @@ public:
 								|| (ini.y - ini.height / 2 + 2 < candidata.y + candidata.height / 2 - 2) && (ini.y + ini.height / 2 - 2 >= candidata.y + candidata.height / 2 - 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))
 								|| (ini.y - ini.height / 2 + 2 < candidata.y - candidata.height / 2 + 2) && (ini.y + ini.height / 2 - 2 >= candidata.y - candidata.height / 2 + 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))) {
 								pompas.at(j)->cadena = true;
+								pompas.at(j)->explotadaPor = pompas.at(i)->explotadaPor;
 							}
 							
 						}

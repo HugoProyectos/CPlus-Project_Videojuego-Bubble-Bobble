@@ -89,9 +89,8 @@ void Pompa::Inicializador(Texture2D spriteSheet, const Rectangle origen, float v
 
 }
 
-sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua) {
+sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua, Scores *puntuaciones) {
 	sh_Enemigo result = NULL;
-
 	if (disparada == 2) {
 		//std::cout << "PIUM" << std::endl;
 		distanciaRecorrida += velocidadDesplazamiento; //Actualiza el contador
@@ -106,12 +105,20 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 		//Si ha iniciado cadena y ya está explotando, es solo en el primer frame que transfiere cadena
 		if (cadena && animacionActiva == EXPLOTA) {
 			cadena = false;
+			std::cout << "Explotada por: " << explotadaPor << std::endl;
+			if (explotadaPor == 1) {
+				std::cout << "Hola" << std::endl;
+				puntuaciones->puntuacion1 += 10;
+				puntuaciones->SumarPuntuacionP1(10);
+			}
+			else if (explotadaPor == 2) {
+				puntuaciones->SumarPuntuacionP2(10);
+			}
 		} else if (cadena) { // Si aún no ha explotado, inicia explosión
 			animacionActiva = EXPLOTA;
 			indiceAnimacion = 0;
 			tVida = -1;
 			//std::cout << "Peto por cadena" << std::endl;
-
 			if (modulo == MODULO_AGUA) {
 				creaAgua = j1.sentidoJugador;
 			}
@@ -168,8 +175,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						//std::cout << "Peto por caida" << std::endl;
 						
 						//Marca que su explosión debe transmitirse
-						cadena = true; 
-
+						cadena = true;
+						explotadaPor = 1;
+						puntuaciones->SumarPuntuacionP1(10);
 						if (modulo == MODULO_AGUA) {
 							creaAgua = j1.sentidoJugador;
 						}
@@ -283,7 +291,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 						//Marca que su explosión debe transmitirse
 						cadena = true;
-
+						explotadaPor = 2;
 						if (modulo == MODULO_AGUA) {
 							creaAgua = j2.sentidoJugador;
 						}

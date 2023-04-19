@@ -4,6 +4,7 @@
 #include <cmath>
 #include "Robot.cpp"
 #include "../Controls.cpp"
+#include "Scores.cpp"
 #include <iostream> //DEBUG
 
 //Valores de módulo acorde a lo que lleva dentro la pompa
@@ -55,6 +56,9 @@ class Pompa : public Sprite {
 	sh_Enemigo extraeEnemigo(bool matalo);
 
 public:
+	//Jugador que ha hecho explotar la pompa
+	int explotadaPor = -1;
+
 	//Controles del jugador
 	static Controls controlesJugador;
 
@@ -109,7 +113,7 @@ public:
 
 	void Inicializador(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
 
-	sh_Enemigo Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua); //3->Derecha, 2->Izquierda
+	sh_Enemigo Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua, Scores *puntuaciones); //3->Derecha, 2->Izquierda
 
 	Pompa &operator=(const Pompa& p);
 	void explota();
