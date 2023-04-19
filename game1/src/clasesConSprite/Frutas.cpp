@@ -2,6 +2,7 @@
 #include "Sprite.hpp"
 #include "Suelo.cpp"
 #include "mapa.cpp"
+#include "../Scores.cpp"
 #include <iostream>
 
 class Frutas : public Sprite {
@@ -26,7 +27,7 @@ public:
 	int pixels = 16;
 	//----------------------------------------------------------------------------
 	int velCaida;
-	int puntuacion;
+	unsigned int puntuacion;
     bool muerto;
 	bool borrame;
     bool enElAire;
@@ -34,14 +35,16 @@ public:
 	Plataforma lastGround;
     int alturaMax;
     clock_t temp;
+    Scores* score;
 
 	Frutas() = default;
 
-	Frutas(std::string rutaTextura, int velCaida, float tamano, int puntuacion, int targetFrames, Rectangle destino) {
+	Frutas(std::string rutaTextura, int velCaida, float tamano, unsigned int puntuacion, int targetFrames, Rectangle destino, Scores& score) {
+        this->score = &score;
 		Inicializador(rutaTextura, velCaida, tamano, puntuacion, targetFrames, destino);
 	}
 
-	void Inicializador(std::string fruta, int velCaida ,float tamano, int puntuacion, int targetFrames, Rectangle destino) {
+	void Inicializador(std::string fruta, int velCaida ,float tamano, unsigned int puntuacion, int targetFrames, Rectangle destino) {
 		/*
         sprite = LoadTexture((path.assign(fruta).assign(".png")).c_str());
 		walkAnimation = LoadTexture((path.assign(fruta).assign(".png")).c_str());
@@ -64,6 +67,7 @@ public:
         destRec = destino;
         alturaMax = destRec.y - 5;
         eliminame = false;
+        this->puntuacion = puntuacion;
 	}
 
 	~Frutas() {
@@ -84,6 +88,7 @@ public:
         if (eliminame) {
             if ((clock() - temp) > 2 * CLOCKS_PER_SEC) {
                 borrame = true;
+                score->SumarPuntuacionP1((unsigned int)puntuacion);
             }
         }
         

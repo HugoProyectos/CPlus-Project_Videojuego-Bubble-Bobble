@@ -206,7 +206,7 @@ int main(void)
     // Global:
     //--------------------------------------------------------------------------------------
     Credits credits = Credits(15, 10, 20, KEY_SIX);
-    Scores scores = Scores(0, 0, 20, SKYBLUE);
+    
     ContadorVidas contadorVidas = ContadorVidas("resources/Players/Bobblun/ContadorVida.png", "resources/Players/Bobblun/ContadorVida2.png", 40.0f, 0.0f); 
     //-------------------------------------------------------------------------------------- 
 
@@ -305,20 +305,20 @@ int main(void)
             // TODO: Update MAIN_MENU screen variables here!
             main_menu.Actualizar(credits.creditos);
             credits.Actualizar();
-            scores.Actualizar();
+            admin.scores.Actualizar();
 
             // Wait for 2 seconds (120 frames) before jumping to TITLE screen
             if (IsKeyPressed(tecla_p1) && credits.creditos >= 1)
             {
                 currentScreen = NIVEL_1;
                 credits.creditos -= 1;
-                scores.hayP1 = true;
+                admin.scores.hayP1 = true;
             }
             else if (IsKeyPressed(tecla_p2) && credits.creditos >= 2) {
                 currentScreen = NIVEL_1;
                 credits.creditos -= 2;
-                scores.hayP1 = true;
-                scores.hayP2 = true;
+                admin.scores.hayP1 = true;
+                admin.scores.hayP2 = true;
                 contadorVidas.hayP2 = true;
             }
         } break;
@@ -329,7 +329,7 @@ int main(void)
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
-                scores.Actualizar();
+                admin.scores.Actualizar();
                 bub.Actualizar();
                 for (int i = 0; i < numPlat; i++) {
                     bub.compruebaColision(plataformas.listaPlataforma[i]);
@@ -375,10 +375,10 @@ int main(void)
                 }
 
 
-                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && scores.hayP1 && !scores.hayP2)
+                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
            		{
                 	credits.creditos -= 1;
-                	scores.hayP2 = true;
+                    admin.scores.hayP2 = true;
                     contadorVidas.hayP2 = true;
             	}
 
@@ -446,7 +446,7 @@ int main(void)
             // TODO: Draw MAIN_MENU screen here!
             main_menu.Dibujar();
             credits.Dibujar();
-            scores.Dibujar();
+            admin.scores.Dibujar();
 
         } break;
         case NIVEL_1:
@@ -454,7 +454,7 @@ int main(void)
             // TODO: Draw NIVEL_1 screen here!
             columnas.Dibujar();
             plataformas.Dibujar();
-            scores.Dibujar();
+            admin.scores.Dibujar();
             admin.agua.Dibujar();
             contadorVidas.Dibujar();
             bub.Dibujar();
@@ -483,7 +483,7 @@ int main(void)
     columnas.Unload();
     plataformas.Unload();
     credits.Unload(); 
-    scores.Unload();
+    admin.scores.Unload();
 
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------

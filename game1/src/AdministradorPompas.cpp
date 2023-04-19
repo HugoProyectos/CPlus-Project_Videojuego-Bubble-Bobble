@@ -19,7 +19,7 @@ public:
 	uint32_t contadorSkull = 0;
 	uint32_t limiteContadorSkull = 60 * 90;
 	bool hurryUp = false; //Se podrá usar para saber cuando mostrar el mensaje de hurry up
-
+	Scores scores = Scores(0, 0, 20, SKYBLUE);
 	//Gestión de cambio de nivel
 	bool cambiaNivel = false;
 	uint32_t contadorFrames = 0;
@@ -268,7 +268,7 @@ public:
 			else {
 				if (!enemigos.at(j)->muertePorAgua && enemigos.at(j)->muerto) {
 					Frutas f = Frutas();
-					f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, 500, 60, enemigos.at(j)->destRec);
+					f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, enemigos.at(j)->destRec, scores);
 					frutas.push_back(std::make_shared<Frutas>(f));
 				}
 			}
