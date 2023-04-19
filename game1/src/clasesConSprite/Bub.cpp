@@ -65,7 +65,8 @@ public:
     bool disparando = false;
     int multiplicadorVelocidadDisparo = 1;
     int multiplicadorDistanciaDisparo = 1;
-    int vidaPompa = 1000;
+    int vidaPompa[10] = {1000, 1000, 1000, 1000, 60*1000, 1000, 1000, 1000, 1000, 1000};
+    int nivel = 0;
 
     // Referencia al administrador de pompas
     AdministradorPompas* admin;
@@ -345,9 +346,9 @@ public:
                     indiceAnimacion = 6; //Es el 0 de la segunda parte de animaciones
                     Pompa p;
                     if (eresBub) {
-                        p = Pompa(spriteBurbuja, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa);
+                        p = Pompa(spriteBurbuja, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa[nivel]);
                     } else {
-                        p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa);
+                        p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa[nivel]);
                     }
                     admin->pompas.push_back(std::make_shared<Pompa>(p));
                 }

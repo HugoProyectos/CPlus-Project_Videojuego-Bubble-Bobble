@@ -71,7 +71,7 @@ int main(void)
     admin.agua = Agua(destAgua, true, spriteAgua, plataformas.listaPlataforma.size());
     admin.agua.existe = false;
     admin.iniciaMapa(3, 1200);
-    admin.CambioDeMapa(0);
+    admin.CambioDeMapa(4); //DEBUG 4->0
 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
@@ -116,6 +116,8 @@ int main(void)
     Rectangle destBub = { GetScreenWidth() - 50, 50, 32, 32};//{ 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true); 
     Bub bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
+    //bub.nivel = 4;
+    //bob.nivel = 4;
 
     
     bool jugando_nivel = true;
@@ -149,7 +151,7 @@ int main(void)
             // Wait for 2 seconds (120 frames) before jumping to TITLE screen
             if (IsKeyPressed(tecla_p1) && credits.creditos >= 1)
             {
-                currentScreen = NIVEL_1;
+                currentScreen = NIVEL_5;
                 credits.creditos -= 1;
                 admin.scores.hayP1 = true;
             }
@@ -225,6 +227,8 @@ int main(void)
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_pequeno.png", "resources/mapa_nivel_2/mapa.txt");
                 bub.cambioMapa = 2; 
                 bob.cambioMapa = 2;
+                bub.nivel = 1;
+                bob.nivel = 1;
                 jugando_nivel = false;
 
             }
@@ -305,6 +309,8 @@ int main(void)
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_pequeno.png", "resources/mapa_nivel_3/mapa.txt");
                 bub.cambioMapa = 2; // TODO
                 bob.cambioMapa = 2; // TODO
+                bub.nivel = 2;
+                bob.nivel = 2;
                 jugando_nivel = false;
 
             }
@@ -386,6 +392,8 @@ int main(void)
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_4/bloque_pequeno.png", "resources/mapa_nivel_4/mapa.txt");
                 bub.cambioMapa = 2; // TODO
                 bob.cambioMapa = 2; // TODO
+                bub.nivel = 3;
+                bob.nivel = 3;
                 jugando_nivel = false;
 
             }
@@ -473,6 +481,8 @@ int main(void)
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt");
                 bub.cambioMapa = 2; // TODO
                 bob.cambioMapa = 2; // TODO
+                bub.nivel = 4;
+                bob.nivel = 4;
                 jugando_nivel = false;
 
             }
