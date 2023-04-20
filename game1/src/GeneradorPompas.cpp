@@ -8,6 +8,7 @@ GeneradorPompas::GeneradorPompas(uint8_t idMapa) {
 }
 
 void GeneradorPompas::cambiarModo(uint8_t idMapa) {
+	std::cout << "Cambiando al mapa " << (int)idMapa << std::endl;
 	this->idMapa = idMapa;
 	Pompa::ID_MAPA = idMapa;
 	contadorCiclos = 0;
@@ -21,6 +22,46 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 		//std::cout << "Chekeo de generación de pompas" << std::endl;
 		contadorCiclos = 0;
 		switch (idMapa) {
+		case 2:
+		{
+			Pompa p;
+			Rectangle r[2] = { { GetScreenWidth() / 2 - 150, GetScreenHeight() + 32, 32, 32}, { GetScreenWidth() / 2 + 150, GetScreenHeight() + 32, 32, 32 } };
+			//resultado.push_back(std::make_shared<Pompa>(p1));
+			//resultado.push_back(std::make_shared<Pompa>(p2));
+			int numRand = rand() % 100;
+			int numRand2 = rand() % 2;
+			//Selección del color de la pompa
+			if (numRand < 50) { //verde
+				p = Pompa(verde, r[numRand2], 0, 0, false, 60 * 60);
+			}
+			else { //azul
+				p = Pompa(azul, r[numRand2], 0, 0, false, 60 * 60);
+			}
+
+			resultado.push_back(std::make_shared<Pompa>(p));
+			
+			break;
+		}
+		case 3:
+		{
+			Pompa p;
+			Rectangle r[2] = { { GetScreenWidth() / 2 - 150, GetScreenHeight() + 32, 32, 32}, { GetScreenWidth() / 2 + 150, GetScreenHeight() + 32, 32, 32 } };
+			//resultado.push_back(std::make_shared<Pompa>(p1));
+			//resultado.push_back(std::make_shared<Pompa>(p2));
+			int numRand = rand() % 100;
+			int numRand2 = rand() % 2;
+			//Selección del color de la pompa
+			if (numRand < 50) { //verde
+				p = Pompa(verde, r[numRand2], 0, 0, false, 60 * 120);
+			}
+			else { //azul
+				p = Pompa(azul, r[numRand2], 0, 0, false, 60 * 120);
+			}
+
+			resultado.push_back(std::make_shared<Pompa>(p));
+
+			break;
+		}
 		case 4: //Mapa del agua
 		{
 			Pompa p;
@@ -31,10 +72,10 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 			for (int i = 0; i < 2; i++) {
 				//Selección del color de la pompa
 				if (numRand < 50) { //verde
-					p = Pompa(verde, r[i], 0, 0, false, 1000000);
+					p = Pompa(verde, r[i], 0, 0, false, 60 * 120);
 				}
 				else { //azul
-					p = Pompa(azul, r[i], 0, 0, false, 1000000);
+					p = Pompa(azul, r[i], 0, 0, false, 60 * 120);
 				}
 				numRand = rand() % 100;
 				if (numRand < 50) { //Que contenga agua
