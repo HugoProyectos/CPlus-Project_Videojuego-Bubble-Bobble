@@ -6,7 +6,16 @@
 
 class Enemigo : public Sprite {
 public:
-    int tipo = -1; // 1->Robot 2-> Agua NO USAR 3->Fantasma 4-> Monsta 5-> Rosa
+    //Gestión de transición de nivel
+    //int8_t cambioMapa = 2; //2->Primera Iteración 1->Desplazándose 0->Ya no
+    //Rectangle posicionPartida = { (float)GetScreenWidth()/2, (float)50, 32, 32};
+    //int cuentaFramesTraslacion = 0; //3 segundos = 3 * 60 frames = 180 frames
+    //const int LIMITE_FRAMES_TRASLACION = 180; //3 segundos = 3 * 60 frames = 180 frames
+    //double razonX = 0;
+    //double razonY = 0;
+    ////////////////////
+
+    int tipo = -1; // -2->No atrapable por pompa 1->Robot 2-> Agua NO USAR 3->Fantasma 4-> Monsta 5-> Rosa
     bool borrame = false; //Eliminarlo de la lista
     bool muerto = false; //Iniciar animacion de muerte
     bool muertePorAgua = false;

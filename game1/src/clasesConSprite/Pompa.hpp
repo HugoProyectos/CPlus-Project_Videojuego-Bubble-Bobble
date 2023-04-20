@@ -2,8 +2,8 @@
 #include "Sprite.hpp"
 #include <string>
 #include <cmath>
-#include "Robot.cpp"
 #include "../Controls.cpp"
+#include "Enemigo.cpp"
 #include <iostream> //DEBUG
 
 //Valores de módulo acorde a lo que lleva dentro la pompa

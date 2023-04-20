@@ -453,6 +453,12 @@ public:
                             || (destRec.x + destRec.width / 2 - 2) >= (admin->frutas.at(i)->destRec.x + admin->frutas.at(i)->destRec.width / 2)
                             && (destRec.x - destRec.width / 2 + 2) <= (admin->frutas.at(i)->destRec.x + admin->frutas.at(i)->destRec.width / 2))) 
                     { //Colisiona con fruta
+                        if (eresBub) {
+                            admin->scores.SumarPuntuacionP1((unsigned int)admin->frutas.at(i)->puntuacion);
+                        }
+                        else {
+                            admin->scores.SumarPuntuacionP2((unsigned int)admin->frutas.at(i)->puntuacion);
+                        }
                         
                         admin->frutas.at(i)->muerto = true;
                     }

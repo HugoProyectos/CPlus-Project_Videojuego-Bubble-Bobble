@@ -221,7 +221,12 @@ public:
 					pompas.at(i)->explota();
 				}
 				//Para borrar a SKULL
-				enemigos.clear();
+				for (int i = 0; i < enemigos.size(); i++) { 
+					enemigos.at(i)->muerto = true;
+					if (enemigos.at(i)->tipo == -2) {
+						enemigos = eliminaEnemigo(i); //Esto borra todos los enemigos (razï¿½n por la que el ï¿½ltimo no genera fruta?)
+					}
+				}
 			}
 			contadorFrames++;
 			if (contadorFrames >= CUENTA_MAXIMA_FIN_NIVEL) {
@@ -238,8 +243,9 @@ public:
 					hurryUp = true;
 					//Crear a Skull y añadirlo a enemigos.
 					Rectangle destRob = { GetScreenWidth() / 2, 70, 32, 32 };
-					sh_Enemigo skull = std::make_shared<Blanco>(Blanco("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 2.0f, 60.0, destRob,j1,j2));
-					enemigos.push_back(skull);
+					Blanco skull;
+					skull = Blanco("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 2.0f, 60.0, destRob,j1,j2);
+					enemigos.push_back(std::make_shared<Blanco>(skull));
 					contadorSkull++;
 				}
 			}
@@ -264,13 +270,6 @@ public:
 		for (int j = 0; j < enemigos.size(); j++) {
 			if (j != i) {
 				auxiliar.push_back(enemigos.at(j));
-			}
-			else {
-				if (!enemigos.at(j)->muertePorAgua && enemigos.at(j)->muerto) {
-					Frutas f = Frutas();
-					f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, enemigos.at(j)->destRec, scores);
-					frutas.push_back(std::make_shared<Frutas>(f));
-				}
 			}
 		}
 		return auxiliar;
@@ -313,7 +312,7 @@ public:
 	};
 
 	void actualizaFrutas(Plataformas& plataformas) {
-		for (int i = 0; i < frutas.size(); i++) {
+		for (int i = 0; i < (frutas.size()); i++) {
 			if (frutas.at(i)->borrame) {
 				frutas = eliminaFruta(i);
 				i--;
@@ -322,12 +321,9 @@ public:
 				frutas.at(i)->Actualizar();
 				for (int j = 0; j < plataformas.listaPlataforma.size(); j++) {
 					frutas.at(i)->compruebaSuelo();
-					frutas.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
+					frutas.at(i)->compruebaColision(plataformas.listaPlataforma[j], (i + enemigos.size()));
 				}
 			}
-		}
-		if (frutas.size() == 0) {
-			std::cout << "Sin frutas que actualizar" << std::endl;
 		}
 	}
 
