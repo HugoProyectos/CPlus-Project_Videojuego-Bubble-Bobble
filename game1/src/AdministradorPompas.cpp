@@ -221,7 +221,10 @@ public:
 					pompas.at(i)->explota();
 				}
 				//Para borrar a SKULL
-				enemigos.clear();
+				for (int i = 0; i < enemigos.size(); i++) {
+					enemigos.at(i)->muerto = true;
+					enemigos = eliminaEnemigo(i);
+				}
 			}
 			contadorFrames++;
 			if (contadorFrames >= CUENTA_MAXIMA_FIN_NIVEL) {
@@ -264,13 +267,6 @@ public:
 		for (int j = 0; j < enemigos.size(); j++) {
 			if (j != i) {
 				auxiliar.push_back(enemigos.at(j));
-			}
-			else {
-				if (!enemigos.at(j)->muertePorAgua && enemigos.at(j)->muerto) {
-					Frutas f = Frutas();
-					f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, enemigos.at(j)->destRec, scores);
-					frutas.push_back(std::make_shared<Frutas>(f));
-				}
 			}
 		}
 		return auxiliar;
@@ -325,9 +321,6 @@ public:
 					frutas.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
 				}
 			}
-		}
-		if (frutas.size() == 0) {
-			std::cout << "Sin frutas que actualizar" << std::endl;
 		}
 	}
 

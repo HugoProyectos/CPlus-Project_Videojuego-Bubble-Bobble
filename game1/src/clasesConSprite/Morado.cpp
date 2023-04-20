@@ -1,4 +1,5 @@
 #pragma once
+#include"AdministradorPompas.cpp"
 #include "Enemigo.cpp"
 
 
@@ -38,14 +39,14 @@ public:
     //Variables lógicas
     int direccionX = 0; //0->izquierda, 1->derecha
     int direccionY = 0; //0->abajo, 1->arriba
-
+    AdministradorPompas* admin;
 
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
 
 
-    Morado(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino) {
+    Morado(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         if (enfadado) {
             animacionActiva = 3;
@@ -58,6 +59,7 @@ public:
         targetFrames = _targetFPS;
         enElAire = true;
         cayendo = true;
+        this->admin = &admin;
     };
 
     void enfadar() {
@@ -125,6 +127,11 @@ public:
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
                 if (indiceAnimacion == 3) {
+                    if (!muertePorAgua) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                    }
                     borrame = true;
                 }
                 break;

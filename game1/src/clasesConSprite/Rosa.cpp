@@ -1,4 +1,5 @@
 #pragma once
+#include "AdministradorPompas.cpp"
 #include "Enemigo.cpp"
 
 
@@ -40,13 +41,13 @@ public:
     int direccionY = 0; //0->abajo, 1->arriba
     int colision = 0; //0->No hay colision, 1->colisiona con paredes(debe variar el movimiento vertical), 2->colision techo(varia movimeitno horizontal)
     int colisionAux = 0;
-
+    AdministradorPompas* admin;
     float velMax = 0;
     float velMin = 0;
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
-    Rosa(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino) {
+    Rosa(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         if (enfadado) {
             animacionActiva = 3;
@@ -61,6 +62,7 @@ public:
         targetFrames = _targetFPS;
         enElAire = true;
         cayendo = true;
+        this->admin = &admin;
     };
 
     void enfadar() {
@@ -104,6 +106,11 @@ public:
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
                 if (indiceAnimacion == 3) {
+                    if (!muertePorAgua){
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                    }
                     borrame = true;
                 }
                 break;

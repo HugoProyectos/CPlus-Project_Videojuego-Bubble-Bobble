@@ -88,7 +88,6 @@ public:
         if (eliminame) {
             if ((clock() - temp) > 2 * CLOCKS_PER_SEC) {
                 borrame = true;
-                score->SumarPuntuacionP1((unsigned int)puntuacion);
             }
         }
         
@@ -180,10 +179,10 @@ public:
             ) {
             switch (s.aproach[enemyNum + 2]) {
             case 1:
-                destRec.x = s.left - destRec.width / 2;
+               // destRec.x = s.left - destRec.width / 2;
                 break;
             case 2:
-                destRec.x = s.right + destRec.width / 2;
+                //destRec.x = s.right + destRec.width / 2;
                 break;
             case 3:
                 destRec.y = s.top - destRec.height / 2;

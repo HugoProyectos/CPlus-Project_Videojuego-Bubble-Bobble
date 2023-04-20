@@ -136,6 +136,11 @@ public:
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
                 if (indiceAnimacion == 1) {
+                    if (!muertePorAgua) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                    }
                     borrame = true;
                 }
                 break;
