@@ -99,6 +99,7 @@ public:
         }
         else {
             if ((clock() - temp) > 5 * CLOCKS_PER_SEC) {
+                velocidadFrames = 2;
                 hayBola = false;
             }
 
@@ -221,12 +222,14 @@ public:
     }
 
     void BolaIzq() {
+        velocidadFrames = 2 * velocidadFrames;
         dir = false;
         disparando = true;
         animacionActiva = 2;
     }
 
     void BolaDer() {
+        velocidadFrames = 2 * velocidadFrames;
         dir = true;
         disparando = true;
         animacionActiva = 2;
