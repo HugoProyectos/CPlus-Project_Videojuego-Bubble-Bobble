@@ -701,6 +701,8 @@ int main(void)
                 gameover.hayP2 = false;
                 admin.scores.puntuacion1 = 0;
                 admin.scores.puntuacion2 = 0;
+                columnas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_grande.png", 1);
+                plataformas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt");
             }
         } break;
         default: break;
