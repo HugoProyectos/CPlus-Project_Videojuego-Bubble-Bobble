@@ -221,9 +221,11 @@ public:
 					pompas.at(i)->explota();
 				}
 				//Para borrar a SKULL
-				for (int i = 0; i < enemigos.size(); i++) {
+				for (int i = 0; i < enemigos.size(); i++) { 
 					enemigos.at(i)->muerto = true;
-					enemigos = eliminaEnemigo(i);
+					if (enemigos.at(i)->tipo == -2) {
+						enemigos = eliminaEnemigo(i); //Esto borra todos los enemigos (raz�n por la que el �ltimo no genera fruta?)
+					}
 				}
 			}
 			contadorFrames++;

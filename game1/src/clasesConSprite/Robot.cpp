@@ -67,45 +67,63 @@ public:
 
     // Controlador de comportamiento
     void Actualizar(Rectangle playerPosition) override {
-        if (muerto) {
-            animacionActiva = 1;
-            Caer();
+    if (cambioMapa > 0){
+        if (cambioMapa == 2) {
+            cambioMapa = 1;
+            razonX = (destRec.x - posicionPartida.x) / LIMITE_FRAMES_TRASLACION;
+            razonY = (destRec.y - posicionPartida.y) / LIMITE_FRAMES_TRASLACION;
+            destRec.x = posicionPartida.x;
+            destRec.y = posicionPartida.y;
         }
-        else if (enfadado) {
-            enfadar();
-            enfadado = false;
+        destRec.x += razonX;
+        destRec.y += razonY;
+
+        cuentaFramesTraslacion++;
+        if (cuentaFramesTraslacion >= LIMITE_FRAMES_TRASLACION) {
+            cambioMapa = -1;
         }
-        else if (!saltando && enElAire) {
-            CaerLento();
-        }
-        else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10)) { //Si el personaje esta encima
-            Salto();
-        }
-        else if (destRec.y != playerPosition.y) {
-            if (direccionX == 0) {
-                //Izquierda
+    } else {
+            if (muerto) {
+                animacionActiva = 1;
+                Caer();
+            }
+            else if (enfadado) {
+                enfadar();
+                enfadado = false;
+            }
+            else if (!saltando && enElAire) {
+                CaerLento();
+            }
+            else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10)) { //Si el personaje esta encima
+                Salto();
+            }
+            else if (destRec.y != playerPosition.y) {
+                if (direccionX == 0) {
+                    //Izquierda
+                    MoverIzq();
+                }
+                else {
+                    //Derecha
+                    MoverDer();
+                }
+            }
+            else if (destRec.x > playerPosition.x + 5) { //Si el personaje esta a la izquierda
                 MoverIzq();
             }
-            else {
-                //Derecha
+            else if (destRec.x < playerPosition.x - 5) { //Si el personaje esta a la derecha
                 MoverDer();
             }
-        }
-        else if (destRec.x > playerPosition.x + 5) { //Si el personaje esta a la izquierda
-            MoverIzq();
-        }
-        else if (destRec.x < playerPosition.x - 5) { //Si el personaje esta a la derecha
-            MoverDer();
-        }
 
-        //Actualizar posicion no salir de la pantalla
-        if (destRec.y > 500) {
-            destRec.y = -10;
-            enElAire = true;
-            cayendo = true;
-        }
-        else if (destRec.y < -50) {
-            destRec.y = 450;
+            //Actualizar posicion no salir de la pantalla
+            if (destRec.y > 500) {
+                destRec.y = -10;
+                enElAire = true;
+                cayendo = true;
+            }
+            else if (destRec.y < -50) {
+                destRec.y = 450;
+            }
+
         }
 
         //Actualizar puntero de animacion
