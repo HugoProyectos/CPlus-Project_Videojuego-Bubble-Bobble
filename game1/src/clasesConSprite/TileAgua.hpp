@@ -23,10 +23,11 @@ class tileAgua : public Sprite {
     //Rectangle srcRect = { 8.0f,0.0f,(float)height, (float)width }; //Se ha pasado la asignaci�n a srcRec en el constructor
  
 
-    //Variables optimizacion
-    int numPlataformas = -1;
+    
 
 public:
+    //Variables optimizacion
+    int numPlataformas = -1;
     //Variables fisica
     bool direccionDerecha = true;
     bool enElAire = true;

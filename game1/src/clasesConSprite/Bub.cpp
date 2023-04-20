@@ -678,7 +678,6 @@ public:
                             )
                     )
                 ) {
-                std::cout << s.aproach[0 + (int)!eresBub] << std::endl;
                 switch (s.aproach[0 + (int)!eresBub]) {
                 case 1:
                     destRec.x = s.left - destRec.width / 2;

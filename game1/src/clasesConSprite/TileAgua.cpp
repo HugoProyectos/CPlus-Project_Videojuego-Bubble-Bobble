@@ -16,15 +16,9 @@ Response tileAgua::ActualizarHead(Plataformas& plat) {
 	current.rect = destRec; current.enElAire = enElAire;
 	current.derecha = direccionDerecha; current.bend = bend;
 	bend = false;
-	//PARTE ESPECIAL PARA PRUEBAS************************************
-	/*if (destRec.y > 500) {
-		destRec.x = 150; destRec.y = 100;
-		return current;
-	}*/
-	//***************************************************************
 
 	if (enElAire) {
-		destRec.y += 16;
+		destRec.y += destRec.height;
 		//Comprobamos si hemos llegado al suelo
 		for (int i = 0; i < numPlataformas; i++) {
 			if (comprobarColisionY(plat.listaPlataforma[i])) {
@@ -44,6 +38,9 @@ Response tileAgua::ActualizarHead(Plataformas& plat) {
 			}
 			//Comprobamos si seguimos tocando el suelo
 			comprobarSuelo(plat.listaPlataforma[lastGroundNum]);
+			if (enElAire) {
+				std::cout << "Aire" << std::endl;
+			}
 		}
 		else {
 			destRec.x -= destRec.width;
@@ -55,6 +52,9 @@ Response tileAgua::ActualizarHead(Plataformas& plat) {
 			}
 			//Comprobamos si seguimos tocando el suelo
 			comprobarSuelo(plat.listaPlataforma[lastGroundNum]);
+			if (enElAire) {
+				std::cout << "Aire" << std::endl;
+			}
 		}
 	}
 	return current;
@@ -72,22 +72,40 @@ Response tileAgua::Actualizar(Response input) {
 bool tileAgua::comprobarColisionY(Plataforma& plat) {
 	if (
 		(
+			(plat.left < (destRec.x + destRec.width - 1)) &&
+			(plat.right > (destRec.x + destRec.width - 1)) &&
+			(plat.top < (destRec.y + destRec.height / 2)) &&
+			(plat.bot > (destRec.y + destRec.height / 2))
+			) ||
+		(
 			(plat.left < (destRec.x + destRec.width / 2)) &&
 			(plat.right > (destRec.x + destRec.width / 2)) &&
-			(plat.top < (destRec.y + destRec.width / 2)) &&
-			(plat.bot > (destRec.y + destRec.width / 2))
+			(plat.top < (destRec.y + destRec.height / 2)) &&
+			(plat.bot > (destRec.y + destRec.height / 2))
 			) ||
 		(
-			(plat.left < (destRec.x - destRec.width / 2)) &&
-			(plat.right > (destRec.x - destRec.width / 2)) &&
-			(plat.top < (destRec.y + destRec.width / 2)) &&
-			(plat.bot > (destRec.y + destRec.width / 2))
+			(plat.left < (destRec.x + 1)) &&
+			(plat.right > (destRec.x + 1)) &&
+			(plat.top < (destRec.y + destRec.height / 2)) &&
+			(plat.bot > (destRec.y + destRec.height / 2))
 			) ||
 		(
-			(plat.left < (destRec.x)) &&
-			(plat.right > (destRec.x)) &&
-			(plat.top < (destRec.y + destRec.width / 2)) &&
-			(plat.bot > (destRec.y + destRec.width / 2))
+			(plat.left < (destRec.x + destRec.width - 1)) &&
+			(plat.right > (destRec.x + destRec.width - 1)) &&
+			(plat.top < (destRec.y + destRec.height / 4)) &&
+			(plat.bot > (destRec.y + destRec.height / 4))
+			) ||
+		(
+			(plat.left < (destRec.x + destRec.width / 2)) &&
+			(plat.right > (destRec.x + destRec.width / 2)) &&
+			(plat.top < (destRec.y + destRec.height / 4)) &&
+			(plat.bot > (destRec.y + destRec.height / 4))
+			) ||
+		(
+			(plat.left < (destRec.x + 1)) &&
+			(plat.right > (destRec.x + 1)) &&
+			(plat.top < (destRec.y + destRec.height / 4)) &&
+			(plat.bot > (destRec.y + destRec.height / 4))
 			)
 		) {
 		destRec.y = plat.top - destRec.height;
@@ -104,21 +122,39 @@ bool tileAgua::comprobarColisionX(Plataforma& plat) {
 			(
 			(plat.left < (destRec.x + destRec.width)) &&
 			(plat.right > (destRec.x + destRec.width)) &&
-			(plat.top < (destRec.y + destRec.width)) && 
-			(plat.bot > (destRec.y + destRec.width))
+			(plat.top < (destRec.y + destRec.height)) && 
+			(plat.bot > (destRec.y + destRec.height))
 			) ||
 			(
 			(plat.left < (destRec.x + destRec.width)) &&
 			(plat.right > (destRec.x + destRec.width)) &&
-			(plat.top < (destRec.y + destRec.width / 2)) &&
-			(plat.bot > (destRec.y + destRec.width / 2))
+			(plat.top < (destRec.y + destRec.height / 2)) &&
+			(plat.bot > (destRec.y + destRec.height / 2))
 			) ||
 			(
 			(plat.left < (destRec.x + destRec.width)) &&
 			(plat.right > (destRec.x + destRec.width)) &&
 			(plat.top < (destRec.y)) &&
 			(plat.bot > (destRec.y))
-			)
+			) ||
+			(
+			(plat.left < (destRec.x + destRec.width / 2)) &&
+			(plat.right > (destRec.x + destRec.width / 2)) &&
+			(plat.top < (destRec.y + destRec.height)) &&
+			(plat.bot > (destRec.y + destRec.height))
+			) ||
+			(
+			(plat.left < (destRec.x + destRec.width / 2)) &&
+			(plat.right > (destRec.x + destRec.width / 2)) &&
+			(plat.top < (destRec.y + destRec.height / 2)) &&
+			(plat.bot > (destRec.y + destRec.height / 2))
+			) ||
+			(
+			(plat.left < (destRec.x + destRec.width / 2)) &&
+			(plat.right > (destRec.x + destRec.width / 2)) &&
+			(plat.top < (destRec.y)) &&
+			(plat.bot > (destRec.y))
+				)
 			) {
 			destRec.x = plat.left - destRec.width;
 			direccionDerecha = false;
@@ -130,18 +166,36 @@ bool tileAgua::comprobarColisionX(Plataforma& plat) {
 		    (
 			(plat.left < (destRec.x)) &&
 			(plat.right > (destRec.x)) &&
-			(plat.top < (destRec.y + destRec.width)) &&
-			(plat.bot > (destRec.y + destRec.width))
+			(plat.top < (destRec.y + destRec.height)) &&
+			(plat.bot > (destRec.y + destRec.height))
 			) ||
 			(
 			(plat.left < (destRec.x)) &&
 			(plat.right > (destRec.x)) &&
-			(plat.top < (destRec.y + destRec.width / 2)) &&
-			(plat.bot > (destRec.y +destRec.width / 2))
+			(plat.top < (destRec.y + destRec.height / 2)) &&
+			(plat.bot > (destRec.y +destRec.height / 2))
 			) ||
 			(
 			(plat.left < (destRec.x)) &&
 			(plat.right > (destRec.x)) &&
+			(plat.top < (destRec.y)) &&
+			(plat.bot > (destRec.y))
+			) ||
+			(
+			(plat.left < (destRec.x - destRec.width / 2)) &&
+			(plat.right > (destRec.x - destRec.width / 2)) &&
+			(plat.top < (destRec.y + destRec.height)) &&
+			(plat.bot > (destRec.y + destRec.height))
+			) ||
+			(
+			(plat.left < (destRec.x - destRec.width / 2)) &&
+			(plat.right > (destRec.x - destRec.width / 2)) &&
+			(plat.top < (destRec.y + destRec.height / 2)) &&
+			(plat.bot > (destRec.y + destRec.height / 2))
+			) ||
+			(
+			(plat.left < (destRec.x - destRec.width / 2)) &&
+			(plat.right > (destRec.x - destRec.width / 2)) &&
 			(plat.top < (destRec.y)) &&
 			(plat.bot > (destRec.y))
 			)
