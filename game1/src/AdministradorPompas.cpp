@@ -58,6 +58,8 @@ public:
 		contadorSkull = 0;
 		hurryUp = false;
 		pompas.clear();
+		enemigos.clear();
+		frutas.clear();
 	}
 
 	void CambioDeMapa(uint8_t idMapa) {

@@ -693,14 +693,36 @@ int main(void)
                 currentScreen = MAIN_MENU; 
                 admin.scores.hayP1 = false;
                 bub.numVidas = 2;
+                bub.destRec = destBub;
+                bub.cambioMapa = 2;
+                bub.muerto = false;
                 if (admin.scores.hayP2) {
                     admin.scores.hayP2 = false;
                     bob.numVidas = 2;
+                    bob.destRec = destBub;
+                    bob.cambioMapa = 2;
+                    bob.muerto = false;
                 }
                 gameover.clear = false;
                 gameover.hayP2 = false;
                 admin.scores.puntuacion1 = 0;
                 admin.scores.puntuacion2 = 0;
+
+                //Reseteo del nivel
+                admin.iniciaMapa(3, 1200);
+                admin.CambioDeMapa(0);
+                
+                destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
+                fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                admin.enemigos.push_back(fantasma);
+                
+                destRob = { (float)GetScreenWidth() / 2, 70, 32, 32 };
+                rosa = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                admin.enemigos.push_back(rosa);
+                
+                destRob = { (float)GetScreenWidth() / 2, 80, 32, 32 };
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin)); 
+                admin.enemigos.push_back(robot);
             }
         } break;
         default: break;
