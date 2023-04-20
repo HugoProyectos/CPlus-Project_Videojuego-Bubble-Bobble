@@ -79,6 +79,7 @@ void Pompa::Inicializador(Texture2D spriteSheet, const Rectangle origen, float v
 		//std::cout << "NO Disparada" << std::endl;
 		disparada = 0;
 		animacionActiva = VACIA;
+		indiceAnimacion = 0;
 	}
 	velocidadDesplazamiento = velDisparo;
 	tamano = 1;
@@ -449,7 +450,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					if (destRec.x >= screenWidth * 0.5 - 40 && destRec.x <= screenWidth * 0.5 + 40 && destRec.y < screenHeight * 0.5 && destRec.y > screenHeight * 0.4) {
 						oscilando = true;
 					}
-					else if (destRec.y <= screenHeight * 0.95 && destRec.y > screenHeight * 0.90 && destRec.x < (screenWidth / 2) - screenWidth / 30) {
+					else if (destRec.y <= screenHeight * 0.93 && destRec.y > screenHeight * 0.90 && destRec.x < (screenWidth / 2) - screenWidth / 30) {
 						destRec.x += 1;
 					}
 					else if (destRec.y <= screenHeight * 0.70 && destRec.y > screenHeight * 0.65 && destRec.x > screenWidth * 0.12) {
@@ -475,7 +476,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					if (destRec.x >= screenWidth * 0.5 - 40 && destRec.x <= screenWidth * 0.5 + 40 && destRec.y < screenHeight * 0.5 && destRec.y > screenHeight * 0.4) {
 						oscilando = true;
 					}
-					else if (destRec.y <= screenHeight * 0.95 && destRec.y > screenHeight * 0.90 && destRec.x > (screenWidth / 2) + screenWidth / 30) {
+					else if (destRec.y <= screenHeight * 0.93 && destRec.y > screenHeight * 0.90 && destRec.x > (screenWidth / 2) + screenWidth / 30) {
 						destRec.x -= 1;
 					}
 					else if (destRec.y <= screenHeight * 0.70 && destRec.y > screenHeight * 0.65 && destRec.x < screenWidth * 0.88) {
@@ -491,6 +492,68 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						destRec.y -= 0.5;
 					}
 					else if (destRec.x <= screenWidth * 0.82 && destRec.x > screenWidth * 0.5 + 40 && destRec.y < screenHeight * 0.65 && destRec.y > screenHeight * 0.2) {
+						destRec.x -= 1;
+					}
+					else {
+						destRec.y -= 0.5;
+					}
+				}
+
+				if (oscilando) {
+					if (abajo) {
+						destRec.y += 0.5;
+					}
+					else {
+						destRec.y += -0.5;
+					}
+					contador++;
+					if (contador >= 20) {
+						abajo = !abajo;
+						contador = 0;
+					}
+				}
+
+				break;
+			}
+			case 3:
+			{
+				if (destRec.y > screenHeight * 0.95) {
+					destRec.y -= 0.5;
+				}
+				if (destRec.x < screenWidth / 2) {
+					if (destRec.x >= screenWidth * 0.5 - 25 && destRec.x <= screenWidth * 0.5 + 25 && destRec.y < screenHeight * 0.5 && destRec.y > screenHeight * 0.4) {
+						oscilando = true;
+					}
+					else if (destRec.y <= screenHeight * 0.94 && destRec.y > screenHeight * 0.90 && destRec.x > screenWidth * 0.12) {
+						destRec.x -= 1;
+					}
+					else if (destRec.y <= screenHeight * 0.54 && destRec.y > screenHeight * 0.44 && destRec.x < screenWidth * 0.35) {
+						destRec.x += 1;
+					}
+					else if (destRec.y <= screenHeight * 0.44 && destRec.y > screenHeight * 0.38 && destRec.x < screenWidth * 0.35) {
+						destRec.x += 1;
+					}
+					else if (destRec.y < screenHeight * 0.25 && destRec.y > screenHeight * 0.15) {
+						destRec.x += 1;
+					}
+					else if (destRec.y <= screenHeight * 0.70 && destRec.x < screenWidth * 0.5 - 25 && destRec.x > screenWidth * 0.14) {
+						destRec.x += 1;
+					}
+					else if (destRec.x >= screenWidth * 0.35 && destRec.x < screenWidth * 0.45 && destRec.y >= screenHeight * 0.25 && destRec.y < screenHeight * 0.70) {
+						destRec.y += 0.5;
+					}
+					else if (destRec.x >= screenWidth * 0.5 - 25 && destRec.x <= screenWidth * 0.5 + 25 && destRec.y <= screenHeight * 0.4) {
+						destRec.y += 0.5;
+					}
+					else {
+						destRec.y -= 0.5;
+					}
+				}
+				else {
+					if (destRec.x >= screenWidth * 0.5 - 40 && destRec.x <= screenWidth * 0.5 + 40 && destRec.y < screenHeight * 0.5 && destRec.y > screenHeight * 0.4) {
+						oscilando = true;
+					}
+					else if (destRec.y <= screenHeight * 0.95 && destRec.y > screenHeight * 0.90 && destRec.x > (screenWidth / 2) + screenWidth / 30) {
 						destRec.x -= 1;
 					}
 					else {
