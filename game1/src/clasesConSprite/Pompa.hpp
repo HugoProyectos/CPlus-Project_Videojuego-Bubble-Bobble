@@ -109,7 +109,7 @@ public:
 
 	void Inicializador(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
 
-	sh_Enemigo Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua); //3->Derecha, 2->Izquierda
+	sh_Enemigo Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua, Columnas *col, Plataformas *plat); //3->Derecha, 2->Izquierda
 
 	Pompa &operator=(const Pompa& p);
 	void explota();

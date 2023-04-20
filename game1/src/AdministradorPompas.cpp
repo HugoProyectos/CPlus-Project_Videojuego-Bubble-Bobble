@@ -8,6 +8,7 @@
 #include "GeneradorPompas.hpp"
 #include <iostream> //Para debuggear
 #include <clasesConSprite/Blanco.cpp>
+#include <mapa.cpp>
 
 
 
@@ -15,6 +16,9 @@
 
 class AdministradorPompas{
 public:
+	//Referencias a plataformas y columnas para la colision de pompas
+	Columnas *col;
+	Plataformas *plat;
 	//Gestión de tiempo de mapa
 	uint32_t contadorSkull = 0;
 	uint32_t limiteContadorSkull = 60 * 90;
@@ -106,7 +110,7 @@ public:
 					}
 				}
 				uint8_t useless;
-				sh_Enemigo enemigo = pompas.at(i)->Actualizar(j1, j2, useless);
+				sh_Enemigo enemigo = pompas.at(i)->Actualizar(j1, j2, useless, col, plat);
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 					if (enemigo->muerto) {
@@ -134,7 +138,7 @@ public:
 				}
 			} else {
 				uint8_t creaAgua = false;
-				sh_Enemigo enemigo = pompas.at(i)->Actualizar(j1, j2, creaAgua);
+				sh_Enemigo enemigo = pompas.at(i)->Actualizar(j1, j2, creaAgua, col, plat);
 				if (pompas.at(i)->animacionActiva != Pompa::EXPLOTA && i < pompas.size() - 1) {
 
 					for (int j = i + 1; j < pompas.size(); j++) {
