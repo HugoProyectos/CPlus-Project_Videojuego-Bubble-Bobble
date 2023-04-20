@@ -95,7 +95,7 @@ public:
 
     // Variables para cargar siguiente nivel
     bool cargando_nivel_siguiente = false;
-    Texture2D bloque_pequeno_siguiente; 
+    Texture2D bloque_pequeno_siguiente;
     std::vector<Plataforma> listaPlataformaSiguiente;
     float distancia_ya_movida = 0;
 
@@ -103,6 +103,15 @@ public:
     bool empezar_contador = false;
     unsigned int iteraciones = 0;
     std::string texto_inicio_ronda = "";
+
+    std::string texto_hurryup = "HURRY UP!!!";
+    bool mostrar_hurryup = false;
+    bool empezar_contador2 = false;
+    unsigned int iteraciones2 = 0;
+    unsigned int indice = 0;
+    Color colores[2] = { YELLOW, MAGENTA };
+    Sound sound = LoadSound("resources/music/sonido_fantasma_inmortal.mp3");
+
 
     Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
 
@@ -177,6 +186,19 @@ public:
                 empezar_contador = false;
             }
         }
+
+
+        if (empezar_contador2) {
+            iteraciones2++;
+            if ((iteraciones2 % 20) == 0) {
+                indice = 1 - indice;
+            }
+            if (iteraciones2 >= 120) {
+                mostrar_hurryup = false;
+                empezar_contador = false;
+            }
+        }
+
     }
 
     void Dibujar() {
@@ -208,7 +230,13 @@ public:
                     destRect.x += anchura_bloque;
                 }
             }
+            if (mostrar_hurryup) {
+                float tamanoPantalla = (float)GetScreenHeight() - tamanoMargenSup - tamanoMargenInf;
+                int tamano = MeasureText(texto_hurryup.c_str(), 40);
+                DrawText(texto_hurryup.c_str(), (GetScreenWidth() - tamano) / 2, tamanoMargenSup + (tamanoPantalla / 2) - 20, 40, colores[indice]);
+            }
             DrawRectangle(listaPlataforma[0].left, 0, GetScreenWidth() - listaPlataforma[0].left, tamanoMargenSup, BLACK);
+
         }
         else {
             float movimiento_por_frame = altura_bloque * (BLOQUE_PEQUENO_ALTO + 6)/ float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
@@ -319,6 +347,15 @@ public:
 
         this->listaPlataforma.assign(this->listaPlataformaSiguiente.begin(), this->listaPlataformaSiguiente.end());
         this->listaPlataforma.resize(this->listaPlataformaSiguiente.size());
+    }
+
+    void SeñalHurryUp() {
+        if (!empezar_contador2) {
+            PlaySound(sound);
+            iteraciones2 = 0;
+            empezar_contador2 = true;
+            mostrar_hurryup = true;
+        }
     }
 };
 

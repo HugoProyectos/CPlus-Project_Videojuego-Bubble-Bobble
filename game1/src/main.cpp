@@ -23,7 +23,7 @@ typedef enum GameScreen { MAIN_MENU, NIVEL_1, NIVEL_2, NIVEL_3, NIVEL_4, NIVEL_5
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
-int main(void)
+int main(void) 
 {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -222,6 +222,10 @@ int main(void)
                 admin.actualizaFrutas(plataformas);
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);  
+
+                if (admin.hurryUp) {
+                    plataformas.SeñalHurryUp();
+                }
                 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
                     gameover.ronda = 1;
@@ -324,6 +328,10 @@ int main(void)
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
+                if (admin.hurryUp) {
+                    plataformas.SeñalHurryUp();
+                }
+
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
                     gameover.ronda = 2;
                     currentScreen = GAME_OVER;
@@ -422,6 +430,10 @@ int main(void)
                 admin.actualizaFrutas(plataformas);
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
+
+                if (admin.hurryUp) {
+                    plataformas.SeñalHurryUp();
+                }
 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
                     gameover.ronda = 3;
@@ -530,6 +542,10 @@ int main(void)
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos); 
 
+                if (admin.hurryUp) {
+                    plataformas.SeñalHurryUp();
+                }
+
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
                     gameover.ronda = 4;
                     currentScreen = GAME_OVER;
@@ -584,7 +600,7 @@ int main(void)
                 plataformas.inicio_de_ronda(5);
             }
         } break;
-        case NIVEL_5:
+        case NIVEL_5: 
         {
             // TODO: Update NIVEL_5 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
@@ -629,6 +645,10 @@ int main(void)
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
+                if (admin.hurryUp) {
+                    plataformas.SeñalHurryUp();
+                }
+
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
                     gameover.ronda = 5;
                     currentScreen = GAME_OVER;
@@ -651,7 +671,7 @@ int main(void)
                 gameover.clear = true;
                 admin.frutas.clear();
                 currentScreen = GAME_OVER;
-            }
+            }  
         } break;
         case CONTROLS_MENU:
         {
