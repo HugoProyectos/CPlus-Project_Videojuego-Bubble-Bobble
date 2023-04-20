@@ -254,7 +254,11 @@ public:
 			//Contador de aparición de SKULL (Monsta blanco)
 			if (contadorSkull < limiteContadorSkull) {
 				contadorSkull++;
-			} else {
+			}
+			else if(j1.muriendo || j2.muriendo) {
+				contadorSkull = 0;
+			}
+			else {
 				if (contadorSkull == limiteContadorSkull) {
 					hurryUp = true;
 					//Crear a Skull y añadirlo a enemigos.
