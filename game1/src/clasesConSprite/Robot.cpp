@@ -16,12 +16,7 @@ public:
     
     //Sprite pixels
     int pixels = 16; //El numero de pixeles del sprite
-    int8_t cambioMapa = 2; //2->Primera Iteración 1->Desplazándose 0->Ya no
-    Rectangle posicionPartida = { (float)GetScreenWidth()/2, (float)50, 32, 32};
-    int cuentaFramesTraslacion = 0; //3 segundos = 3 * 60 frames = 180 frames
-    const int LIMITE_FRAMES_TRASLACION = 180; //3 segundos = 3 * 60 frames = 180 frames
-    double razonX = 0;
-    double razonY = 0;
+    
     //Animation
     Texture2D walkAnimation = LoadTexture("resources/enemyRobot/robotWalk.png");
     Texture2D deadAnimation = LoadTexture("resources/enemyRobot/robotDead.png");
