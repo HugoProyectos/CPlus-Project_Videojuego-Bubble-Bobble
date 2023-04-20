@@ -261,6 +261,7 @@ public:
 			}
 			else if(j1.muriendo || j2.muriendo) {
 				contadorSkull = 0;
+				hurryUp = false;
 			}
 			else {
 				if (contadorSkull == limiteContadorSkull) {
