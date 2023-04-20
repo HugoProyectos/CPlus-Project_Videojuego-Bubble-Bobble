@@ -481,7 +481,7 @@ int main(void)
 
                 jugando_nivel = true;
                 plataformas.inicio_de_ronda(4);
-            }
+            }     
         } break;
         case NIVEL_4:
         {
@@ -514,7 +514,7 @@ int main(void)
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
                     else if (admin.agua.existe) {
-                        bob.enElAgua = admin.agua.colisionBub(bob.destRec, bob.waterlessFrames);
+                        bob.enElAgua = admin.agua.colisionBub(bob.destRec, bob.waterlessFrames); 
                     }
                 }
                 admin.agua.Actualizar(plataformas, columnas);
@@ -526,7 +526,7 @@ int main(void)
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
 
-                contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
+                contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos); 
 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
                     gameover.ronda = 1;
@@ -844,9 +844,15 @@ int main(void)
     // TODO: Unload all loaded data (textures, fonts, audio) here!
     main_menu.Unload();
     columnas.Unload();
+    for (int i = plataformas.listaPlataforma.size() - 1; i >= 0; i--) {
+        plataformas.listaPlataforma[i].Unload();
+    }
     plataformas.Unload();
     credits.Unload(); 
     admin.scores.Unload();
+    gameover.Unload();
+    controls.Unload();
+    contadorVidas.Unload();  
 
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------

@@ -17,7 +17,7 @@ public:
         LoadTexture("resources/main_menu/menu_5.png") };
     Texture2D currentMenu = menu[0];
 
-    Music music = LoadMusicStream("resources/music/Bubble Bobble Arcade In-Game Music.mp3");
+    Music music = LoadMusicStream("resources/music/sonido_main_menu.mp3");
     
     unsigned int frecuencia;
     unsigned int iteraciones = 0;
@@ -52,6 +52,8 @@ public:
         UnloadTexture(menu[0]);
         UnloadTexture(menu[1]);
         UnloadTexture(menu[2]);
+        UnloadTexture(menu[3]);
+        UnloadTexture(menu[4]);
     };
 
     void Unload() {
@@ -59,6 +61,8 @@ public:
         UnloadTexture(menu[0]);
         UnloadTexture(menu[1]);
         UnloadTexture(menu[2]);
+        UnloadTexture(menu[3]);
+        UnloadTexture(menu[4]);
     };
 
     void Actualizar(int credits) {
@@ -88,4 +92,3 @@ public:
     }
 
 };
-
