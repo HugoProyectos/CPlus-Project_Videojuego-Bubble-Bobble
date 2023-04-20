@@ -126,7 +126,7 @@ int main(void)
     //bob.nivel = 4;
 
     
-    bool jugando_nivel = true;
+    bool jugando_nivel = true; 
 
     //bub.destRec.x = 100; bub.destRec.y = 100;
 
@@ -160,6 +160,7 @@ int main(void)
                 currentScreen = NIVEL_1;
                 credits.creditos -= 1;
                 admin.scores.hayP1 = true;
+                plataformas.inicio_de_ronda(1);
             }
             else if (IsKeyPressed(tecla_p2) && credits.creditos >= 2) {
                 currentScreen = NIVEL_1;
@@ -168,6 +169,7 @@ int main(void)
                 admin.scores.hayP2 = true;
                 contadorVidas.hayP2 = true;
                 gameover.hayP2 = true;
+                plataformas.inicio_de_ronda(1);
                 //bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
             }
         } break;
@@ -269,6 +271,7 @@ int main(void)
                 admin.enemigos.push_back(robot);
 
                 jugando_nivel = true;
+                plataformas.inicio_de_ronda(2); 
             }
         } break;
         case NIVEL_2:
@@ -365,6 +368,7 @@ int main(void)
 
 
                 jugando_nivel = true;
+                plataformas.inicio_de_ronda(3);
             }
         } break;
         case NIVEL_3:
@@ -467,6 +471,7 @@ int main(void)
                 robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
                 admin.enemigos.push_back(robot);
                 jugando_nivel = true;
+                plataformas.inicio_de_ronda(4);
             }
         } break;
         case NIVEL_4:
@@ -561,6 +566,7 @@ int main(void)
                 robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
                 admin.enemigos.push_back(robot);
                 jugando_nivel = true;
+                plataformas.inicio_de_ronda(5);
             }
         } break;
         case NIVEL_5:
@@ -674,6 +680,8 @@ int main(void)
                     admin.scores.hayP2 = false;
                     bob.numVidas = 2;
                 }
+                gameover.clear = false;
+                gameover.hayP2 = false;
                 admin.scores.puntuacion1 = 0;
                 admin.scores.puntuacion2 = 0;
             }

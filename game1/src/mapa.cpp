@@ -99,6 +99,11 @@ public:
     std::vector<Plataforma> listaPlataformaSiguiente;
     float distancia_ya_movida = 0;
 
+    bool mostrar_inicio_ronda = false;
+    bool empezar_contador = false;
+    unsigned int iteraciones = 0;
+    std::string texto_inicio_ronda = "";
+
     Plataformas() = default;
 
     Plataformas(std::string ruta_bloque_pequeno, std::string ruta_ubicacion_bloques, float margenSuperior, float margenInferior) {
@@ -155,6 +160,16 @@ public:
     void Actualizar() {
         for (int i = 0; i < listaPlataforma.size(); i++) {
             listaPlataforma[i].Actualizar(ratioMargenSup, ratioMargenInf);
+        }
+        if (empezar_contador) {
+            iteraciones++;
+            if (iteraciones >= 120 && iteraciones < 300) {
+                mostrar_inicio_ronda = true;
+            }
+            else if (iteraciones >= 300) {
+                mostrar_inicio_ronda = false;
+                empezar_contador = false;
+            }
         }
     }
 
@@ -249,6 +264,11 @@ public:
                 this->listaPlataforma.resize(this->listaPlataformaSiguiente.size());
             }
         }
+        if (mostrar_inicio_ronda) {
+            float tamanoPantalla = (float)GetScreenHeight() - tamanoMargenSup - tamanoMargenInf;
+            int tamano = MeasureText(texto_inicio_ronda.c_str(), 40);
+            DrawText(texto_inicio_ronda.c_str(), (GetScreenWidth() - tamano) / 2, tamanoMargenSup + (tamanoPantalla / 2) - 20, 40, WHITE);
+        }
 
         
 
@@ -267,6 +287,14 @@ public:
             }
         }
         
+    }
+
+    void inicio_de_ronda(unsigned int ronda) {
+        if (!empezar_contador) {
+            iteraciones = 0;
+            texto_inicio_ronda = "ROUND " + std::to_string(ronda) + "\nREADY !";
+            empezar_contador = true;
+        }
     }
 };
 
@@ -294,6 +322,7 @@ public:
     float distancia_ya_movida = 0;
 
     std::string numeroNivel = "";
+
 
 
     Columnas() = default; //Debe llamarsse a Inicializador
@@ -347,6 +376,8 @@ public:
         float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
         float altura_bloque = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_GRANDE_ALTO;
         float anchura_bloque = GetScreenWidth() / (float)BLOQUE_GRANDE_ANCHO;
+
+              
 
         if (!cargando_nivel_siguiente) {
             
@@ -414,6 +445,7 @@ public:
             }
         }
         
+        
     }
 
     void CargarSiguienteNivel(std::string ruta_bloque_grande_siguiente, unsigned int numeroNivelSiguiente) {
@@ -423,6 +455,8 @@ public:
             this->numeroNivelSiguiente = std::to_string(numeroNivelSiguiente);
         }
     }
+
+    
 };
 
 
