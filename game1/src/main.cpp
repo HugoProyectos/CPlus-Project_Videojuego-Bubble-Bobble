@@ -74,12 +74,12 @@ int main(void)
 
     AdministradorPompas admin = AdministradorPompas();
     Texture2D spriteAgua = LoadTexture("resources/agua.png");
-    Rectangle destAgua = { -100, -100, 16, 16 };
+    Rectangle destAgua = { -100, -100, 13, 13 };
     admin.agua = Agua(destAgua, true, spriteAgua, plataformas.listaPlataforma.size());
     admin.agua.existe = false;
     admin.col = &columnas;
     admin.plat = &plataformas;
-    admin.iniciaMapa(3, 1200);
+    admin.iniciaMapa(0, 1200);
     admin.CambioDeMapa(0); //DEBUG 4->0
 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
@@ -248,20 +248,22 @@ int main(void)
                   
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(4, 1200);
-                admin.CambioDeMapa(1);
-                columnas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_grande.png", 2);
-                plataformas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_pequeno.png", "resources/mapa_nivel_2/mapa.txt");
+                admin.iniciaMapa(6, 120000);
+                admin.CambioDeMapa(4);
+                columnas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_grande.png", 2);
+                plataformas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt");
                 contadorVidas.cargar_siguiente_nivel();
                 bub.cambioMapa = 2; 
                 bob.cambioMapa = 2;
                 bub.nivel = 1;
                 bob.nivel = 1;
                 jugando_nivel = false;
-
+                for (int i = 0; i < 10; i++) {
+                    admin.agua.stream[i].numPlataformas = plataformas.listaPlataformaSiguiente.size();
+                }
             }
             else {
-                currentScreen = NIVEL_2;
+                currentScreen = NIVEL_5;
                 destRob = { (float)GetScreenWidth() / 2 + 20, 100, 32, 32 };
                 robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
@@ -281,7 +283,7 @@ int main(void)
                 admin.frutas.clear();
 
                 jugando_nivel = true;
-                plataformas.inicio_de_ronda(2); 
+                plataformas.inicio_de_ronda(2);
             }
         } break;
         case NIVEL_2:
@@ -362,7 +364,9 @@ int main(void)
                 bub.nivel = 2;
                 bob.nivel = 2;
                 jugando_nivel = false;
-
+                for (int i = 0; i < 10; i++) {
+                    admin.agua.stream[i].numPlataformas = plataformas.listaPlataformaSiguiente.size();
+                }
             }
             else {
                 currentScreen = NIVEL_3;
@@ -466,7 +470,9 @@ int main(void)
                 bub.nivel = 3;
                 bob.nivel = 3;
                 jugando_nivel = false;
-
+                for (int i = 0; i < 10; i++) {
+                    admin.agua.stream[i].numPlataformas = plataformas.listaPlataformaSiguiente.size();
+                }
             }
             else {
                 currentScreen = NIVEL_4;
@@ -578,7 +584,9 @@ int main(void)
                 bub.nivel = 4;
                 bob.nivel = 4;
                 jugando_nivel = false;
-
+                for (int i = 0; i < 10; i++) {
+                    admin.agua.stream[i].numPlataformas = plataformas.listaPlataformaSiguiente.size();
+                }
             }
             else {
                 currentScreen = NIVEL_5;
