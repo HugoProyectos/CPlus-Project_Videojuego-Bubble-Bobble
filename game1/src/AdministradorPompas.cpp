@@ -326,6 +326,9 @@ public:
 				}
 			}
 		}
+		if (frutas.size() == 0) {
+			std::cout << "Sin frutas que actualizar" << std::endl;
+		}
 	}
 
 	void dibujaEnemigos() {

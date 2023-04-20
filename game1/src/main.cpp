@@ -268,6 +268,8 @@ int main(void)
                 robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
                 admin.enemigos.push_back(robot);
 
+                admin.frutas.clear();
+
                 jugando_nivel = true;
             }
         } break;
@@ -310,8 +312,9 @@ int main(void)
                 for (int i = 0; i < admin.enemigos.size(); i++) {
                     admin.agua.colisionEnemigo(*admin.enemigos.at(i));
                 }
-
+                
                 admin.actualizaEnemigos(plataformas, columnas);
+                admin.actualizaFrutas(plataformas);
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
@@ -363,6 +366,7 @@ int main(void)
                 robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
                 admin.enemigos.push_back(robot);
 
+                admin.frutas.clear();
 
                 jugando_nivel = true;
             }
@@ -406,8 +410,9 @@ int main(void)
                 for (int i = 0; i < admin.enemigos.size(); i++) {
                     admin.agua.colisionEnemigo(*admin.enemigos.at(i));
                 }
-
+                
                 admin.actualizaEnemigos(plataformas, columnas);
+                admin.actualizaFrutas(plataformas);
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
@@ -466,6 +471,9 @@ int main(void)
                 destRob = { (float)GetScreenWidth() - 120, (float)GetScreenHeight() - 100, 32, 32 };
                 robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
                 admin.enemigos.push_back(robot);
+
+                admin.frutas.clear();
+
                 jugando_nivel = true;
             }
         } break;
@@ -510,6 +518,7 @@ int main(void)
                 }
 
                 admin.actualizaEnemigos(plataformas, columnas);
+                admin.actualizaFrutas(plataformas);
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
@@ -560,6 +569,9 @@ int main(void)
                 destRob = { (float)GetScreenWidth() / 2 - 70, 300, 32, 32 };
                 robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
                 admin.enemigos.push_back(robot);
+
+                admin.frutas.clear();
+
                 jugando_nivel = true;
             }
         } break;
@@ -602,8 +614,9 @@ int main(void)
                 for (int i = 0; i < admin.enemigos.size(); i++) {
                     admin.agua.colisionEnemigo(*admin.enemigos.at(i));
                 }
-
+                
                 admin.actualizaEnemigos(plataformas, columnas);
+                admin.actualizaFrutas(plataformas);
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
@@ -627,6 +640,7 @@ int main(void)
             else if (admin.cambiaNivel) {
                 gameover.ronda = 5;
                 gameover.clear = true;
+                admin.frutas.clear();
                 currentScreen = GAME_OVER;
             }
         } break;
@@ -739,6 +753,7 @@ int main(void)
             }
             admin.dibujaPompas();
             admin.dibujaEnemigos();
+            admin.dibujaFrutas();
 
         } break;
         case NIVEL_3:
@@ -757,6 +772,7 @@ int main(void)
             }
             admin.dibujaPompas();
             admin.dibujaEnemigos();
+            admin.dibujaFrutas();
 
         } break;
         case NIVEL_4:
@@ -775,6 +791,7 @@ int main(void)
             }
             admin.dibujaPompas();
             admin.dibujaEnemigos();
+            admin.dibujaFrutas();
 
         } break;
         case NIVEL_5:
@@ -793,6 +810,7 @@ int main(void)
             }
             admin.dibujaPompas();
             admin.dibujaEnemigos();
+            admin.dibujaFrutas();
 
         } break;
         case CONTROLS_MENU:
