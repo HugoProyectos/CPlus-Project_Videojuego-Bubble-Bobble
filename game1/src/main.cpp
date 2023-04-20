@@ -225,6 +225,7 @@ int main(void)
 
                 if (admin.hurryUp) {
                     plataformas.SeñalHurryUp();
+                    admin.hurryUp = false; 
                 }
                 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
@@ -330,6 +331,7 @@ int main(void)
 
                 if (admin.hurryUp) {
                     plataformas.SeñalHurryUp();
+                    admin.hurryUp = false;
                 }
 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
@@ -433,6 +435,7 @@ int main(void)
 
                 if (admin.hurryUp) {
                     plataformas.SeñalHurryUp();
+                    admin.hurryUp = false;
                 }
 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
@@ -537,13 +540,14 @@ int main(void)
                     admin.agua.colisionEnemigo(*admin.enemigos.at(i));
                 }
 
-                admin.actualizaEnemigos(plataformas, columnas);
+                admin.actualizaEnemigos(plataformas, columnas); 
                 admin.actualizaFrutas(plataformas);
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos); 
 
                 if (admin.hurryUp) {
                     plataformas.SeñalHurryUp();
+                    admin.hurryUp = false;
                 }
 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
@@ -647,6 +651,7 @@ int main(void)
 
                 if (admin.hurryUp) {
                     plataformas.SeñalHurryUp();
+                    admin.hurryUp = false;
                 }
 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {

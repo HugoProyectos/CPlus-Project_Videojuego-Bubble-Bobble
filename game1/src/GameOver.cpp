@@ -91,7 +91,7 @@ public:
         }
         if (iteraciones >= (tiempo_duracion * 2)) {
             iteraciones = 0;
-            
+            mostrar_gameover = false;
             return true;
         }
         return false;

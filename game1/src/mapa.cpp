@@ -195,7 +195,7 @@ public:
             }
             if (iteraciones2 >= 120) {
                 mostrar_hurryup = false;
-                empezar_contador = false;
+                empezar_contador2 = false;
             }
         }
 
