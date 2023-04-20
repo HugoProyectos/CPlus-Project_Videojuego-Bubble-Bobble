@@ -2,7 +2,7 @@
 #include "Pompa.hpp"
 
 
-uint32_t Pompa::ID_MAPA = 0;
+uint8_t Pompa::ID_MAPA = 0;
 uint32_t Pompa::ID_GLOBAL = 0;
 Controls Pompa::controlesJugador = Controls();
 
@@ -362,9 +362,58 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			/////INICIO DESPLAZAMIENTO POR EL MAPA
 			double screenHeight = GetScreenHeight();
 			double screenWidth = GetScreenWidth();
-			switch (ID_MAPA) {
+			switch ((int)ID_MAPA) {
+			case 2:
+			{
+				if (destRec.y > screenHeight * 0.95) {
+					destRec.y -= 0.5;
+				}
+				if (destRec.x < screenWidth / 2) {
+					if (destRec.y >= screenHeight * 0.95 && destRec.y < screenHeight * 0.90 && destRec.x < (screenWidth / 2) - screenWidth / 30) {
+						destRec.x += 1;
+					}
+					else if (destRec.y >= screenHeight * 0.70 && destRec.y < screenHeight * 0.60 && destRec.x > screenWidth * 0.2) {
+						destRec.x -= 1;
+					}
+					else if (destRec.y >= screenHeight * 0.20 && destRec.y < screenHeight * 0.10 && destRec.x < screenWidth * 0.5 - 50) {
+						destRec.x += 1;
+					}
+					else if (destRec.x >= screenWidth * 0.5 - 50 && destRec.x <= screenWidth * 0.5 + 50 && destRec.y >= screenHeight * 0.3 && destRec.y <= screenHeight * 0.4) {
+						destRec.y -= 0.5;
+					}
+					else if (destRec.x >= screenWidth * 0.5 - 50 && destRec.x <= screenWidth * 0.5 + 50 && !oscilando) {
+						destRec.y += 0.5;
+					}
+					else if (destRec.x > screenWidth * 0.2 && destRec.x < screenWidth * 0.5 - 50 && destRec.y < screenHeight * 0.5 && destRec.y > screenHeight * 0.2) {
+						destRec.x += 1;
+					}
+					else {
+						destRec.y += 0.5;
+					}
+				}
+				else {
+
+				}
+
+				if (oscilando) {
+					if (abajo) {
+						destRec.y += 0.5;
+					}
+					else {
+						destRec.y += -0.5;
+					}
+					contador++;
+					if (contador >= 20) {
+						abajo = !abajo;
+						contador = 0;
+					}
+				}
+
+				break;
+			}
 			case 4: //Mapa del agua
 			{
+
 				if (destRec.x < screenWidth / 2) {
 					if (destRec.y < (screenHeight * 0.85) && (destRec.y > (screenHeight * 0.80) && destRec.x >= 130)) {
 						destRec.x -= 1;
