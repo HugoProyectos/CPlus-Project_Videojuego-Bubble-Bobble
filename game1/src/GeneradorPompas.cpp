@@ -17,7 +17,7 @@ void GeneradorPompas::cambiarModo(uint8_t idMapa) {
 std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 	std::vector<sh_Pompa> resultado;
 	//std::vector<Pompa> pompas;
-	//contadorCiclos++;
+	contadorCiclos++;
 	if (contadorCiclos >= ciclosPompa[idMapa]) {
 		//std::cout << "Chekeo de generación de pompas" << std::endl;
 		contadorCiclos = 0;
