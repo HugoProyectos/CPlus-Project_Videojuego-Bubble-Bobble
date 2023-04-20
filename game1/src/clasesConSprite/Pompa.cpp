@@ -714,8 +714,6 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						contador = 0;
 					}
 				}
-
-				
 			};
 
 			//Evitar que la pompa se salga por arriba
