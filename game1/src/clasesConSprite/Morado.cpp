@@ -44,7 +44,7 @@ public:
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
-
+    Morado() = default;
 
     Morado(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);

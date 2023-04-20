@@ -39,6 +39,7 @@ public:
     DatosJugador *j1;
     DatosJugador *j2;
 
+    Blanco() = default;
 
     Blanco(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, DatosJugador& _j1, DatosJugador& _j2) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
