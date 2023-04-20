@@ -21,6 +21,9 @@ class Bub : public Sprite {
     const int TRASLATION = 6;
     const Texture2D spriteBurbuja = LoadTexture("resources/Players/Bobblun/pompa.png");
     const Texture2D spriteBurbuja2 = LoadTexture("resources/Players/Bobblun/pompa2.png");
+    const Sound sonidoDisparar = LoadSound("resources/music/sonido_escupir.mp3");
+    const Sound sonidoSaltar = LoadSound("resources/music/sonido_salto.mp3");
+
 
     const int NUM_FILAS = 4; //n�mero de filas en el animation_set
 
@@ -236,6 +239,7 @@ public:
                     destRec.y -= velocidadActual;
                     saltoRecorrido += velocidadActual;
                     velocidadActual -= deceleracion;
+                    PlaySound(sonidoSaltar);
                 } else if (admin->j2.debeRebotar > 0 && !eresBub) {
                     //std::cout << "Me dicen que rebote" << std::endl;
                     saltoRecorrido = 0;
@@ -249,6 +253,7 @@ public:
                     destRec.y -= velocidadActual;
                     saltoRecorrido += velocidadActual;
                     velocidadActual -= deceleracion;
+                    PlaySound(sonidoSaltar);
                 }
 
                 if (enElAire) {
@@ -351,6 +356,7 @@ public:
                         p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa[nivel]);
                     }
                     admin->pompas.push_back(std::make_shared<Pompa>(p));
+                    PlaySound(sonidoDisparar);
                 }
                 else if (!enElAire) {
                     if (IsKeyDown(left) && !muriendo) { //if (IsKeyDown(KEY_A)) {
@@ -397,6 +403,7 @@ public:
                     destRec.y -= velocidadActual;
                     saltoRecorrido += velocidadActual;
                     velocidadActual -= deceleracion;
+                    PlaySound(sonidoSaltar);
                 }
                 else if (velocidadActual > 0 && enElAire && !cayendo) {
                     if (!disparando && !muriendo) animacionActiva = JUMPING;
