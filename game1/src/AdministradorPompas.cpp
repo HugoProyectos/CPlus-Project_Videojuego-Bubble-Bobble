@@ -110,7 +110,7 @@ public:
 					}
 				}
 				uint8_t useless;
-				sh_Enemigo enemigo = pompas.at(i)->Actualizar(j1, j2, useless, col, plat);
+				sh_Enemigo enemigo = pompas.at(i)->Actualizar(j1, j2, useless, col, plat, &scores);
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 					if (enemigo->muerto) {
@@ -138,7 +138,7 @@ public:
 				}
 			} else {
 				uint8_t creaAgua = false;
-				sh_Enemigo enemigo = pompas.at(i)->Actualizar(j1, j2, creaAgua, col, plat);
+				sh_Enemigo enemigo = pompas.at(i)->Actualizar(j1, j2, creaAgua, col, plat, &scores);
 				if (pompas.at(i)->animacionActiva != Pompa::EXPLOTA && i < pompas.size() - 1) {
 
 					for (int j = i + 1; j < pompas.size(); j++) {

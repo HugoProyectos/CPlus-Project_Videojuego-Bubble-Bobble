@@ -4,6 +4,7 @@
 #include <cmath>
 #include "../Controls.cpp"
 #include "Enemigo.cpp"
+#include "Scores.cpp"
 #include <iostream> //DEBUG
 
 //Valores de módulo acorde a lo que lleva dentro la pompa
@@ -78,8 +79,8 @@ public:
 	int tVida = 0;
 	bool matame = false;
 
-	//Indica si inicia cadena de explosiones
-	bool cadena = false;
+	//Indica si inicia cadena de explosiones y que jugador ha iniciado la cadena
+	int cadena = 0; // 0 = NO CADENA, 1 = BUB, 2 = BOB
 
 
 	//Enemigo contenido
@@ -109,7 +110,7 @@ public:
 
 	void Inicializador(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
 
-	sh_Enemigo Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua, Columnas *col, Plataformas *plat); //3->Derecha, 2->Izquierda
+	sh_Enemigo Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua, Columnas *col, Plataformas *plat, Scores *scr); //3->Derecha, 2->Izquierda
 
 	Pompa &operator=(const Pompa& p);
 	void explota();
