@@ -16,6 +16,8 @@
 
 class AdministradorPompas{
 public:
+	Sound sonidoMuerteEnemigo = LoadSound("resources/music/sonido_muerte_enemigo.mp3");
+
 	//Referencias a plataformas y columnas para la colision de pompas
 	Columnas *col;
 	Plataformas *plat;
@@ -63,7 +65,7 @@ public:
 	}
 
 	void CambioDeMapa(uint8_t idMapa) {
-		std::cout << "------------------------------------------CAMBIAMOS AL MAPA " << (int)idMapa << std::endl;
+		/*std::cout << "------------------------------------------CAMBIAMOS AL MAPA " << (int)idMapa << std::endl;
 		std::cout << "------------------------------------------" << std::endl;
 		std::cout << "------------------------------------------" << std::endl;
 		std::cout << "------------------------------------------" << std::endl;
@@ -72,7 +74,7 @@ public:
 		std::cout << "------------------------------------------" << std::endl;
 		std::cout << "------------------------------------------" << std::endl;
 		std::cout << "------------------------------------------" << std::endl;
-		std::cout << "------------------------------------------" << std::endl;
+		std::cout << "------------------------------------------" << std::endl;*/
 		generador.cambiarModo(idMapa);
 	}
 	////////////////////////////////////////
@@ -126,6 +128,7 @@ public:
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 					if (enemigo->muerto) {
+						PlaySound(sonidoMuerteEnemigo);
 						enemigosPorMatar--;
 						std::cout << "Quedan " << enemigosPorMatar << " enemigos por matar." << std::endl;
 					}
@@ -186,6 +189,7 @@ public:
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo); 
 					if (enemigo->muerto) {
+						PlaySound(sonidoMuerteEnemigo);
 						enemigosPorMatar--;
 						std::cout << "Quedan " << (int)enemigosPorMatar << " enemigos por matar." << std::endl;
 					}

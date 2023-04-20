@@ -8,7 +8,7 @@ GeneradorPompas::GeneradorPompas(uint8_t idMapa) {
 }
 
 void GeneradorPompas::cambiarModo(uint8_t idMapa) {
-	std::cout << "Cambiando al mapa " << (int)idMapa << std::endl;
+	//std::cout << "Cambiando al mapa " << (int)idMapa << std::endl;
 	this->idMapa = idMapa;
 	Pompa::ID_MAPA = idMapa;
 	contadorCiclos = 0;
