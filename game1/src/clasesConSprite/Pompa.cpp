@@ -527,19 +527,19 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					else if (destRec.y <= screenHeight * 0.94 && destRec.y > screenHeight * 0.90 && destRec.x > screenWidth * 0.12) {
 						destRec.x -= 1;
 					}
-					else if (destRec.y <= screenHeight * 0.54 && destRec.y > screenHeight * 0.44 && destRec.x < screenWidth * 0.35) {
+					else if (destRec.y <= screenHeight * 0.54 && destRec.y > screenHeight * 0.48 && destRec.x < screenWidth * 0.35) {
 						destRec.x += 1;
 					}
-					else if (destRec.y <= screenHeight * 0.44 && destRec.y > screenHeight * 0.38 && destRec.x < screenWidth * 0.35) {
+					else if (destRec.y <= screenHeight * 0.48 && destRec.y > screenHeight * 0.38 && destRec.x < screenWidth * 0.35 && destRec.x > screenWidth * 0.14) {
 						destRec.x += 1;
 					}
 					else if (destRec.y < screenHeight * 0.25 && destRec.y > screenHeight * 0.15) {
 						destRec.x += 1;
 					}
-					else if (destRec.y <= screenHeight * 0.70 && destRec.x < screenWidth * 0.5 - 25 && destRec.x > screenWidth * 0.14) {
+					else if (destRec.y <= screenHeight * 0.73 && destRec.y >= screenHeight * 0.69 && destRec.x < screenWidth * 0.5 - 25 && destRec.x > screenWidth * 0.14) {
 						destRec.x += 1;
 					}
-					else if (destRec.x >= screenWidth * 0.35 && destRec.x < screenWidth * 0.45 && destRec.y >= screenHeight * 0.25 && destRec.y < screenHeight * 0.70) {
+					else if (destRec.x >= screenWidth * 0.35 && destRec.x < screenWidth * 0.45 && destRec.y >= screenHeight * 0.25 && destRec.y < screenHeight * 0.72) {
 						destRec.y += 0.5;
 					}
 					else if (destRec.x >= screenWidth * 0.5 - 25 && destRec.x <= screenWidth * 0.5 + 25 && destRec.y <= screenHeight * 0.4) {
