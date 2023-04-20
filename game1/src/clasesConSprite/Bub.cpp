@@ -613,6 +613,24 @@ public:
                             )
                     ) ||
                 (
+                    //Comprobamos colision centro inferior derecha
+                    (((s.bot) > (destRec.y + destRec.height / 4)) &&
+                        ((destRec.y + destRec.height / 4) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x + destRec.width / 2)) &&
+                            ((destRec.x + destRec.width / 2) > (s.left))
+                            )
+                    ) ||
+                (
+                    //Comprobamos colision centro superior derecha
+                    (((s.bot) > (destRec.y - destRec.height / 4)) &&
+                        ((destRec.y - destRec.height / 4) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x + destRec.width / 2)) &&
+                            ((destRec.x + destRec.width / 2) > (s.left))
+                            )
+                    ) ||
+                (
                     //Comprobamos colision esquina superior derecha
                     (((s.bot) > (destRec.y - destRec.height / 2)) &&
                         ((destRec.y - destRec.height / 2) > (s.top))
@@ -631,6 +649,24 @@ public:
                             )
                     ) ||
                 (
+                    //Comprobamos colision centro superior izquierda
+                    (((s.bot) > (destRec.y - destRec.height / 4)) &&
+                        ((destRec.y - destRec.height / 4) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x - destRec.width / 2)) &&
+                            ((destRec.x - destRec.width / 2) > (s.left))
+                            )
+                    ) ||
+                (
+                    //Comprobamos colision centro inferior izquierda
+                    (((s.bot) > (destRec.y + destRec.height / 4)) &&
+                        ((destRec.y + destRec.height / 4) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x - destRec.width / 2)) &&
+                            ((destRec.x - destRec.width / 2) > (s.left))
+                            )
+                    ) ||
+                (
                     //Comprobamos colision esquina inferior izquierda
                     (((s.bot) > (destRec.y + destRec.height / 2)) &&
                         ((destRec.y + destRec.height / 2) > (s.top))
@@ -638,9 +674,18 @@ public:
                             ((s.right) > (destRec.x - destRec.width / 2)) &&
                             ((destRec.x - destRec.width / 2) > (s.left))
                             )
+                    ) ||
+                (
+                    //Comprobamos colision centro inferior
+                    (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                        ((destRec.y + destRec.height / 2) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x)) &&
+                            ((destRec.x) > (s.left))
+                            )
                     )
                 ) {
-                //std::cout << "Choque" << std::endl;
+                std::cout << s.aproach[0 + (int)!eresBub] << std::endl;
                 switch (s.aproach[0 + (int)!eresBub]) {
                 case 1:
                     destRec.x = s.left - destRec.width / 2;
@@ -730,7 +775,18 @@ public:
                                 ((destRec.x - destRec.width / 2) > (s.left))
                                 )
                         )
-                    ) {
+                    ||
+                    //Comprobamos colision centro inferior
+                    (
+                        (((s.bot) > (destRec.y + destRec.height / 2 + 5)) &&
+                            ((destRec.y + destRec.height / 2 + 5) > (s.top))
+                            ) && (
+                                ((s.right) > (destRec.x)) &&
+                                ((destRec.x) > (s.left))
+                                )
+                        )
+                    )
+                    {
                     //std::cout << "Aproach top" << std::endl;
                     s.aproach[0 + (int)!eresBub] = 3;
                 }
@@ -762,6 +818,15 @@ public:
                         ) && (
                             ((s.right) > (destRec.x - destRec.width / 2)) &&
                             ((destRec.x - destRec.width / 2) > (s.left))
+                            )
+                    ) &&
+                !(
+                    //Comprobamos colision esquina centro inferior
+                    (((s.bot) > (destRec.y + destRec.height / 2)) &&
+                        ((destRec.y + destRec.height / 2 + 1) > (s.top))
+                        ) && (
+                            ((s.right) > (destRec.x)) &&
+                            ((destRec.x) > (s.left))
                             )
                     )
                 ) {
