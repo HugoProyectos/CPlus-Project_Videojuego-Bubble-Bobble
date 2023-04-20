@@ -302,6 +302,24 @@ public:
             empezar_contador = true;
         }
     }
+
+    void VolverAlPrimerNivel(std::string ruta_bloque_pequeno_siguiente, std::string ruta_ubicacion_bloques_siguiente) {
+        
+        this->bloque_pequeno_siguiente = LoadTexture(ruta_bloque_pequeno_siguiente.c_str());
+
+        // Crear una plataforma por cada linea de ruta_ubicacion_bloques
+        this->listaPlataformaSiguiente = this->leerArchivo(ruta_ubicacion_bloques_siguiente);
+        // Se actualiza para poder tener los valores top y bot correctos
+        for (int i = 0; i < listaPlataformaSiguiente.size(); i++) {
+            listaPlataformaSiguiente[i].Actualizar(ratioMargenSup, ratioMargenInf);
+        }
+
+        this->bloque_pequeno = this->bloque_pequeno_siguiente;
+        this->distancia_ya_movida = 0;
+
+        this->listaPlataforma.assign(this->listaPlataformaSiguiente.begin(), this->listaPlataformaSiguiente.end());
+        this->listaPlataforma.resize(this->listaPlataformaSiguiente.size());
+    }
 };
 
 class Columnas {
@@ -460,6 +478,15 @@ public:
             this->bloque_grande_siguiente = LoadTexture(ruta_bloque_grande_siguiente.c_str());
             this->numeroNivelSiguiente = std::to_string(numeroNivelSiguiente);
         }
+    }
+
+    void VolverAlPrimerNivel(std::string ruta_bloque_grande_siguiente, unsigned int numeroNivelSiguiente) {
+        this->bloque_grande_siguiente = LoadTexture(ruta_bloque_grande_siguiente.c_str());
+        this->numeroNivelSiguiente = std::to_string(numeroNivelSiguiente);
+
+        this->bloque_grande = this->bloque_grande_siguiente;
+        this->distancia_ya_movida = 0;
+        this->numeroNivel = this->numeroNivelSiguiente;
     }
 
     

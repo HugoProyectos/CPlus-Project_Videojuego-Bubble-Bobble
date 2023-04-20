@@ -723,6 +723,8 @@ int main(void)
                 destRob = { (float)GetScreenWidth() / 2, 80, 32, 32 };
                 robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin)); 
                 admin.enemigos.push_back(robot);
+                columnas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_grande.png", 1);
+                plataformas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt");
             }
         } break;
         default: break;

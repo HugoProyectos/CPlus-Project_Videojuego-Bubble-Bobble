@@ -49,6 +49,7 @@ public:
     int direccionY = 0; //0->abajo, 1->arriba
     int colision = 0; //0->No hay colision, 1->colisiona con paredes(debe variar el movimiento vertical), 2->colision techo(varia movimeitno horizontal)
     int colisionAux = 0;
+    bool frutaGenerada = false;
     AdministradorPompas* admin;
     float velMax = 0;
     float velMin = 0;
@@ -132,11 +133,13 @@ public:
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
                 if (indiceAnimacion == 3) {
-                    if (!muertePorAgua){
+                    if (!muertePorAgua && !frutaGenerada) {
+                        frutaGenerada = true;
                         Frutas f = Frutas();
                         f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
                         admin->frutas.push_back(std::make_shared<Frutas>(f));
                     }
+
                     borrame = true;
                 }
                 break;
@@ -501,6 +504,12 @@ public:
             else if (muerto) {
                 enElAire = false;
                 cayendo = false;
+                if (!muertePorAgua && !frutaGenerada) {
+                    frutaGenerada = true;
+                    Frutas f = Frutas();
+                    f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
+                    admin->frutas.push_back(std::make_shared<Frutas>(f));
+                }
                 borrame = true;
             }
             else {
