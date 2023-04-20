@@ -312,7 +312,7 @@ public:
 	};
 
 	void actualizaFrutas(Plataformas& plataformas) {
-		for (int i = 0; i < frutas.size(); i++) {
+		for (int i = 0; i < (frutas.size()); i++) {
 			if (frutas.at(i)->borrame) {
 				frutas = eliminaFruta(i);
 				i--;
@@ -321,7 +321,7 @@ public:
 				frutas.at(i)->Actualizar();
 				for (int j = 0; j < plataformas.listaPlataforma.size(); j++) {
 					frutas.at(i)->compruebaSuelo();
-					frutas.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
+					frutas.at(i)->compruebaColision(plataformas.listaPlataforma[j], (i + enemigos.size()));
 				}
 			}
 		}
