@@ -104,6 +104,8 @@ public:
     unsigned int iteraciones = 0;
     std::string texto_inicio_ronda = "";
 
+    Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
+
     Plataformas() = default;
 
     Plataformas(std::string ruta_bloque_pequeno, std::string ruta_ubicacion_bloques, float margenSuperior, float margenInferior) {
@@ -123,6 +125,7 @@ public:
         this->ratioMargenSup = margenSuperior != 0 ? GetScreenHeight() / margenSuperior : 0;
         this->ratioMargenInf = margenInferior != 0 ? GetScreenHeight() / margenInferior : 0;
 
+        PlayMusicStream(music);
     }
 
     std::vector<Plataforma> leerArchivo(std::string nombreArchivo) {
@@ -151,13 +154,16 @@ public:
 
     ~Plataformas() {
         UnloadTexture(bloque_pequeno);
+        UnloadMusicStream(music);
     }
 
     void Unload() {
         UnloadTexture(bloque_pequeno);
+        UnloadMusicStream(music);
     }
 
     void Actualizar() {
+        UpdateMusicStream(music);
         for (int i = 0; i < listaPlataforma.size(); i++) {
             listaPlataforma[i].Actualizar(ratioMargenSup, ratioMargenInf);
         }
