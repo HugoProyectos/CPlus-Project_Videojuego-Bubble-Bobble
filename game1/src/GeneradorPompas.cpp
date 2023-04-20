@@ -17,7 +17,7 @@ void GeneradorPompas::cambiarModo(uint8_t idMapa) {
 std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 	std::vector<sh_Pompa> resultado;
 	//std::vector<Pompa> pompas;
-	//contadorCiclos++;
+	contadorCiclos++;
 	if (contadorCiclos >= ciclosPompa[idMapa]) {
 		//std::cout << "Chekeo de generación de pompas" << std::endl;
 		contadorCiclos = 0;
@@ -32,10 +32,10 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 			int numRand2 = rand() % 2;
 			//Selección del color de la pompa
 			if (numRand < 50) { //verde
-				p = Pompa(verde, r[numRand2], 0, 0, false, 60 * 120);
+				p = Pompa(verde, r[numRand2], 0, 0, false, 60 * 60);
 			}
 			else { //azul
-				p = Pompa(azul, r[numRand2], 0, 0, false, 60 * 120);
+				p = Pompa(azul, r[numRand2], 0, 0, false, 60 * 60);
 			}
 
 			resultado.push_back(std::make_shared<Pompa>(p));
