@@ -89,15 +89,92 @@ void Pompa::Inicializador(Texture2D spriteSheet, const Rectangle origen, float v
 
 }
 
-sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua) {
+sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua, Columnas *col, Plataformas *plat) {
 	sh_Enemigo result = NULL;
-
+	
 	if (disparada == 2) {
 		//std::cout << "PIUM" << std::endl;
+		//Explota inmediatamente si empieza dentro de una plataforma
+		bool inicio = false;
+		if (distanciaRecorrida == 0) {
+			inicio = true;
+		}
 		distanciaRecorrida += velocidadDesplazamiento; //Actualiza el contador
 		//std::cout << distanciaRecorrida << std::endl;
 		//std::cout << distanciaDisparo << std::endl;
 		destRec.x += velocidadDesplazamiento;
+		//Comprobamos colision con las columnas
+		if (velocidadDesplazamiento > 0) {
+			if (destRec.x > col->left_der - destRec.width / 2) {
+				destRec.x = col->left_der - destRec.width / 2;
+				disparada = 1;
+				if (inicio) {
+					animacionActiva = EXPLOTA;
+				}
+			}
+		}
+		else {
+			if (destRec.x < col->right_izq + destRec.width / 2) {
+				destRec.x = col->right_izq + destRec.width / 2;
+				disparada = 1;
+				if (inicio) {
+					animacionActiva = EXPLOTA;
+				}
+			}
+		}
+		//Comprobamos colision con las plataformas
+		for (int i = 0; i < plat->listaPlataforma.size(); i++) {
+
+			//Comprobamos y
+			if (
+				(
+					(plat->listaPlataforma[i].top <= destRec.y - destRec.height / 2) &&
+					(plat->listaPlataforma[i].bot >= destRec.y - destRec.height / 2)
+					) ||
+				(
+					(plat->listaPlataforma[i].top <= destRec.y - destRec.height / 4) &&
+					(plat->listaPlataforma[i].bot >= destRec.y - destRec.height / 4)
+					) ||
+				(
+					(plat->listaPlataforma[i].top < destRec.y + destRec.height / 2) &&
+					(plat->listaPlataforma[i].bot > destRec.y + destRec.height / 2)
+					) ||
+				(
+					(plat->listaPlataforma[i].top <= destRec.y + destRec.height / 4) &&
+					(plat->listaPlataforma[i].bot >= destRec.y + destRec.height / 4)
+					)
+				) {
+				//Comprobamos x
+				if (velocidadDesplazamiento > 0) {
+					if (
+						(plat->listaPlataforma[i].left < destRec.x + destRec.width / 2) &&
+						(plat->listaPlataforma[i].right > destRec.x + destRec.width / 2)
+						) {
+						if (inicio) {
+							animacionActiva = EXPLOTA;
+						}
+						else {
+							destRec.x = plat->listaPlataforma[i].left - destRec.width / 2;
+						}
+						disparada = 1;
+					}
+				}
+				else {
+					if (
+						(plat->listaPlataforma[i].left < destRec.x - destRec.width / 2) &&
+						(plat->listaPlataforma[i].right > destRec.x - destRec.width / 2)
+						) {
+						if (inicio) {
+							animacionActiva = EXPLOTA;
+						}
+						else {
+							destRec.x = plat->listaPlataforma[i].right + destRec.width / 2;
+						}
+						disparada = 1;
+					}
+				}
+			}
+		}
 		if (abs(distanciaRecorrida) >= abs(distanciaDisparo)) {
 			disparada = 1; //Último frame en que atrapa enemigos
 		}

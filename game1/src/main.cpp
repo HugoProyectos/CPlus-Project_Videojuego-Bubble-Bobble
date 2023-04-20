@@ -77,6 +77,8 @@ int main(void)
     Rectangle destAgua = { -100, -100, 16, 16 };
     admin.agua = Agua(destAgua, true, spriteAgua, plataformas.listaPlataforma.size());
     admin.agua.existe = false;
+    admin.col = &columnas;
+    admin.plat = &plataformas;
     admin.iniciaMapa(3, 1200);
     admin.CambioDeMapa(0); //DEBUG 4->0
 
