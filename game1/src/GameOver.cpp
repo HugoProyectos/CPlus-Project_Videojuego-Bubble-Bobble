@@ -20,6 +20,8 @@ public:
         LoadTexture("resources/gameover/pantalla_clear_p1.png"),
         LoadTexture("resources/gameover/pantalla_clear_p2.png") };
 
+    Music music = LoadMusicStream("resources/music/sonido_pantalla_final.mp3");
+    Sound sound = LoadSound("resources/music/sonido_gameover.mp3");
 
     // Rectangulos del fondo
     Rectangle srcRect1;
@@ -58,6 +60,8 @@ public:
         this->ratioMargenInf = margenInferior != 0 ? GetScreenHeight() / margenInferior : 0;
 
         this->tiempo_duracion = tiempo_duracion;
+
+        PlayMusicStream(music);
     }
 
     ~GameOver() {
@@ -78,11 +82,16 @@ public:
 
     bool Actualizar() {
         iteraciones++;
-        if (iteraciones >= tiempo_duracion) {
+        if (iteraciones < tiempo_duracion) {
+            UpdateMusicStream(music);
+        }
+        if (iteraciones == tiempo_duracion) {
+            PlaySound(sound);
             mostrar_gameover = true;
         }
         if (iteraciones >= (tiempo_duracion * 2)) {
             iteraciones = 0;
+            
             return true;
         }
         return false;

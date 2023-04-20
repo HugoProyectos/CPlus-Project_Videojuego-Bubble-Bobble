@@ -323,11 +323,11 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
-                    gameover.ronda = 1;
+                    gameover.ronda = 2;
                     currentScreen = GAME_OVER;
                 }
                 else if (gameover.hayP2 && bub.muerto && bob.muerto && bub.numVidas == 0 && bob.numVidas == 0) {
-                    gameover.ronda = 1;
+                    gameover.ronda = 2;
                     currentScreen = GAME_OVER;
                 }
 
@@ -422,11 +422,11 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
-                    gameover.ronda = 1;
+                    gameover.ronda = 3;
                     currentScreen = GAME_OVER;
                 }
                 else if (gameover.hayP2 && bub.muerto && bob.muerto && bub.numVidas == 0 && bob.numVidas == 0) {
-                    gameover.ronda = 1;
+                    gameover.ronda = 3;
                     currentScreen = GAME_OVER;
                 }
 
@@ -529,11 +529,11 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos); 
 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
-                    gameover.ronda = 1;
+                    gameover.ronda = 4;
                     currentScreen = GAME_OVER;
                 }
                 else if (gameover.hayP2 && bub.muerto && bob.muerto && bub.numVidas == 0 && bob.numVidas == 0) {
-                    gameover.ronda = 1;
+                    gameover.ronda = 4;
                     currentScreen = GAME_OVER;
                 }
 
@@ -628,11 +628,11 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
-                    gameover.ronda = 1;
+                    gameover.ronda = 5;
                     currentScreen = GAME_OVER;
                 }
                 else if (gameover.hayP2 && bub.muerto && bob.muerto && bub.numVidas == 0 && bob.numVidas == 0) {
-                    gameover.ronda = 1;
+                    gameover.ronda = 5;
                     currentScreen = GAME_OVER;
                 }
 
