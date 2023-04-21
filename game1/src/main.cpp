@@ -735,6 +735,7 @@ int main(void)
                 bub.muriendo = false;
                 if (admin.scores.hayP2) {
                     admin.scores.hayP2 = false;
+                    contadorVidas.hayP2 = false;
                     bob.numVidas = 2;
                     bob.destRec = destBub;
                     bob.cambioMapa = 2;
