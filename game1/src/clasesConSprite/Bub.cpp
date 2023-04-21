@@ -23,6 +23,7 @@ class Bub : public Sprite {
     const Texture2D spriteBurbuja2 = LoadTexture("resources/Players/Bobblun/pompa2.png");
     const Sound sonidoDisparar = LoadSound("resources/music/sonido_escupir.mp3");
     const Sound sonidoSaltar = LoadSound("resources/music/sonido_salto.mp3");
+    const Sound sonidoFruta = LoadSound("resources/music/sonido_comer_fruta.mp3");
 
 
     const int NUM_FILAS = 4; //n�mero de filas en el animation_set
@@ -466,7 +467,7 @@ public:
                         else {
                             admin->scores.SumarPuntuacionP2((unsigned int)admin->frutas.at(i)->puntuacion);
                         }
-                        
+                        PlaySound(sonidoFruta);
                         admin->frutas.at(i)->muerto = true;
                     }
                 }

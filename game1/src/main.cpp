@@ -79,7 +79,7 @@ int main(void)
     admin.agua.existe = false;
     admin.col = &columnas;
     admin.plat = &plataformas;
-    admin.iniciaMapa(0, 1200);
+    admin.iniciaMapa(3, 1200);
     admin.CambioDeMapa(0); //DEBUG 4->0
 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
@@ -248,10 +248,10 @@ int main(void)
                   
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(6, 120000);
-                admin.CambioDeMapa(4);
-                columnas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_grande.png", 2);
-                plataformas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt");
+                admin.iniciaMapa(4, 120000);
+                admin.CambioDeMapa(1);
+                columnas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_grande.png", 2);
+                plataformas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_pequeno.png", "resources/mapa_nivel_2/mapa.txt");
                 contadorVidas.cargar_siguiente_nivel();
                 bub.cambioMapa = 2; 
                 bob.cambioMapa = 2;
@@ -263,7 +263,7 @@ int main(void)
                 }
             }
             else {
-                currentScreen = NIVEL_5;
+                currentScreen = NIVEL_2;
                 destRob = { (float)GetScreenWidth() / 2 + 20, 100, 32, 32 };
                 robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
