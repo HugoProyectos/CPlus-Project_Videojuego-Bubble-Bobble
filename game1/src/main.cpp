@@ -265,19 +265,19 @@ int main(void)
             else {
                 currentScreen = NIVEL_2;
                 destRob = { (float)GetScreenWidth() / 2 + 20, 100, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)GetScreenWidth() / 2 - 20, 100, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)GetScreenWidth() / 2 + 50, 190, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)GetScreenWidth() / 2 - 50, 190, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 admin.frutas.clear();
@@ -477,7 +477,7 @@ int main(void)
             else {
                 currentScreen = NIVEL_4;
                 destRob = { (float)(GetScreenWidth() * 0.18), 90, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)(GetScreenWidth() * 0.82), 90, 32, 32 };
@@ -489,7 +489,7 @@ int main(void)
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)(GetScreenWidth() * 0.75), 150, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { 200, (float)GetScreenHeight() - 150, 32, 32 };
@@ -591,19 +591,19 @@ int main(void)
             else {
                 currentScreen = NIVEL_5;
                 destRob = { (float)GetScreenWidth() / 2 + 70, 60, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)GetScreenWidth() / 2 + 20, 160, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)GetScreenWidth() / 2 - 20, 240, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)GetScreenWidth() / 2 - 70, 320, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 admin.frutas.clear();

@@ -272,6 +272,9 @@ public:
 					skull = Blanco("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 2.0f, 60.0, destRob,j1,j2);
 					enemigos.push_back(std::make_shared<Blanco>(skull));
 					contadorSkull++;
+					for (int j = 0; j < enemigos.size(); j++) {
+						enemigos[j]->enfadado = true;
+					}
 				}
 			}
 			//Genera pompas del mapa
