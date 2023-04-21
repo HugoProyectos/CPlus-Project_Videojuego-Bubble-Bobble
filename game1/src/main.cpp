@@ -243,7 +243,6 @@ int main(void)
                     admin.scores.hayP2 = true;
                     contadorVidas.hayP2 = true;
                     gameover.hayP2 = true;
-                    //bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
             	}
                   
             }
@@ -346,11 +345,12 @@ int main(void)
                 }
 
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
-                {
-                    credits.creditos -= 1;
+           		{
+                	credits.creditos -= 1;
                     admin.scores.hayP2 = true;
+                    contadorVidas.hayP2 = true;
                     gameover.hayP2 = true;
-                }
+            	}
 
             }
             else if (admin.cambiaNivel) {
@@ -455,6 +455,7 @@ int main(void)
                 {
                     credits.creditos -= 1;
                     admin.scores.hayP2 = true;
+                    contadorVidas.hayP2 = true;
                     gameover.hayP2 = true;
                 }
 
@@ -569,6 +570,7 @@ int main(void)
                 {
                     credits.creditos -= 1;
                     admin.scores.hayP2 = true;
+                    contadorVidas.hayP2 = true;
                     gameover.hayP2 = true;
                 }
 
@@ -675,6 +677,7 @@ int main(void)
                 {
                     credits.creditos -= 1;
                     admin.scores.hayP2 = true;
+                    contadorVidas.hayP2 = true;
                     gameover.hayP2 = true;
                 }
 

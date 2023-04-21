@@ -42,7 +42,7 @@ public:
 
     void Inicializador(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral)
     {
-        sprite = LoadTexture(rutaTextura.c_str());// Texture loading
+        //sprite = LoadTexture(rutaTextura.c_str());// Texture loading
         velocidadLateral = velLateral;
         velocidadSalto = velSalto;
         distanciaSaltoMax = saltoMax;

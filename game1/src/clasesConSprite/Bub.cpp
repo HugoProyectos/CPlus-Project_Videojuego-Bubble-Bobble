@@ -146,6 +146,7 @@ public:
 
         // Origin of the texture (rotation/scale point), it's relative to destination rectangle size
         origin = { (float)widthAnimation * tamano / 2, (float)heightAnimation * tamano / 2 }; //En principio no lo necesitamos
+        
     }
 
     ~Bub() {
