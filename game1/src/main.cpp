@@ -79,7 +79,7 @@ int main(void)
     admin.agua.existe = false;
     admin.col = &columnas;
     admin.plat = &plataformas;
-    admin.iniciaMapa(3, 1200);
+    admin.iniciaMapa(3, 30*60);
     admin.CambioDeMapa(0); //DEBUG 4->0
 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
@@ -91,12 +91,12 @@ int main(void)
 
     
     Rectangle destRob = { GetScreenWidth() / 2, 30, 32, 32 };
-    sh_Enemigo fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+    sh_Enemigo fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
     admin.enemigos.push_back(fantasma);
     destRob = { (float)GetScreenWidth() / 2, 70, 32, 32 };
     sh_Enemigo rosa = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
     destRob = { (float)GetScreenWidth() / 2, 80, 32, 32 };
-    sh_Enemigo robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+    sh_Enemigo robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
 
     admin.enemigos.push_back(rosa);
     admin.enemigos.push_back(robot);
@@ -248,7 +248,7 @@ int main(void)
                   
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(4, 120000);
+                admin.iniciaMapa(4, 60*30);
                 admin.CambioDeMapa(1);
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_grande.png", 2);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_pequeno.png", "resources/mapa_nivel_2/mapa.txt");
@@ -354,7 +354,7 @@ int main(void)
 
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(4, 1200); // TODO
+                admin.iniciaMapa(4, 30*60); // TODO
                 admin.CambioDeMapa(2); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_grande.png", 3);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_pequeno.png", "resources/mapa_nivel_3/mapa.txt");
@@ -371,19 +371,19 @@ int main(void)
             else {
                 currentScreen = NIVEL_3;
                 destRob = { (float)GetScreenWidth() / 2 + 100, 100, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)GetScreenWidth() / 2 - 100, 100, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)200, 180, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)GetScreenWidth() - 200, 180, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 admin.frutas.clear();
@@ -460,7 +460,7 @@ int main(void)
 
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(6, 2200); // TODO
+                admin.iniciaMapa(6, 30*60); // TODO
                 admin.CambioDeMapa(3); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_4/bloque_grande.png", 4);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_4/bloque_pequeno.png", "resources/mapa_nivel_4/mapa.txt");
@@ -481,11 +481,11 @@ int main(void)
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)(GetScreenWidth() * 0.82), 90, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)(GetScreenWidth() * 0.25), 150, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)(GetScreenWidth() * 0.75), 150, 32, 32 };
@@ -493,11 +493,11 @@ int main(void)
                 admin.enemigos.push_back(robot);
 
                 destRob = { 200, (float)GetScreenHeight() - 150, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)GetScreenWidth() - 200, (float)GetScreenHeight() - 150, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 admin.frutas.clear();
@@ -574,7 +574,7 @@ int main(void)
 
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(4, 2200); // TODO
+                admin.iniciaMapa(4, 30*60); // TODO
                 admin.CambioDeMapa(4); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_grande.png", 5);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt");
@@ -591,19 +591,19 @@ int main(void)
             else {
                 currentScreen = NIVEL_5;
                 destRob = { (float)GetScreenWidth() / 2 + 70, 60, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)GetScreenWidth() / 2 + 20, 160, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)GetScreenWidth() / 2 - 20, 240, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)GetScreenWidth() / 2 - 70, 320, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 admin.frutas.clear();
@@ -744,13 +744,13 @@ int main(void)
                 admin.scores.puntuacion2 = 0;
 
                 //Reseteo del nivel
-                admin.iniciaMapa(3, 1200);
+                admin.iniciaMapa(3, 30*60);
                 admin.CambioDeMapa(0);
                 columnas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_grande.png", 1);
                 plataformas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt");
                 
                 destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
-                fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(fantasma);
                 
                 destRob = { (float)GetScreenWidth() / 2, 70, 32, 32 };
@@ -758,7 +758,7 @@ int main(void)
                 admin.enemigos.push_back(rosa);
                 
                 destRob = { (float)GetScreenWidth() / 2, 80, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin)); 
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
             }
         } break;
