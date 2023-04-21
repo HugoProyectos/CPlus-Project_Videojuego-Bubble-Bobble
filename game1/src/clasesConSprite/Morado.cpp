@@ -48,6 +48,7 @@ public:
     int direccionX = 0; //0->izquierda, 1->derecha
     int direccionY = 0; //0->abajo, 1->arriba
     AdministradorPompas* admin;
+    bool frutaProducida = false;
 
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
@@ -153,7 +154,8 @@ public:
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
                 if (indiceAnimacion == 3) {
-                    if (!muertePorAgua) {
+                    if (!muertePorAgua && !frutaProducida) {
+                        frutaProducida = true;
                         Frutas f = Frutas();
                         f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
                         admin->frutas.push_back(std::make_shared<Frutas>(f));
@@ -400,6 +402,12 @@ public:
             else if (muerto) {
                 enElAire = false;
                 cayendo = false;
+                if (!muertePorAgua && !frutaProducida) {
+                    frutaProducida = true;
+                    Frutas f = Frutas();
+                    f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
+                    admin->frutas.push_back(std::make_shared<Frutas>(f));
+                }
                 borrame = true;
             }
             else {
