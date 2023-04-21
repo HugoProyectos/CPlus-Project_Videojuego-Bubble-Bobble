@@ -20,18 +20,22 @@ public:
 
     //Animation
     Texture2D walkAnimation = LoadTexture("resources/enemyFantasma/fantasmaWalk.png");
+    Texture2D angryWalkAnimation = LoadTexture("resources/enemyFantasma/fantasmaAngryWalk.png");
     Texture2D deadAnimation = LoadTexture("resources/enemyFantasma/fantasmaMuerte.png");
+    Texture2D angryBallAnimation = LoadTexture("resources/enemyFantasma/fantasmaAngryBola.png");
     Texture2D ballAnimation = LoadTexture("resources/enemyFantasma/fantasmaBola.png");
-    Texture2D animations[4] = { walkAnimation, deadAnimation, ballAnimation };
+    Texture2D animations[6] = { walkAnimation, deadAnimation, ballAnimation, angryWalkAnimation, angryBallAnimation };
 
     //sh_Enemigo bola = std::make_shared<Bola>(Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir));
 
     int indexBolas = 0;
     
     int fWalkAnimation = 2; //Número de fotogramas de la animacion camniar
+    int fAngryWalkAnimation = 4; //Número de fotogramas de la animacion camniar
     int fDeadAnimation = 2; //Número de fotogramas de la animacion muerte
     int fBallAnimation = 4;
-    int fAnimation[4] = { fWalkAnimation , fDeadAnimation, fBallAnimation };
+    int fAngryBallAnimation = 4;
+    int fAnimation[6] = { fWalkAnimation , fDeadAnimation, fBallAnimation, fAngryWalkAnimation, fAngryBallAnimation };
 
     int widthAnimation; // Se actualiza para cada animación activa
     int heightAnimation;
@@ -58,13 +62,19 @@ public:
 
     clock_t temp;
     int direccionX = 1;
-
+    bool postEnfado = false;
 
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
     Fantasma(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
+        if (enfadado) {
+            animacionActiva = 3;
+            velocidadLateral *= 1.5;
+            enfadado = false;
+            postEnfado = true;
+        }
         destRec = destino;
         tipo = 3;
         widthAnimation = walkAnimation.width / fWalkAnimation;
@@ -77,6 +87,12 @@ public:
         hayBola = false;
 
     };
+
+    void enfadar() {
+        animacionActiva = 3;
+        velocidadLateral *= 1.5;
+        postEnfado = true;
+    }
 
     // Controlador de comportamiento
     void Actualizar(Rectangle playerPosition) override {
@@ -106,6 +122,10 @@ public:
             if (muerto) {
                 animacionActiva = 1;
                 Caer();
+            }
+            else if (enfadado) {
+                enfadar();
+                enfadado = false;
             }
             else if (!saltando && enElAire) {
                 CaerLento();
@@ -189,6 +209,29 @@ public:
                     hayBola = true;
                 }
                 break;
+            case 3:
+                //Actualizar width&height animacion
+                indiceAnimacion = (indiceAnimacion + 1) % fWalkAnimation;
+                widthAnimation = walkAnimation.width / fWalkAnimation;
+                heightAnimation = walkAnimation.height;
+                break;
+            case 4:
+                indiceAnimacion = (indiceAnimacion + 1) % fAnimation[2];
+                widthAnimation = animations[2].width / fAnimation[2];
+                heightAnimation = animations[2].height;
+                if (indiceAnimacion == 3) {
+                    disparando = false;
+                    animacionActiva = 3;
+                    Bola b;
+                    b = Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir, IDBola);
+                    admin->enemigos.push_back(std::make_shared<Bola>(b));
+                    i = (i + 1) % 3;
+                    IDBola++;
+                    indexBolas = (indexBolas + 1) % 3;
+                    temp = clock();
+                    hayBola = true;
+                }
+                break;
             default:
                 break;
             }
@@ -225,14 +268,16 @@ public:
         velocidadFrames = 2 * velocidadFrames;
         dir = false;
         disparando = true;
-        animacionActiva = 2;
+        if(!postEnfado){ animacionActiva = 2; }
+        else { animacionActiva = 4; }
     }
 
     void BolaDer() {
         velocidadFrames = 2 * velocidadFrames;
         dir = true;
         disparando = true;
-        animacionActiva = 2;
+        if (!postEnfado) { animacionActiva = 2; }
+        else { animacionActiva = 4; }
     }
 
     void Salto() {

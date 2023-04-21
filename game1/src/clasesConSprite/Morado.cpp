@@ -60,6 +60,8 @@ public:
         if (enfadado) {
             animacionActiva = 3;
             velocidadLateral *= 2;
+            enfadado = false;
+
         }
         destRec = destino;
         tipo = 4;

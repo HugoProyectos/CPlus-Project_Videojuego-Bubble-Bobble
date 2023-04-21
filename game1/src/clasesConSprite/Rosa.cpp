@@ -61,6 +61,8 @@ public:
         if (enfadado) {
             animacionActiva = 3;
             velocidadLateral *= 2;
+            enfadado = false;
+
         }
         velMax = 2 * velLateral;
         velMin = velLateral / 2;
