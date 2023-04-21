@@ -30,7 +30,7 @@ public:
 	bool cambiaNivel = false;
 	uint32_t contadorFrames = 0;
 	const uint32_t CUENTA_MAXIMA_FIN_NIVEL = 60 * 10;
-	uint8_t enemigosPorMatar = 0;
+	int8_t enemigosPorMatar = 0;
 	
 	/*Rectangle posicionJugador = {-1,-1,-1,-1};
 	bool jugadorCayendo = false;
@@ -253,6 +253,9 @@ public:
 				std::cout << "FIN DE MAPA" << std::endl;
 				cambiaNivel = true;
 			}
+		}
+		else if (enemigosPorMatar < 0) {
+			enemigosPorMatar = 0; //Esto es porque por alguna razón algun enemigo se resta dos veces
 		}
 		if (enemigosPorMatar > 0) {
 			//Contador de aparición de SKULL (Monsta blanco)
