@@ -119,7 +119,7 @@ public:
         admin = &adm;
 
         if (esBub) {
-            sprite = LoadTexture("resources/Players/Bobblun/animation_set.png");
+            sprite = LoadTexture("resources/Players/Bobblun/animation_set4.png");
         } else {
             this->eresBub = false;
             sprite = LoadTexture("resources/Players/Bobblun/animation_set2.png");

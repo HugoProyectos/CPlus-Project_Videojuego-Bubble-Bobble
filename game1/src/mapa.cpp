@@ -113,7 +113,8 @@ public:
     Sound sound = LoadSound("resources/music/sonido_fantasma_inmortal.mp3");
 
 
-    Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
+    //Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
+    Music music = LoadMusicStream("resources/music/sonido_gigachad.mp3");
 
     Plataformas() = default;
 
