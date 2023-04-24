@@ -185,6 +185,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 							destRec.x = plat->listaPlataforma[i].right + destRec.width / 2;
 						}
 						disparada = 1;
+
 					}
 				}
 			}
@@ -845,4 +846,7 @@ void Pompa::Dibujar() {
 	srcRec.x = 0.0f; //Pompa verde
 	srcRec.y = 16.0f; //Pompa verde*/
 	DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
+	if (disparada == 1) {
+		indiceAnimacion = 0; //Elimina bug de sprite robot
+	}
 }
