@@ -93,8 +93,11 @@ public:
 
 	void actualizaPompas() {
 
+		std::cout << "Pompas a actualizar: " << pompas.size() << std::endl;
 		//Actualiza el estado de las pompas
 		for (int i = 0; i < pompas.size(); i++) {
+			//std::cout << "Dimensiones pompa; " << pompas.at(i)->destRec.x << "," << pompas.at(i)->destRec.y << "/" << pompas.at(i)->lastHeight << "," << pompas.at(i)->lastWidth << std::endl;
+
 			if (pompas.at(i)->matame) {
 				//auto aBorrar = pompas.begin() + i;
 				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas			

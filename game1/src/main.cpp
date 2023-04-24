@@ -79,7 +79,7 @@ int main(void)
     admin.agua.existe = false;
     admin.col = &columnas;
     admin.plat = &plataformas;
-    admin.iniciaMapa(3, 30*60);
+    admin.iniciaMapa(3, 30000*60);// DEBUG 30*60
     admin.CambioDeMapa(0); //DEBUG 4->0
 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
@@ -92,14 +92,14 @@ int main(void)
     
     Rectangle destRob = { GetScreenWidth() / 2, 30, 32, 32 };
     sh_Enemigo fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
-    admin.enemigos.push_back(fantasma);
+   // DEBUG admin.enemigos.push_back(fantasma);
     destRob = { (float)GetScreenWidth() / 2, 70, 32, 32 };
     sh_Enemigo rosa = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
     destRob = { (float)GetScreenWidth() / 2, 80, 32, 32 };
     sh_Enemigo robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
 
-    admin.enemigos.push_back(rosa);
-    admin.enemigos.push_back(robot);
+   // DEBUG admin.enemigos.push_back(rosa);
+   // DEBUG admin.enemigos.push_back(robot);
 
     /*
 
@@ -110,7 +110,7 @@ int main(void)
     sh_Enemigo robot2 = std::make_shared<Robot>(Robot("resources/enemyRobot/robotBasic.png", 2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob));
     admin.enemigos.push_back(robot2);
     */
-
+    /*
     Rectangle destPompa = { 100, GetScreenHeight() - GetScreenHeight()/2, 32, 32 };
     Pompa p = Pompa(spritePompa, destPompa, 0, 0, false, Pompa::INFINITA);
     Rectangle destPompa2 = { 120, GetScreenHeight() - GetScreenHeight() / 2, 32, 32 };
@@ -121,6 +121,7 @@ int main(void)
     p2.indiceAnimacion = 2 * Pompa::NUM_FOTOGRAMAS;
     //admin.pompas.push_back(std::make_shared<Pompa>(p));
     //admin.pompas.push_back(std::make_shared<Pompa>(p2));
+    */
 
     Rectangle destBub = { GetScreenWidth() - 50, 50, 32, 32};//{ 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true); 

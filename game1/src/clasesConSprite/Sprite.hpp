@@ -12,6 +12,8 @@ public:
     Rectangle srcRec, destRec;
     Vector2 origin;
     float tamano;
+
+	//const double ratioAspecto = 800 / 450; //Para medir qué tamaño debe tener en realidad la pantalla dentro de la ventana
 };
 
 //Tipo de dato que utilizan muchas de las clases con Sprite

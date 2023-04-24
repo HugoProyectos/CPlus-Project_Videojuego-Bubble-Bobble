@@ -65,7 +65,6 @@ void Pompa::Inicializador(Texture2D spriteSheet, const Rectangle origen, float v
 
 	sprite = spriteSheet;
 
-	destRec = origen;//{ origen.x, origen.y, (float)widthAnimation * 2, (float)heightAnimation * 2 };
 	tVida = tiempoVida;
 	vidaMaxima = tiempoVida;
 	velocidadFrames = 8;
@@ -83,15 +82,29 @@ void Pompa::Inicializador(Texture2D spriteSheet, const Rectangle origen, float v
 	}
 	velocidadDesplazamiento = velDisparo;
 	tamano = 1;
+	//lastHeight = GetScreenHeight();
+	//lastWidth = GetScreenWidth();
 
-	destRec = { origen.x, origen.y, (float)widthAnimation * 2, (float)heightAnimation * 2 };
+	destRec = origen;//{ origen.x, origen.y, (float)widthAnimation * 2, (float)heightAnimation * 2 };
+	//destRec = { origen.x, origen.y, (float)widthAnimation * 2, (float)heightAnimation * 2 };
 	srcRec = { 0.0f, 0.0f, (float)heightAnimation, (float)widthAnimation };
 	origin = { origen.width / 2, origen.height / 2 }; //En principio no lo necesitamos
-
 }
 
 sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua, Columnas *col, Plataformas *plat, Scores *scr) {
 	sh_Enemigo result = NULL;
+	if (lastHeight != GetScreenHeight()) {
+		destRec.height = GetScreenHeight() / 14.0625f;
+		destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+		origin.y = destRec.height / 2;
+		lastHeight = GetScreenHeight();
+	}
+	if (lastWidth != GetScreenWidth()) {
+		destRec.width = GetScreenWidth() / 25.0f;
+		destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+		origin.x = destRec.width / 2;
+		lastWidth = GetScreenWidth();
+	}
 	
 	if (disparada == 2) {
 		//std::cout << "PIUM" << std::endl;

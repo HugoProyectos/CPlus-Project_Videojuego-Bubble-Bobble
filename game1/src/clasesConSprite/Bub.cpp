@@ -40,8 +40,9 @@ class Bub : public Sprite {
     const float DISTANCIA_DISPARO = 200.0;
     Rectangle inicio = { -1,-1,-1,-1 };
 
-   
-
+    const int anchoOriginal = 800;
+    Texture2D sprite2;
+    bool segundaSkin = false;
 public:
     //Variable de controles
     Controls controles;
@@ -122,10 +123,13 @@ public:
         admin = &adm;
 
         if (esBub) {
-            sprite = LoadTexture("resources/Players/Bobblun/animation_set4.png");
+            sprite = LoadTexture("resources/Players/Bobblun/animation_set.png");
+            sprite2 = LoadTexture("resources/Players/Bobblun/animation_set4.png");
+
         } else {
             this->eresBub = false;
             sprite = LoadTexture("resources/Players/Bobblun/animation_set2.png");
+            sprite2 = LoadTexture("resources/Players/Bobblun/animation_set5.png");
         }
         //widthAnimation = standingAnimation.width / fStandingAnimation;
         //heightAnimation = standingAnimation.height;
@@ -383,10 +387,13 @@ public:
                     indiceAnimacion = 6; //Es el 0 de la segunda parte de animaciones
                     Pompa p;
                     if (eresBub) {
-                        p = Pompa(spriteBurbuja, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa[nivel]);
+                        p = Pompa(spriteBurbuja, destRec, (double)(VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * ((double)lastWidth/ (double)anchoOriginal) * sentido), (double)(DISTANCIA_DISPARO * multiplicadorDistanciaDisparo * ((double)lastWidth / (double)anchoOriginal)), true, vidaPompa[nivel]);
+                        std::cout << "Dimensiones pompa; " <<p.destRec.x << "," << p.destRec.y << "/" << p.lastHeight << "," << p.lastWidth << std::endl;
+                    
                     } else {
                         p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa[nivel]);
                     }
+                    std::cout << "Dimensiones pompa; " <<p.destRec.x << "," << p.destRec.y << "/" << p.lastHeight << "," << p.lastWidth << std::endl;
                     admin->pompas.push_back(std::make_shared<Pompa>(p));
                     PlaySound(sonidoDisparar);
                 }
@@ -623,7 +630,13 @@ public:
             orientacionActual = switchOrientacion;
         }
         srcRec.y = (float)heightAnimation * (float)(animacionActiva % NUM_FILAS);
-        DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
+        if (!segundaSkin) {
+            DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
+        }
+        else {
+            DrawTexturePro(sprite2, srcRec, destRec, origin, 0.0f, WHITE);
+        }
+        
     }
 
     void compruebaColision(Plataforma& s) {

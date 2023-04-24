@@ -36,7 +36,7 @@ class Pompa : public Sprite {
 	const int NARANJA = 1;
 	const int ROJO = 2;
 
-
+	
 	const int widthAnimation = 16;
 	const int heightAnimation = 16;
 
@@ -56,6 +56,9 @@ class Pompa : public Sprite {
 	sh_Enemigo extraeEnemigo(bool matalo);
 
 public:
+	int lastHeight = GetScreenHeight();
+	int lastWidth = GetScreenWidth();
+
 	//Controles del jugador
 	static Controls controlesJugador;
 

@@ -11,6 +11,8 @@
 #define BLOQUE_GRANDE_ALTO 13
 #define FRAMES_CARGAR_SIGUIENTE_NIVEL 120
 
+const double ratioAspecto = 800 / 450;
+
 class Plataforma {
 public:
     // Posicion en la cuadricula [1..ancho] [1..alto]
@@ -113,8 +115,8 @@ public:
     Sound sound = LoadSound("resources/music/sonido_fantasma_inmortal.mp3");
 
 
-    //Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
-    Music music = LoadMusicStream("resources/music/sonido_gigachad.mp3");
+    Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
+    Music music2 = LoadMusicStream("resources/music/sonido_gigachad.mp3");
 
     Plataformas() = default;
 
