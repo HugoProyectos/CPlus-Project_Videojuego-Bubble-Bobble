@@ -33,10 +33,10 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "Bubble Bobble");
     SetWindowMinSize(200, 200);
     SetWindowState(FLAG_WINDOW_RESIZABLE);
-
+     
     InitAudioDevice();
 
-    GameScreen currentScreen = CONTROLS_MENU;
+    GameScreen currentScreen = MAIN_MENU;
 
     // TODO: Initialize all required variables and load all required data here!
     // 
@@ -138,23 +138,25 @@ int main(void)
 
     int framesCounter = 0;          // Useful to count frames
 
-    SetTargetFPS(60);               // Set desired framerate (frames-per-second)
+    SetTargetFPS(60);               // Set desired framerate (frames-per-second) 
     //--------------------------------------------------------------------------------------
 
     /*bub.cayendo = true;
-    bub.enElAire = true;*/
+    bub.enElAire = true;*/ 
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
-        switch (currentScreen)
+        switch (currentScreen) 
         {
         case MAIN_MENU:
         {
             // TODO: Update MAIN_MENU screen variables here!
-            main_menu.Actualizar(credits.creditos);
+            if (main_menu.Actualizar(credits.creditos)) { 
+                currentScreen = CONTROLS_MENU;
+            }
             credits.Actualizar();
             admin.scores.Actualizar();
 
@@ -166,7 +168,7 @@ int main(void)
                 admin.scores.hayP1 = true;
                 plataformas.inicio_de_ronda(1);
             }
-            else if (IsKeyPressed(tecla_p2) && credits.creditos >= 2) {
+            else if (IsKeyPressed(tecla_p2) && credits.creditos >= 2) { 
                 currentScreen = NIVEL_1;
                 credits.creditos -= 2;
                 admin.scores.hayP1 = true;
@@ -195,7 +197,7 @@ int main(void)
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
                 else if (admin.agua.existe) {
-                    bub.enElAgua = admin.agua.colisionBub(bub.destRec, bub.waterlessFrames);
+                    bub.enElAgua = admin.agua.colisionBub(bub.destRec, bub.waterlessFrames);   
                 }
                 if (contadorVidas.hayP2) {
                     bob.Actualizar();
@@ -501,11 +503,11 @@ int main(void)
                 destRob = { (float)GetScreenWidth() - 200, (float)GetScreenHeight() - 150, 32, 32 };
                 robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
-
+                 
                 admin.frutas.clear();
 
-                jugando_nivel = true;
-                plataformas.inicio_de_ronda(4);
+                jugando_nivel = true;   
+                plataformas.inicio_de_ronda(4);  
             }     
         } break;
         case NIVEL_4:
@@ -697,7 +699,7 @@ int main(void)
                 // ASIGNAR TODOS LOS BOTONES
                 controls.guardarControlesNuevos();
                 credits.tecla = controls.coin;
-                tecla_p1 = controls.play1;
+                tecla_p1 = controls.play1; 
                 tecla_p2 = controls.play2;
                 // ...
                 // Asignamos los controles de los jugadores 
@@ -717,7 +719,7 @@ int main(void)
                 bob.right = controls.right_p2;
                 bob.jump = controls.jump_p2;
                 bob.shoot = controls.spit_p2;
-                Pompa::controlesJugador = controls;
+                //Pompa::controlesJugador = controls; 
 
                 currentScreen = MAIN_MENU;
             }
