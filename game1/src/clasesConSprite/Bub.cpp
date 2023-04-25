@@ -685,8 +685,8 @@ public:
             if (
                 (
                     //Comprobamos colision esquina inferior derecha
-                    (((s.bot) > (destRec.y + destRec.height / 2.0f)) &&
-                        ((destRec.y + destRec.height / 2.0f) > (s.top))
+                    (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                        ((destRec.y + destRec.height * 0.49) > (s.top))
                         ) && (
                             ((s.right) > (destRec.x + destRec.width / 2.0f)) &&
                             ((destRec.x + destRec.width / 2.0f) > (s.left))
@@ -748,8 +748,8 @@ public:
                     ) ||
                 (
                     //Comprobamos colision esquina inferior izquierda
-                    (((s.bot) > (destRec.y + destRec.height / 2.0f)) &&
-                        ((destRec.y + destRec.height / 2.0f) > (s.top))
+                    (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                        ((destRec.y + destRec.height * 0.49) > (s.top))
                         ) && (
                             ((s.right) > (destRec.x - destRec.width / 2.0f)) &&
                             ((destRec.x - destRec.width / 2.0f) > (s.left))
@@ -757,8 +757,8 @@ public:
                     ) ||
                 (
                     //Comprobamos colision centro inferior
-                    (((s.bot) > (destRec.y + destRec.height / 2.0f)) &&
-                        ((destRec.y + destRec.height / 2.0f) > (s.top))
+                    (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                        ((destRec.y + destRec.height * 0.49) > (s.top))
                         ) && (
                             ((s.right) > (destRec.x)) &&
                             ((destRec.x) > (s.left))
@@ -798,8 +798,8 @@ public:
                     ||
                     //Comprobamos colision esquina inferior derecha
                     (
-                        (((s.bot) > (destRec.y + destRec.height / 2.0f)) &&
-                            ((destRec.y + destRec.height / 2.0f) > (s.top))
+                        (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                            ((destRec.y + destRec.height * 0.49) > (s.top))
                             ) && (
                                 ((s.right) > (destRec.x + destRec.width / 2 + destRec.width / 6)) &&
                                 ((destRec.x + destRec.width / 2 + destRec.width / 6) > (s.left))
@@ -823,8 +823,8 @@ public:
                     ||
                     //Comprobamos colision esquina inferior derecha
                     (
-                        (((s.bot) > (destRec.y + destRec.height / 2.0f)) &&
-                            ((destRec.y + destRec.height / 2.0f) > (s.top))
+                        (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                            ((destRec.y + destRec.height * 0.49) > (s.top))
                             ) && (
                                 ((s.right) > (destRec.x - destRec.width / 2 - destRec.width / 6)) &&
                                 ((destRec.x - destRec.width / 2 - destRec.width / 6) > (s.left))
