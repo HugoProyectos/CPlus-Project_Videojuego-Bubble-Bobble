@@ -142,23 +142,25 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 		for (int i = 0; i < plat->listaPlataforma.size(); i++) {
 
 			//Comprobamos y
+			bool a = (plat->listaPlataforma[i].top <= destRec.y - destRec.height / 2) &&
+				(plat->listaPlataforma[i].bot >= destRec.y - destRec.height / 2);
+			bool b = (plat->listaPlataforma[i].top <= destRec.y - destRec.height / 4) &&
+				(plat->listaPlataforma[i].bot >= destRec.y - destRec.height / 4);
+			bool c = (plat->listaPlataforma[i].top < destRec.y + destRec.height * 0.49) && 
+				(plat->listaPlataforma[i].bot > destRec.y + destRec.height * 0.49); //Este es el que lo causa. Preguntar a Jesús qué caso cubre
+			bool d = (plat->listaPlataforma[i].top <= destRec.y + destRec.height / 4) &&
+				(plat->listaPlataforma[i].bot >= destRec.y + destRec.height / 4);
 			if (
 				(
-					(plat->listaPlataforma[i].top <= destRec.y - destRec.height / 2) &&
-					(plat->listaPlataforma[i].bot >= destRec.y - destRec.height / 2)
-					) ||
+					
+					a) ||
 				(
-					(plat->listaPlataforma[i].top <= destRec.y - destRec.height / 4) &&
-					(plat->listaPlataforma[i].bot >= destRec.y - destRec.height / 4)
-					) ||
+					
+					b) ||
 				(
-					(plat->listaPlataforma[i].top < destRec.y + destRec.height / 2) &&
-					(plat->listaPlataforma[i].bot > destRec.y + destRec.height / 2)
-					) ||
+					c) ||
 				(
-					(plat->listaPlataforma[i].top <= destRec.y + destRec.height / 4) &&
-					(plat->listaPlataforma[i].bot >= destRec.y + destRec.height / 4)
-					)
+					d)
 				) {
 				//Comprobamos x
 				if (velocidadDesplazamiento > 0) {

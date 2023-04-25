@@ -781,7 +781,11 @@ int main(void)
         BeginDrawing();
 
         ClearBackground(BLACK);
-          
+        ///DEBUG
+        DrawLine(0, bub.posicionOriginalBub.y + bub.destRec.height/2, GetScreenWidth(), bub.posicionOriginalBub.y + bub.destRec.height / 2, GRAY);
+        DrawLine(bub.posicionOriginalBub.x + bub.destRec.width / 2, 0, bub.posicionOriginalBub.x + bub.destRec.width / 2, GetScreenHeight(), GRAY);
+        /// DEBUG
+
         switch (currentScreen)
         {
         case MAIN_MENU:

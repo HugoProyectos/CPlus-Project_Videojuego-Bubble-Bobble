@@ -166,6 +166,12 @@ public:
 
     void Actualizar() {
         if (lastHeight != GetScreenHeight()) {
+            if (cambioMapa > 0) {
+                destRec.height /= 2;
+                destRec.width /= 2;
+                destRec.x += destRec.width / 2.0f;
+                destRec.y += destRec.height / 2.0f;
+            }
             destRec.height = GetScreenHeight() / 14.0625f;
             destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
             origin.y = destRec.height / 2;
@@ -175,10 +181,27 @@ public:
             else {
                 posicionOriginalBob.y = GetScreenHeight() * (posicionOriginalBob.y / lastHeight);
             }
+            if (cambioMapa > 0) {
+                destRec.height *= 2;
+                destRec.width *= 2;
+                if (eresBub) {
+                    razonY = ((posicionOriginalBub.y - posicionOriginalBub.y*0.05) - destRec.y) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
+                }
+                else {
+                    razonY = ((posicionOriginalBob.y - posicionOriginalBob.y*0.05)- destRec.y) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
+                }
+            }
             lastHeight = GetScreenHeight();
         }
         if (lastWidth != GetScreenWidth()) {
-            destRec.width = GetScreenWidth()/ 25.0f;
+            if (cambioMapa > 0) {
+                destRec.height /= 2;
+                destRec.width /= 2;
+                destRec.x += destRec.width / 2.0f;
+                destRec.y += destRec.height / 2.0f;
+            }
+           
+            destRec.width = GetScreenWidth() / 25.0f;
             destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
             origin.x = destRec.width / 2;
             if (eresBub) {
@@ -187,6 +210,17 @@ public:
             else {
                 posicionOriginalBob.x = GetScreenWidth() * (posicionOriginalBob.x / lastWidth);
             }
+            if (cambioMapa > 0) {
+                destRec.height *= 2;
+                destRec.width *= 2;
+                if (eresBub) {
+                    razonX = (posicionOriginalBub.x - destRec.x) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
+                }
+                else {
+                    razonX = (posicionOriginalBob.x - destRec.x) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
+                }
+            }
+            
             lastWidth = GetScreenWidth();
         }
         //Frames de "inmunidad" al agua
