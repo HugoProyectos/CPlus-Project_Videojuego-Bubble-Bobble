@@ -84,8 +84,8 @@ public:
 
 	//Indica si inicia cadena de explosiones y que jugador ha iniciado la cadena
 	int cadena = 0; // 0 = NO CADENA, 1 = BUB, 2 = BOB
-
-
+	//Indica numero de enemigos muertos en la cadena
+	int killCount = 0;
 	//Enemigo contenido
 	sh_Enemigo enemigoContenido = NULL;
 	int modulo = 0;
