@@ -59,6 +59,9 @@ public:
 	int lastHeight = GetScreenHeight();
 	int lastWidth = GetScreenWidth();
 
+	double ratioX = 1;
+	double ratioY = 1;
+
 	//Controles del jugador
 	static Controls controlesJugador;
 
