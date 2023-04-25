@@ -123,6 +123,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 				destRec.x = col->left_der - destRec.width / 2;
 				disparada = 1;
 				if (inicio) {
+					std::cout << "EXPLOTO 1" << std::endl;
 					animacionActiva = EXPLOTA;
 				}
 			}
@@ -132,6 +133,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 				destRec.x = col->right_izq + destRec.width / 2;
 				disparada = 1;
 				if (inicio) {
+					std::cout << "EXPLOTO 2" << std::endl;
 					animacionActiva = EXPLOTA;
 				}
 			}
@@ -166,6 +168,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						) {
 						if (inicio) {
 							animacionActiva = EXPLOTA;
+							std::cout << "EXPLOTO 3" << std::endl;
 						}
 						else {
 							destRec.x = plat->listaPlataforma[i].left - destRec.width / 2;
@@ -180,6 +183,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						) {
 						if (inicio) {
 							animacionActiva = EXPLOTA;
+							std::cout << "EXPLOTO 4" << std::endl;
 						}
 						else {
 							destRec.x = plat->listaPlataforma[i].right + destRec.width / 2;
