@@ -49,7 +49,13 @@ public:
     //Lógica
     int direccionX = 1; //0 para izquierda, 1 para derecha
     float anchosX = 15.0f; 
-
+    bool sueloArriba = false;
+    bool sueloDerecha = false;
+    bool sueloIzquierda = false;
+    bool saltandoDer = false;
+    bool saltandoDerCorto = false;
+    bool saltandoIzq = false;
+    bool saltandoIzqCorto = false;
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
@@ -117,56 +123,55 @@ public:
             }
 
             if (muerto) {
-                std::cout << "mueto" << std::endl;
                 animacionActiva = 1;
                 Caer();
             }
             else if (!saltando && enElAire) {
-                std::cout << "lento" << std::endl;
-
                 CaerLento();
             }
+            else if ( saltandoDerCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height  >= playerPosition.y && !sueloDerecha && destRec.x < playerPosition.x - anchosX) {
+                Salto(playerPosition, 2);
+            }
+            else if (saltandoIzqCorto  || destRec.y <= playerPosition.y && destRec.y + destRec.height  >= playerPosition.y && !sueloIzquierda && destRec.x > playerPosition.x + anchosX) {
+                Salto(playerPosition, -2);
+            }
+            //Salto a la derecha, player esta a +distancia
+            else if (saltandoDer || (destRec.y > playerPosition.y && destRec.x + distanciaSaltoMax > playerPosition.x - anchosX && destRec.x + distanciaSaltoMax < playerPosition.x + anchosX)) { //Si el personaje esta encima
+                Salto(playerPosition,1);
+            }
+            //Salto a la izquierda, player esta a -distancia
+            else if (saltandoIzq || (destRec.y > playerPosition.y && destRec.x - distanciaSaltoMax > playerPosition.x - anchosX && destRec.x - distanciaSaltoMax < playerPosition.x + anchosX)) { //Si el personaje esta encima
+
+                Salto(playerPosition, -1);
+            }
             else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - anchosX && destRec.x < playerPosition.x + anchosX)) { //Si el personaje esta encima
-                std::cout << "salto" << std::endl;
 
                 Salto(playerPosition);
             }
             else if (destRec.y != playerPosition.y) {
                 if (direccionX == 0) {
                     //Izquierda
-                    std::cout << "izq random" << std::endl;
-
                     MoverIzq();
                 }
                 else {
                     //Derecha
-                    std::cout << "der random" << std::endl;
-
                     MoverDer();
                 }
             }
             else if (destRec.x > playerPosition.x + anchosX) { //Si el personaje esta a la izquierda
-                std::cout << "izq siguendo" << std::endl;
-
                 MoverIzq();
             }
-            else if (destRec.x < playerPosition.x - anchosX) { //Si el personaje esta a la derecha
-                std::cout << "der diguiendo" << std::endl;
-
+            else if (destRec.x < playerPosition.x - anchosX) { //Si el personaje esta a la 
                 MoverDer();
             }
 
             //Actualizar posicion no salir de la pantalla
             if (destRec.y > GetScreenHeight() + 50) {
-                std::cout << "me salgo por abajo" << std::endl;
-
                 destRec.y = -10;
                 enElAire = true;
                 cayendo = true;
             }
             else if (destRec.y < -50) {
-                std::cout << "me salgo por arriba?" << std::endl;
-
                 destRec.y = GetScreenHeight() + 5;
             }
 
@@ -213,6 +218,9 @@ public:
                 break;
             }
         }
+        sueloArriba = false;
+        sueloDerecha = false;
+        sueloIzquierda = false;
     }
 
     void Dibujar() override {
@@ -241,10 +249,10 @@ public:
         destRec.y += velocidadSalto/2;
     }
 
-    void Salto(Rectangle player) {
+
+    void Salto(Rectangle player, int tipo = 0) {
         //Gestión de salto
         if (!saltando) {
-            //std::cout << "Inicio Salto" << std::endl;
             saltando = true;
             finSaltando = false;
             enElAire = true;
@@ -252,27 +260,96 @@ public:
         }
         //Subiendo
         else if ((saltoRecorrido <= distanciaSaltoMax) && !finSaltando) {
-            //std::cout << "Subida Salto" << std::endl;
-            destRec.y -= velocidadSalto;
-            saltoRecorrido += velocidadSalto;
+            if (tipo == -1) {
+                destRec.x -= velocidadLateral;
+                srcRec.width = pixels;
+                direccionX = 0;
+                saltandoIzq = true;
+                destRec.y -= velocidadSalto;
+                saltoRecorrido += velocidadSalto;
+            }
+            else if (tipo == 1) {
+                destRec.x += velocidadLateral;
+                srcRec.width = -pixels;
+                direccionX = 1;
+                saltandoDer = true;
+                destRec.y -= velocidadSalto;
+                saltoRecorrido += velocidadSalto;
+            }
+            else if (tipo == -2) {
+                destRec.x -= velocidadSalto * 2;
+                srcRec.width = pixels;
+                direccionX = 0;
+                saltandoIzqCorto = true;
+                destRec.y -= velocidadSalto;
+                saltoRecorrido += velocidadSalto*3;
+            }
+            else if (tipo == 2) {
+                destRec.x += velocidadSalto * 2;
+                srcRec.width = -pixels;
+                direccionX = 1;
+                saltandoDerCorto = true;
+                destRec.y -= velocidadSalto;
+                saltoRecorrido += velocidadSalto * 3;
+            }
+            else {
+                destRec.y -= velocidadSalto;
+                saltoRecorrido += velocidadSalto;
+            }
         }
         //Hemos llegado al máximo
         else if (saltoRecorrido >= distanciaSaltoMax) {
-            //std::cout << "max salto" << std::endl;
             finSaltando = true;
             destRec.y += velocidadSalto;
             saltoRecorrido -= velocidadSalto;
         }
         //Bajar
         else if (saltoRecorrido > 0 && finSaltando && enElAire) {
-            //std::cout << "Bajar Salto" << std::endl;
-            destRec.y += velocidadSalto;
-            saltoRecorrido -= velocidadSalto;
+            if (tipo == -1) {
+                destRec.x -= velocidadLateral;
+                srcRec.width = pixels;
+                direccionX = 0;
+                saltandoIzq = true;
+                destRec.y += velocidadSalto;
+                saltoRecorrido -= velocidadSalto;
+            }
+            else if (tipo == 1) {
+                destRec.x += velocidadLateral;
+                srcRec.width = -pixels;
+                direccionX = 1;
+                saltandoDer = true;
+                destRec.y += velocidadSalto;
+                saltoRecorrido -= velocidadSalto;
+            }
+            else if (tipo == -2) {
+                destRec.x -= velocidadSalto * 2;
+                srcRec.width = pixels;
+                direccionX = 0;
+                saltandoIzqCorto = true;
+                destRec.y += velocidadSalto;
+                saltoRecorrido -= velocidadSalto * 3;
+            }
+            else if (tipo == 2) {
+                destRec.x += velocidadSalto * 2;
+                srcRec.width = -pixels;
+                direccionX = 1;
+                saltandoDerCorto = true;
+                destRec.y += velocidadSalto;
+                saltoRecorrido -= velocidadSalto * 3;
+            }
+            else {
+                destRec.y += velocidadSalto;
+                saltoRecorrido -= velocidadSalto*2;
+            }
         }
         else if (saltoRecorrido < 5) {
-            //std::cout << " Salto acabado" << std::endl;
             saltando = false;
             finSaltando = true;
+            saltandoDer = false;
+            saltandoIzq = false;
+            saltandoDerCorto = false;
+            saltandoIzqCorto = false;
+
             if (player.x > destRec.x) {
                 direccionX = 1;
             }
@@ -281,7 +358,6 @@ public:
             }
         }
         else {
-            //std::cout << " Salto perdido" << std::endl;
             saltando = false;
             finSaltando = true;
             if (player.x > destRec.x) {
@@ -437,6 +513,34 @@ public:
                     s.aproach[enemyNum + 2] = 4;
                 }
             }
+
+            destRec.y = destRec.y - distanciaSaltoMax + destRec.height;
+            //Comporbaciones adicionales
+            if ((((s.bot) > (destRec.y)) && ((destRec.y) > (s.top)) &&
+                ((s.right-8) > (destRec.x)) && ((destRec.x) > (s.left+8)))){
+                sueloArriba = true;
+            }
+            destRec.y = destRec.y + distanciaSaltoMax - destRec.height;
+
+            destRec.y = destRec.y + destRec.height*3/4;
+            destRec.x = destRec.x - destRec.width;
+            //Comporbaciones adicionales
+            if ((((s.bot) > (destRec.y)) && ((destRec.y) > (s.top)) &&
+                ((s.right) > (destRec.x)) && ((destRec.x) > (s.left)))) {
+                sueloIzquierda = true;
+            }
+            destRec.y = destRec.y - destRec.height*3/4;
+            destRec.x = destRec.x + destRec.width;
+
+            destRec.y = destRec.y + destRec.height*3/4;
+            destRec.x = destRec.x + destRec.width;
+            //Comporbaciones adicionales
+            if ((((s.bot) > (destRec.y)) && ((destRec.y) > (s.top)) &&
+                ((s.right) > (destRec.x)) && ((destRec.x) > (s.left)))) {
+                sueloDerecha = true;
+            }
+            destRec.y = destRec.y - destRec.height*3/4;
+            destRec.x = destRec.x - destRec.width;
         }
     }
 
