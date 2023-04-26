@@ -234,17 +234,17 @@ public:
 							//Empuja la pompa2, que se mete por debajo (disminuye y) (se ha creado más tarde, por lo que está en una etapa más tardía de la ruta).
 							//Choca por la derecha de la que empuja -> Empuja hacia la derecha
 							if ((pompa1.x - pompa1.width / 3 < pompa2.x + pompa2.width / 3 ) && (pompa1.x + pompa1.width / 3  >= pompa2.x + pompa2.width / 3 ) && !((pompa1.y - pompa1.height / 3  > pompa2.y + pompa2.height / 3 ) || (pompa1.y + pompa1.height / 3  < pompa2.y - pompa2.height / 3 ))) {
-								pompas.at(i)->destRec.x += pompa1.width / 8;
-								pompas.at(i)->destRec.y -= pompa1.width / 8;
-								pompas.at(j)->destRec.y += pompa1.width / 8;
+								pompas.at(i)->destRec.x += pompa1.width / 16;
+								pompas.at(i)->destRec.y -= pompa1.width / 16;
+								pompas.at(j)->destRec.y += pompa1.width / 16;
 								if(pompas.at(i)->tVida != Pompa::INFINITA) pompas.at(i)->tVida -= 5;
 								if (pompas.at(j)->tVida != Pompa::INFINITA) pompas.at(j)->tVida -= 5;
 							}
 							//Choca por la izquierda de la que empuja -> Empuja hacia la izquierda
 							else if ((pompa1.x - pompa1.width / 3 < pompa2.x - pompa2.width / 3) && (pompa1.x + pompa1.width / 3 >= pompa2.x - pompa2.width / 3) && !((pompa1.y - pompa1.height / 3 > pompa2.y + pompa2.height / 3) || (pompa1.y + pompa1.height / 3 < pompa2.y - pompa2.height / 3))) {
-								pompas.at(i)->destRec.x -= pompa1.width / 8;
-								pompas.at(i)->destRec.y -= pompa1.width / 8;
-								pompas.at(j)->destRec.y += pompa1.width / 8;
+								pompas.at(i)->destRec.x -= pompa1.width / 16;
+								pompas.at(i)->destRec.y -= pompa1.width / 16;
+								pompas.at(j)->destRec.y += pompa1.width / 16;
 								if (pompas.at(i)->tVida != Pompa::INFINITA) pompas.at(i)->tVida -= 5;
 								if (pompas.at(j)->tVida != Pompa::INFINITA) pompas.at(j)->tVida -= 5;
 							}

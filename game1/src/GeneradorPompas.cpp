@@ -68,12 +68,10 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 			}
 			if (lastHeight != GetScreenHeight()) {
 				p.destRec.height = GetScreenHeight() / 14.0625f;
-				p.destRec.y = GetScreenHeight() * (p.destRec.y / lastHeight);
 				p.origin.y = p.destRec.height / 2;
 			}
 			if (lastWidth != GetScreenWidth()) {
 				p.destRec.width = GetScreenWidth() / 25.0f;
-				p.destRec.x = GetScreenWidth() * (p.destRec.x / lastWidth);
 				p.origin.x = p.destRec.width / 2;
 			}
 			resultado.push_back(std::make_shared<Pompa>(p));
@@ -84,7 +82,7 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 		case 4: //Mapa del agua
 		{
 			Pompa p;
-			Rectangle r[2] = { { GetScreenWidth() * 0.3125, -(GetScreenHeight() * 0.0711), 32, 32}, { GetScreenWidth() * 0.6875, -(GetScreenHeight() * 0.0711), 32, 32 } };
+ 			Rectangle r[2] = { { GetScreenWidth() * 0.3125, -(GetScreenHeight() * 0.0711), 32, 32}, { GetScreenWidth() * 0.6875, -(GetScreenHeight() * 0.0711), 32, 32 } };
 			//resultado.push_back(std::make_shared<Pompa>(p1));
 			//resultado.push_back(std::make_shared<Pompa>(p2));
 			int numRand = rand() % 100;
@@ -100,16 +98,21 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 			numRand = rand() % 100;
 			if (numRand < 50) { //Que contenga agua
 				p.modulo = Pompa::MODULO_AGUA;
+				p.tVida = Pompa::INFINITA;
 			}
 			if (lastHeight != GetScreenHeight()) {
 				p.destRec.height = GetScreenHeight() / 14.0625f;
-				p.destRec.y = GetScreenHeight() * (p.destRec.y / lastHeight);
 				p.origin.y = p.destRec.height / 2;
+				/*p.destRec.y = GetScreenHeight() * (p.destRec.y / lastHeight);
+				*/
+				//p.lastHeight = lastHeight;
 			}
 			if (lastWidth != GetScreenWidth()) {
 				p.destRec.width = GetScreenWidth() / 25.0f;
-				p.destRec.x = GetScreenWidth() * (p.destRec.x / lastWidth);
 				p.origin.x = p.destRec.width / 2;
+				/*p.destRec.x = GetScreenWidth() * (p.destRec.x / lastWidth);
+				*/
+				//p.lastWidth = lastWidth;
 			}
 			resultado.push_back(std::make_shared<Pompa>(p));
 			//}

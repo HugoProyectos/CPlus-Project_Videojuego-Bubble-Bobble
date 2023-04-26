@@ -50,6 +50,7 @@ class Pompa : public Sprite {
 	//Modo oscilacion
 	bool oscilando = false;
 	bool abajo = true;
+	bool ignorar = false;
 	uint8_t contador = 0;
 
 	//Abstracción de generación de enemigo al explotar
