@@ -25,7 +25,7 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 		case 2:
 		{
 			Pompa p;
-			Rectangle r[2] = { { GetScreenWidth() / 2 - 150, GetScreenHeight() + 32, 32, 32}, { GetScreenWidth() / 2 + 150, GetScreenHeight() + 32, 32, 32 } };
+			Rectangle r[2] = { { GetScreenWidth() * 0.3125, GetScreenHeight() * 1.0711, 32, 32}, { GetScreenWidth() * 0.6875, GetScreenHeight() * 1.0711, 32, 32 } };
 			//resultado.push_back(std::make_shared<Pompa>(p1));
 			//resultado.push_back(std::make_shared<Pompa>(p2));
 			int numRand = rand() % 100;
@@ -53,7 +53,7 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 		case 3:
 		{
 			Pompa p;
-			Rectangle r[2] = { { GetScreenWidth() / 2 - 150, GetScreenHeight() + 32, 32, 32}, { GetScreenWidth() / 2 + 150, GetScreenHeight() + 32, 32, 32 } };
+			Rectangle r[2] = { { GetScreenWidth() * 0.3125, GetScreenHeight() * 1.0711, 32, 32}, { GetScreenWidth() * 0.6875, GetScreenHeight() * 1.0711, 32, 32 } };
 			//resultado.push_back(std::make_shared<Pompa>(p1));
 			//resultado.push_back(std::make_shared<Pompa>(p2));
 			int numRand = rand() % 100;
@@ -82,7 +82,7 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 		case 4: //Mapa del agua
 		{
 			Pompa p;
-			Rectangle r[2] = { { GetScreenWidth() / 2 - 150, GetScreenHeight() + 32, 32, 32}, { GetScreenWidth() / 2 + 150, GetScreenHeight() + 32, 32, 32 } };
+			Rectangle r[2] = { { GetScreenWidth() * 0.3125, GetScreenHeight() * 1.0711, 32, 32}, { GetScreenWidth() * 0.6875, GetScreenHeight() * 1.0711, 32, 32 } };
 			//resultado.push_back(std::make_shared<Pompa>(p1));
 			//resultado.push_back(std::make_shared<Pompa>(p2));
 			int numRand = rand() % 100;
