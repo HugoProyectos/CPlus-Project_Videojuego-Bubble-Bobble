@@ -21,6 +21,12 @@ public:
 	//Referencias a plataformas y columnas para la colision de pompas
 	Columnas *col;
 	Plataformas *plat;
+	//Texturas para puntuacion de cadena
+	Texture2D bubPoints = LoadTexture("resources/puntos/puntosBub.png");
+	Texture2D bobPoints = LoadTexture("resources/puntos/puntosBob.png");
+	Rectangle pointSource;
+	Rectangle destRec;
+	int pointsTime = 0;
 	//Gestión de tiempo de mapa
 	uint32_t contadorSkull = 0;
 	uint32_t limiteContadorSkull = 60 * 90;
@@ -96,8 +102,15 @@ public:
 		return auxiliar;
 	}
 
-	void actualizaPompas() {
+	void dibujarPuntosCadena() {
+		if (pointsTime > 0) {
+			pointsTime--;
+			std::cout << pointSource.x << std :: endl;
+			DrawTexturePro(bubPoints, pointSource, destRec, { destRec.width / 2, destRec.height / 2 }, 0.0f, WHITE);
+		}
+	}
 
+	void actualizaPompas() {
 		//std::cout << "Pompas a actualizar: " << pompas.size() << std::endl;
 		//Actualiza el estado de las pompas
 		for (int i = 0; i < pompas.size(); i++) {
@@ -142,7 +155,6 @@ public:
 					}
 				}
 				if (pompas.at(i)->cadena) {
-					std::cout << "Kill Count 1: " << killCountBub << std::endl;
 					if (pompas.at(i)->cadena == 1) {
 						if (pompas.at(i)->enemigoContenido != NULL) {
 							killCountBub++;
@@ -286,7 +298,6 @@ public:
 					agua.existe = true;
 				}
 				if (pompas.at(i)->cadena) {
-					std::cout << "Kill Count 2: " << killCountBub << std::endl;
 					if (pompas.at(i)->cadena == 1) {
 						if (pompas.at(i)->enemigoContenido != NULL) {
 							killCountBub++;
@@ -430,7 +441,34 @@ public:
 			}
 		}
 		if (lastKCBub == killCountBub) {
-			killCountBub = 0;
+			if (killCountBub != 0) {
+				switch (killCountBub) {
+				case 1:
+					pointSource = { 10,221,15,29 };
+					break;
+				case 2:
+					pointSource = { 10,254,15,31 };
+					break;
+				case 3:
+					pointSource = { 10,289,15,31 };
+					break;
+				case 4:
+					pointSource = { 10,324,15,31 };
+					break;
+				case 5:
+					pointSource = { 10,359,15,47 };
+					break;
+				case 6:
+					pointSource = { 10,410,15,47 };
+					break;
+				case 7:
+					pointSource = { 10,461,15,47 };
+					break;
+				}
+				killCountBub = 0;
+				pointsTime = 10000;
+				destRec = { 50, 50, (pointSource.y * GetScreenHeight()) / 5, (pointSource.y * GetScreenWidth()) / 10 };
+			}
 		}
 		else {
 			lastKCBub = killCountBub;

@@ -79,7 +79,7 @@ int main(void)
     admin.agua.existe = false;
     admin.col = &columnas;
     admin.plat = &plataformas;
-    admin.iniciaMapa(0, 300*60);
+    admin.iniciaMapa(3, 300*60);
     admin.CambioDeMapa(0); //DEBUG 4->0
 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
@@ -248,7 +248,7 @@ int main(void)
                   
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(0, 60*30);
+                admin.iniciaMapa(4, 60*30);
                 admin.CambioDeMapa(1);
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_grande.png", 2);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_pequeno.png", "resources/mapa_nivel_2/mapa.txt");
@@ -355,7 +355,7 @@ int main(void)
 
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(0, 30*60); // TODO
+                admin.iniciaMapa(4, 30*60); // TODO
                 admin.CambioDeMapa(2); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_grande.png", 3);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_pequeno.png", "resources/mapa_nivel_3/mapa.txt");
@@ -462,7 +462,7 @@ int main(void)
 
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(0, 30*60); // TODO
+                admin.iniciaMapa(6, 30*60); // TODO
                 admin.CambioDeMapa(3); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_4/bloque_grande.png", 4);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_4/bloque_pequeno.png", "resources/mapa_nivel_4/mapa.txt");
@@ -578,7 +578,7 @@ int main(void)
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
-                admin.iniciaMapa(5, 3000*60); // TODO
+                admin.iniciaMapa(4, 30*60); // TODO
                 admin.CambioDeMapa(4); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_grande.png", 5);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt");
@@ -800,7 +800,8 @@ int main(void)
         } break;
         case NIVEL_1:
         {
-            // TODO: Draw NIVEL_1 screen here! 
+            // TODO: Draw NIVEL_1 screen here!
+            admin.dibujarPuntosCadena();
             columnas.Dibujar();
             plataformas.Dibujar();
             //scores.Dibujar();   
@@ -816,6 +817,7 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
+            admin.dibujarPuntosCadena();
         } break;
         case NIVEL_2:
         {
