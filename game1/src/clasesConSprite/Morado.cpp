@@ -59,9 +59,6 @@ public:
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         if (enfadado) {
             animacionActiva = 3;
-            velocidadLateral *= 2;
-            enfadado = false;
-
         }
         destRec = destino;
         tipo = 4;
@@ -75,7 +72,6 @@ public:
 
     void enfadar() {
         animacionActiva = 3;
-        velocidadLateral *= 2;
     }
 
     // Controlador de comportamiento
@@ -97,13 +93,34 @@ public:
             }
         }
         else {
+
+            if (lastHeight != GetScreenHeight()) {
+                destRec.height = GetScreenHeight() / 14.0625f;
+                destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+                distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
+                origin.y = destRec.height / 2;
+                lastHeight = GetScreenHeight();
+            }
+            if (lastWidth != GetScreenWidth()) {
+                destRec.width = GetScreenWidth() / 25.0f;
+                destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+                origin.x = destRec.width / 2;
+                lastWidth = GetScreenWidth();
+            }
+
+            if (enfadado) {
+                animacionActiva = 3;
+                velocidadLateral = 1.5 * destRec.width / 16.0f;
+                velocidadSalto = destRec.height / 10.0f;
+            }
+            else {
+                velocidadLateral = destRec.width / 16.0f;
+                velocidadSalto = destRec.height / 10.0f;
+            }
+
             if (muerto) {
                 animacionActiva = 1;
                 Caer();
-            }
-            else if (enfadado) {
-                enfadar();
-                enfadado = false;
             }
             //Si va a la izquierda
             else if (direccionX == 0) {
@@ -129,13 +146,17 @@ public:
             }
 
             //Actualizar posicion no salir de la pantalla
-            if (destRec.y > 450) {
-                destRec.y = 40;
+            if (destRec.y > GetScreenHeight() + 50) {
+                std::cout << "me salgo por abajo" << std::endl;
+
+                destRec.y = -10;
                 enElAire = true;
                 cayendo = true;
             }
-            else if (destRec.y < 20) {
-                destRec.y = 430;
+            else if (destRec.y < -50) {
+                std::cout << "me salgo por arriba?" << std::endl;
+
+                destRec.y = GetScreenHeight() + 5;
             }
         }
 
