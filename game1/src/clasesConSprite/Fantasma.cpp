@@ -62,6 +62,7 @@ public:
 
     clock_t temp;
     int direccionX = 1;
+    float anchosX = 15.0f;
     bool postEnfado = false;
 
     //Muerto -> Ahora esta en Enemigo
@@ -71,7 +72,6 @@ public:
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         if (enfadado) {
             animacionActiva = 3;
-            velocidadLateral *= 1.5;
             enfadado = false;
             postEnfado = true;
         }
@@ -90,7 +90,6 @@ public:
 
     void enfadar() {
         animacionActiva = 3;
-        velocidadLateral *= 1.5;
         postEnfado = true;
     }
 
@@ -114,6 +113,31 @@ public:
             }
         }
         else {
+
+            if (lastHeight != GetScreenHeight()) {
+                destRec.height = GetScreenHeight() / 14.0625f;
+                destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+                distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
+                origin.y = destRec.height / 2;
+                lastHeight = GetScreenHeight();
+            }
+            if (lastWidth != GetScreenWidth()) {
+                destRec.width = GetScreenWidth() / 25.0f;
+                destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+                anchosX = anchosX * ((float)GetScreenWidth() / (float)lastWidth);
+                origin.x = destRec.width / 2;
+                lastWidth = GetScreenWidth();
+            }
+
+            if (postEnfado) {
+                velocidadLateral = 2 * destRec.width / 16.0f;
+                velocidadSalto = destRec.height / 10.0f;
+            }
+            else {
+                velocidadLateral = destRec.width / 16.0f;
+                velocidadSalto = destRec.height / 10.0f;
+            }
+
             if ((clock() - temp) > 5 * CLOCKS_PER_SEC) {
                 velocidadFrames = 2;
                 hayBola = false;
@@ -130,8 +154,8 @@ public:
             else if (!saltando && enElAire) {
                 CaerLento();
             }
-            else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - 10 && destRec.x < playerPosition.x + 10) && !disparando) { //Si el personaje esta encima
-                Salto();
+            else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - anchosX && destRec.x < playerPosition.x + anchosX) && !disparando) { //Si el personaje esta encima
+                Salto(playerPosition);
             }
             else if (destRec.y != playerPosition.y) {
                 if (direccionX == 0) {
@@ -143,27 +167,27 @@ public:
                     MoverDer();
                 }
             }
-            else if (destRec.x > playerPosition.x + 100 && !disparando) { //Si el personaje esta a la izquierda      
+            else if (destRec.x > playerPosition.x + anchosX*10 && !disparando) { //Si el personaje esta a la izquierda      
                 MoverIzq();
             }
-            else if (destRec.x < playerPosition.x - 100 && !disparando) { //Si el personaje esta a la derecha
+            else if (destRec.x < playerPosition.x - anchosX*10 && !disparando) { //Si el personaje esta a la derecha
                 MoverDer();
             }
-            else if (destRec.x > playerPosition.x + 5 && !hayBola) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
+            else if (destRec.x > playerPosition.x + anchosX && !hayBola) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
                 BolaIzq();
             }
-            else if (destRec.x < playerPosition.x - 5 && !hayBola) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
+            else if (destRec.x < playerPosition.x - anchosX && !hayBola) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
                 BolaDer();
             }
 
             //Actualizar posicion no salir de la pantalla
-            if (destRec.y > 500) {
+            if (destRec.y > GetScreenHeight() + 50) {
                 destRec.y = -10;
                 enElAire = true;
                 cayendo = true;
             }
             else if (destRec.y < -50) {
-                destRec.y = 450;
+                destRec.y = GetScreenHeight() + 5;
             }
         }
 
@@ -280,7 +304,7 @@ public:
         else { animacionActiva = 4; }
     }
 
-    void Salto() {
+    void Salto(Rectangle player) {
         //Gestión de salto
         if (!saltando) {
             //std::cout << "Inicio Salto" << std::endl;
@@ -308,14 +332,27 @@ public:
             destRec.y += velocidadSalto;
             saltoRecorrido -= velocidadSalto;
         }
-        else if (saltoRecorrido <= 0) {
+        else if (saltoRecorrido < 5) {
             //std::cout << " Salto acabado" << std::endl;
             saltando = false;
             finSaltando = true;
+            if (player.x > destRec.x) {
+                direccionX = 1;
+            }
+            else {
+                direccionX = 0;
+            }
         }
         else {
             //std::cout << " Salto perdido" << std::endl;
-
+            saltando = false;
+            finSaltando = true;
+            if (player.x > destRec.x) {
+                direccionX = 1;
+            }
+            else {
+                direccionX = 0;
+            }
         }
     }
 
