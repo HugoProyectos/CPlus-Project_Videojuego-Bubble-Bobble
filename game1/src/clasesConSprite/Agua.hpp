@@ -9,6 +9,8 @@ public:
     tileAgua stream[10];
     bool existe = false;
     int bubTile;
+    int lastWidth;
+    int lastHeight;
     Agua() = default;
     Agua(Rectangle destino, bool right, Texture2D sprite, int numPlat);
 

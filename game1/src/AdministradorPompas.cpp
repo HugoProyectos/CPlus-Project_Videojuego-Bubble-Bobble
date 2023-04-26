@@ -268,12 +268,20 @@ public:
 				else if (creaAgua == 2 && !agua.existe) {
 					agua.stream[0].destRec.x = pompas.at(i)->destRec.x;
 					agua.stream[0].destRec.y = pompas.at(i)->destRec.y;
+					agua.stream[0].destRec.width = GetScreenWidth() / 61.5f;
+					agua.stream[0].destRec.height = GetScreenHeight() / 34.6f;
+					agua.lastHeight = GetScreenHeight();
+					agua.lastWidth = GetScreenWidth();
 					agua.stream[0].direccionDerecha = false;
 					agua.existe = true;
 				}
 				else if (creaAgua == 3 && !agua.existe) {
 					agua.stream[0].destRec.x = pompas.at(i)->destRec.x;
 					agua.stream[0].destRec.y = pompas.at(i)->destRec.y;
+					agua.stream[0].destRec.width = GetScreenWidth() / 61.5f;
+					agua.stream[0].destRec.height = GetScreenHeight() / 34.6f;
+					agua.lastHeight = GetScreenHeight();
+					agua.lastWidth = GetScreenWidth();
 					agua.stream[0].direccionDerecha = true;
 					agua.existe = true;
 				}

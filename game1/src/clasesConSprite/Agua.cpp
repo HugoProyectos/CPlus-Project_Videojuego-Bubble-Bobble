@@ -11,6 +11,8 @@ Agua::Agua()
 
 Agua::Agua(Rectangle destino, bool right, Texture2D sprite, int numPlat)
 {
+	lastWidth = GetScreenWidth();
+	lastHeight = GetScreenHeight();
 	existe = true;
 	for (int i = 0; i < 10; i++) {
 		stream[i] = tileAgua(destino, right, sprite, numPlat);
@@ -19,6 +21,16 @@ Agua::Agua(Rectangle destino, bool right, Texture2D sprite, int numPlat)
 
 void Agua::Actualizar(Plataformas& plat, Columnas& col) {
 	if (existe) {
+		if ((GetScreenHeight() != lastHeight) || (GetScreenWidth() != lastWidth)) {
+			for (int i = 0; i < 9; i++) {
+				stream[i].destRec.height = GetScreenHeight() / 34.6f;
+				stream[i].destRec.width = GetScreenWidth() / 61.5f;
+				stream[i].destRec.y = (stream[0].destRec.y / lastHeight) * GetScreenHeight() - 5;
+				stream[i].destRec.x = (stream[0].destRec.x / lastWidth) * GetScreenWidth();
+			}
+			lastHeight = GetScreenHeight();
+			lastWidth = GetScreenWidth();
+		}
 		Response next = stream[0].ActualizarHead(plat);
 		if (stream[0].destRec.y < GetScreenHeight() + 160) {
 			for (int i = 1; i < 10; i++) {

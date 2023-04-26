@@ -116,6 +116,8 @@ public:
         Inicializador(tamano, saltoMax, velSalto, velLateral, _targetFrames, adm, esBub);
 		destRec = destino;
         inicio = destino;
+        lastHeight = GetScreenHeight();
+        lastWidth = GetScreenWidth();
     };
     void Inicializador(float tamano, float saltoMax, float velSalto,float velLateral, int _targetFrames, AdministradorPompas& adm, bool esBub)
     {
