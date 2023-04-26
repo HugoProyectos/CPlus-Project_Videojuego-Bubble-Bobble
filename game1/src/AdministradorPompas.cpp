@@ -32,6 +32,11 @@ public:
 	const uint32_t CUENTA_MAXIMA_FIN_NIVEL = 60 * 10;
 	int8_t enemigosPorMatar = 0;
 	
+	int killCountBub = 0;
+	int lastKCBub = 0;
+	int killCountBob = 0;
+	int lastKCBob = 0;
+
 	/*Rectangle posicionJugador = {-1,-1,-1,-1};
 	bool jugadorCayendo = false;
 	int sentidoJugador = 2; //3->mira a la derecha 2->mira a la izquierda: variable orientacionActual de Bub
@@ -137,6 +142,69 @@ public:
 					}
 				}
 				if (pompas.at(i)->cadena) {
+					std::cout << "Kill Count 1: " << killCountBub << std::endl;
+					if (pompas.at(i)->cadena == 1) {
+						if (pompas.at(i)->enemigoContenido != NULL) {
+							killCountBub++;
+							pompas.at(i)->killCount = killCountBub;
+							switch (killCountBub) {
+							case 1:
+								scores.puntuacion1 += 1000;
+								break;
+							case 2:
+								scores.puntuacion1 += 2000;
+								break;
+							case 3:
+								scores.puntuacion1 += 4000;
+								break;
+							case 4:
+								scores.puntuacion1 += 8000;
+								break;
+							case 5:
+								scores.puntuacion1 += 16000;
+								break;
+							case 6:
+								scores.puntuacion1 += 32000;
+								break;
+							default:
+								scores.puntuacion1 += 64000;
+							}
+						}
+						else {
+							scores.puntuacion1 += 10;
+						}
+					}
+					else if (pompas.at(i)->cadena == 2) {
+						if (pompas.at(i)->enemigoContenido != NULL) {
+							killCountBob++;
+							pompas.at(i)->killCount = killCountBob;
+							switch (killCountBob) {
+							case 1:
+								scores.puntuacion2 += 1000;
+								break;
+							case 2:
+								scores.puntuacion2 += 2000;
+								break;
+							case 3:
+								scores.puntuacion2 += 4000;
+								break;
+							case 4:
+								scores.puntuacion2 += 8000;
+								break;
+							case 5:
+								scores.puntuacion2 += 16000;
+								break;
+							case 6:
+								scores.puntuacion2 += 32000;
+								break;
+							default:
+								scores.puntuacion1 += 64000;
+							};
+						}
+						else {
+							scores.puntuacion2 += 10;
+						}
+					}
 					for (int j = 0; j < pompas.size(); j++) {
 						if (!pompas.at(j)->cadena && pompas.at(j)->animacionActiva != Pompa::EXPLOTA) {
 							Rectangle ini = pompas.at(i)->destRec;
@@ -210,6 +278,69 @@ public:
 					agua.existe = true;
 				}
 				if (pompas.at(i)->cadena) {
+					std::cout << "Kill Count 2: " << killCountBub << std::endl;
+					if (pompas.at(i)->cadena == 1) {
+						if (pompas.at(i)->enemigoContenido != NULL) {
+							killCountBub++;
+							pompas.at(i)->killCount = killCountBub;
+							switch (killCountBub) {
+							case 1:
+								scores.puntuacion1 += 1000;
+								break;
+							case 2:
+								scores.puntuacion1 += 2000;
+								break;
+							case 3:
+								scores.puntuacion1 += 4000;
+								break;
+							case 4:
+								scores.puntuacion1 += 8000;
+								break;
+							case 5:
+								scores.puntuacion1 += 16000;
+								break;
+							case 6:
+								scores.puntuacion1 += 32000;
+								break;
+							default:
+								scores.puntuacion1 += 64000;
+							};
+						}
+						else {
+							scores.puntuacion1 += 10;
+						}
+					}
+					else if (pompas.at(i)->cadena == 2) {
+						if (pompas.at(i)->enemigoContenido != NULL) {
+							killCountBob++;
+							pompas.at(i)->killCount = killCountBob;
+							switch (killCountBob) {
+							case 1:
+								scores.puntuacion2 += 1000;
+								break;
+							case 2:
+								scores.puntuacion2 += 2000;
+								break;
+							case 3:
+								scores.puntuacion2 += 4000;
+								break;
+							case 4:
+								scores.puntuacion2 += 8000;
+								break;
+							case 5:
+								scores.puntuacion2 += 16000;
+								break;
+							case 6:
+								scores.puntuacion2 += 32000;
+								break;
+							default:
+								scores.puntuacion1 += 64000;
+							};
+						}
+						else {
+							scores.puntuacion2 += 10;
+						}
+					}
 					for (int j = 0; j < pompas.size(); j++) {
 						//Si es candidata a continuar la cadena y está en contacto con la pompa de la cadena
 						if (!pompas.at(j)->cadena && pompas.at(j)->animacionActiva != Pompa::EXPLOTA ) {
@@ -289,6 +420,18 @@ public:
 				//std::cout << "Creo pompa" << std::endl;
 				pompas.push_back(pompasGeneradas.at(i));
 			}
+		}
+		if (lastKCBub == killCountBub) {
+			killCountBub = 0;
+		}
+		else {
+			lastKCBub = killCountBub;
+		}
+		if (lastKCBob == killCountBob) {
+			killCountBob = 0;
+		}
+		else {
+			lastKCBob = killCountBob;
 		}
 	};
 

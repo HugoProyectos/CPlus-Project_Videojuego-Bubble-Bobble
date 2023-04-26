@@ -53,6 +53,9 @@ public:
     AdministradorPompas* admin;
     float velMax = 0;
     float velMin = 0;
+    float anchosX = 15.0f;
+    float anchosY = 15.0f; 
+
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
@@ -60,9 +63,6 @@ public:
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         if (enfadado) {
             animacionActiva = 3;
-            velocidadLateral *= 2;
-            enfadado = false;
-
         }
         velMax = 2 * velLateral;
         velMin = velLateral / 2;
@@ -78,7 +78,6 @@ public:
 
     void enfadar() {
         animacionActiva = 3;
-        velocidadLateral *= 2;
     }
 
     // Controlador de comportamiento
@@ -100,13 +99,36 @@ public:
             }
         }
         else {
+
+            if (lastHeight != GetScreenHeight()) {
+                destRec.height = GetScreenHeight() / 14.0625f;
+                destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+                distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
+                anchosY = anchosY * ((float)GetScreenHeight() / (float)lastHeight);
+                origin.y = destRec.height / 2;
+                lastHeight = GetScreenHeight();
+            }
+            if (lastWidth != GetScreenWidth()) {
+                destRec.width = GetScreenWidth() / 25.0f;
+                destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+                anchosX = anchosX * ((float)GetScreenWidth() / (float)lastWidth);
+                origin.x = destRec.width / 2;
+                lastWidth = GetScreenWidth();
+            }
+            
+            if (enfadado) {
+                animacionActiva = 3;
+                velocidadLateral =1.5f* destRec.width / 16.0f;
+                velocidadSalto =1.5f* destRec.height / 10.0f;
+            }
+            else {
+                velocidadLateral = destRec.width / 16.0f;
+                velocidadSalto = destRec.height / 10.0f;
+            }
+
             if (muerto) {
                 animacionActiva = 1;
                 Caer();
-            }
-            else if (enfadado) {
-                enfadar();
-                enfadado = false;
             }
             else if (colision == 0) {
                 SeguirJugador(playerPosition);
@@ -173,24 +195,24 @@ public:
     //funciones de comportamiento
     void SeguirJugador(Rectangle playerPosition) {
         //El movimiento vertical depende del jugador
-        if (destRec.y > playerPosition.y + 10) {
+        if (destRec.y > playerPosition.y + anchosY) {
             //Estamos por debajo del player, restamos posicion
             direccionY = 0;
             destRec.y -= velocidadLateral;
         }
-        else if (destRec.y < playerPosition.y - 10) {
+        else if (destRec.y < playerPosition.y - anchosY) {
             //Estamos por encima del player, sumamos posicion
             direccionY = 1;
             destRec.y += velocidadLateral;
         }
 
         //El movimiento horizontal depende del jugador
-        if (destRec.x > playerPosition.x + 10) {
+        if (destRec.x > playerPosition.x + anchosX) {
             //Estamos por izq del player, restamos posicion
             direccionX = 0;
             destRec.x -= velocidadLateral;
         }
-        else if (destRec.x < playerPosition.x - 10) {
+        else if (destRec.x < playerPosition.x - anchosX) {
             //Estamos por derecha del player, sumamos posicion
             direccionX = 1;
             destRec.x += velocidadLateral;
@@ -203,7 +225,7 @@ public:
 
     void MoverHorizontal(Rectangle playerPosition) {
         //El movimiento vertical depende del jugador
-        if (destRec.y > playerPosition.y + 10) {
+        if (destRec.y > playerPosition.y + anchosY) {
             //Estamos por debajo del player, restamos posicion
             if (colisionAux == 4) {
                 destRec.y -= 0.1;
@@ -212,7 +234,7 @@ public:
                 destRec.y -= velocidadLateral;
             }
         }
-        else if (destRec.y < playerPosition.y - 10) {
+        else if (destRec.y < playerPosition.y - anchosY) {
             //Estamos por encima del player, sumamos posicion
             if (colisionAux == 3) {
                 destRec.y += 0.1;
@@ -240,7 +262,7 @@ public:
 
     void MoverVertical(Rectangle playerPosition) {
         //El movimiento horizontal depende del jugador
-        if (destRec.x > playerPosition.x + 10) {
+        if (destRec.x > playerPosition.x + anchosX) {
             //Estamos por izq del player, restamos posicion
             if (colisionAux == 1) {
                 destRec.x -= 0.1;
@@ -249,7 +271,7 @@ public:
                 destRec.x -= velocidadLateral;
             }
         }
-        else if (destRec.x < playerPosition.x - 10) {
+        else if (destRec.x < playerPosition.x - anchosX) {
             //Estamos por derecha del player, sumamos posicion
             if (colisionAux == 2) {
                 destRec.x += 0.1;

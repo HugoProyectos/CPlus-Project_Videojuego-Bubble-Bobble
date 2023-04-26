@@ -422,12 +422,12 @@ public:
                     Pompa p;
                     if (eresBub) {
                         p = Pompa(spriteBurbuja, destRec, (double)(VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * ((double)lastWidth/ (double)anchoOriginal) * sentido), (double)(DISTANCIA_DISPARO * multiplicadorDistanciaDisparo * ((double)lastWidth / (double)anchoOriginal)), true, vidaPompa[nivel]);
-                        std::cout << "Dimensiones pompa; " <<p.destRec.x << "," << p.destRec.y << "/" << p.lastHeight << "," << p.lastWidth << std::endl;
+                        //std::cout << "Dimensiones pompa; " <<p.destRec.x << "," << p.destRec.y << "/" << p.lastHeight << "," << p.lastWidth << std::endl;
                     
                     } else {
                         p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa[nivel]);
                     }
-                    std::cout << "Dimensiones pompa; " <<p.destRec.x << "," << p.destRec.y << "/" << p.lastHeight << "," << p.lastWidth << std::endl;
+                    //std::cout << "Dimensiones pompa; " <<p.destRec.x << "," << p.destRec.y << "/" << p.lastHeight << "," << p.lastWidth << std::endl;
                     admin->pompas.push_back(std::make_shared<Pompa>(p));
                     PlaySound(sonidoDisparar);
                 }
@@ -774,7 +774,6 @@ public:
                     break;
                 case 3:
                     destRec.y = s.top - destRec.height / 2.0f;
-                    std::cout <<s.bot - s.top << "  " << GetScreenHeight() << std::endl;
                     enElAire = false;
                     cayendo = false;
                     saltoRecorrido = 0;
@@ -881,7 +880,6 @@ public:
 
     void compruebaSuelo(Plataforma s) {
         if (cambioMapa == 0) {
-            std::cout << s.top << " " << destRec.y << " " << destRec.height << " " << destRec.y - destRec.height << std::endl;
             if (
                 !(
                     //Comprobamos colision esquina inferior derecha
@@ -922,13 +920,11 @@ public:
             
             //Comprobamos columna derecha
             if (s.left_der < (destRec.x + destRec.width / 2.0f)) {
-                std::cout << s.left_der - s.right_der << std::endl;
                 destRec.x = s.left_der - destRec.width / 2.0f;
             }
             //Comprobamos columna izquierda
             else if (s.right_izq > (destRec.x - destRec.width / 2.0f)) {
                 destRec.x = s.right_izq + destRec.width / 2.0f;
-                std::cout << s.right_izq - s.left_izq << std::endl;
             }
         }
     }

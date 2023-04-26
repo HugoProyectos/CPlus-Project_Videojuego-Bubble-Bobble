@@ -196,22 +196,6 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 	else {
 		//Si ha iniciado cadena y ya está explotando, es solo en el primer frame que transfiere cadena
 		if (cadena != 0 && animacionActiva == EXPLOTA) {
-			if (cadena == 1) {
-				if (enemigoContenido != NULL) {
-					scr->puntuacion1 += 1000;
-				}
-				else {
-					scr->puntuacion1 += 10;
-				}
-			}
-			else if(cadena == 2){
-				if (enemigoContenido != NULL) {
-					scr->puntuacion2 += 1000;
-				}
-				else {
-					scr->puntuacion2 += 10;
-				}
-			}
 			cadena = 0;
 		} else if (cadena != 0) { // Si aún no ha explotado, inicia explosión
 			animacionActiva = EXPLOTA;
@@ -276,7 +260,6 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						
 						//Marca que su explosión debe transmitirse
 						cadena = 1; 
-
 						if (modulo == MODULO_AGUA) {
 							creaAgua = j1.sentidoJugador;
 						}
@@ -306,7 +289,6 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 					//Marca que su explosión debe transmitirse
 					cadena = 1;
-
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j1.sentidoJugador;
 					}
@@ -325,7 +307,6 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 					//Marca que su explosión debe transmitirse
 					cadena = 1;
-
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j1.sentidoJugador;
 					}
@@ -390,7 +371,6 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 						//Marca que su explosión debe transmitirse
 						cadena = 2;
-
 						if (modulo == MODULO_AGUA) {
 							creaAgua = j2.sentidoJugador;
 						}
@@ -420,7 +400,6 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 					//Marca que su explosión debe transmitirse
 					cadena = 2;
-
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j2.sentidoJugador;
 					}
@@ -439,7 +418,6 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 					//Marca que su explosión debe transmitirse
 					cadena = 2;
-
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j2.sentidoJugador;
 					}
