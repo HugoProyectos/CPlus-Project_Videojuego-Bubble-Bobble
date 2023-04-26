@@ -117,41 +117,41 @@ public:
             }
 
             if (muerto) {
-                std::cout << "mueto" << std::endl;
+                //std::cout << "mueto" << std::endl;
                 animacionActiva = 1;
                 Caer();
             }
             else if (!saltando && enElAire) {
-                std::cout << "lento" << std::endl;
+                //std::cout << "lento" << std::endl;
 
                 CaerLento();
             }
             else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - anchosX && destRec.x < playerPosition.x + anchosX)) { //Si el personaje esta encima
-                std::cout << "salto" << std::endl;
+                //std::cout << "salto" << std::endl;
 
                 Salto(playerPosition);
             }
             else if (destRec.y != playerPosition.y) {
                 if (direccionX == 0) {
                     //Izquierda
-                    std::cout << "izq random" << std::endl;
+                   // std::cout << "izq random" << std::endl;
 
                     MoverIzq();
                 }
                 else {
                     //Derecha
-                    std::cout << "der random" << std::endl;
+                  //  std::cout << "der random" << std::endl;
 
                     MoverDer();
                 }
             }
             else if (destRec.x > playerPosition.x + anchosX) { //Si el personaje esta a la izquierda
-                std::cout << "izq siguendo" << std::endl;
+                //std::cout << "izq siguendo" << std::endl;
 
                 MoverIzq();
             }
             else if (destRec.x < playerPosition.x - anchosX) { //Si el personaje esta a la derecha
-                std::cout << "der diguiendo" << std::endl;
+                //std::cout << "der diguiendo" << std::endl;
 
                 MoverDer();
             }
@@ -165,7 +165,7 @@ public:
                 cayendo = true;
             }
             else if (destRec.y < -50) {
-                std::cout << "me salgo por arriba?" << std::endl;
+                //std::cout << "me salgo por arriba?" << std::endl;
 
                 destRec.y = GetScreenHeight() + 5;
             }
