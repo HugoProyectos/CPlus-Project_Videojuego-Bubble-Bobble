@@ -730,7 +730,7 @@ int main(void)
                 currentScreen = MAIN_MENU; 
                 admin.scores.hayP1 = false;
                 bub.numVidas = 2;
-                bub.destRec = destBub;
+                bub.destRec = {GetScreenWidth() * (destBub.x / 800), GetScreenHeight() * (destBub.y/450), GetScreenWidth() / 25.0f, GetScreenHeight() / 14.0625f };
                 bub.cambioMapa = 2;
                 bub.muerto = false;
                 bub.muriendo = false;
@@ -738,7 +738,7 @@ int main(void)
                     admin.scores.hayP2 = false;
                     contadorVidas.hayP2 = false;
                     bob.numVidas = 2;
-                    bob.destRec = destBub;
+                    bob.destRec = { GetScreenWidth() * (destBub.x / 800), GetScreenHeight() * (destBub.y / 450), GetScreenWidth() / 25.0f, GetScreenHeight() / 14.0625f };
                     bob.cambioMapa = 2;
                     bob.muerto = false;
                     bob.muriendo = false;

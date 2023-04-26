@@ -110,6 +110,11 @@ public:
     float deceleracion = 0.1f;
     float velocidadActual = 0;
 
+    //Invulneravilidad
+    int framesInvulnerabilidad = 0;
+    bool invulnerable = false;
+    bool dibuja = true;
+
     Bub() = default; //Debe llamarse a Inicializador
 
     Bub(float tamano, float saltoMax, float velSalto, float velLateral, int _targetFrames, Rectangle destino, AdministradorPompas& adm, bool esBub) {
@@ -165,6 +170,16 @@ public:
     };
 
     void Actualizar() {
+        if (framesInvulnerabilidad > 0) {
+            framesInvulnerabilidad--;
+            if (framesInvulnerabilidad % 10 == 0) { //Parpadeo
+                dibuja = !dibuja;
+            }
+        }
+        else {
+            invulnerable = false;
+            dibuja = true;
+        }
         if (lastHeight != GetScreenHeight()) {
             if (cambioMapa > 0) {
                 destRec.height /= 2;
@@ -506,7 +521,7 @@ public:
 
                 //Comprueba choque con los enemigos
                 for (int i = 0; i < admin->enemigos.size(); i++) {
-                    if (!admin->enemigos.at(i)->borrame && !admin->enemigos.at(i)->muerto && !muriendo
+                    if (!admin->enemigos.at(i)->borrame && !admin->enemigos.at(i)->muerto && !muriendo && !invulnerable
                         && ((destRec.y + destRec.height / 2.0f) >= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2.0f)
                             && (destRec.y - destRec.height / 2.0f) <= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2.0f)
                             || (destRec.y + destRec.height / 2.0f) >= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2.0f)
@@ -636,6 +651,8 @@ public:
 				cayendo = true;
                 disparando = false;
                 animacionActiva = STANDING;
+                invulnerable = true;
+                framesInvulnerabilidad = 60 * 3; //3 segundos
                 if (eresBub) {
                     destRec.x = posicionOriginalBub.x;
                     destRec.y = posicionOriginalBub.y;
@@ -664,13 +681,14 @@ public:
             orientacionActual = switchOrientacion;
         }
         srcRec.y = (float)heightAnimation * (float)(animacionActiva % NUM_FILAS);
-        if (!segundaSkin) {
-            DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
+        if (dibuja) {
+            if (!segundaSkin) {
+                DrawTexturePro(sprite, srcRec, destRec, origin, 0.0f, WHITE);
+            }
+            else {
+                DrawTexturePro(sprite2, srcRec, destRec, origin, 0.0f, WHITE);
+            }
         }
-        else {
-            DrawTexturePro(sprite2, srcRec, destRec, origin, 0.0f, WHITE);
-        }
-        
     }
 
     void compruebaColision(Plataforma& s) {
