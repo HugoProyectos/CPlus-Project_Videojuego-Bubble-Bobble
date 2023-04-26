@@ -56,6 +56,12 @@ public:
     bool resoluciones1_pulsado = false;
     bool resoluciones2_pulsado = false;
 
+    const char* IA_MODO[2] = {
+        "Original", "Alternative"
+    };
+    unsigned int IA_mode = 0;
+    bool IA_pulsado = false;
+
 
     Controls() = default;
 
@@ -149,7 +155,7 @@ public:
         file.generate(ini);
     }
 
-    void Actualizar() {
+    void Actualizar(int IA_MODE) {
         this->actualizarControlesProvisionales();
 
         /*if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -225,12 +231,17 @@ public:
         // Si ponemos el cursor encima
         if (CheckCollisionPointRec(mousePoint, rectAux)) {
             // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
-            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && resoluciones2_mode == 0 && resoluciones1_pulsado == false) {
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && resoluciones2_mode != 2 && resoluciones1_pulsado == false) {
                 resoluciones1_mode = (resoluciones1_mode + 1) % 6;
                 SetWindowSize(resoluciones1_width[resoluciones1_mode], resoluciones1_height[resoluciones1_mode]);
                 resoluciones1_pulsado = true;
             }
-            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+            else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) && resoluciones2_mode != 2 && resoluciones1_pulsado == false) {
+                resoluciones1_mode = (resoluciones1_mode + 6 - 1) % 6;
+                SetWindowSize(resoluciones1_width[resoluciones1_mode], resoluciones1_height[resoluciones1_mode]);
+                resoluciones1_pulsado = true;
+            }
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) || IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
                 resoluciones1_pulsado = false;
             }
         }
@@ -269,8 +280,31 @@ public:
                 resoluciones2_pulsado = false;
             }
         }
-        
-        
+
+        // Modos ventana
+        positionX = 20;
+        positionY = 20 + 30 * (4 + 3);
+        // Calculo el tamaño para hacer el rectangulo a medida
+        texto = TextFormat("IA mode: %s", this->IA_MODO[IA_mode]);
+        tamano_texto = MeasureText(texto.c_str(), 20);
+
+        // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
+        rectAux = { (float)positionX, (float)positionY, (float)tamano_texto, 30 };
+        //DrawRectangle(20, 20 + 30 * i, 200, 30, SKYBLUE);
+        mousePoint = GetMousePosition();
+
+        // Si ponemos el cursor encima
+        if (CheckCollisionPointRec(mousePoint, rectAux)) {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && IA_pulsado == false) {
+                IA_mode = (IA_mode + 1) % 2;
+                IA_pulsado = true;
+            }
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+                IA_pulsado = false;
+            }
+        }
+        IA_MODE = IA_mode;
     }
 
     void Dibujar() {
@@ -346,6 +380,28 @@ public:
         positionY = 20 + 30 * (4 + 2);
         // Calculo el tamaño para hacer el rectangulo a medida
         texto = TextFormat("Window mode: %s", this->resoluciones2_names[resoluciones2_mode]);
+        tamano_texto = MeasureText(texto.c_str(), 20);
+
+        // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
+        rectAux = { (float)positionX, (float)positionY, (float)tamano_texto, 30 };
+        //DrawRectangle(20, 20 + 30 * i, 200, 30, SKYBLUE);
+        mousePoint = GetMousePosition();
+
+        // Si ponemos el cursor encima
+        if (CheckCollisionPointRec(mousePoint, rectAux)) {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            DrawText(texto.c_str(), positionX, positionY, 20, RED);
+        }
+        else {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            DrawText(texto.c_str(), positionX, positionY, 20, BLACK);
+        }
+
+        // Modo IA
+        positionX = 20;
+        positionY = 20 + 30 * (4 + 3);
+        // Calculo el tamaño para hacer el rectangulo a medida
+        texto = TextFormat("IA mode: %s", this->IA_MODO[IA_mode]);
         tamano_texto = MeasureText(texto.c_str(), 20);
 
         // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla

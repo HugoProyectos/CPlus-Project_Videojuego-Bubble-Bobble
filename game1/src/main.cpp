@@ -63,6 +63,7 @@ int main(void)
     // Controls:
     //--------------------------------------------------------------------------------------
     Controls controls = Controls("config.ini");
+    int Modo_IA = 0;  // 0 -> IA original, 1 -> IA propia
     //--------------------------------------------------------------------------------------
 
     // GameOver:
@@ -129,6 +130,20 @@ int main(void)
     //bub.nivel = 4;
     //bob.nivel = 4;
 
+    //--------------------------------------------------------------------------------------
+    // Asignar controles iniciales
+    credits.tecla = controls.coin;
+    tecla_p1 = controls.play1;
+    tecla_p2 = controls.play2;
+    bub.left = controls.left_p1;
+    bub.right = controls.right_p1;
+    bub.jump = controls.jump_p1;
+    bub.shoot = controls.spit_p1;
+    bob.left = controls.left_p2;
+    bob.right = controls.right_p2;
+    bob.jump = controls.jump_p2;
+    bob.shoot = controls.spit_p2;
+    //--------------------------------------------------------------------------------------
     
     bool jugando_nivel = true; 
 
@@ -168,7 +183,7 @@ int main(void)
                 admin.scores.hayP1 = true;
                 plataformas.inicio_de_ronda(1);
             }
-            else if (IsKeyPressed(tecla_p2) && credits.creditos >= 2) { 
+            else if (IsKeyPressed(tecla_p2) && credits.creditos >= 2) {  
                 currentScreen = NIVEL_1;
                 credits.creditos -= 2;
                 admin.scores.hayP1 = true;
@@ -664,16 +679,16 @@ int main(void)
 
                 if (admin.hurryUp) {
                     plataformas.SeñalHurryUp();
-                    admin.hurryUp = false;
+                    admin.hurryUp = false; 
                 }
 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
                     gameover.ronda = 5;
-                    currentScreen = GAME_OVER;
+                    currentScreen = GAME_OVER;  
                 }
                 else if (gameover.hayP2 && bub.muerto && bob.muerto && bub.numVidas == 0 && bob.numVidas == 0) {
                     gameover.ronda = 5;
-                    currentScreen = GAME_OVER;
+                    currentScreen = GAME_OVER; 
                 }
 
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
@@ -694,7 +709,7 @@ int main(void)
         } break;
         case CONTROLS_MENU:
         {
-            controls.Actualizar();
+            controls.Actualizar(Modo_IA);
             if (IsKeyPressed(KEY_ENTER)) {
                 // ASIGNAR TODOS LOS BOTONES
                 controls.guardarControlesNuevos();
@@ -707,7 +722,7 @@ int main(void)
                 controls.keys[1] = controls.right_p1;
                 controls.keys[2] = controls.jump_p1;
                 controls.keys[3] = controls.spit_p1;
-                controls.keys[4] = controls.left_p2;
+                controls.keys[4] = controls.left_p2; 
                 controls.keys[5] = controls.right_p2;
                 controls.keys[6] = controls.jump_p2;
                 controls.keys[7] = controls.spit_p2;*/
@@ -717,9 +732,9 @@ int main(void)
                 bub.shoot = controls.spit_p1;
                 bob.left = controls.left_p2;
                 bob.right = controls.right_p2;
-                bob.jump = controls.jump_p2;
+                bob.jump = controls.jump_p2; 
                 bob.shoot = controls.spit_p2;
-                //Pompa::controlesJugador = controls; 
+                //Pompa::controlesJugador = controls;  // Descomentar
 
                 currentScreen = MAIN_MENU;
             }
@@ -798,8 +813,9 @@ int main(void)
         case NIVEL_1:
         {
             // TODO: Draw NIVEL_1 screen here! 
-            columnas.Dibujar();
+            columnas.DibujarIzquierda();
             plataformas.Dibujar();
+            columnas.DibujarDerecha();
             //scores.Dibujar();   
             admin.scores.Dibujar();
             admin.agua.Dibujar();
@@ -817,8 +833,9 @@ int main(void)
         case NIVEL_2:
         {
             // TODO: Draw NIVEL_2 screen here!
-            columnas.Dibujar();
+            columnas.DibujarIzquierda();
             plataformas.Dibujar();
+            columnas.DibujarDerecha();
             admin.scores.Dibujar();
             admin.agua.Dibujar();
             contadorVidas.Dibujar();
@@ -836,8 +853,9 @@ int main(void)
         case NIVEL_3:
         {
             // TODO: Draw NIVEL_2 screen here!
-            columnas.Dibujar();
+            columnas.DibujarIzquierda();
             plataformas.Dibujar();
+            columnas.DibujarDerecha();
             admin.scores.Dibujar();
             admin.agua.Dibujar();
             contadorVidas.Dibujar();
@@ -855,8 +873,9 @@ int main(void)
         case NIVEL_4:
         {
             // TODO: Draw NIVEL_2 screen here!
-            columnas.Dibujar();
+            columnas.DibujarIzquierda();
             plataformas.Dibujar();
+            columnas.DibujarDerecha();
             admin.scores.Dibujar();
             admin.agua.Dibujar();
             contadorVidas.Dibujar();
@@ -874,8 +893,9 @@ int main(void)
         case NIVEL_5:
         {
             // TODO: Draw NIVEL_2 screen here!
-            columnas.Dibujar();
+            columnas.DibujarIzquierda();
             plataformas.Dibujar();
+            columnas.DibujarDerecha();
             admin.scores.Dibujar();
             admin.agua.Dibujar();
             contadorVidas.Dibujar();
@@ -910,7 +930,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
 
     // TODO: Unload all loaded data (textures, fonts, audio) here!
-    main_menu.Unload();
+    main_menu.Unload();   
     columnas.Unload();
     for (int i = plataformas.listaPlataforma.size() - 1; i >= 0; i--) {
         plataformas.listaPlataforma[i].Unload();

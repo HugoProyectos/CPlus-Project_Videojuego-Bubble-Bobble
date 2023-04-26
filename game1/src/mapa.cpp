@@ -216,8 +216,8 @@ public:
                 destRect = {
                     listaPlataforma[i].left, // Posicion x de la esquina topleft
                     listaPlataforma[i].top, // Posicion y de la esquina topleft
-                    anchura_bloque,  // anchura bloque
-                    altura_bloque // altura bloque
+                    anchura_bloque + anchura_bloque/2,  // anchura bloque
+                    altura_bloque  + altura_bloque/2 // altura bloque
                 };
                 for (int tamanoX = 0; tamanoX < listaPlataforma[i].tamanoX; tamanoX++) {
                     int bloques_a_dibujar = listaPlataforma[i].tamanoY;
@@ -248,8 +248,8 @@ public:
                 destRect = {
                     listaPlataforma[i].left, // Posicion x de la esquina topleft
                     listaPlataforma[i].top - distancia_ya_movida, // Posicion y de la esquina topleft
-                    anchura_bloque,  // anchura bloque
-                    altura_bloque // altura bloque
+                    anchura_bloque + anchura_bloque / 2,  // anchura bloque
+                    altura_bloque + altura_bloque / 2  // altura bloque
                 };
                 for (int tamanoX = 0; tamanoX < listaPlataforma[i].tamanoX; tamanoX++) {
                     int bloques_a_dibujar = listaPlataforma[i].tamanoY;
@@ -272,8 +272,8 @@ public:
                 destRect = {
                     listaPlataformaSiguiente[i].left, // Posicion x de la esquina topleft
                     listaPlataformaSiguiente[i].top + (GetScreenHeight() - tamanoMargenInf - tamanoMargenSup + (altura_bloque * 6)) - distancia_ya_movida, // Posicion y de la esquina topleft
-                    anchura_bloque,  // anchura bloque
-                    altura_bloque // altura bloque
+                    anchura_bloque + anchura_bloque / 2,  // anchura bloque
+                    altura_bloque + altura_bloque / 2  // altura bloque
                 };
                 for (int tamanoX = 0; tamanoX < listaPlataformaSiguiente[i].tamanoX; tamanoX++) {
                     int bloques_a_dibujar = listaPlataformaSiguiente[i].tamanoY;
@@ -434,7 +434,7 @@ public:
         this->right_der = GetScreenWidth() - anchura_bloque + anchura_bloque;
     };
 
-    void Dibujar() {
+    void DibujarIzquierda() {
         // Destination rectangle (screen rectangle where drawing part of texture)
         float tamanoMargenSup = ratioMargenSup != 0 ? GetScreenHeight() / ratioMargenSup : 0;
         float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
@@ -446,15 +446,7 @@ public:
         if (!cargando_nivel_siguiente) {
             
             // Columna izquierda
-            destRect = { 0, tamanoMargenSup, anchura_bloque, altura_bloque };
-            for (int i = 0; i < BLOQUE_GRANDE_ALTO; i++)
-            {
-                DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
-                destRect.y += altura_bloque;
-            }
-
-            // Columna derecha
-            destRect = { (GetScreenWidth() - anchura_bloque), tamanoMargenSup, anchura_bloque, altura_bloque };
+            destRect = { 0, tamanoMargenSup, anchura_bloque + anchura_bloque/ 4, altura_bloque + altura_bloque/4 };
             for (int i = 0; i < BLOQUE_GRANDE_ALTO; i++)
             {
                 DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
@@ -469,7 +461,7 @@ public:
             float movimiento_por_frame = altura_bloque * (BLOQUE_GRANDE_ALTO + 3) / float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
             this->distancia_ya_movida += movimiento_por_frame;
             // Columna izquierda
-            destRect = { 0, tamanoMargenSup - distancia_ya_movida, anchura_bloque, altura_bloque };
+            destRect = { 0, tamanoMargenSup - distancia_ya_movida, anchura_bloque + anchura_bloque / 4, altura_bloque + altura_bloque / 4 };
             for (int i = 0; i < (BLOQUE_GRANDE_ALTO + 1); i++)
             {
                 DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
@@ -482,8 +474,40 @@ public:
             }
             DrawRectangle(0, 0, anchura_bloque, tamanoMargenSup, BLACK);
 
+
+            // Poner nº de nivel
+            int tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
+            DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
+
+        }
+        
+        
+    }
+    void DibujarDerecha() {
+        // Destination rectangle (screen rectangle where drawing part of texture)
+        float tamanoMargenSup = ratioMargenSup != 0 ? GetScreenHeight() / ratioMargenSup : 0;
+        float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
+        float altura_bloque = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_GRANDE_ALTO;
+        float anchura_bloque = GetScreenWidth() / (float)BLOQUE_GRANDE_ANCHO;
+
+
+
+        if (!cargando_nivel_siguiente) {
+
             // Columna derecha
-            destRect = { (GetScreenWidth() - anchura_bloque), tamanoMargenSup - distancia_ya_movida, anchura_bloque, altura_bloque };
+            destRect = { (GetScreenWidth() - anchura_bloque), tamanoMargenSup, anchura_bloque + anchura_bloque / 4, altura_bloque + altura_bloque / 4 };
+            for (int i = 0; i < BLOQUE_GRANDE_ALTO; i++)
+            {
+                DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
+                destRect.y += altura_bloque;
+            }
+
+        }
+        else {
+            float movimiento_por_frame = altura_bloque * (BLOQUE_GRANDE_ALTO + 3) / float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
+
+            // Columna derecha
+            destRect = { (GetScreenWidth() - anchura_bloque), tamanoMargenSup - distancia_ya_movida, anchura_bloque + anchura_bloque / 4, altura_bloque + altura_bloque / 4 };
             for (int i = 0; i < (BLOQUE_GRANDE_ALTO + 1); i++)
             {
                 DrawTexturePro(bloque_grande, srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
@@ -496,10 +520,6 @@ public:
             }
             DrawRectangle(GetScreenWidth() - anchura_bloque, 0, GetScreenWidth(), tamanoMargenSup, BLACK);
 
-            // Poner nº de nivel
-            int tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
-            DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
-
             // Resetear valores a la normalidad
             if (distancia_ya_movida >= altura_bloque * (BLOQUE_GRANDE_ALTO + 3)) {
                 this->cargando_nivel_siguiente = false;
@@ -508,8 +528,8 @@ public:
                 this->numeroNivel = this->numeroNivelSiguiente;
             }
         }
-        
-        
+
+
     }
 
     void CargarSiguienteNivel(std::string ruta_bloque_grande_siguiente, unsigned int numeroNivelSiguiente) {
