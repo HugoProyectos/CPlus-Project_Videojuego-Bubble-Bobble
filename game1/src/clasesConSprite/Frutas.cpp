@@ -75,6 +75,7 @@ public:
     int alturaMax;
     clock_t temp;
     Scores* score;
+    int asciende = 0;
 
 
 	Frutas() = default;
@@ -145,10 +146,12 @@ public:
 
         if (muerto_bub) {
             animacionActiva = (i*3) + 1;
+            velCaida = 2;
             Asciende();
         }
         if (muerto_bob) {
             animacionActiva = (i * 3) + 2;
+            velCaida = 2;
             Asciende();
         }
 
@@ -183,7 +186,8 @@ public:
 	}
 
     void Asciende() {
-        if( (destRec.y - velCaida / 2) > alturaMax ){
+        if( asciende < 50){
+            asciende += 1;
             destRec.y -= velCaida / 2;
         }
         else if (!eliminame) {
@@ -350,15 +354,7 @@ public:
                 )
             ) {
             // No colisiona con plataforma
-            enElAire = true;
-        }
-        else if (muerto_bub) {
             enElAire = false;
-            animacionActiva = 1;
-        }
-        else if (muerto_bob) {
-            enElAire = false;
-            animacionActiva = 2;
         }
         else {
             enElAire = false;
