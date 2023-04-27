@@ -57,7 +57,7 @@ int main(void)
     // Nivel 1:
     //--------------------------------------------------------------------------------------
     Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f);  
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f);   
     //--------------------------------------------------------------------------------------
 
     // Controls:
@@ -70,13 +70,20 @@ int main(void)
     int Modo_mapa = controls.mapa_modo; // 0 -> 2.5D, 1 -> 2D
     plataformas.modo_2d = Modo_mapa == 1 ? true : false;
     columnas.modo_2d = Modo_mapa == 1 ? true : false;
+    int Mute_music = controls.music_modo; // 1 -> muted
+    int Mute_effect = controls.effect_modo; // 1 -> muted
+    main_menu.mute_music = Mute_music == 1 ? true : false;  
+    credits.mute_sound = Mute_effect == 1 ? true : false;   
+    plataformas.mute_effect = Mute_effect == 1 ? true : false;
+    plataformas.mute_music = Mute_music == 1 ? true : false; 
     //--------------------------------------------------------------------------------------
 
     // GameOver:
     //--------------------------------------------------------------------------------------
     GameOver gameover = GameOver(300, 40.0f, 0.0f);
+    gameover.mute_music = Mute_music == 1 ? true : false; 
     //--------------------------------------------------------------------------------------
-    
+    // 
     //int numPlat = plataformas.listaPlataforma.size();
 
     AdministradorPompas admin = AdministradorPompas();
@@ -716,8 +723,8 @@ int main(void)
             }  
         } break;
         case CONTROLS_MENU:
-        {
-            controls.Actualizar(Modo_IA, Modo_skins, Modo_mapa);
+        { 
+            controls.Actualizar(Modo_IA, Modo_skins, Modo_mapa, Mute_music, Mute_effect);
             if (IsKeyPressed(KEY_ENTER)) {
                 // ASIGNAR TODOS LOS BOTONES
                 controls.guardarControlesNuevos();
@@ -726,13 +733,18 @@ int main(void)
                 tecla_p2 = controls.play2; 
                 columnas.modo_2d = Modo_mapa == 1 ? true : false;
                 plataformas.modo_2d = Modo_mapa == 1 ? true : false;
+                main_menu.mute_music = Mute_music == 1 ? true : false;
+                credits.mute_sound = Mute_effect == 1 ? true : false;
+                plataformas.mute_effect = Mute_effect == 1 ? true : false;
+                plataformas.mute_music = Mute_music == 1 ? true : false;
+                gameover.mute_music = Mute_music == 1 ? true : false;
                 // ...
                 // Asignamos los controles de los jugadores 
                 /*controls.keys[0] = controls.left_p1;
                 controls.keys[1] = controls.right_p1;
                 controls.keys[2] = controls.jump_p1;
                 controls.keys[3] = controls.spit_p1;
-                controls.keys[4] = controls.left_p2; 
+                controls.keys[4] = controls.left_p2;  
                 controls.keys[5] = controls.right_p2;
                 controls.keys[6] = controls.jump_p2;
                 controls.keys[7] = controls.spit_p2;*/ 

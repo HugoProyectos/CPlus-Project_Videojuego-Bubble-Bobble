@@ -80,12 +80,23 @@ public:
         "2.5D", "2D"
     };
 
+    unsigned int music_modo = 0;
+    bool music_pulsado = false;
+    const char* MUSIC_MODE[2] = {
+        "ON", "OFF"
+    };
+
+    unsigned int effect_modo = 0;
+    bool effect_pulsado = false;
+    const char* EFFECT_MODE[2] = {
+        "ON", "OFF"
+    };
 
     bool soundPlaying = false;
 
     void playSound(Sound soundToPlay)
     {
-        if (!soundPlaying)
+        if (!soundPlaying && effect_modo == 0)
         {
             PlaySound(soundToPlay);
             soundPlaying = true;
@@ -103,9 +114,15 @@ public:
         cargarControles(ruta_fichero_configuracion);
     }
 
-    ~Controls() {}
+    ~Controls() {
+        UnloadSound(rollover);
+        UnloadSound(clic);
+    }
 
-    void Unload() {}
+    void Unload() {
+        UnloadSound(rollover);
+        UnloadSound(clic);
+    }
 
     void actualizarControles() {
         this->left_p1 = keys[0];
@@ -161,6 +178,8 @@ public:
         this->mapa_modo = stoi(ini["global"]["map_2d"]);
         this->resoluciones2_mode = stoi(ini["screen"]["screen_mode"]);
         this->resoluciones1_mode = stoi(ini["screen"]["resolution"]);
+        this->music_modo = stoi(ini["sound"]["mute_music"]);
+        this->effect_modo = stoi(ini["sound"]["mute_effects"]);
     }
 
     void guardarControlesNuevos() {
@@ -192,11 +211,14 @@ public:
         ini["screen"]["screen_mode"] = std::to_string(this->resoluciones2_mode);
         ini["screen"]["resolution"] = std::to_string(this->resoluciones1_mode);
 
+        ini["sound"]["mute_music"] = std::to_string(this->music_modo);
+        ini["sound"]["mute_effects"] = std::to_string(this->effect_modo);
+
         // generate an INI file (overwrites any previous file)
         file.write(ini);
     }
 
-    void Actualizar(int & IA_MODE, int  &SKIN_MODE, int & MAPA_MODE) {
+    void Actualizar(int & IA_MODE, int  &SKIN_MODE, int & MAPA_MODE, int &MUSIC_OUT, int & EFFECT_OUT) {
         this->actualizarControlesProvisionales();
 
         /*if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -343,7 +365,9 @@ public:
         if (CheckCollisionPointRec(mousePoint, rectAux)) {
             // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && IA_pulsado == false) {
-                PlaySound(clic);
+                if (effect_modo == 0) {
+                    PlaySound(clic);
+                }
                 IA_mode = (IA_mode + 1) % 2;
                 IA_pulsado = true;
             }
@@ -396,7 +420,9 @@ public:
         if (CheckCollisionPointRec(mousePoint, rectAux)) {
             // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && mapa_pulsado == false) {
-                PlaySound(clic);
+                if (effect_modo == 0) {
+                    PlaySound(clic);
+                }
                 mapa_modo = (mapa_modo + 1) % 2;
                 mapa_pulsado = true;
             }
@@ -405,6 +431,63 @@ public:
             }
         }
         MAPA_MODE = mapa_modo;
+
+
+        // Modos MUSIC
+        positionX = 20;
+        positionY = 20 + 30 * (4 + 4);
+        // Calculo el tamaño para hacer el rectangulo a medida
+        texto = TextFormat("Musica: %s", this->MUSIC_MODE[music_modo]);
+        tamano_texto = MeasureText(texto.c_str(), 20);
+
+        // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
+        rectAux = { (float)positionX, (float)positionY, (float)tamano_texto, 20 };
+        //DrawRectangle(20, 20 + 30 * i, 200, 30, SKYBLUE);
+        mousePoint = GetMousePosition();
+
+        // Si ponemos el cursor encima
+        if (CheckCollisionPointRec(mousePoint, rectAux)) {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && music_pulsado == false) {
+                if (effect_modo == 0) {
+                    PlaySound(clic);
+                }
+                music_modo = (music_modo + 1) % 2;
+                music_pulsado = true;
+            }
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+                music_pulsado = false;
+            }
+        }
+        MUSIC_OUT = music_modo;
+
+        // Modos EFFECT
+        positionX = 20 + (GetScreenWidth() / 2);
+        positionY = 20 + 30 * (4 + 4);
+        // Calculo el tamaño para hacer el rectangulo a medida
+        texto = TextFormat("Efectos de sonido: %s", this->EFFECT_MODE[effect_modo]);
+        tamano_texto = MeasureText(texto.c_str(), 20);
+
+        // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
+        rectAux = { (float)positionX, (float)positionY, (float)tamano_texto, 20 };
+        //DrawRectangle(20, 20 + 30 * i, 200, 30, SKYBLUE);
+        mousePoint = GetMousePosition();
+
+        // Si ponemos el cursor encima
+        if (CheckCollisionPointRec(mousePoint, rectAux)) {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && effect_pulsado == false) {
+                if (effect_modo == 0) {
+                    PlaySound(clic);
+                }
+                effect_modo = (effect_modo + 1) % 2;
+                effect_pulsado = true;
+            }
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+                effect_pulsado = false;
+            }
+        }
+        EFFECT_OUT = effect_modo;
 
     }
 
@@ -568,13 +651,58 @@ public:
             DrawText(texto.c_str(), positionX, positionY, 20, WHITE);
         }
 
-        // Si se ha seleccionado una funcionalidad, pedir al usuario que presione una tecla para asignarla
-        if (selected_key >= 0) {
-            DrawText(TextFormat("Pulse una tecla para asignarla a la funcionalidad %s", keys_names[selected_key]), 20, 280, 20, WHITE);
+
+        // Modo MUSIC
+        positionX = 20 ;
+        positionY = 20 + 30 * (4 + 4);
+        // Calculo el tamaño para hacer el rectangulo a medida
+        texto = TextFormat("Musica: %s", this->MUSIC_MODE[music_modo]);
+        tamano_texto = MeasureText(texto.c_str(), 20);
+
+        // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
+        rectAux = { (float)positionX, (float)positionY, (float)tamano_texto, 20 };
+        //DrawRectangle(20, 20 + 30 * i, 200, 30, SKYBLUE);
+        mousePoint = GetMousePosition();
+
+        // Si ponemos el cursor encima
+        if (CheckCollisionPointRec(mousePoint, rectAux)) {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            DrawText(texto.c_str(), positionX, positionY, 20, RED);
         }
         else {
-            DrawText("Pulse ENTER para guardar los controles y empezar a jugar", 20, 280, 20, WHITE);
-            DrawText("Pulse BACKSPACE para volver a los controles predeterminados", 20, 280 + 30, 20, WHITE);
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            DrawText(texto.c_str(), positionX, positionY, 20, WHITE);
+        }
+
+        // Modo EFFECT
+        positionX = 20 + (GetScreenWidth() / 2) ;
+        positionY = 20 + 30 * (4 + 4);
+        // Calculo el tamaño para hacer el rectangulo a medida
+        texto = TextFormat("Efectos de sonido: %s", this->EFFECT_MODE[effect_modo]);
+        tamano_texto = MeasureText(texto.c_str(), 20);
+
+        // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
+        rectAux = { (float)positionX, (float)positionY, (float)tamano_texto, 20 };
+        //DrawRectangle(20, 20 + 30 * i, 200, 30, SKYBLUE);
+        mousePoint = GetMousePosition();
+
+        // Si ponemos el cursor encima
+        if (CheckCollisionPointRec(mousePoint, rectAux)) {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            DrawText(texto.c_str(), positionX, positionY, 20, RED);
+        }
+        else {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            DrawText(texto.c_str(), positionX, positionY, 20, WHITE);
+        }
+
+        // Si se ha seleccionado una funcionalidad, pedir al usuario que presione una tecla para asignarla
+        if (selected_key >= 0) {
+            DrawText(TextFormat("Pulse una tecla para asignarla a la funcionalidad %s", keys_names[selected_key]), 20, GetScreenHeight() - 30, 20, WHITE);
+        }
+        else {
+            DrawText("Pulse ENTER para guardar los controles y empezar a jugar", 20, GetScreenHeight() - 60, 20, WHITE);
+            DrawText("Pulse BACKSPACE para volver a los controles predeterminados", 20, GetScreenHeight() - 60 + 30, 20, WHITE);
         }
     }
 

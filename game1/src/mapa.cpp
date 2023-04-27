@@ -122,6 +122,11 @@ public:
     Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
     Music music2 = LoadMusicStream("resources/music/sonido_gigachad.mp3");
 
+    bool mute_music = false;
+    bool mute_effect = false;
+
+    float ratio = 0;
+
     Plataformas() = default;
 
     Plataformas(std::string ruta_bloque_pequeno, std::string ruta_ubicacion_bloques, float margenSuperior, float margenInferior) {
@@ -144,7 +149,7 @@ public:
 
         this->ratioMargenSup = margenSuperior != 0 ? GetScreenHeight() / margenSuperior : 0;
         this->ratioMargenInf = margenInferior != 0 ? GetScreenHeight() / margenInferior : 0;
-
+        this->ratio = (GetScreenHeight() - margenInferior - margenSuperior) / 40;
         PlayMusicStream(music);
     }
 
@@ -175,15 +180,22 @@ public:
     ~Plataformas() {
         UnloadTexture(bloque_pequeno);
         UnloadMusicStream(music);
+        UnloadMusicStream(music2);
+        UnloadSound(sound);
     }
 
     void Unload() {
         UnloadTexture(bloque_pequeno);
         UnloadMusicStream(music);
+        UnloadMusicStream(music2);
+        UnloadSound(sound);
     }
 
     void Actualizar() {
-        UpdateMusicStream(music);
+        if (!mute_music) {
+            UpdateMusicStream(music);
+        }
+        
         for (int i = 0; i < listaPlataforma.size(); i++) {
             listaPlataforma[i].Actualizar(ratioMargenSup, ratioMargenInf);
         }
@@ -244,7 +256,7 @@ public:
             if (mostrar_hurryup) {
                 float tamanoPantalla = (float)GetScreenHeight() - tamanoMargenSup - tamanoMargenInf;
                 int tamano = MeasureText(texto_hurryup.c_str(), 40);
-                DrawText(texto_hurryup.c_str(), (GetScreenWidth() - tamano) / 2, tamanoMargenSup + (tamanoPantalla / 2) - 20, 40, colores[indice]);
+                DrawText(texto_hurryup.c_str(), (GetScreenWidth() - tamano) / 2, tamanoMargenSup + (tamanoPantalla / 2) - 20, GetScreenHeight() /  ratio, colores[indice]);
             }
             DrawRectangle(listaPlataforma[0].left, 0, GetScreenWidth() - listaPlataforma[0].left, tamanoMargenSup, BLACK);
 
@@ -312,8 +324,8 @@ public:
         }
         if (mostrar_inicio_ronda) {
             float tamanoPantalla = (float)GetScreenHeight() - tamanoMargenSup - tamanoMargenInf;
-            int tamano = MeasureText(texto_inicio_ronda.c_str(), 40);
-            DrawText(texto_inicio_ronda.c_str(), (GetScreenWidth() - tamano) / 2, tamanoMargenSup + (tamanoPantalla / 2) - 20, 40, WHITE);
+            int tamano = MeasureText(texto_inicio_ronda.c_str(), GetScreenHeight() / ratio);
+            DrawText(texto_inicio_ronda.c_str(), (GetScreenWidth() - tamano) / 2, tamanoMargenSup + (tamanoPantalla / 2) - 20, GetScreenHeight() / ratio, WHITE);
         }
 
         
@@ -368,7 +380,10 @@ public:
 
     void SeñalHurryUp() {
         if (!empezar_contador2) {
-            PlaySound(sound);
+            if (!mute_effect) {
+                PlaySound(sound);
+            }
+            
             iteraciones2 = 0;
             empezar_contador2 = true;
             mostrar_hurryup = true;
@@ -513,7 +528,6 @@ public:
         float anchura_bloque = GetScreenWidth() / (float)BLOQUE_GRANDE_ANCHO;
 
 
-        printf("%d", modo_2d);
         if (!cargando_nivel_siguiente) {
 
             // Columna derecha

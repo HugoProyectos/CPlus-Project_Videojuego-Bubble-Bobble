@@ -18,7 +18,7 @@ public:
         LoadTexture("resources/main_menu/options.png")};
     Texture2D currentMenu = menu[0];
 
-
+    bool mute_music = false;
     Music music = LoadMusicStream("resources/music/sonido_main_menu.mp3");
     
     unsigned int frecuencia;
@@ -83,7 +83,10 @@ public:
             currentMenu = menu[4];
         }
         else {
-            UpdateMusicStream(music);
+            if (!mute_music) {
+                UpdateMusicStream(music);
+            }
+            
             iteraciones++;
             if (iteraciones == frecuencia) {
                 indice = (indice + 1) % 3;

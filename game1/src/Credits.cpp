@@ -13,6 +13,7 @@ public:
     int tamano_fuente;
     int tecla = KEY_SIX;
 
+    bool mute_sound = false;
     Sound sound = LoadSound("resources/music/sonido_insertar_credito.mp3");
 
     Credits() = default;
@@ -46,7 +47,10 @@ public:
             // Por ejemplo, puedes imprimir un mensaje en la consola
             teclaPresionada = true;
             creditos++;
-            PlaySound(sound);
+            if (!mute_sound) {
+                PlaySound(sound);
+            }
+            
         }
 
         // Comprueba si se ha liberado la tecla
