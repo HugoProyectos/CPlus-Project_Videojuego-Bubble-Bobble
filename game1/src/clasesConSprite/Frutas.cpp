@@ -110,7 +110,7 @@ public:
         muerto_bob = false;
         muerto_bub = false;
         borrame = false;
-        enElAire = true;
+        enElAire = false;
         destRec = destino;
         alturaMax = destRec.y - 5;
         eliminame = false;
