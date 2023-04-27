@@ -107,7 +107,7 @@ public:
     float distanciaSaltoMax = 0;
     float velocidadSalto = 0;  //A�adir aceleracion, y hacer que velocidad nueva = velocidad anterior + aceleracion. Empezar con una aceleracion inicial, y que se le vayan restando valores. A partir de cierta velocidad, capar. Hay que comprobar que el tope coincida con el planeo.
     float velocidadLateral = 0;
-    float deceleracion = 0.1f;
+    float deceleracion = 0;
     float velocidadActual = 0;
 
     Bub() = default; //Debe llamarse a Inicializador
@@ -227,8 +227,8 @@ public:
         }
         //Frames de "inmunidad" al agua
         velocidadLateral = destRec.width / 16.0f;
-        velocidadSalto = destRec.height / 7.5f;
-        deceleracion = velocidadSalto / 40.0f;
+        velocidadSalto = destRec.height / 4.5f;
+        deceleracion = velocidadSalto / 25.0f;
         if (waterlessFrames > 0) { waterlessFrames--; }
         //Gestion de wrap vertical
         if (destRec.y > GetScreenHeight() + 50) {
@@ -495,8 +495,8 @@ public:
                 else if (enElAire && cayendo) { //Planeando
                     //std::cout << "I'm gliding" << std::endl;
                     if (!disparando && !muriendo) animacionActiva = FALLING;
-                    destRec.y += velocidadSalto / 2.0f;
-                    saltoRecorrido -= velocidadSalto / 2.0f;
+                    destRec.y += velocidadSalto / 3.0f;
+                    saltoRecorrido -= velocidadSalto / 3.0f;
                 }
                 else if (enElAire) { //Inicio ca�da
                     if (!disparando && !muriendo) animacionActiva = FALLING;
