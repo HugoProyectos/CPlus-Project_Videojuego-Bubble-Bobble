@@ -207,7 +207,7 @@ public:
 			if (pompas.at(i)->matame) {
 				//auto aBorrar = pompas.begin() + i;
 				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas			
-				if (pompas.at(i)->modulo = Pompa::MODULO_RAYO) {
+				if (pompas.at(i)->modulo == Pompa::MODULO_RAYO) {
 					int val = pompas.at(i)->sentidoJugador;
 					bool izq = val == 3;
 					Rayo r = Rayo(spriteRayo, pompas.at(i)->destRec, izq);
