@@ -49,6 +49,7 @@ public:
     //Lógica
     int direccionX = 1; //0 para izquierda, 1 para derecha
     float anchosX = 15.0f; 
+    bool frutaProducida = false;
 
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
@@ -119,7 +120,7 @@ public:
             if (muerto) {
                 //std::cout << "mueto" << std::endl;
                 animacionActiva = 1;
-                Caer();
+                CaerLento();
             }
             else if (!saltando && enElAire) {
                 //std::cout << "lento" << std::endl;
@@ -134,13 +135,13 @@ public:
             else if (destRec.y != playerPosition.y) {
                 if (direccionX == 0) {
                     //Izquierda
-                   // std::cout << "izq random" << std::endl;
+                    //std::cout << "izq random" << std::endl;
 
                     MoverIzq();
                 }
                 else {
                     //Derecha
-                  //  std::cout << "der random" << std::endl;
+                    //std::cout << "der random" << std::endl;
 
                     MoverDer();
                 }
@@ -151,14 +152,14 @@ public:
                 MoverIzq();
             }
             else if (destRec.x < playerPosition.x - anchosX) { //Si el personaje esta a la derecha
-                //std::cout << "der diguiendo" << std::endl;
+                //std::cout << "der siguiendo" << std::endl;
 
                 MoverDer();
             }
 
             //Actualizar posicion no salir de la pantalla
             if (destRec.y > GetScreenHeight() + 50) {
-                std::cout << "me salgo por abajo" << std::endl;
+                //std::cout << "me salgo por abajo" << std::endl;
 
                 destRec.y = -10;
                 enElAire = true;
@@ -188,14 +189,14 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
-                if (indiceAnimacion == 3) {
-                    if (!muertePorAgua) {
-                        Frutas f = Frutas();
-                        f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
-                        admin->frutas.push_back(std::make_shared<Frutas>(f));
-                    }
-                    borrame = true;
-                }
+                //if (indiceAnimacion == 3) {
+                //    if (!muertePorAgua) {
+                //        Frutas f = Frutas();
+                //        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
+                //        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                //    }
+                //    borrame = true;
+                //}
                 break;
             case 2:
                 //Actualizar width&height animacion
@@ -468,9 +469,57 @@ public:
                 cayendo = true;
             }
             else if (muerto) {
-                animacionActiva = 1;
                 enElAire = false;
                 cayendo = false;
+                if (!muertePorAgua && !frutaProducida) {
+                    frutaProducida = true;
+                    //std::cout << "-------------------------------     " + std::to_string(killCount) << std::endl;
+                    //while (true) {}
+                    Rectangle  aux = destRec;
+                    if (killCount == 0) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)500, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                    }
+                    else if (killCount == 1) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)1000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 2) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)2000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 3) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)3000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 4) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)4000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 5) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)5000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 6) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)6000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    
+                }
+                borrame = true;
 
             }
             else {

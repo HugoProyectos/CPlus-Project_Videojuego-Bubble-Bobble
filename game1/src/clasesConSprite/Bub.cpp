@@ -121,6 +121,8 @@ public:
         Inicializador(tamano, saltoMax, velSalto, velLateral, _targetFrames, adm, esBub);
 		destRec = destino;
         inicio = destino;
+        lastHeight = GetScreenHeight();
+        lastWidth = GetScreenWidth();
     };
     void Inicializador(float tamano, float saltoMax, float velSalto,float velLateral, int _targetFrames, AdministradorPompas& adm, bool esBub)
     {
@@ -538,7 +540,7 @@ public:
 
                 // Comprueba que se come la fruta
                 for (int i = 0; i < admin->frutas.size(); i++) {
-                    if (!admin->frutas.at(i)->borrame && !admin->frutas.at(i)->muerto && !muriendo
+                    if (!admin->frutas.at(i)->borrame && !admin->frutas.at(i)->muerto_bub && !admin->frutas.at(i)->muerto_bob && !muriendo
                         && ((destRec.y + destRec.height / 2.0f) >= (admin->frutas.at(i)->destRec.y + admin->frutas.at(i)->destRec.height / 2.0f)
                             && (destRec.y - destRec.height / 2.0f) <= (admin->frutas.at(i)->destRec.y + admin->frutas.at(i)->destRec.height / 2.0f)
                             || (destRec.y + destRec.height / 2.0f) >= (admin->frutas.at(i)->destRec.y - admin->frutas.at(i)->destRec.height / 2.0f)
@@ -550,12 +552,14 @@ public:
                     { //Colisiona con fruta
                         if (eresBub) {
                             admin->scores.SumarPuntuacionP1((unsigned int)admin->frutas.at(i)->puntuacion);
+                            admin->frutas.at(i)->muerto_bub = true;
                         }
                         else {
                             admin->scores.SumarPuntuacionP2((unsigned int)admin->frutas.at(i)->puntuacion);
+                            admin->frutas.at(i)->muerto_bob = true;
                         }
                         PlaySound(sonidoFruta);
-                        admin->frutas.at(i)->muerto = true;
+                        
                     }
                 }
 

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Pompa.hpp"
 
 
@@ -15,33 +15,49 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->cayendo = true;
 		enemigoContenido->muerto = matalo;
 		enemigoContenido->enfadado = true;
+		if (matalo) {
+			enemigoContenido->killCount = this->killCount;
+			std::cout << "-------------------------------     " + std::to_string(enemigoContenido->killCount) << std::endl;
+		}
 
 		resultado = enemigoContenido;
-	} else if (modulo == 3) {
+	}
+	else if (modulo == 3) {
 		enemigoContenido->destRec = destRec;
 		enemigoContenido->borrame = false;
 		enemigoContenido->enElAire = true;
 		enemigoContenido->cayendo = true;
 		enemigoContenido->muerto = matalo;
 		enemigoContenido->enfadado = true;
+		if (matalo) {
+			enemigoContenido->killCount = this->killCount;
+		}
 
 		resultado = enemigoContenido;
-	} else if (modulo == 4) {
+	}
+	else if (modulo == 4) {
 		enemigoContenido->destRec = destRec;
 		enemigoContenido->borrame = false;
 		enemigoContenido->enElAire = true;
 		enemigoContenido->cayendo = true;
 		enemigoContenido->muerto = matalo;
 		enemigoContenido->enfadado = true;
+		if (matalo) {
+			enemigoContenido->killCount = this->killCount;
+		}
 
 		resultado = enemigoContenido;
-	} else if (modulo == 5) {
+	}
+	else if (modulo == 5) {
 		enemigoContenido->destRec = destRec;
 		enemigoContenido->borrame = false;
 		enemigoContenido->enElAire = true;
 		enemigoContenido->cayendo = true;
 		enemigoContenido->muerto = matalo;
 		enemigoContenido->enfadado = true;
+		if (matalo) {
+			enemigoContenido->killCount = this->killCount;
+		}
 
 		resultado = enemigoContenido;
 	}
@@ -61,7 +77,7 @@ bool Pompa::operator==(const Pompa& p) {
 }
 
 void Pompa::Inicializador(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida) {
-	ID = ID_GLOBAL++; //Asigna identificador único (De no ser todo secuencial, habrá que gestionar sección crítica)
+	ID = ID_GLOBAL++; //Asigna identificador ï¿½nico (De no ser todo secuencial, habrï¿½ que gestionar secciï¿½n crï¿½tica)
 
 	sprite = spriteSheet;
 
@@ -91,13 +107,14 @@ void Pompa::Inicializador(Texture2D spriteSheet, const Rectangle origen, float v
 	origin = { origen.width / 2, origen.height / 2 }; //En principio no lo necesitamos
 }
 
-sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua, Columnas *col, Plataformas *plat, Scores *scr) {
+sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua, Columnas* col, Plataformas* plat, Scores* scr) {
 	sh_Enemigo result = NULL;
 	if (lastHeight != GetScreenHeight()) {
 		destRec.height = GetScreenHeight() / 14.0625f;
 		destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
 		origin.y = destRec.height / 2;
 
+		ratioY = destRec.height / 32;
 		lastHeight = GetScreenHeight();
 	}
 	if (lastWidth != GetScreenWidth()) {
@@ -105,11 +122,10 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 		destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
 		origin.x = destRec.width / 2;
 
+		ratioX = destRec.width / 32;
 		lastWidth = GetScreenWidth();
 	}
-	ratioY = destRec.height / 32;
-	ratioX = destRec.width / 32;
-	
+
 	if (disparada == 2) {
 		//std::cout << "PIUM" << std::endl;
 		//Explota inmediatamente si empieza dentro de una plataforma
@@ -150,8 +166,8 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 				(plat->listaPlataforma[i].bot >= destRec.y - destRec.height / 2);
 			bool b = (plat->listaPlataforma[i].top <= destRec.y - destRec.height / 4) &&
 				(plat->listaPlataforma[i].bot >= destRec.y - destRec.height / 4);
-			bool c = (plat->listaPlataforma[i].top < destRec.y + destRec.height * 0.49) && 
-				(plat->listaPlataforma[i].bot > destRec.y + destRec.height * 0.49); //Este es el que lo causa. Preguntar a Jesús qué caso cubre
+			bool c = (plat->listaPlataforma[i].top < destRec.y + destRec.height * 0.49) &&
+				(plat->listaPlataforma[i].bot > destRec.y + destRec.height * 0.49); //Este es el que lo causa. Preguntar a Jesï¿½s quï¿½ caso cubre
 			bool d = (plat->listaPlataforma[i].top <= destRec.y + destRec.height / 4) &&
 				(plat->listaPlataforma[i].bot >= destRec.y + destRec.height / 4);
 			if ((a) || (b) || (c) || (d)) {
@@ -190,14 +206,15 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			}
 		}
 		if (abs(distanciaRecorrida) >= abs(distanciaDisparo)) {
-			disparada = 1; //Último frame en que atrapa enemigos
+			disparada = 1; //ï¿½ltimo frame en que atrapa enemigos
 		}
 	}
 	else {
-		//Si ha iniciado cadena y ya está explotando, es solo en el primer frame que transfiere cadena
+		//Si ha iniciado cadena y ya estï¿½ explotando, es solo en el primer frame que transfiere cadena
 		if (cadena != 0 && animacionActiva == EXPLOTA) {
 			cadena = 0;
-		} else if (cadena != 0) { // Si aún no ha explotado, inicia explosión
+		}
+		else if (cadena != 0) { // Si aï¿½n no ha explotado, inicia explosiï¿½n
 			animacionActiva = EXPLOTA;
 			indiceAnimacion = 0;
 			tVida = -1;
@@ -216,17 +233,17 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			animacionActiva = EXPLOTA;
 			indiceAnimacion = 0;
 			tVida--;
-			
+
 			result = extraeEnemigo(false);
-			
+
 		}
 		else if (tVida > 0 || tVida == INFINITA) {
 			disparada = 0;
-			if(tVida != INFINITA) tVida -= VELOCIDAD_MUERTE;
+			if (tVida != INFINITA) tVida -= VELOCIDAD_MUERTE;
 			animacionActiva = VACIA;
-			/////COMPROBACIÓN DE COLISIÓN CON EL JUGADOR BUB
-			if (!j1.muriendo){
-				
+			/////COMPROBACIï¿½N DE COLISIï¿½N CON EL JUGADOR BUB
+			if (!j1.muriendo) {
+
 				bool contactoFrente = ((destRec.x - destRec.width / 2) < (j1.posicionJugador.x - j1.posicionJugador.width / 2))
 					&& ((destRec.x + destRec.width / 2) > (j1.posicionJugador.x - j1.posicionJugador.width / 2));
 				bool contactoEspalda = ((destRec.x - destRec.width / 2) < (j1.posicionJugador.x + j1.posicionJugador.width / 2))
@@ -251,15 +268,15 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 				if (((destRec.x - destRec.width / 2) < (j1.posicionJugador.x + j1.posicionJugador.width / 2) && (destRec.x + destRec.width / 2) > (j1.posicionJugador.x + j1.posicionJugador.width / 2)
 					|| (destRec.x + destRec.width / 2) > (j1.posicionJugador.x - j1.posicionJugador.width) && (destRec.x - destRec.width / 2) < (j1.posicionJugador.x - j1.posicionJugador.width / 2))
 					&& (j1.posicionJugador.y + j1.posicionJugador.height / 2) > (destRec.y - destRec.height / 2) && (j1.posicionJugador.y + j1.posicionJugador.height / 2) < (destRec.y + destRec.height / 2)
-					&& j1.jugadorCayendo && animacionActiva != EXPLOTA) { //Choque en caída
+					&& j1.jugadorCayendo && animacionActiva != EXPLOTA) { //Choque en caï¿½da
 					if (j1.debeRebotar == 0 && !IsKeyDown(controlesJugador.jump_p1)) { // Explota la pompa
 						animacionActiva = EXPLOTA;
 						indiceAnimacion = 0;
 						tVida = -1;
 						//std::cout << "Peto por caida" << std::endl;
-						
-						//Marca que su explosión debe transmitirse
-						cadena = 1; 
+
+						//Marca que su explosiï¿½n debe transmitirse
+						cadena = 1;
 						if (modulo == MODULO_AGUA) {
 							creaAgua = j1.sentidoJugador;
 						}
@@ -282,12 +299,12 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 				}
 				else if (contactoEspalda
 					&& ((destRec.y - destRec.width / 2) < (j1.posicionJugador.y + j1.posicionJugador.height / 4) && (destRec.y + destRec.height / 2) > (j1.posicionJugador.y + j1.posicionJugador.height / 4)
-						|| (destRec.y - destRec.width / 2) < (j1.posicionJugador.y - j1.posicionJugador.height / 2) && (destRec.y + destRec.height / 2) > (j1.posicionJugador.y - j1.posicionJugador.height / 2))) { //Choca por detrás del jugador (primera linea->horizontal, segunda y tercera->posibilidades verticales)
+						|| (destRec.y - destRec.width / 2) < (j1.posicionJugador.y - j1.posicionJugador.height / 2) && (destRec.y + destRec.height / 2) > (j1.posicionJugador.y - j1.posicionJugador.height / 2))) { //Choca por detrï¿½s del jugador (primera linea->horizontal, segunda y tercera->posibilidades verticales)
 					animacionActiva = EXPLOTA;
 					indiceAnimacion = 0;
 					tVida = -1;
 
-					//Marca que su explosión debe transmitirse
+					//Marca que su explosiï¿½n debe transmitirse
 					cadena = 1;
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j1.sentidoJugador;
@@ -305,7 +322,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					tVida = -1;
 					//std::cout << "Peto por cabeza" << std::endl;
 
-					//Marca que su explosión debe transmitirse
+					//Marca que su explosiï¿½n debe transmitirse
 					cadena = 1;
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j1.sentidoJugador;
@@ -318,7 +335,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 				else if (contactoFrente
 					&& ((destRec.y - destRec.width / 2) < (j1.posicionJugador.y + j1.posicionJugador.height / 4) && (destRec.y + destRec.height / 2) > (j1.posicionJugador.y + j1.posicionJugador.height / 4)
 						|| (destRec.y - destRec.width / 2) < (j1.posicionJugador.y - j1.posicionJugador.height / 2) && (destRec.y + destRec.height / 2) > (j1.posicionJugador.y - j1.posicionJugador.height / 2))) {
-					
+
 					if (j1.sentidoJugador == 2) {
 						destRec.x -= j1.velLateral / 2;
 					}
@@ -330,13 +347,13 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						contadorFrames = 0;
 					}
 				}
-				
+
 			}
 
-			/////FIN COMPROBACIÓN DE COLISIÓN CON EL JUGADOR BUB
+			/////FIN COMPROBACIï¿½N DE COLISIï¿½N CON EL JUGADOR BUB
 
 
-			/////COMPROBACIÓN DE COLISIÓN CON EL JUGADOR BOB
+			/////COMPROBACIï¿½N DE COLISIï¿½N CON EL JUGADOR BOB
 			if (!j2.muriendo) {
 				bool contactoFrente = ((destRec.x - destRec.width / 2) < (j2.posicionJugador.x - j2.posicionJugador.width / 2))
 					&& ((destRec.x + destRec.width / 2) > (j2.posicionJugador.x - j2.posicionJugador.width / 2));
@@ -362,14 +379,14 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 				if (((destRec.x - destRec.width / 2) < (j2.posicionJugador.x + j2.posicionJugador.width / 2) && (destRec.x + destRec.width / 2) > (j2.posicionJugador.x + j2.posicionJugador.width / 2)
 					|| (destRec.x + destRec.width / 2) > (j2.posicionJugador.x - j2.posicionJugador.width) && (destRec.x - destRec.width / 2) < (j2.posicionJugador.x - j2.posicionJugador.width / 2))
 					&& (j2.posicionJugador.y + j2.posicionJugador.height / 2) > (destRec.y - destRec.height / 2) && (j2.posicionJugador.y + j2.posicionJugador.height / 2) < (destRec.y + destRec.height / 2)
-					&& j2.jugadorCayendo && animacionActiva != EXPLOTA) { //Choque en caída
+					&& j2.jugadorCayendo && animacionActiva != EXPLOTA) { //Choque en caï¿½da
 					if (j2.debeRebotar == 0 && !IsKeyDown(controlesJugador.jump_p2)) { // Explota la pompa
 						animacionActiva = EXPLOTA;
 						indiceAnimacion = 0;
 						tVida = -1;
 						//std::cout << "Peto por caida" << std::endl;
 
-						//Marca que su explosión debe transmitirse
+						//Marca que su explosiï¿½n debe transmitirse
 						cadena = 2;
 						if (modulo == MODULO_AGUA) {
 							creaAgua = j2.sentidoJugador;
@@ -393,12 +410,12 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 				}
 				else if (contactoEspalda
 					&& ((destRec.y - destRec.width / 2) < (j2.posicionJugador.y + j2.posicionJugador.height / 4) && (destRec.y + destRec.height / 2) > (j2.posicionJugador.y + j2.posicionJugador.height / 4)
-						|| (destRec.y - destRec.width / 2) < (j2.posicionJugador.y - j2.posicionJugador.height / 2) && (destRec.y + destRec.height / 2) > (j2.posicionJugador.y - j2.posicionJugador.height / 2))) { //Choca por detrás del jugador (primera linea->horizontal, segunda y tercera->posibilidades verticales)
+						|| (destRec.y - destRec.width / 2) < (j2.posicionJugador.y - j2.posicionJugador.height / 2) && (destRec.y + destRec.height / 2) > (j2.posicionJugador.y - j2.posicionJugador.height / 2))) { //Choca por detrï¿½s del jugador (primera linea->horizontal, segunda y tercera->posibilidades verticales)
 					animacionActiva = EXPLOTA;
 					indiceAnimacion = 0;
 					tVida = -1;
 
-					//Marca que su explosión debe transmitirse
+					//Marca que su explosiï¿½n debe transmitirse
 					cadena = 2;
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j2.sentidoJugador;
@@ -416,7 +433,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					tVida = -1;
 					//std::cout << "Peto por cabeza" << std::endl;
 
-					//Marca que su explosión debe transmitirse
+					//Marca que su explosiï¿½n debe transmitirse
 					cadena = 2;
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j2.sentidoJugador;
@@ -442,51 +459,41 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					}
 				}
 			}
-			/////FIN COMPROBACIÓN DE COLISIÓN CON EL JUGADOR BOB
+			/////FIN COMPROBACIï¿½N DE COLISIï¿½N CON EL JUGADOR BOB
 
 			/////INICIO DESPLAZAMIENTO POR EL MAPA
 			double screenHeight = GetScreenHeight();
 			double screenWidth = GetScreenWidth();
-			oscilando = false;
 			switch ((int)ID_MAPA) {
 			case 2:
 			{
 				if (destRec.y > screenHeight * 0.95) {
-					destRec.y -= 0.9 * ratioY;
-					abajo = false;
+					destRec.y -= 0.5 * ratioY;
 				}
 				if (destRec.x < screenWidth / 2) {
 					if (destRec.x >= screenWidth * 0.45 && destRec.x <= screenWidth * 0.55 && destRec.y < screenHeight * 0.5 && destRec.y > screenHeight * 0.4) {
 						oscilando = true;
 					}
 					else if (destRec.y <= screenHeight * 0.93 && destRec.y > screenHeight * 0.90 && destRec.x < (screenWidth / 2) - screenWidth / 30) {
-						destRec.x += 1.2 * ratioX;
+						destRec.x += 1 * ratioX;
 					}
 					else if (destRec.y <= screenHeight * 0.70 && destRec.y > screenHeight * 0.65 && destRec.x > screenWidth * 0.12) {
-						destRec.x -= 1.2 * ratioX;
+						destRec.x -= 1 * ratioX;
 					}
 					else if (destRec.y <= screenHeight * 0.20 && destRec.y > screenHeight * 0.10 && destRec.x < screenWidth * 0.4375) {
-						destRec.x += 1.2 * ratioX;
+						destRec.x += 1 * ratioX;
 					}
 					else if (destRec.x >= screenWidth * 0.4375 && destRec.x <= screenWidth * 0.5625 && destRec.y >= screenHeight * 0.1 && destRec.y <= screenHeight * 0.4) {
-						destRec.y += 0.9 * ratioY;
-						abajo = true;
+						destRec.y += 0.5 * ratioY;
 					}
 					else if (destRec.x <= screenWidth * 0.4375 && destRec.x >= screenWidth * 0.5625 && !oscilando) {
-						destRec.y -= 0.9 * ratioY;
-						abajo = false;
+						destRec.y -= 0.5 * ratioY;
 					}
 					else if (destRec.x >= screenWidth * 0.18 && destRec.x < screenWidth * 0.45 && destRec.y < screenHeight * 0.65 && destRec.y > screenHeight * 0.2) {
-						destRec.x += 1.2 * ratioX;
-					}
-					else if (destRec.y < screenHeight * 0.15) {
-						destRec.y += 0.9 * ratioY; 
-						abajo = true;
-						oscilando = false;
+						destRec.x += 1 * ratioX;
 					}
 					else {
-						destRec.y -= 0.9 * ratioY;
-						abajo = false;
+						destRec.y -= 0.5 * ratioY;
 					}
 				}
 				else {
@@ -494,42 +501,34 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						oscilando = true;
 					}
 					else if (destRec.y <= screenHeight * 0.93 && destRec.y > screenHeight * 0.90 && destRec.x > (screenWidth / 2) + screenWidth / 30) {
-						destRec.x -= 1.2 * ratioX;
+						destRec.x -= 1 * ratioX;
 					}
 					else if (destRec.y <= screenHeight * 0.70 && destRec.y > screenHeight * 0.65 && destRec.x < screenWidth * 0.88) {
-						destRec.x += 1.2 * ratioX;
+						destRec.x += 1 * ratioX;
 					}
 					else if (destRec.y <= screenHeight * 0.20 && destRec.y > screenHeight * 0.10 && destRec.x > screenWidth * 0.5625) {
-						destRec.x -= 1.2 * ratioX;
+						destRec.x -= 1 * ratioX;
 					}
 					else if (destRec.x >= screenWidth * 0.4375 && destRec.x <= screenWidth * 0.5625 && destRec.y >= screenHeight * 0.1 && destRec.y <= screenHeight * 0.4) {
-						destRec.y += 0.9 * ratioY;
-						abajo = true;
+						destRec.y += 0.5 * ratioY;
 					}
 					else if (destRec.x <= screenWidth * 0.4375 && destRec.x >= screenWidth * 0.5625 && !oscilando) {
-						destRec.y -= 0.9 * ratioY; 
-						abajo = false;
+						destRec.y -= 0.5 * ratioY;
 					}
 					else if (destRec.x <= screenWidth * 0.82 && destRec.x > screenWidth * 0.55 && destRec.y < screenHeight * 0.65 && destRec.y > screenHeight * 0.2) {
-						destRec.x -= 1.2 * ratioX;
-					}
-					else if (destRec.y < screenHeight * 0.15) {
-						destRec.y += 0.9 * ratioY;
-						abajo = true;
-						oscilando = false;
+						destRec.x -= 1 * ratioX;
 					}
 					else {
-						destRec.y -= 0.9 * ratioY;
-						abajo = false;
+						destRec.y -= 0.5 * ratioY;
 					}
 				}
 
 				if (oscilando) {
 					if (abajo) {
-						destRec.y += 0.9 * ratioY;
+						destRec.y += 0.5 * ratioY;
 					}
 					else {
-						destRec.y += -0.9 * ratioY;
+						destRec.y += -0.5 * ratioY;
 					}
 					contador++;
 					if (contador >= 20) {
@@ -542,89 +541,81 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			}
 			case 3:
 			{
-				
+				oscilando = false;
 				if (destRec.y > screenHeight * 0.95) {
-					destRec.y -= 0.9 * ratioY;
+					destRec.y -= 0.5 * ratioY;
 				}
 				if (destRec.x < screenWidth / 2) {
-					if (destRec.x >= screenWidth * 0.43 && destRec.x <= screenWidth * 0.53 && destRec.y < screenHeight * 0.5 && destRec.y > screenHeight * 0.4) {
+					if (destRec.x >= screenWidth * 0.5 - 25 && destRec.x <= screenWidth * 0.5 + 25 && destRec.y < screenHeight * 0.5 && destRec.y > screenHeight * 0.4) {
 						oscilando = true;
 					}
 					else if (destRec.y <= screenHeight * 0.94 && destRec.y > screenHeight * 0.90 && destRec.x > screenWidth * 0.12) {
-						destRec.x -= 1.2 * ratioX;
+						destRec.x -= 1 * ratioX;
 					}
 					else if (destRec.y <= screenHeight * 0.54 && destRec.y > screenHeight * 0.48 && destRec.x < screenWidth * 0.35) {
-						destRec.x += 1.2 * ratioX;
+						destRec.x += 1 * ratioX;
 					}
 					else if (destRec.y <= screenHeight * 0.48 && destRec.y > screenHeight * 0.38 && destRec.x < screenWidth * 0.35 && destRec.x > screenWidth * 0.14) {
-						destRec.x += 1.2 * ratioX;
+						destRec.x += 1 * ratioX;
 					}
-					else if (destRec.y < screenHeight * 0.264 && destRec.y > screenHeight * 0.15 && destRec.x < screenWidth * 0.49){
-						destRec.x += 1.2 * ratioX;
+					else if (destRec.y < screenHeight * 0.25 && destRec.y > screenHeight * 0.15) {
+						destRec.x += 1 * ratioX;
 					}
-					else if (destRec.y <= screenHeight * 0.73 && destRec.y >= screenHeight * 0.69 && destRec.x < screenWidth * 0.46875 && destRec.x > screenWidth * 0.14) {
-						destRec.x += 1.2 * ratioX;
+					else if (destRec.y <= screenHeight * 0.73 && destRec.y >= screenHeight * 0.69 && destRec.x < screenWidth * 0.5 - 25 && destRec.x > screenWidth * 0.14) {
+						destRec.x += 1 * ratioX;
 					}
 					else if (destRec.x >= screenWidth * 0.35 && destRec.x < screenWidth * 0.45 && destRec.y >= screenHeight * 0.25 && destRec.y < screenHeight * 0.72) {
-						destRec.y += 0.9 * ratioY; 
-						abajo = true;
+						destRec.y += 0.5 * ratioY;
 					}
 					else if (destRec.x >= screenWidth * 0.46875 && destRec.x <= screenWidth * 0.53125 && destRec.y <= screenHeight * 0.4) {
-						destRec.y += 0.9 * ratioY;
-						abajo = true;
+						destRec.y += 0.5 * ratioY;
 					}
 					else if (destRec.y < screenHeight * 0.15) {
-						destRec.y += 0.9 * ratioY;
-						abajo = true;
+						destRec.y += 0.5 * ratioY;
 					}
 					else {
-						destRec.y -= 0.9 * ratioY;
-						abajo = false;
+						destRec.y -= 0.5 * ratioY;
 					}
 				}
 				else {
-					if (destRec.x >= screenWidth * 0.43 && destRec.x <= screenWidth * 0.53 && destRec.y < screenHeight * 0.5 && destRec.y > screenHeight * 0.4) {
+					if (destRec.x >= screenWidth * 0.5 - 25 && destRec.x <= screenWidth * 0.5 + 25 && destRec.y < screenHeight * 0.5 && destRec.y > screenHeight * 0.4) {
 						oscilando = true;
 					}
 					else if (destRec.y <= screenHeight * 0.94 && destRec.y > screenHeight * 0.90 && destRec.x < screenWidth * 0.88) {
-						destRec.x += 1.2 * ratioX;
+						destRec.x += 1 * ratioX;
 					}
 					else if (destRec.y <= screenHeight * 0.54 && destRec.y > screenHeight * 0.48 && destRec.x > screenWidth * 0.65) {
-						destRec.x -= 1.2 * ratioX;
+						destRec.x -= 1 * ratioX;
 					}
 					else if (destRec.y <= screenHeight * 0.48 && destRec.y > screenHeight * 0.38 && destRec.x > screenWidth * 0.65 && destRec.x < screenWidth * 0.86) {
-						destRec.x -= 1.2 * ratioX;
+						destRec.x -= 1 * ratioX;
 					}
-					else if (destRec.y < screenHeight * 0.264 && destRec.y > screenHeight * 0.15 && destRec.x > screenWidth * 0.51) {
-						destRec.x -= 1.2 * ratioX;
+					else if (destRec.y < screenHeight * 0.25 && destRec.y > screenHeight * 0.15 && destRec.x > screenWidth * 0.5001) {
+						destRec.x -= 1 * ratioX;
 					}
-					else if (destRec.y <= screenHeight * 0.73 && destRec.y >= screenHeight * 0.69 && destRec.x > screenWidth * 0.53125 && destRec.x < screenWidth * 0.86) {
-						destRec.x -= 1.2 * ratioX;
+					else if (destRec.y <= screenHeight * 0.73 && destRec.y >= screenHeight * 0.69 && destRec.x > screenWidth * 0.5 + 25 && destRec.x < screenWidth * 0.86) {
+						destRec.x -= 1 * ratioX;
 					}
 					else if (destRec.x <= screenWidth * 0.65 && destRec.x > screenWidth * 0.55 && destRec.y >= screenHeight * 0.25 && destRec.y < screenHeight * 0.72) {
-						destRec.y += 0.9 * ratioY;
-						abajo = true;
+						destRec.y += 0.5 * ratioY;
 					}
 					else if (destRec.x <= screenWidth * 0.53125 && destRec.x >= screenWidth * 0.46875 && destRec.y <= screenHeight * 0.4) {
-						destRec.y += 0.9 * ratioY;
-						abajo = true;
+						destRec.y += 0.5 * ratioY;
 					}
-					else if (destRec.y < screenHeight * 0.15){
-						destRec.y += 0.9 * ratioY;
-						abajo = true;
+					else if (destRec.y < screenHeight * 0.15) {
+						destRec.y += 0.5 * ratioY;
 					}
 					else {
-						destRec.y -= 0.9 * ratioY;
-						abajo = false;
+						destRec.y -= 0.5 * ratioY;
 					}
 				}
 
 				if (oscilando) {
 					if (abajo) {
-						destRec.y += 0.9 * ratioY;
+						destRec.y += 0.5 * ratioY;
 					}
 					else {
-						destRec.y += -0.9 * ratioY;
+						destRec.y += -0.5 * ratioY;
 					}
 					contador++;
 					if (contador >= 20) {
@@ -639,87 +630,76 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			{
 
 				if (destRec.x < screenWidth / 2) {
-					if (destRec.y < (screenHeight * 0.85) && (destRec.y > (screenHeight * 0.80) && destRec.x >= screenWidth*0.1625)) {
-						destRec.x -= 1.2 * ratioX;
+					if (destRec.y < (screenHeight * 0.85) && (destRec.y > (screenHeight * 0.80) && destRec.x >= screenWidth * 0.1625)) {
+						destRec.x -= 1 * ratioX;
 						//std::cout << "Ruta 1" << std::endl;
 					}
 					else if (destRec.y <= (screenHeight * 0.70) && destRec.y > (screenHeight * 0.65) && destRec.x < screenWidth * 0.4625) {
-						destRec.x += 1.2 * ratioX;
+						destRec.x += 1 * ratioX;
 						//std::cout << "Ruta 2" << std::endl;
 					}
 					else if (destRec.y <= (screenHeight * 0.55) && destRec.y > (screenHeight * 0.50) && destRec.x >= screenWidth * 0.1625) {
-						destRec.x -= 1.2 * ratioX;
+						destRec.x -= 1 * ratioX;
 						//std::cout << "Ruta 3" << std::endl;
 					}
 					else if (destRec.y <= (screenHeight * 0.35) && destRec.y > (screenHeight * 0.30) && destRec.x < screenWidth * 0.4625) {
-						destRec.x += 1.2 * ratioX;
+						destRec.x += 1 * ratioX;
+						oscilando = false;
 						//std::cout << "Ruta 4" << std::endl;
 					}
-					else if (destRec.y > GetScreenHeight() * 0.1556 && !ignorar) {
-						destRec.y -= 0.9 * ratioY;
-						abajo = false;
+					else if (destRec.y > GetScreenHeight() * 0.1556 && !oscilando) {
+						destRec.y -= 0.5 * ratioY;
 						//std::cout << "Ruta Arriba" << std::endl;
 					}
-					else if (destRec.y < screenHeight * 0.15) {
-						destRec.y += 0.9 * ratioY; 
-						abajo = true;
-						oscilando = false;
-					}
 					else {
-						ignorar = true;
 						oscilando = true;
 						//std::cout << "Oscilas" << std::endl;
 					}
 				}
 				else {
 					if (destRec.y < (screenHeight * 0.85) && (destRec.y > (screenHeight * 0.80) && destRec.x <= screenWidth * 0.8375)) {
-						destRec.x += 1.2 * ratioX;
+						destRec.x += 1 * ratioX;
 						//std::cout << "Ruta 1" << std::endl;
 					}
 					else if (destRec.y <= (screenHeight * 0.70) && destRec.y > (screenHeight * 0.65) && destRec.x > screenWidth * 0.5375) {
-						destRec.x -= 1.2 * ratioX;
+						destRec.x -= 1 * ratioX;
 						//std::cout << "Ruta 2" << std::endl;
 					}
 					else if (destRec.y <= (screenHeight * 0.55) && destRec.y > (screenHeight * 0.50) && destRec.x <= screenWidth * 0.8375) {
-						destRec.x += 1.2 * ratioX;
+						destRec.x += 1 * ratioX;
 						//std::cout << "Ruta 3" << std::endl;
 					}
 					else if (destRec.y <= (screenHeight * 0.35) && destRec.y > (screenHeight * 0.30) && destRec.x > screenWidth * 0.5375) {
-						destRec.x -= 1.2 * ratioX;
+						destRec.x -= 1 * ratioX;
 						//std::cout << "Ruta 4" << std::endl;
 					}
-					else if (destRec.y > GetScreenHeight() * 0.1556 && !ignorar) {
-						destRec.y -= 0.9 * ratioY;
-						abajo = false;
+					else if (destRec.y > GetScreenHeight() * 0.1556 && !oscilando) {
+						destRec.y -= 0.5 * ratioY;
+						oscilando = false;
 						//std::cout << "Ruta Arriba" << std::endl;
-					}
-					else if (destRec.y < screenHeight * 0.15) {
-						destRec.y += 0.9 * ratioY;
-						abajo = true;
 					}
 					else {
 						//std::cout << destRec.y << std::endl;
-						ignorar = true;
 						oscilando = true;
 						//std::cout << "Oscilas" << std::endl;
 					}
 				}
 
 				if (oscilando) {
-					if (destRec.x <= screenWidth / 4 && destRec.y < GetScreenHeight() * 0.2) {
-						destRec.y += 0.9 * ratioY;
+					if (destRec.x <= screenWidth / 4 && destRec.y < GetScreenHeight() * 0.2222) {
+						destRec.y += 0.5 * ratioY;
 						//std::cout << "Abajo" << std::endl;
 					}
-					else if (destRec.x >= screenWidth * 3 / 4 && destRec.y > GetScreenHeight() * 0.1656) {
-						destRec.y -= 0.9 * ratioY;
+					else if (destRec.x >= screenWidth * 3 / 4 && destRec.y > GetScreenHeight() * 0.1556) {
+						destRec.y -= 0.5 * ratioY;
 						//std::cout << "Arriba" << std::endl;
 					}
-					else if (destRec.y >= screenHeight * 0.1999 ) {
-						destRec.x += 1.2 * ratioX;
+					else if (destRec.y >= screenHeight * 0.2111) {
+						destRec.x += 0.5 * ratioX;
 						//std::cout << "Derecha" << std::endl;
 					}
 					else {
-						destRec.x -= 1.2 * ratioX;
+						destRec.x -= 0.5 * ratioX;
 						//std::cout << "Izquierda" << std::endl;
 					}
 					/*contador++;
@@ -734,21 +714,16 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 			default:
 				if (!oscilando) {
-					if (destRec.y > GetScreenHeight() * 0.21) {
-						destRec.y += -0.9 * ratioY;
-						abajo = false;
-					}
-					else if (destRec.y < GetScreenHeight() * 0.12) {
-						destRec.y += 0.9 * ratioY;
-						abajo = true;
+					if (destRec.y > GetScreenHeight() * 0.1778) {
+						destRec.y += -0.5 * ratioY;
 					}
 					else {
 						if (destRec.x < (GetScreenWidth() / 2) - GetScreenWidth() / 30) {
-							destRec.x += 1.2 * ratioX;
+							destRec.x += 0.5 * ratioX;
 							sentidoLateral = 2;
 						}
 						else if (destRec.x > (GetScreenWidth() / 2) + GetScreenWidth() / 30) {
-							destRec.x -= 1.2 * ratioX;
+							destRec.x -= 0.5 * ratioX;
 							sentidoLateral = 3;
 						}
 						else {
@@ -760,10 +735,10 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 				if (oscilando) {
 					if (abajo) {
-						destRec.y += 0.9 * ratioY;
+						destRec.y += 0.5 * ratioY;
 					}
 					else {
-						destRec.y += -0.9 * ratioY;
+						destRec.y += -0.5 * ratioY;
 					}
 					contador++;
 					if (contador >= 20) {
@@ -774,9 +749,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			};
 
 			//Evitar que la pompa se salga por arriba
-			/*if (destRec.y < screenHeight * 0.1333) {
-				destRec.y += screenHeight * 0.1333;
-			}*/
+			if (destRec.y < screenHeight * 0.1333) {
+				destRec.y = screenHeight * 0.1333;
+			}
 		}
 		/////FIN DESPLAZAMIENTO POR EL MAPA
 
@@ -813,36 +788,37 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			else {
 				if ((indiceAnimacion == 1 || indiceAnimacion == 2) && contadorFrames < maxFrames && contadorFrames > 0) {
 					contadorFrames++;
-				} else {
+				}
+				else {
 					contadorFrames = -1;
 					indiceAnimacion = 0;
 				}
 			}
-			
+
 			break;
 		};
 	}
 	return result;
 }
 
-Pompa &Pompa::operator=(const Pompa& p) {
+Pompa& Pompa::operator=(const Pompa& p) {
 	this->ID = p.ID;
 	this->sprite = p.sprite;
 
 	this->tVida = p.tVida;
 	this->vidaMaxima = p.vidaMaxima;
 	this->velocidadFrames = p.velocidadFrames;
-	
+
 	this->disparada = p.disparada;
 	this->distanciaDisparo = p.distanciaDisparo;
 	this->animacionActiva = p.animacionActiva;
-	
+
 	this->velocidadDesplazamiento = p.velocidadDesplazamiento;
 	this->tamano = p.tamano;
 
 	this->destRec = p.destRec;
 	this->srcRec = p.srcRec;
-	this->origin = p.origin; //En principio no lo necesitamosç
+	this->origin = p.origin; //En principio no lo necesitamosï¿½
 
 	return *this;
 }
@@ -864,11 +840,11 @@ void Pompa::Dibujar() {
 		//std::cout << "NARANJA" << std::endl;
 		srcRec.y = (float)heightAnimation * (float)(animacionActiva + NARANJA); //Cambia el fotograma
 	}
-	else { //Pompa Verde y demás
+	else { //Pompa Verde y demï¿½s
 		srcRec.y = (float)heightAnimation * (float)animacionActiva; //Cambia el fotograma
 		//std::cout << "VERDE" << std::endl;
 	}
-	srcRec.x = (float)widthAnimation * (float)indiceAnimacion; //Cambia la animación activa
+	srcRec.x = (float)widthAnimation * (float)indiceAnimacion; //Cambia la animaciï¿½n activa
 	/*
 	srcRec.x = 0.0f; //Pompa verde
 	srcRec.y = 16.0f; //Pompa verde*/

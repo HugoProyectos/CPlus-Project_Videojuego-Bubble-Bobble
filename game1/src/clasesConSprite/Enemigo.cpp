@@ -32,6 +32,7 @@ public:
     float distanciaSaltoMax = 0;
     int lastHeight = 450;
     int lastWidth = 800;
+    int killCount = 0;
 
     Enemigo() = default; //Debe llamarsse a Inicializador
 
