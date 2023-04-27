@@ -63,7 +63,13 @@ int main(void)
     // Controls:
     //--------------------------------------------------------------------------------------
     Controls controls = Controls("config.ini");
-    int Modo_IA = 0;  // 0 -> IA original, 1 -> IA propia
+    int Modo_IA = controls.IA_mode;  // 0 -> IA original, 1 -> IA propia
+    // Añadir inicializacion de IA  
+    int Modo_skins = controls.skin_modo; // 0 -> original, 1 -> alternativo
+    // Añadir inicializacion de skins 
+    int Modo_mapa = controls.mapa_modo; // 0 -> 2.5D, 1 -> 2D
+    plataformas.modo_2d = Modo_mapa == 1 ? true : false;
+    columnas.modo_2d = Modo_mapa == 1 ? true : false;
     //--------------------------------------------------------------------------------------
 
     // GameOver:
@@ -528,7 +534,7 @@ int main(void)
         } break;
         case NIVEL_4:
         {
-            // TODO: Update NIVEL_4 screen variables here!
+            // TODO: Update NIVEL_4 screen variables here!     
             if (!admin.cambiaNivel && jugando_nivel) {
                 columnas.Actualizar();
                 plataformas.Actualizar();
@@ -599,7 +605,7 @@ int main(void)
                 admin.iniciaMapa(4, 30*60); // TODO
                 admin.CambioDeMapa(4); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_grande.png", 5);
-                plataformas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt");
+                plataformas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt"); 
                 contadorVidas.cargar_siguiente_nivel();
                 bub.cambioMapa = 2; // TODO
                 bob.cambioMapa = 2; // TODO
@@ -612,7 +618,7 @@ int main(void)
             }
             else {
                 currentScreen = NIVEL_5;
-                destRob = { (float)GetScreenWidth() / 2 + 70, 60, 32, 32 };
+                destRob = { (float)GetScreenWidth() / 2 + 70, 60, 32, 32 }; 
                 robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
@@ -657,7 +663,7 @@ int main(void)
                 if (contadorVidas.hayP2) {
                     bob.Actualizar();
                     for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
-                        bob.compruebaColision(plataformas.listaPlataforma[i]);
+                        bob.compruebaColision(plataformas.listaPlataforma[i]);  
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
@@ -665,7 +671,7 @@ int main(void)
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
                     else if (admin.agua.existe) {
-                        bob.enElAgua = admin.agua.colisionBub(bob.destRec, bob.waterlessFrames);
+                        bob.enElAgua = admin.agua.colisionBub(bob.destRec, bob.waterlessFrames); 
                     }
                 }
                 admin.agua.Actualizar(plataformas, columnas);
@@ -711,13 +717,15 @@ int main(void)
         } break;
         case CONTROLS_MENU:
         {
-            controls.Actualizar(Modo_IA);
+            controls.Actualizar(Modo_IA, Modo_skins, Modo_mapa);
             if (IsKeyPressed(KEY_ENTER)) {
                 // ASIGNAR TODOS LOS BOTONES
                 controls.guardarControlesNuevos();
                 credits.tecla = controls.coin;
                 tecla_p1 = controls.play1; 
-                tecla_p2 = controls.play2;
+                tecla_p2 = controls.play2; 
+                columnas.modo_2d = Modo_mapa == 1 ? true : false;
+                plataformas.modo_2d = Modo_mapa == 1 ? true : false;
                 // ...
                 // Asignamos los controles de los jugadores 
                 /*controls.keys[0] = controls.left_p1;
@@ -727,7 +735,7 @@ int main(void)
                 controls.keys[4] = controls.left_p2; 
                 controls.keys[5] = controls.right_p2;
                 controls.keys[6] = controls.jump_p2;
-                controls.keys[7] = controls.spit_p2;*/
+                controls.keys[7] = controls.spit_p2;*/ 
                 bub.left = controls.left_p1;
                 bub.right = controls.right_p1;
                 bub.jump = controls.jump_p1;
@@ -736,7 +744,7 @@ int main(void)
                 bob.right = controls.right_p2;
                 bob.jump = controls.jump_p2; 
                 bob.shoot = controls.spit_p2;
-                Pompa::controlesJugador = controls;
+                //Pompa::controlesJugador = controls;
 
                 currentScreen = MAIN_MENU;
             }
@@ -900,7 +908,7 @@ int main(void)
         case NIVEL_5:
         {
             // TODO: Draw NIVEL_2 screen here!
-            columnas.DibujarIzquierda();
+            columnas.DibujarIzquierda();  
             plataformas.Dibujar();
             columnas.DibujarDerecha();
             admin.scores.Dibujar();

@@ -1,11 +1,12 @@
 #pragma once
 #include "raylib.h"
+#include "ini.h"
 #include <string>
 
 class Scores {
 public:
     unsigned int puntuacion1 = 0;
-    unsigned int puntuacion_maxima = 300000;
+    unsigned int puntuacion_maxima = 30000;
     unsigned int puntuacion2 = 0;
 
     bool hayP2 = false;
@@ -35,7 +36,18 @@ public:
     }
 
     void Inicializador(int x, int y, int tamano_fuente_base, Color color)
-    {
+    {   
+        
+        mINI::INIFile file("config.ini");
+
+        // next, create a structure that will hold data
+        mINI::INIStructure ini;
+
+        // now we can read the file
+        file.read(ini);
+
+        this->puntuacion_maxima = stoi(ini["score"]["high_score"]);
+
         this->x = x;
         this->y = y;
         this->color = color;
@@ -122,6 +134,15 @@ public:
         this->puntuacion1 += puntuacion_a_sumar;
         if (puntuacion1 > puntuacion_maxima) {
             puntuacion_maxima = puntuacion1;
+            mINI::INIFile file("config.ini");
+
+            // create a data structure
+            mINI::INIStructure ini;
+            file.read(ini);
+            // populate the structure
+            ini["score"]["high_score"] = std::to_string(puntuacion_maxima);
+
+            file.write(ini);
         }
     }
 
@@ -129,6 +150,15 @@ public:
         this->puntuacion2 += puntuacion_a_sumar;
         if (puntuacion2 > puntuacion_maxima) {
             puntuacion_maxima = puntuacion2;
+            mINI::INIFile file("config.ini");
+
+            // create a data structure
+            mINI::INIStructure ini;
+            file.read(ini);
+            // populate the structure
+            ini["score"]["high_score"] = std::to_string(puntuacion_maxima);
+
+            file.write(ini);
         }
     }
 };
