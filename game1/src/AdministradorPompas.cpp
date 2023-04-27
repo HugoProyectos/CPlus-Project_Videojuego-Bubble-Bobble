@@ -9,6 +9,7 @@
 #include <iostream> //Para debuggear
 #include <clasesConSprite/Blanco.cpp>
 #include <mapa.cpp>
+#include "clasesConSprite/Rayo.hpp"
 
 
 
@@ -55,13 +56,15 @@ public:
 	bool muriendo = false;
 	int j1DebeRebotar = 0; //0->No
 	int j1VelLateral = 0;*/
+	Texture2D spriteRayo = LoadTexture("resources/rayo/rayo.png");
 	DatosJugador j1, j2;
 	Agua agua = Agua();
 	GeneradorPompas generador = GeneradorPompas();
 
 	std::vector<sh_Pompa> pompas;
 	std::vector<sh_Enemigo> enemigos;
-
+	std::vector<Rayo> rayos;
+	
 	// Frutas -------
 	std::vector<sh_Frutas> frutas;
 	//---------------
@@ -96,6 +99,56 @@ public:
 	}
 	////////////////////////////////////////
 
+	//Secci�n rayos
+	std::vector<Rayo> eliminaRayo(int i) {
+		std::vector<Rayo> auxiliar;
+		for (int j = 0; j < rayos.size(); j++) {
+			if (j != i) {
+				auxiliar.push_back(rayos.at(j));
+			}
+		}
+		return auxiliar;
+	}
+
+	void actualizaRayos() {
+		for (int i = 0; i < rayos.size(); i++) {
+			//std::cout << "Dimensiones pompa; " << pompas.at(i)->destRec.x << "," << pompas.at(i)->destRec.y << "/" << pompas.at(i)->lastHeight << "," << pompas.at(i)->lastWidth << std::endl;
+
+			if (rayos.at(i).borrame) {
+				//auto aBorrar = pompas.begin() + i;
+				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas			
+				rayos = eliminaRayo(i);
+				i--;
+			}
+			else {
+				rayos.at(i).Actualizar(j1,j2);
+				for (int j = 0; j < enemigos.size(); j++) {
+					if (!enemigos.at(j)->borrame && !enemigos.at(j)->muerto && (enemigos.at(j)->tipo != -2)
+						&& ((rayos.at(i).destRec.y + rayos.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
+							&& (rayos.at(i).destRec.y - rayos.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
+							|| (rayos.at(i).destRec.y + rayos.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
+							&& (rayos.at(i).destRec.y - rayos.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2))
+						&& ((rayos.at(i).destRec.x + rayos.at(i).destRec.width / 2 - rayos.at(i).destRec.width * 0.125) >= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
+							&& (rayos.at(i).destRec.x - rayos.at(i).destRec.width / 2 + rayos.at(i).destRec.width * 0.125) <= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
+							|| (rayos.at(i).destRec.x + rayos.at(i).destRec.width / 2 - rayos.at(i).destRec.width * 0.125) >= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)
+							&& (rayos.at(i).destRec.x - rayos.at(i).destRec.width / 2 + rayos.at(i).destRec.width * 0.125) <= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2))) { //Si choca con el enemigo, lo marca para que se borre y se cambia el estado de la pompa
+						enemigos.at(j)->muertePorRayo = true;
+						enemigos.at(j)->muerto = true;
+						rayos.at(i).animacionActiva = 1;
+						rayos.at(i).indiceAnimacion = 0;
+						enemigosPorMatar--;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	void DibujaRayos() {
+		for (int i = 0; i < rayos.size(); i++) {
+			rayos[i].Dibujar();
+		}
+	}
 
 	//Secci�n pompas
 	std::vector<sh_Pompa> elimina(int i) {
@@ -154,6 +207,14 @@ public:
 			if (pompas.at(i)->matame) {
 				//auto aBorrar = pompas.begin() + i;
 				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas			
+				if (pompas.at(i)->modulo = Pompa::MODULO_RAYO) {
+					int val = pompas.at(i)->sentidoJugador;
+					bool izq = val == 3;
+					Rayo r = Rayo(spriteRayo, pompas.at(i)->destRec, izq);
+					//std::cout << "Direccion del rayo: " << r.izquierda << "Deberia ser: " << izq << std::endl;
+					r.izquierda = izq;
+					rayos.push_back(r);
+				}
 				pompas = elimina(i);
 				i--;
 			}
@@ -284,11 +345,11 @@ public:
 						if (pompas.at(j)->disparada == 0 && pompas.at(j)->animacionActiva != Pompa::EXPLOTA) {
 							//Empuja la pompa2, que se mete por debajo (disminuye y) (se ha creado m�s tarde, por lo que est� en una etapa m�s tard�a de la ruta).
 							//Choca por la derecha de la que empuja -> Empuja hacia la derecha
-							if ((pompa1.x - pompa1.width / 3 < pompa2.x + pompa2.width / 3) && (pompa1.x + pompa1.width / 3 >= pompa2.x + pompa2.width / 3) && !((pompa1.y - pompa1.height / 3 > pompa2.y + pompa2.height / 3) || (pompa1.y + pompa1.height / 3 < pompa2.y - pompa2.height / 3))) {
-								pompas.at(i)->destRec.x += pompa1.width / 8;
-								pompas.at(i)->destRec.y -= pompa1.width / 8;
-								pompas.at(j)->destRec.y += pompa1.width / 8;
-								if (pompas.at(i)->tVida != Pompa::INFINITA) pompas.at(i)->tVida -= 5;
+							if ((pompa1.x - pompa1.width / 3 < pompa2.x + pompa2.width / 3 ) && (pompa1.x + pompa1.width / 3  >= pompa2.x + pompa2.width / 3 ) && !((pompa1.y - pompa1.height / 3  > pompa2.y + pompa2.height / 3 ) || (pompa1.y + pompa1.height / 3  < pompa2.y - pompa2.height / 3 ))) {
+								pompas.at(i)->destRec.x += pompa1.width / 16;
+								pompas.at(i)->destRec.y -= pompa1.width / 16;
+								pompas.at(j)->destRec.y += pompa1.width / 16;
+								if(pompas.at(i)->tVida != Pompa::INFINITA) pompas.at(i)->tVida -= 5;
 								if (pompas.at(j)->tVida != Pompa::INFINITA) pompas.at(j)->tVida -= 5;
 							}
 							//Choca por la izquierda de la que empuja -> Empuja hacia la izquierda

@@ -69,6 +69,9 @@ public:
 	//Para las pompas con agua
 	static const int INFINITA = -25;
 	static const int MODULO_AGUA = 2;
+	static const int MODULO_RAYO = 6;
+	bool izquierdaRayo = true;
+	int sentidoJugador = 1;
 
 	//Indice de animación básicos
 	static const int DISPARO = 0;

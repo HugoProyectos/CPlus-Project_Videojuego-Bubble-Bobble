@@ -86,29 +86,11 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 			//resultado.push_back(std::make_shared<Pompa>(p1));
 			//resultado.push_back(std::make_shared<Pompa>(p2));
 			int numRand = rand() % 100;
-			for (int i = 0; i < 2; i++) {
+			//for (int i = 0; i < 2; i++) {
+			int i = rand() % 2;
 				//Selecci�n del color de la pompa
-				if (numRand < 50) { //verde
-					p = Pompa(verde, r[i], 0, 0, false, 60 * 120);
-				}
-				else { //azul
-					p = Pompa(azul, r[i], 0, 0, false, 60 * 120);
-				}
-				numRand = rand() % 100;
-				if (numRand < 50) { //Que contenga agua
-					p.modulo = Pompa::MODULO_AGUA;
-				}
-				if (lastHeight != GetScreenHeight()) {
-					p.destRec.height = GetScreenHeight() / 14.0625f;
-					p.destRec.y = GetScreenHeight() * (p.destRec.y / lastHeight);
-					p.origin.y = p.destRec.height / 2;
-				}
-				if (lastWidth != GetScreenWidth()) {
-					p.destRec.width = GetScreenWidth() / 25.0f;
-					p.destRec.x = GetScreenWidth() * (p.destRec.x / lastWidth);
-					p.origin.x = p.destRec.width / 2;
-				}
-				resultado.push_back(std::make_shared<Pompa>(p));
+			if (numRand < 50) { //verde
+				p = Pompa(verde, r[i], 0, 0, false, 60 * 120);
 			}
 			break;
 		}

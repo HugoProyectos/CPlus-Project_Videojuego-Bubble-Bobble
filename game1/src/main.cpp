@@ -79,10 +79,8 @@ int main(void)
     admin.agua.existe = false;
     admin.col = &columnas;
     admin.plat = &plataformas;
-    //admin.iniciaMapa(3, 30*60);
-    admin.iniciaMapa(4, 3000 * 60);
-    admin.CambioDeMapa(0); //DEBUG 4->0
-
+    admin.iniciaMapa(3, 30*60);
+    admin.CambioDeMapa(0); 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
@@ -128,8 +126,9 @@ int main(void)
     //admin.pompas.push_back(std::make_shared<Pompa>(p2));
     */
 
-    Rectangle destBub = { GetScreenWidth() - 50, 50, GetScreenHeight() / 14.0625f, GetScreenWidth() / 25.0f };//{ 100, GetScreenHeight() - 50, 32, 32 };
-    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true);
+    Rectangle destBub = { GetScreenWidth() - 50, 50, 32, 32};//{ 100, GetScreenHeight() - 50, 32, 32 };
+    Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true); 
+    //bub.imTheThunder = true;//DEBUG
     Bub bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
     //bub.nivel = 4;
     //bob.nivel = 4;
@@ -227,7 +226,9 @@ int main(void)
 
                 admin.actualizaFrutas(plataformas);
 
-                contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
+                admin.actualizaRayos();
+
+                contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);  
 
                 if (admin.hurryUp) {
                     plataformas.SeñalHurryUp();
@@ -334,6 +335,8 @@ int main(void)
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
 
+                admin.actualizaRayos();
+
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
@@ -360,7 +363,7 @@ int main(void)
 
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(4, 30 * 60); // TODO
+                admin.iniciaMapa(4, 30*60); // TODO 
                 admin.CambioDeMapa(2); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_grande.png", 3);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_pequeno.png", "resources/mapa_nivel_3/mapa.txt");
@@ -441,6 +444,8 @@ int main(void)
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
 
+                admin.actualizaRayos();
+
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
@@ -467,7 +472,7 @@ int main(void)
 
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(6, 30 * 60); // TODO
+                admin.iniciaMapa(6, 30*60); // TODO 
                 admin.CambioDeMapa(3); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_4/bloque_grande.png", 4);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_4/bloque_pequeno.png", "resources/mapa_nivel_4/mapa.txt");
@@ -556,7 +561,9 @@ int main(void)
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
 
-                contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
+                admin.actualizaRayos();
+
+                contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos); 
 
                 if (admin.hurryUp) {
                     plataformas.SeñalHurryUp();
@@ -664,6 +671,8 @@ int main(void)
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
 
+                admin.actualizaRayos();
+
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
@@ -755,7 +764,7 @@ int main(void)
                 admin.scores.puntuacion2 = 0;
 
                 //Reseteo del nivel
-                admin.iniciaMapa(3, 30 * 60);
+                admin.iniciaMapa(3, 30*60); 
                 admin.CambioDeMapa(0);
                 columnas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_grande.png", 1);
                 plataformas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt");
@@ -787,7 +796,7 @@ int main(void)
         BeginDrawing();
 
         ClearBackground(BLACK);
-        ///DEBUG
+        /// DEBUG
         //DrawLine(0, bub.posicionOriginalBub.y + bub.destRec.height/2, GetScreenWidth(), bub.posicionOriginalBub.y + bub.destRec.height / 2, GRAY);
         //DrawLine(bub.posicionOriginalBub.x + bub.destRec.width / 2, 0, bub.posicionOriginalBub.x + bub.destRec.width / 2, GetScreenHeight(), GRAY);
         /// DEBUG
@@ -822,6 +831,7 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
+            admin.DibujaRayos();
             admin.dibujarPuntosCadena();
         } break;
         case NIVEL_2:
@@ -841,6 +851,7 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
+            admin.DibujaRayos();
 
         } break;
         case NIVEL_3:
@@ -860,6 +871,7 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
+            admin.DibujaRayos();
 
         } break;
         case NIVEL_4:
@@ -879,6 +891,7 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
+            admin.DibujaRayos();
 
         } break;
         case NIVEL_5:
@@ -898,6 +911,7 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
+            admin.DibujaRayos();
 
         } break;
         case CONTROLS_MENU:

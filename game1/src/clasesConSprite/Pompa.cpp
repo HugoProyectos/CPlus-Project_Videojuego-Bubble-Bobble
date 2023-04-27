@@ -125,7 +125,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 		ratioX = destRec.width / 32;
 		lastWidth = GetScreenWidth();
 	}
-
+	ratioY = destRec.height / 32;
+	ratioX = destRec.width / 32;
+	
 	if (disparada == 2) {
 		//std::cout << "PIUM" << std::endl;
 		//Explota inmediatamente si empieza dentro de una plataforma
@@ -207,6 +209,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 		}
 		if (abs(distanciaRecorrida) >= abs(distanciaDisparo)) {
 			disparada = 1; //�ltimo frame en que atrapa enemigos
+
 		}
 	}
 	else {
@@ -223,6 +226,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			if (modulo == MODULO_AGUA) {
 				creaAgua = j1.sentidoJugador;
 			}
+			else if (modulo == MODULO_RAYO) {
+				sentidoJugador = j1.sentidoJugador;
+			}
 			else {
 				result = extraeEnemigo(true);
 			}
@@ -238,12 +244,21 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 		}
 		else if (tVida > 0 || tVida == INFINITA) {
+			if (disparada == 1) {
+				if (modulo == MODULO_RAYO) {
+					indiceAnimacion = 18;
+				}
+				else if (modulo == MODULO_AGUA) {
+					indiceAnimacion = 6;
+				}
+			}
 			disparada = 0;
 			if (tVida != INFINITA) tVida -= VELOCIDAD_MUERTE;
 			animacionActiva = VACIA;
+			
 			/////COMPROBACI�N DE COLISI�N CON EL JUGADOR BUB
-			if (!j1.muriendo) {
-
+			if (!j1.muriendo && animacionActiva != EXPLOTA){
+				
 				bool contactoFrente = ((destRec.x - destRec.width / 2) < (j1.posicionJugador.x - j1.posicionJugador.width / 2))
 					&& ((destRec.x + destRec.width / 2) > (j1.posicionJugador.x - j1.posicionJugador.width / 2));
 				bool contactoEspalda = ((destRec.x - destRec.width / 2) < (j1.posicionJugador.x + j1.posicionJugador.width / 2))
@@ -280,6 +295,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						if (modulo == MODULO_AGUA) {
 							creaAgua = j1.sentidoJugador;
 						}
+						else if (modulo == MODULO_RAYO) {
+							sentidoJugador = j1.sentidoJugador;
+						}
 						else {
 							result = extraeEnemigo(true);
 						}
@@ -309,6 +327,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j1.sentidoJugador;
 					}
+					else if (modulo == MODULO_RAYO) {
+						sentidoJugador = j1.sentidoJugador;
+					}
 					else {
 						result = extraeEnemigo(true);
 					}
@@ -326,6 +347,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					cadena = 1;
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j1.sentidoJugador;
+					}
+					else if (modulo == MODULO_RAYO) {
+						sentidoJugador = j1.sentidoJugador;
 					}
 					else {
 						result = extraeEnemigo(true);
@@ -354,7 +378,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 
 			/////COMPROBACI�N DE COLISI�N CON EL JUGADOR BOB
-			if (!j2.muriendo) {
+			if (!j2.muriendo && animacionActiva != EXPLOTA) {
 				bool contactoFrente = ((destRec.x - destRec.width / 2) < (j2.posicionJugador.x - j2.posicionJugador.width / 2))
 					&& ((destRec.x + destRec.width / 2) > (j2.posicionJugador.x - j2.posicionJugador.width / 2));
 				bool contactoEspalda = ((destRec.x - destRec.width / 2) < (j2.posicionJugador.x + j2.posicionJugador.width / 2))
@@ -391,6 +415,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						if (modulo == MODULO_AGUA) {
 							creaAgua = j2.sentidoJugador;
 						}
+						else if (modulo == MODULO_RAYO) {
+							sentidoJugador = j2.sentidoJugador;
+						}
 						else {
 							result = extraeEnemigo(true);
 						}
@@ -420,6 +447,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j2.sentidoJugador;
 					}
+					else if (modulo == MODULO_RAYO) {
+						sentidoJugador = j2.sentidoJugador;
+					}
 					else {
 						result = extraeEnemigo(true);
 					}
@@ -437,6 +467,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					cadena = 2;
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j2.sentidoJugador;
+					}
+					else if (modulo == MODULO_RAYO) {
+						sentidoJugador = j2.sentidoJugador;
 					}
 					else {
 						result = extraeEnemigo(true);
@@ -602,8 +635,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					else if (destRec.x <= screenWidth * 0.53125 && destRec.x >= screenWidth * 0.46875 && destRec.y <= screenHeight * 0.4) {
 						destRec.y += 0.5 * ratioY;
 					}
-					else if (destRec.y < screenHeight * 0.15) {
-						destRec.y += 0.5 * ratioY;
+					else if (destRec.y < screenHeight * 0.15){
+						destRec.y += 0.9 * ratioY;
+						abajo = true;
 					}
 					else {
 						destRec.y -= 0.5 * ratioY;
@@ -630,8 +664,8 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			{
 
 				if (destRec.x < screenWidth / 2) {
-					if (destRec.y < (screenHeight * 0.85) && (destRec.y > (screenHeight * 0.80) && destRec.x >= screenWidth * 0.1625)) {
-						destRec.x -= 1 * ratioX;
+					if (destRec.y < (screenHeight * 0.85) && (destRec.y > (screenHeight * 0.80) && destRec.x >= screenWidth*0.1625)) {
+						destRec.x -= 1.2 * ratioX;
 						//std::cout << "Ruta 1" << std::endl;
 					}
 					else if (destRec.y <= (screenHeight * 0.70) && destRec.y > (screenHeight * 0.65) && destRec.x < screenWidth * 0.4625) {
@@ -651,7 +685,13 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						destRec.y -= 0.5 * ratioY;
 						//std::cout << "Ruta Arriba" << std::endl;
 					}
+					else if (destRec.y < screenHeight * 0.15) {
+						destRec.y += 0.9 * ratioY; 
+						abajo = true;
+						oscilando = false;
+					}
 					else {
+						ignorar = true;
 						oscilando = true;
 						//std::cout << "Oscilas" << std::endl;
 					}
@@ -694,8 +734,8 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						destRec.y -= 0.5 * ratioY;
 						//std::cout << "Arriba" << std::endl;
 					}
-					else if (destRec.y >= screenHeight * 0.2111) {
-						destRec.x += 0.5 * ratioX;
+					else if (destRec.y >= screenHeight * 0.1999 ) {
+						destRec.x += 1.2 * ratioX;
 						//std::cout << "Derecha" << std::endl;
 					}
 					else {
@@ -749,8 +789,15 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			};
 
 			//Evitar que la pompa se salga por arriba
-			if (destRec.y < screenHeight * 0.1333) {
-				destRec.y = screenHeight * 0.1333;
+			/*if (destRec.y < screenHeight * 0.1333) {
+				destRec.y += screenHeight * 0.1333;
+			}*/
+			//Evitar que la pompa se salga por los lados
+			if (destRec.x < GetScreenWidth() * 0.1) {
+				destRec.x = GetScreenWidth() * 0.1;
+			}
+			else if (destRec.x > GetScreenWidth() * 0.9) {
+				destRec.x = GetScreenWidth() * 0.9;
 			}
 		}
 		/////FIN DESPLAZAMIENTO POR EL MAPA
