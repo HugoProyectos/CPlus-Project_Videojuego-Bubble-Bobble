@@ -107,7 +107,7 @@ public:
     float distanciaSaltoMax = 0;
     float velocidadSalto = 0;  //A�adir aceleracion, y hacer que velocidad nueva = velocidad anterior + aceleracion. Empezar con una aceleracion inicial, y que se le vayan restando valores. A partir de cierta velocidad, capar. Hay que comprobar que el tope coincida con el planeo.
     float velocidadLateral = 0;
-    float deceleracion = 0.1f;
+    float deceleracion = 0;
     float velocidadActual = 0;
 
     Bub() = default; //Debe llamarse a Inicializador
@@ -116,6 +116,8 @@ public:
         Inicializador(tamano, saltoMax, velSalto, velLateral, _targetFrames, adm, esBub);
 		destRec = destino;
         inicio = destino;
+        lastHeight = GetScreenHeight();
+        lastWidth = GetScreenWidth();
     };
     void Inicializador(float tamano, float saltoMax, float velSalto,float velLateral, int _targetFrames, AdministradorPompas& adm, bool esBub)
     {
@@ -166,6 +168,12 @@ public:
 
     void Actualizar() {
         if (lastHeight != GetScreenHeight()) {
+            if (cambioMapa > 0) {
+                destRec.height /= 2;
+                destRec.width /= 2;
+                destRec.x += destRec.width / 2.0f;
+                destRec.y += destRec.height / 2.0f;
+            }
             destRec.height = GetScreenHeight() / 14.0625f;
             destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
             origin.y = destRec.height / 2;
@@ -175,10 +183,27 @@ public:
             else {
                 posicionOriginalBob.y = GetScreenHeight() * (posicionOriginalBob.y / lastHeight);
             }
+            if (cambioMapa > 0) {
+                destRec.height *= 2;
+                destRec.width *= 2;
+                if (eresBub) {
+                    razonY = ((posicionOriginalBub.y - posicionOriginalBub.y*0.05) - destRec.y) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
+                }
+                else {
+                    razonY = ((posicionOriginalBob.y - posicionOriginalBob.y*0.05)- destRec.y) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
+                }
+            }
             lastHeight = GetScreenHeight();
         }
         if (lastWidth != GetScreenWidth()) {
-            destRec.width = GetScreenWidth()/ 25.0f;
+            if (cambioMapa > 0) {
+                destRec.height /= 2;
+                destRec.width /= 2;
+                destRec.x += destRec.width / 2.0f;
+                destRec.y += destRec.height / 2.0f;
+            }
+           
+            destRec.width = GetScreenWidth() / 25.0f;
             destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
             origin.x = destRec.width / 2;
             if (eresBub) {
@@ -187,12 +212,23 @@ public:
             else {
                 posicionOriginalBob.x = GetScreenWidth() * (posicionOriginalBob.x / lastWidth);
             }
+            if (cambioMapa > 0) {
+                destRec.height *= 2;
+                destRec.width *= 2;
+                if (eresBub) {
+                    razonX = (posicionOriginalBub.x - destRec.x) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
+                }
+                else {
+                    razonX = (posicionOriginalBob.x - destRec.x) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
+                }
+            }
+            
             lastWidth = GetScreenWidth();
         }
         //Frames de "inmunidad" al agua
         velocidadLateral = destRec.width / 16.0f;
-        velocidadSalto = destRec.height / 7.5f;
-        deceleracion = velocidadSalto / 40.0f;
+        velocidadSalto = destRec.height / 4.5f;
+        deceleracion = velocidadSalto / 25.0f;
         if (waterlessFrames > 0) { waterlessFrames--; }
         //Gestion de wrap vertical
         if (destRec.y > GetScreenHeight() + 50) {
@@ -459,8 +495,8 @@ public:
                 else if (enElAire && cayendo) { //Planeando
                     //std::cout << "I'm gliding" << std::endl;
                     if (!disparando && !muriendo) animacionActiva = FALLING;
-                    destRec.y += velocidadSalto / 2.0f;
-                    saltoRecorrido -= velocidadSalto / 2.0f;
+                    destRec.y += velocidadSalto / 3.0f;
+                    saltoRecorrido -= velocidadSalto / 3.0f;
                 }
                 else if (enElAire) { //Inicio ca�da
                     if (!disparando && !muriendo) animacionActiva = FALLING;
@@ -651,8 +687,8 @@ public:
             if (
                 (
                     //Comprobamos colision esquina inferior derecha
-                    (((s.bot) > (destRec.y + destRec.height / 2.0f)) &&
-                        ((destRec.y + destRec.height / 2.0f) > (s.top))
+                    (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                        ((destRec.y + destRec.height * 0.49) > (s.top))
                         ) && (
                             ((s.right) > (destRec.x + destRec.width / 2.0f)) &&
                             ((destRec.x + destRec.width / 2.0f) > (s.left))
@@ -714,8 +750,8 @@ public:
                     ) ||
                 (
                     //Comprobamos colision esquina inferior izquierda
-                    (((s.bot) > (destRec.y + destRec.height / 2.0f)) &&
-                        ((destRec.y + destRec.height / 2.0f) > (s.top))
+                    (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                        ((destRec.y + destRec.height * 0.49) > (s.top))
                         ) && (
                             ((s.right) > (destRec.x - destRec.width / 2.0f)) &&
                             ((destRec.x - destRec.width / 2.0f) > (s.left))
@@ -723,8 +759,8 @@ public:
                     ) ||
                 (
                     //Comprobamos colision centro inferior
-                    (((s.bot) > (destRec.y + destRec.height / 2.0f)) &&
-                        ((destRec.y + destRec.height / 2.0f) > (s.top))
+                    (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                        ((destRec.y + destRec.height * 0.49) > (s.top))
                         ) && (
                             ((s.right) > (destRec.x)) &&
                             ((destRec.x) > (s.left))
@@ -763,8 +799,8 @@ public:
                     ||
                     //Comprobamos colision esquina inferior derecha
                     (
-                        (((s.bot) > (destRec.y + destRec.height / 2.0f)) &&
-                            ((destRec.y + destRec.height / 2.0f) > (s.top))
+                        (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                            ((destRec.y + destRec.height * 0.49) > (s.top))
                             ) && (
                                 ((s.right) > (destRec.x + destRec.width / 2 + destRec.width / 6)) &&
                                 ((destRec.x + destRec.width / 2 + destRec.width / 6) > (s.left))
@@ -788,8 +824,8 @@ public:
                     ||
                     //Comprobamos colision esquina inferior derecha
                     (
-                        (((s.bot) > (destRec.y + destRec.height / 2.0f)) &&
-                            ((destRec.y + destRec.height / 2.0f) > (s.top))
+                        (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                            ((destRec.y + destRec.height * 0.49) > (s.top))
                             ) && (
                                 ((s.right) > (destRec.x - destRec.width / 2 - destRec.width / 6)) &&
                                 ((destRec.x - destRec.width / 2 - destRec.width / 6) > (s.left))

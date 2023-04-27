@@ -21,6 +21,18 @@ public:
 	//Referencias a plataformas y columnas para la colision de pompas
 	Columnas *col;
 	Plataformas *plat;
+	//Texturas para puntuacion de cadena
+	Texture2D bubPoints = LoadTexture("resources/puntos/puntosBub.png");
+	Rectangle pointSourceBub;
+	Rectangle destRecBub;
+	int pointsTimeBub = 0;
+	Texture2D bobPoints = LoadTexture("resources/puntos/puntosBob.png");
+	Rectangle pointSourceBob;
+	Rectangle destRecBob;
+	int pointsTimeBob = 0;
+	int lastHeight;
+	int lastWidth;
+	Rectangle lastPopped;
 	//Gestión de tiempo de mapa
 	uint32_t contadorSkull = 0;
 	uint32_t limiteContadorSkull = 60 * 90;
@@ -96,8 +108,44 @@ public:
 		return auxiliar;
 	}
 
-	void actualizaPompas() {
+	void dibujarPuntosCadena() {
+		if (pointsTimeBub > 0) {
+			pointsTimeBub--;
+			if (lastWidth != GetScreenWidth()) {
+				destRecBub.x = (destRecBub.x / lastWidth) * GetScreenWidth();
+				destRecBub.width = (destRecBub.width / lastWidth) * GetScreenWidth();
+			}
+			if (lastWidth != GetScreenWidth()) {
+				destRecBub.y = (destRecBub.y / lastHeight) * GetScreenHeight();
+				destRecBub.height = (destRecBub.height / lastHeight) * GetScreenHeight();
+			}
+			destRecBub.y -= (float)GetScreenHeight() / 300;
+			if (destRecBub.y < -50) {
+				destRecBub.y = GetScreenHeight() + 50;
+			}
+			DrawTexturePro(bubPoints, pointSourceBub, destRecBub, { destRecBub.width / 2, destRecBub.height / 2 }, 0.0f, WHITE);
+		}
+		if (pointsTimeBob > 0) {
+			pointsTimeBob--;
+			if (lastWidth != GetScreenWidth()) {
+				destRecBob.x = (destRecBob.x / lastWidth) * GetScreenWidth();
+				destRecBob.width = (destRecBob.width / lastWidth) * GetScreenWidth();
+			}
+			if (lastWidth != GetScreenWidth()) {
+				destRecBob.y = (destRecBob.y / lastHeight) * GetScreenHeight();
+				destRecBob.height = (destRecBob.height / lastHeight) * GetScreenHeight();
+			}
+			destRecBob.y -= (float)GetScreenHeight() / 300;
+			if (destRecBob.y < -50) {
+				destRecBob.y = GetScreenHeight() + 50;
+			}
+			DrawTexturePro(bobPoints, pointSourceBob, destRecBob, { destRecBob.width / 2, destRecBob.height / 2 }, 0.0f, WHITE);
+		}
+		lastWidth = GetScreenWidth();
+		lastHeight = GetScreenHeight();
+	}
 
+	void actualizaPompas() {
 		//std::cout << "Pompas a actualizar: " << pompas.size() << std::endl;
 		//Actualiza el estado de las pompas
 		for (int i = 0; i < pompas.size(); i++) {
@@ -142,10 +190,10 @@ public:
 					}
 				}
 				if (pompas.at(i)->cadena) {
-					std::cout << "Kill Count 1: " << killCountBub << std::endl;
 					if (pompas.at(i)->cadena == 1) {
 						if (pompas.at(i)->enemigoContenido != NULL) {
 							killCountBub++;
+							lastPopped = pompas.at(i)->destRec;
 							pompas.at(i)->killCount = killCountBub;
 							switch (killCountBub) {
 							case 1:
@@ -177,6 +225,7 @@ public:
 					else if (pompas.at(i)->cadena == 2) {
 						if (pompas.at(i)->enemigoContenido != NULL) {
 							killCountBob++;
+							lastPopped = pompas.at(i)->destRec;
 							pompas.at(i)->killCount = killCountBob;
 							switch (killCountBob) {
 							case 1:
@@ -268,20 +317,28 @@ public:
 				else if (creaAgua == 2 && !agua.existe) {
 					agua.stream[0].destRec.x = pompas.at(i)->destRec.x;
 					agua.stream[0].destRec.y = pompas.at(i)->destRec.y;
+					agua.stream[0].destRec.width = GetScreenWidth() / 61.5f;
+					agua.stream[0].destRec.height = GetScreenHeight() / 34.6f;
+					agua.lastHeight = GetScreenHeight();
+					agua.lastWidth = GetScreenWidth();
 					agua.stream[0].direccionDerecha = false;
 					agua.existe = true;
 				}
 				else if (creaAgua == 3 && !agua.existe) {
 					agua.stream[0].destRec.x = pompas.at(i)->destRec.x;
 					agua.stream[0].destRec.y = pompas.at(i)->destRec.y;
+					agua.stream[0].destRec.width = GetScreenWidth() / 61.5f;
+					agua.stream[0].destRec.height = GetScreenHeight() / 34.6f;
+					agua.lastHeight = GetScreenHeight();
+					agua.lastWidth = GetScreenWidth();
 					agua.stream[0].direccionDerecha = true;
 					agua.existe = true;
 				}
 				if (pompas.at(i)->cadena) {
-					std::cout << "Kill Count 2: " << killCountBub << std::endl;
 					if (pompas.at(i)->cadena == 1) {
 						if (pompas.at(i)->enemigoContenido != NULL) {
 							killCountBub++;
+							lastPopped = pompas.at(i)->destRec;
 							pompas.at(i)->killCount = killCountBub;
 							switch (killCountBub) {
 							case 1:
@@ -313,6 +370,7 @@ public:
 					else if (pompas.at(i)->cadena == 2) {
 						if (pompas.at(i)->enemigoContenido != NULL) {
 							killCountBob++;
+							lastPopped = pompas.at(i)->destRec;
 							pompas.at(i)->killCount = killCountBob;
 							switch (killCountBob) {
 							case 1:
@@ -422,13 +480,69 @@ public:
 			}
 		}
 		if (lastKCBub == killCountBub) {
-			killCountBub = 0;
+			if (killCountBub > 1) {
+				switch (killCountBub) {
+				case 2:
+					pointSourceBub = { 254.0f,10.0f,31.0f,15.0f };
+					break;
+				case 3:
+					pointSourceBub = { 289.0f,10.f,31.0f,15.0f };
+					break;
+				case 4:
+					pointSourceBub = { 324.0f,10.0f,31.0f,15.0f };
+					break;
+				case 5:
+					pointSourceBub = { 359.0f,10.0f,47.0f,15.0f };
+					break;
+				case 6:
+					pointSourceBub = { 410.0f,10.0f,47.0f,15.0f };
+					break;
+				case 7:
+					pointSourceBub = { 461.0f,10.0f,47.0f,15.0f };
+					break;
+				}
+				pointsTimeBub = 300;
+				lastHeight = GetScreenHeight();
+				lastWidth = GetScreenWidth();
+				destRecBub = { lastPopped.x, lastPopped.y,  ((float)GetScreenWidth() / 200)*pointSourceBub.width, ((float)GetScreenHeight() / 200)*pointSourceBub.height };
+			}
+			if (killCountBub != 0) {
+				killCountBub = 0;
+			}
 		}
 		else {
 			lastKCBub = killCountBub;
 		}
 		if (lastKCBob == killCountBob) {
-			killCountBob = 0;
+			if (killCountBob > 1) {
+				switch (killCountBob) {
+				case 2:
+					pointSourceBob = { 254.0f,10.0f,31.0f,15.0f };
+					break;
+				case 3:
+					pointSourceBob = { 289.0f,10.f,31.0f,15.0f };
+					break;
+				case 4:
+					pointSourceBob = { 324.0f,10.0f,31.0f,15.0f };
+					break;
+				case 5:
+					pointSourceBob = { 359.0f,10.0f,47.0f,15.0f };
+					break;
+				case 6:
+					pointSourceBob = { 410.0f,10.0f,47.0f,15.0f };
+					break;
+				case 7:
+					pointSourceBob = { 461.0f,10.0f,47.0f,15.0f };
+					break;
+				}
+				pointsTimeBob = 300;
+				lastHeight = GetScreenHeight();
+				lastWidth = GetScreenWidth();
+				destRecBob = { lastPopped.x, lastPopped.y,  ((float)GetScreenWidth() / 200) * pointSourceBob.width, ((float)GetScreenHeight() / 200) * pointSourceBob.height };
+			}
+			if (killCountBob != 0) {
+				killCountBob = 0;
+			}
 		}
 		else {
 			lastKCBob = killCountBob;

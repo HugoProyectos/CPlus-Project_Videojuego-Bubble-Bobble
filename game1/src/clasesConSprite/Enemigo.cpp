@@ -30,6 +30,8 @@ public:
     float velocidadSalto = 0;
     float saltoRecorrido = 0;
     float distanciaSaltoMax = 0;
+    int lastHeight = 450;
+    int lastWidth = 800;
 
     Enemigo() = default; //Debe llamarsse a Inicializador
 

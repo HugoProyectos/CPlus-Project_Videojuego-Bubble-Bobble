@@ -67,6 +67,22 @@ public:
             empezando = false;
         }
 
+        if (lastHeight != GetScreenHeight()) {
+            destRec.height = GetScreenHeight() / 14.0625f;
+            destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+            distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
+            origin.y = destRec.height / 2;
+            lastHeight = GetScreenHeight();
+        }
+        if (lastWidth != GetScreenWidth()) {
+            destRec.width = GetScreenWidth() / 25.0f;
+            destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+            origin.x = destRec.width / 2;
+            lastWidth = GetScreenWidth();
+        }
+
+        velocidadLateral = destRec.width / 16.0f;
+        velocidadSalto = destRec.height / 10.0f;
 
         //Contar segundos 
         //Si ha pasado el tiempo mover durante x segundos

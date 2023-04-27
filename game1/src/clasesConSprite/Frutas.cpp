@@ -14,7 +14,7 @@ public:
     Texture2D walkAnimation = LoadTexture("resources/frutas/cereza.png");
     Texture2D deadAnimation = LoadTexture("resources/frutas/500.png");
 	Texture2D animations[2] = { walkAnimation, deadAnimation };
-	int fWalkAnimation = 1; 
+	int fWalkAnimation = 1;
 	int fDeadAnimation = 1;
 	int fAnimation[2] = { fWalkAnimation , fDeadAnimation };
 	int widthAnimation; 

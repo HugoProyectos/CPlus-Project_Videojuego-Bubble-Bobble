@@ -75,12 +75,13 @@ int main(void)
 
     AdministradorPompas admin = AdministradorPompas();
     Texture2D spriteAgua = LoadTexture("resources/agua.png");
-    Rectangle destAgua = { -100, -100, 13, 13 };
+    Rectangle destAgua = { -100, -100, GetScreenHeight() / 34.6f, 61.5f };
     admin.agua = Agua(destAgua, true, spriteAgua, plataformas.listaPlataforma.size());
     admin.agua.existe = false;
     admin.col = &columnas;
     admin.plat = &plataformas;
-    admin.iniciaMapa(3, 300*60);
+    //admin.iniciaMapa(3, 30*60);
+    admin.iniciaMapa(4, 3000 * 60);
     admin.CambioDeMapa(0); //DEBUG 4->0
 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
@@ -124,7 +125,7 @@ int main(void)
     //admin.pompas.push_back(std::make_shared<Pompa>(p2));
     */
 
-    Rectangle destBub = { GetScreenWidth() - 50, 50, 32, 32};//{ 100, GetScreenHeight() - 50, 32, 32 };
+    Rectangle destBub = { GetScreenWidth() - 50, 50, GetScreenHeight() / 14.0625f, GetScreenWidth() / 25.0f };//{ 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true); 
     Bub bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
     //bub.nivel = 4;
@@ -153,7 +154,7 @@ int main(void)
 
     int framesCounter = 0;          // Useful to count frames
 
-    SetTargetFPS(60);               // Set desired framerate (frames-per-second) 
+    SetTargetFPS(60);               // Set desired framerate (frames-per-second)
     //--------------------------------------------------------------------------------------
 
     /*bub.cayendo = true;
@@ -164,7 +165,7 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        switch (currentScreen) 
+        switch (currentScreen)
         {
         case MAIN_MENU:
         {
@@ -183,7 +184,7 @@ int main(void)
                 admin.scores.hayP1 = true;
                 plataformas.inicio_de_ronda(1);
             }
-            else if (IsKeyPressed(tecla_p2) && credits.creditos >= 2) {  
+            else if (IsKeyPressed(tecla_p2) && credits.creditos >= 2) {
                 currentScreen = NIVEL_1;
                 credits.creditos -= 2;
                 admin.scores.hayP1 = true;
@@ -212,7 +213,7 @@ int main(void)
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
                 else if (admin.agua.existe) {
-                    bub.enElAgua = admin.agua.colisionBub(bub.destRec, bub.waterlessFrames);   
+                    bub.enElAgua = admin.agua.colisionBub(bub.destRec, bub.waterlessFrames);
                 }
                 if (contadorVidas.hayP2) {
                     bob.Actualizar();
@@ -594,6 +595,7 @@ int main(void)
 
             }
             else if (admin.cambiaNivel) {
+                //CAMBIADO PARA PRUEBAS DE AGUA
                 admin.iniciaMapa(4, 30*60); // TODO
                 admin.CambioDeMapa(4); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_grande.png", 5);
@@ -734,7 +736,7 @@ int main(void)
                 bob.right = controls.right_p2;
                 bob.jump = controls.jump_p2; 
                 bob.shoot = controls.spit_p2;
-                //Pompa::controlesJugador = controls;  // Descomentar
+                Pompa::controlesJugador = controls;
 
                 currentScreen = MAIN_MENU;
             }
@@ -798,7 +800,11 @@ int main(void)
         BeginDrawing();
 
         ClearBackground(BLACK);
-          
+        ///DEBUG
+        //DrawLine(0, bub.posicionOriginalBub.y + bub.destRec.height/2, GetScreenWidth(), bub.posicionOriginalBub.y + bub.destRec.height / 2, GRAY);
+        //DrawLine(bub.posicionOriginalBub.x + bub.destRec.width / 2, 0, bub.posicionOriginalBub.x + bub.destRec.width / 2, GetScreenHeight(), GRAY);
+        /// DEBUG
+
         switch (currentScreen)
         {
         case MAIN_MENU:
@@ -829,6 +835,7 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
+            admin.dibujarPuntosCadena();
         } break;
         case NIVEL_2:
         {
