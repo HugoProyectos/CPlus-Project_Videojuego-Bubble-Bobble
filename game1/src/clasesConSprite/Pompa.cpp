@@ -15,6 +15,9 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->cayendo = true;
 		enemigoContenido->muerto = matalo;
 		enemigoContenido->enfadado = true;
+		if (matalo) {
+			enemigoContenido->killCount = this->killCount;
+		}
 
 		resultado = enemigoContenido;
 	} else if (modulo == 3) {
@@ -24,6 +27,9 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->cayendo = true;
 		enemigoContenido->muerto = matalo;
 		enemigoContenido->enfadado = true;
+		if (matalo) {
+			enemigoContenido->killCount = this->killCount;
+		}
 
 		resultado = enemigoContenido;
 	} else if (modulo == 4) {
@@ -33,6 +39,9 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->cayendo = true;
 		enemigoContenido->muerto = matalo;
 		enemigoContenido->enfadado = true;
+		if (matalo) {
+			enemigoContenido->killCount = this->killCount;
+		}
 
 		resultado = enemigoContenido;
 	} else if (modulo == 5) {
@@ -42,6 +51,9 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->cayendo = true;
 		enemigoContenido->muerto = matalo;
 		enemigoContenido->enfadado = true;
+		if (matalo) {
+			enemigoContenido->killCount = this->killCount;
+		}
 
 		resultado = enemigoContenido;
 	}

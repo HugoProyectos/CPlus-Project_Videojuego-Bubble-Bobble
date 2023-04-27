@@ -120,7 +120,7 @@ public:
 
             if (muerto) {
                 animacionActiva = 1;
-                Caer();
+                CaerLento();
             }
             //Si va a la izquierda
             else if (direccionX == 0) {
@@ -176,15 +176,6 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
-                if (indiceAnimacion == 3) {
-                    if (!muertePorAgua && !frutaProducida) {
-                        frutaProducida = true;
-                        Frutas f = Frutas();
-                        f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
-                        admin->frutas.push_back(std::make_shared<Frutas>(f));
-                    }
-                    borrame = true;
-                }
                 break;
             case 2:
                 //Actualizar width&height animacion

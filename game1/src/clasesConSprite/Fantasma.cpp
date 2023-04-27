@@ -64,6 +64,7 @@ public:
     int direccionX = 1;
     float anchosX = 15.0f;
     bool postEnfado = false;
+    bool frutaProducida = false;
 
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
@@ -145,7 +146,7 @@ public:
 
             if (muerto) {
                 animacionActiva = 1;
-                Caer();
+                CaerLento();
             }
             else if (enfadado) {
                 enfadar();
@@ -534,6 +535,13 @@ public:
                 animacionActiva = 1;
                 enElAire = false;
                 cayendo = false;
+                if (!muertePorAgua && !frutaProducida) {
+                    frutaProducida = true;
+                    Frutas f = Frutas();
+                    f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
+                    admin->frutas.push_back(std::make_shared<Frutas>(f));
+                }
+                borrame = true;
 
             }
             else {

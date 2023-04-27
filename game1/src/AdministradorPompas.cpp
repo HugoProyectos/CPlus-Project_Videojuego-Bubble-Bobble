@@ -105,7 +105,7 @@ public:
 	void dibujarPuntosCadena() {
 		if (pointsTime > 0) {
 			pointsTime--;
-			std::cout << pointSource.x << std :: endl;
+			//std::cout << pointSource.x << std :: endl;
 			DrawTexturePro(bubPoints, pointSource, destRec, { destRec.width / 2, destRec.height / 2 }, 0.0f, WHITE);
 		}
 	}
@@ -159,6 +159,7 @@ public:
 						if (pompas.at(i)->enemigoContenido != NULL) {
 							killCountBub++;
 							pompas.at(i)->killCount = killCountBub;
+							std::cout << pompas.at(i)->killCount << std::endl;
 							switch (killCountBub) {
 							case 1:
 								scores.puntuacion1 += 1000;
