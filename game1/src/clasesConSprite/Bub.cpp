@@ -107,7 +107,7 @@ public:
     float distanciaSaltoMax = 0;
     float velocidadSalto = 0;  //A�adir aceleracion, y hacer que velocidad nueva = velocidad anterior + aceleracion. Empezar con una aceleracion inicial, y que se le vayan restando valores. A partir de cierta velocidad, capar. Hay que comprobar que el tope coincida con el planeo.
     float velocidadLateral = 0;
-    float deceleracion = 0;
+    float deceleracion = 0.1f;
     float velocidadActual = 0;
 
     Bub() = default; //Debe llamarse a Inicializador
@@ -227,8 +227,8 @@ public:
         }
         //Frames de "inmunidad" al agua
         velocidadLateral = destRec.width / 16.0f;
-        velocidadSalto = destRec.height / 4.5f;
-        deceleracion = velocidadSalto / 25.0f;
+        velocidadSalto = destRec.height / 7.5f;
+        deceleracion = velocidadSalto / 40.0f;
         if (waterlessFrames > 0) { waterlessFrames--; }
         //Gestion de wrap vertical
         if (destRec.y > GetScreenHeight() + 50) {
@@ -495,8 +495,8 @@ public:
                 else if (enElAire && cayendo) { //Planeando
                     //std::cout << "I'm gliding" << std::endl;
                     if (!disparando && !muriendo) animacionActiva = FALLING;
-                    destRec.y += velocidadSalto / 3.0f;
-                    saltoRecorrido -= velocidadSalto / 3.0f;
+                    destRec.y += velocidadSalto / 2.0f;
+                    saltoRecorrido -= velocidadSalto / 2.0f;
                 }
                 else if (enElAire) { //Inicio ca�da
                     if (!disparando && !muriendo) animacionActiva = FALLING;
@@ -525,7 +525,7 @@ public:
 
                 // Comprueba que se come la fruta
                 for (int i = 0; i < admin->frutas.size(); i++) {
-                    if (!admin->frutas.at(i)->borrame && !admin->frutas.at(i)->muerto && !muriendo
+                    if (!admin->frutas.at(i)->borrame && !admin->frutas.at(i)->muerto_bub && !admin->frutas.at(i)->muerto_bob && !muriendo
                         && ((destRec.y + destRec.height / 2.0f) >= (admin->frutas.at(i)->destRec.y + admin->frutas.at(i)->destRec.height / 2.0f)
                             && (destRec.y - destRec.height / 2.0f) <= (admin->frutas.at(i)->destRec.y + admin->frutas.at(i)->destRec.height / 2.0f)
                             || (destRec.y + destRec.height / 2.0f) >= (admin->frutas.at(i)->destRec.y - admin->frutas.at(i)->destRec.height / 2.0f)
@@ -537,12 +537,14 @@ public:
                     { //Colisiona con fruta
                         if (eresBub) {
                             admin->scores.SumarPuntuacionP1((unsigned int)admin->frutas.at(i)->puntuacion);
+                            admin->frutas.at(i)->muerto_bub = true;
                         }
                         else {
                             admin->scores.SumarPuntuacionP2((unsigned int)admin->frutas.at(i)->puntuacion);
+                            admin->frutas.at(i)->muerto_bob = true;
                         }
                         PlaySound(sonidoFruta);
-                        admin->frutas.at(i)->muerto = true;
+                        
                     }
                 }
 
