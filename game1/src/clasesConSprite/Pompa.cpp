@@ -191,6 +191,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 		}
 		if (abs(distanciaRecorrida) >= abs(distanciaDisparo)) {
 			disparada = 1; //Último frame en que atrapa enemigos
+
 		}
 	}
 	else {
@@ -205,6 +206,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 			if (modulo == MODULO_AGUA) {
 				creaAgua = j1.sentidoJugador;
+			}
+			else if (modulo == MODULO_RAYO) {
+				sentidoJugador = j1.sentidoJugador;
 			}
 			else {
 				result = extraeEnemigo(true);
@@ -221,11 +225,20 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			
 		}
 		else if (tVida > 0 || tVida == INFINITA) {
+			if (disparada == 1) {
+				if (modulo == MODULO_RAYO) {
+					indiceAnimacion = 18;
+				}
+				else if (modulo == MODULO_AGUA) {
+					indiceAnimacion = 6;
+				}
+			}
 			disparada = 0;
 			if(tVida != INFINITA) tVida -= VELOCIDAD_MUERTE;
 			animacionActiva = VACIA;
+			
 			/////COMPROBACIÓN DE COLISIÓN CON EL JUGADOR BUB
-			if (!j1.muriendo){
+			if (!j1.muriendo && animacionActiva != EXPLOTA){
 				
 				bool contactoFrente = ((destRec.x - destRec.width / 2) < (j1.posicionJugador.x - j1.posicionJugador.width / 2))
 					&& ((destRec.x + destRec.width / 2) > (j1.posicionJugador.x - j1.posicionJugador.width / 2));
@@ -263,6 +276,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						if (modulo == MODULO_AGUA) {
 							creaAgua = j1.sentidoJugador;
 						}
+						else if (modulo == MODULO_RAYO) {
+							sentidoJugador = j1.sentidoJugador;
+						}
 						else {
 							result = extraeEnemigo(true);
 						}
@@ -292,6 +308,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j1.sentidoJugador;
 					}
+					else if (modulo == MODULO_RAYO) {
+						sentidoJugador = j1.sentidoJugador;
+					}
 					else {
 						result = extraeEnemigo(true);
 					}
@@ -309,6 +328,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					cadena = 1;
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j1.sentidoJugador;
+					}
+					else if (modulo == MODULO_RAYO) {
+						sentidoJugador = j1.sentidoJugador;
 					}
 					else {
 						result = extraeEnemigo(true);
@@ -337,7 +359,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 
 			/////COMPROBACIÓN DE COLISIÓN CON EL JUGADOR BOB
-			if (!j2.muriendo) {
+			if (!j2.muriendo && animacionActiva != EXPLOTA) {
 				bool contactoFrente = ((destRec.x - destRec.width / 2) < (j2.posicionJugador.x - j2.posicionJugador.width / 2))
 					&& ((destRec.x + destRec.width / 2) > (j2.posicionJugador.x - j2.posicionJugador.width / 2));
 				bool contactoEspalda = ((destRec.x - destRec.width / 2) < (j2.posicionJugador.x + j2.posicionJugador.width / 2))
@@ -374,6 +396,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						if (modulo == MODULO_AGUA) {
 							creaAgua = j2.sentidoJugador;
 						}
+						else if (modulo == MODULO_RAYO) {
+							sentidoJugador = j2.sentidoJugador;
+						}
 						else {
 							result = extraeEnemigo(true);
 						}
@@ -403,6 +428,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j2.sentidoJugador;
 					}
+					else if (modulo == MODULO_RAYO) {
+						sentidoJugador = j2.sentidoJugador;
+					}
 					else {
 						result = extraeEnemigo(true);
 					}
@@ -420,6 +448,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					cadena = 2;
 					if (modulo == MODULO_AGUA) {
 						creaAgua = j2.sentidoJugador;
+					}
+					else if (modulo == MODULO_RAYO) {
+						sentidoJugador = j2.sentidoJugador;
 					}
 					else {
 						result = extraeEnemigo(true);
@@ -777,6 +808,13 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			/*if (destRec.y < screenHeight * 0.1333) {
 				destRec.y += screenHeight * 0.1333;
 			}*/
+			//Evitar que la pompa se salga por los lados
+			if (destRec.x < GetScreenWidth() * 0.1) {
+				destRec.x = GetScreenWidth() * 0.1;
+			}
+			else if (destRec.x > GetScreenWidth() * 0.9) {
+				destRec.x = GetScreenWidth() * 0.9;
+			}
 		}
 		/////FIN DESPLAZAMIENTO POR EL MAPA
 

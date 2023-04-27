@@ -9,6 +9,7 @@
 #include <iostream> //Para debuggear
 #include <clasesConSprite/Blanco.cpp>
 #include <mapa.cpp>
+#include "clasesConSprite/Rayo.hpp"
 
 
 
@@ -43,12 +44,14 @@ public:
 	bool muriendo = false;
 	int j1DebeRebotar = 0; //0->No
 	int j1VelLateral = 0;*/
+	Texture2D spriteRayo = LoadTexture("resources/rayo/rayo.png");
 	DatosJugador j1, j2;
 	Agua agua = Agua();
 	GeneradorPompas generador = GeneradorPompas();
 
 	std::vector<sh_Pompa> pompas;
 	std::vector<sh_Enemigo> enemigos;
+	std::vector<Rayo> rayos;
 	
 	// Frutas -------
 	std::vector<sh_Frutas> frutas;
@@ -85,6 +88,57 @@ public:
 	////////////////////////////////////////
 	
 
+	//Sección rayos
+	std::vector<Rayo> eliminaRayo(int i) {
+		std::vector<Rayo> auxiliar;
+		for (int j = 0; j < rayos.size(); j++) {
+			if (j != i) {
+				auxiliar.push_back(rayos.at(j));
+			}
+		}
+		return auxiliar;
+	}
+
+	void actualizaRayos() {
+		for (int i = 0; i < rayos.size(); i++) {
+			//std::cout << "Dimensiones pompa; " << pompas.at(i)->destRec.x << "," << pompas.at(i)->destRec.y << "/" << pompas.at(i)->lastHeight << "," << pompas.at(i)->lastWidth << std::endl;
+
+			if (rayos.at(i).borrame) {
+				//auto aBorrar = pompas.begin() + i;
+				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas			
+				rayos = eliminaRayo(i);
+				i--;
+			}
+			else {
+				rayos.at(i).Actualizar(j1,j2);
+				for (int j = 0; j < enemigos.size(); j++) {
+					if (!enemigos.at(j)->borrame && !enemigos.at(j)->muerto && (enemigos.at(j)->tipo != -2)
+						&& ((rayos.at(i).destRec.y + rayos.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
+							&& (rayos.at(i).destRec.y - rayos.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
+							|| (rayos.at(i).destRec.y + rayos.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
+							&& (rayos.at(i).destRec.y - rayos.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2))
+						&& ((rayos.at(i).destRec.x + rayos.at(i).destRec.width / 2 - rayos.at(i).destRec.width * 0.125) >= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
+							&& (rayos.at(i).destRec.x - rayos.at(i).destRec.width / 2 + rayos.at(i).destRec.width * 0.125) <= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
+							|| (rayos.at(i).destRec.x + rayos.at(i).destRec.width / 2 - rayos.at(i).destRec.width * 0.125) >= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)
+							&& (rayos.at(i).destRec.x - rayos.at(i).destRec.width / 2 + rayos.at(i).destRec.width * 0.125) <= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2))) { //Si choca con el enemigo, lo marca para que se borre y se cambia el estado de la pompa
+						enemigos.at(j)->muertePorRayo = true;
+						enemigos.at(j)->muerto = true;
+						rayos.at(i).animacionActiva = 1;
+						rayos.at(i).indiceAnimacion = 0;
+						enemigosPorMatar--;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	void DibujaRayos() {
+		for (int i = 0; i < rayos.size(); i++) {
+			rayos[i].Dibujar();
+		}
+	}
+
 	//Sección pompas
 	std::vector<sh_Pompa> elimina(int i) {
 		std::vector<sh_Pompa> auxiliar;
@@ -106,6 +160,14 @@ public:
 			if (pompas.at(i)->matame) {
 				//auto aBorrar = pompas.begin() + i;
 				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas			
+				if (pompas.at(i)->modulo = Pompa::MODULO_RAYO) {
+					int val = pompas.at(i)->sentidoJugador;
+					bool izq = val == 3;
+					Rayo r = Rayo(spriteRayo, pompas.at(i)->destRec, izq);
+					//std::cout << "Direccion del rayo: " << r.izquierda << "Deberia ser: " << izq << std::endl;
+					r.izquierda = izq;
+					rayos.push_back(r);
+				}
 				pompas = elimina(i);
 				i--;
 			} else if (pompas.at(i)->disparada > 0) { //comprueba contacto con los enemigos
