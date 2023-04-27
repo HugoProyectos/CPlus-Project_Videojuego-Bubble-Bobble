@@ -852,6 +852,7 @@ int main(void)
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
             admin.DibujaRayos();
+            admin.dibujarPuntosCadena();
 
         } break;
         case NIVEL_3:
@@ -872,6 +873,7 @@ int main(void)
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
             admin.DibujaRayos();
+            admin.dibujarPuntosCadena();
 
         } break;
         case NIVEL_4:
@@ -892,6 +894,7 @@ int main(void)
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
             admin.DibujaRayos();
+            admin.dibujarPuntosCadena();
 
         } break;
         case NIVEL_5:
@@ -912,6 +915,7 @@ int main(void)
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
             admin.DibujaRayos();
+            admin.dibujarPuntosCadena();
 
         } break;
         case CONTROLS_MENU:

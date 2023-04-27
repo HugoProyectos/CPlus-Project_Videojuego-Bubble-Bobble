@@ -793,11 +793,11 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 				destRec.y += screenHeight * 0.1333;
 			}*/
 			//Evitar que la pompa se salga por los lados
-			if (destRec.x < GetScreenWidth() * 0.05) {
+			if (destRec.x < GetScreenWidth() * 0.07) {
 				destRec.x = GetScreenWidth() * 0.05;
 			}
-			else if (destRec.x > GetScreenWidth() * 0.95) {
-				destRec.x = GetScreenWidth() * 0.95;
+			else if (destRec.x > GetScreenWidth() * 0.93) {
+				destRec.x = GetScreenWidth() * 0.93;
 			}
 		}
 		/////FIN DESPLAZAMIENTO POR EL MAPA
