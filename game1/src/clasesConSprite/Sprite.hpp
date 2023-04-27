@@ -27,4 +27,5 @@ struct DatosJugador {
 	bool electrocutalo = false;
 	bool electrocutado = false;
 	int thunderLessFrames = 0;
+	bool heIsTheThunder = false;
 };

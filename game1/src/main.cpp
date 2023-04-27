@@ -124,7 +124,7 @@ int main(void)
 
     Rectangle destBub = { GetScreenWidth() - 50, 50, 32, 32};//{ 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true); 
-    bub.imTheThunder = true;//DEBUG
+    //bub.imTheThunder = true;//DEBUG
     Bub bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
     //bub.nivel = 4;
     //bob.nivel = 4;

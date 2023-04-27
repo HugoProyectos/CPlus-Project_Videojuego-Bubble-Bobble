@@ -608,6 +608,7 @@ public:
                     admin->j1.muriendo = muriendo;
                     admin->j1.thunderLessFrames = thunderLessFrames;
                     admin->j1.electrocutado = electrocutado;
+                    admin->j1.heIsTheThunder = imTheThunder;
                 } else {
                     admin->j2.velLateral = velocidadLateralActual;
                     admin->j2.jugadorCayendo = cayendo;
@@ -616,6 +617,7 @@ public:
                     admin->j2.muriendo = muriendo;
                     admin->j2.thunderLessFrames = thunderLessFrames;
                     admin->j2.electrocutado = electrocutado;
+                    admin->j2.heIsTheThunder = imTheThunder;
                 }
             }
 

@@ -41,7 +41,7 @@ void Rayo::Actualizar(DatosJugador& j1, DatosJugador& j2) {
 		}
 
 		//Comprueba colisión con los jugadores
-		if ((!j1.muriendo && !j1.electrocutado && j1.thunderLessFrames <= 0
+		if ((!j1.muriendo && !j1.electrocutado && j1.thunderLessFrames <= 0 && !j1.heIsTheThunder
 			&& ((destRec.y + destRec.height / 2.0f) >= (j1.posicionJugador.y + j1.posicionJugador.height / 2.0f)
 				&& (destRec.y - destRec.height / 2.0f) <= (j1.posicionJugador.y + j1.posicionJugador.height / 2.0f)
 				|| (destRec.y + destRec.height / 2.0f) >= (j1.posicionJugador.y - j1.posicionJugador.height / 2.0f)
@@ -56,7 +56,7 @@ void Rayo::Actualizar(DatosJugador& j1, DatosJugador& j2) {
 				indiceAnimacion = 0;
 			}
 		}
-		if ((!j2.muriendo && !j2.electrocutado && j2.thunderLessFrames <= 0
+		if ((!j2.muriendo && !j2.electrocutado && j2.thunderLessFrames <= 0 && !j1.heIsTheThunder
 			&& ((destRec.y + destRec.height / 2.0f) >= (j2.posicionJugador.y + j2.posicionJugador.height / 2.0f)
 				&& (destRec.y - destRec.height / 2.0f) <= (j2.posicionJugador.y + j2.posicionJugador.height / 2.0f)
 				|| (destRec.y + destRec.height / 2.0f) >= (j2.posicionJugador.y - j2.posicionJugador.height / 2.0f)
