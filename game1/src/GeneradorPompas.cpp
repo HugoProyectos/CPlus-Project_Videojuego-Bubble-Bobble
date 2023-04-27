@@ -1,4 +1,4 @@
-#include "generadorPompas.hpp"
+ï»¿#include "generadorPompas.hpp"
 #include <stdlib.h>
 #include <time.h>
 
@@ -19,7 +19,7 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 	//std::vector<Pompa> pompas;
 	contadorCiclos++;
 	if (contadorCiclos >= ciclosPompa[idMapa]) {
-		//std::cout << "Chekeo de generación de pompas" << std::endl;
+		//std::cout << "Chekeo de generaciï¿½n de pompas" << std::endl;
 		contadorCiclos = 0;
 		switch (idMapa) {
 		case 2:
@@ -31,14 +31,14 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 			//resultado.push_back(std::make_shared<Pompa>(p2));
 			int numRand = rand() % 100;
 			int numRand2 = rand() % 2;
-			//Selección del color de la pompa
+			//Selecciï¿½n del color de la pompa
 			if (numRand < 50) { //verde
 				p = Pompa(verde, r[numRand2], 0, 0, false, 60 * 60);
 			}
 			else { //azul
 				p = Pompa(azul, r[numRand2], 0, 0, false, 60 * 60);
 			}
-			
+
 			if (lastHeight != GetScreenHeight()) {
 				p.destRec.height = GetScreenHeight() / 14.0625f;
 				p.origin.y = p.destRec.height / 2;
@@ -48,7 +48,7 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 				p.origin.x = p.destRec.width / 2;
 			}
 			resultado.push_back(std::make_shared<Pompa>(p));
-			std::cout << "Genero pompa en: " << p.destRec.x << "," << p.destRec.y << std::endl;
+
 			break;
 		}
 		case 3:
@@ -59,7 +59,7 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 			//resultado.push_back(std::make_shared<Pompa>(p2));
 			int numRand = rand() % 100;
 			int numRand2 = rand() % 2;
-			//Selección del color de la pompa
+			//Selecciï¿½n del color de la pompa
 			if (numRand < 50) { //verde
 				p = Pompa(verde, r[numRand2], 0, 0, false, 60 * 120);
 			}
@@ -88,7 +88,7 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 			int numRand = rand() % 100;
 			//for (int i = 0; i < 2; i++) {
 			int i = rand() % 2;
-				//Selección del color de la pompa
+				//Selecciï¿½n del color de la pompa
 			if (numRand < 50) { //verde
 				p = Pompa(verde, r[i], 0, 0, false, 60 * 120);
 			}

@@ -5,8 +5,8 @@
 
 class Robot : public Enemigo {
 public:
-    //Gestión de transición de nivel
-    int8_t cambioMapa = 2; //2->Primera Iteración 1->Desplazándose 0->Ya no
+    //Gestiï¿½n de transiciï¿½n de nivel
+    int8_t cambioMapa = 2; //2->Primera Iteraciï¿½n 1->Desplazï¿½ndose 0->Ya no
     Rectangle posicionPartida = { (float)GetScreenWidth()/2, (float)50, 32, 32};
     int cuentaFramesTraslacion = 0; //3 segundos = 3 * 60 frames = 180 frames
     const int LIMITE_FRAMES_TRASLACION = 180; //3 segundos = 3 * 60 frames = 180 frames
@@ -24,17 +24,17 @@ public:
     Texture2D angryAnimation = LoadTexture("resources/enemyRobot/robotAngry.png");
     Texture2D animations[4] = { walkAnimation, deadAnimation, waterAnimation, angryAnimation };
 
-    int fWalkAnimation = 4; //Número de fotogramas de la animacion camniar
-    int fDeadAnimation = 4; //Número de fotogramas de la animacion muerte
-    int fWaterAnimation = 4; //Número de fotogramas de la animacion muerte agua
-    int fAngryAnimation = 4; //Número de fotogramas de la animacion enfado
+    int fWalkAnimation = 4; //Nï¿½mero de fotogramas de la animacion camniar
+    int fDeadAnimation = 4; //Nï¿½mero de fotogramas de la animacion muerte
+    int fWaterAnimation = 4; //Nï¿½mero de fotogramas de la animacion muerte agua
+    int fAngryAnimation = 4; //Nï¿½mero de fotogramas de la animacion enfado
     int fAnimation[4] = { fWalkAnimation , fDeadAnimation, fWaterAnimation, fAngryAnimation };
 
-    int widthAnimation; // Se actualiza para cada animación activa
+    int widthAnimation; // Se actualiza para cada animaciï¿½n activa
     int heightAnimation;
 
-    int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation, 1->DeadAnimation, 2->WaterAniamtion, 3->AngryAnimation
-    int indiceAnimacion = 0; //Indica el número de frame actual de la animación activa
+    int animacionActiva = 0; //Indica la animaciï¿½n activa: 0->WalkAnimation, 1->DeadAnimation, 2->WaterAniamtion, 3->AngryAnimation
+    int indiceAnimacion = 0; //Indica el nï¿½mero de frame actual de la animaciï¿½n activa
 
     //Frames
     int targetFrames;
@@ -46,9 +46,10 @@ public:
     AdministradorPompas* admin;
 
 
-    //Lógica
+    //Lï¿½gica
     int direccionX = 1; //0 para izquierda, 1 para derecha
     float anchosX = 15.0f; 
+    bool frutaProducida = false;
 
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
@@ -119,7 +120,7 @@ public:
             if (muerto) {
                 //std::cout << "mueto" << std::endl;
                 animacionActiva = 1;
-                Caer();
+                CaerLento();
             }
             else if (!saltando && enElAire) {
                 //std::cout << "lento" << std::endl;
@@ -134,13 +135,13 @@ public:
             else if (destRec.y != playerPosition.y) {
                 if (direccionX == 0) {
                     //Izquierda
-                   // std::cout << "izq random" << std::endl;
+                    //std::cout << "izq random" << std::endl;
 
                     MoverIzq();
                 }
                 else {
                     //Derecha
-                  //  std::cout << "der random" << std::endl;
+                    //std::cout << "der random" << std::endl;
 
                     MoverDer();
                 }
@@ -151,14 +152,14 @@ public:
                 MoverIzq();
             }
             else if (destRec.x < playerPosition.x - anchosX) { //Si el personaje esta a la derecha
-                //std::cout << "der diguiendo" << std::endl;
+                //std::cout << "der siguiendo" << std::endl;
 
                 MoverDer();
             }
 
             //Actualizar posicion no salir de la pantalla
             if (destRec.y > GetScreenHeight() + 50) {
-                std::cout << "me salgo por abajo" << std::endl;
+                //std::cout << "me salgo por abajo" << std::endl;
 
                 destRec.y = -10;
                 enElAire = true;
@@ -188,14 +189,14 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
-                if (indiceAnimacion == 3) {
-                    if (!muertePorAgua) {
-                        Frutas f = Frutas();
-                        f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
-                        admin->frutas.push_back(std::make_shared<Frutas>(f));
-                    }
-                    borrame = true;
-                }
+                //if (indiceAnimacion == 3) {
+                //    if (!muertePorAgua) {
+                //        Frutas f = Frutas();
+                //        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
+                //        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                //    }
+                //    borrame = true;
+                //}
                 break;
             case 2:
                 //Actualizar width&height animacion
@@ -242,7 +243,7 @@ public:
     }
 
     void Salto(Rectangle player) {
-        //Gestión de salto
+        //Gestiï¿½n de salto
         if (!saltando) {
             //std::cout << "Inicio Salto" << std::endl;
             saltando = true;
@@ -256,7 +257,7 @@ public:
             destRec.y -= velocidadSalto;
             saltoRecorrido += velocidadSalto;
         }
-        //Hemos llegado al máximo
+        //Hemos llegado al mï¿½ximo
         else if (saltoRecorrido >= distanciaSaltoMax) {
             //std::cout << "max salto" << std::endl;
             finSaltando = true;
@@ -340,13 +341,13 @@ public:
                     //Derecha
                     destRec.x = s.left - destRec.width / 2.0f;
                     direccionX = 0; //Colisiona derecha, ahora se mueve izquierda
-                    //Se puede añadir un movimiento random en eje Y
+                    //Se puede aï¿½adir un movimiento random en eje Y
                     break;
                 case 2:
                     //Izquierda
                     destRec.x = s.right + destRec.width / 2.0f;
                     direccionX = 1; //Colisiona izquierda, hora se mueve derecha
-                    //Se puede añadir un movimiento random en eje Y
+                    //Se puede aï¿½adir un movimiento random en eje Y
                     break;
                 case 3:
                     destRec.y = s.top - destRec.height / 2.0f;
@@ -357,7 +358,7 @@ public:
                     break;
                 }
             }
-            //Comprobamos si se esta acercando a la superficie desde alguna dirección
+            //Comprobamos si se esta acercando a la superficie desde alguna direcciï¿½n
             else {
                 //Izquierda
                 if (
@@ -468,9 +469,57 @@ public:
                 cayendo = true;
             }
             else if (muerto) {
-                animacionActiva = 1;
                 enElAire = false;
                 cayendo = false;
+                if (!muertePorAgua && !frutaProducida) {
+                    frutaProducida = true;
+                    //std::cout << "-------------------------------     " + std::to_string(killCount) << std::endl;
+                    //while (true) {}
+                    Rectangle  aux = destRec;
+                    if (killCount == 0) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)500, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                    }
+                    else if (killCount == 1) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)1000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 2) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)2000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 3) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)3000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 4) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)4000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 5) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)5000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 6) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)6000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    
+                }
+                borrame = true;
 
             }
             else {
