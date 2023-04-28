@@ -1438,6 +1438,7 @@ int main(void)
                 admin.enemigos.push_back(robot);
                 admin.enemigos.push_back(robot2);
                 admin.enemigos.push_back(robot3);
+                admin.scores.persistenciaHighScore();
             }
         } break;
         default: break;

@@ -261,29 +261,29 @@ public:
 							pompas.at(i)->killCount = killCountBub;
 							switch (killCountBub) {
 							case 1:
-								scores.puntuacion1 += 1000;
+								scores.SumarPuntuacionP1(1000);
 								break;
 							case 2:
-								scores.puntuacion1 += 2000;
+								scores.SumarPuntuacionP1(2000);
 								break;
 							case 3:
-								scores.puntuacion1 += 4000;
+								scores.SumarPuntuacionP1(4000);
 								break;
 							case 4:
-								scores.puntuacion1 += 8000;
+								scores.SumarPuntuacionP1(8000);
 								break;
 							case 5:
-								scores.puntuacion1 += 16000;
+								scores.SumarPuntuacionP1(16000);
 								break;
 							case 6:
-								scores.puntuacion1 += 32000;
+								scores.SumarPuntuacionP1(32000);
 								break;
 							default:
-								scores.puntuacion1 += 64000;
+								scores.SumarPuntuacionP1(64000);
 							}
 						}
 						else {
-							scores.puntuacion1 += 10;
+							scores.SumarPuntuacionP1(10);
 						}
 					}
 					else if (pompas.at(i)->cadena == 2) {
@@ -293,29 +293,29 @@ public:
 							pompas.at(i)->killCount = killCountBob;
 							switch (killCountBob) {
 							case 1:
-								scores.puntuacion2 += 1000;
+								scores.SumarPuntuacionP2(1000);
 								break;
 							case 2:
-								scores.puntuacion2 += 2000;
+								scores.SumarPuntuacionP2(2000);
 								break;
 							case 3:
-								scores.puntuacion2 += 4000;
+								scores.SumarPuntuacionP2(4000);
 								break;
 							case 4:
-								scores.puntuacion2 += 8000;
+								scores.SumarPuntuacionP2(8000);
 								break;
 							case 5:
-								scores.puntuacion2 += 16000;
+								scores.SumarPuntuacionP2(16000);
 								break;
 							case 6:
-								scores.puntuacion2 += 32000;
+								scores.SumarPuntuacionP2(32000);
 								break;
 							default:
-								scores.puntuacion1 += 64000;
+								scores.SumarPuntuacionP2(64000);
 							};
 						}
 						else {
-							scores.puntuacion2 += 10;
+							scores.SumarPuntuacionP2(10);
 						}
 					}
 					for (int j = 0; j < pompas.size(); j++) {
@@ -412,29 +412,29 @@ public:
 							//while (true) {}
 							switch (killCountBub) {
 							case 1:
-								scores.puntuacion1 += 1000;
+								scores.SumarPuntuacionP1(1000);
 								break;
 							case 2:
-								scores.puntuacion1 += 2000;
+								scores.SumarPuntuacionP1(2000);
 								break;
 							case 3:
-								scores.puntuacion1 += 4000;
+								scores.SumarPuntuacionP1(4000);
 								break;
 							case 4:
-								scores.puntuacion1 += 8000;
+								scores.SumarPuntuacionP1(8000);
 								break;
 							case 5:
-								scores.puntuacion1 += 16000;
+								scores.SumarPuntuacionP1(16000);
 								break;
 							case 6:
-								scores.puntuacion1 += 32000;
+								scores.SumarPuntuacionP1(32000);
 								break;
 							default:
-								scores.puntuacion1 += 64000;
+								scores.SumarPuntuacionP1(64000);
 							};
 						}
 						else {
-							scores.puntuacion1 += 10;
+							scores.SumarPuntuacionP1(10);
 						}
 					}
 					else if (pompas.at(i)->cadena == 2) {
@@ -444,29 +444,29 @@ public:
 							pompas.at(i)->killCount = killCountBob;
 							switch (killCountBob) {
 							case 1:
-								scores.puntuacion2 += 1000;
+								scores.SumarPuntuacionP2(1000);
 								break;
 							case 2:
-								scores.puntuacion2 += 2000;
+								scores.SumarPuntuacionP2(2000);
 								break;
 							case 3:
-								scores.puntuacion2 += 4000;
+								scores.SumarPuntuacionP2(4000);
 								break;
 							case 4:
-								scores.puntuacion2 += 8000;
+								scores.SumarPuntuacionP2(8000);
 								break;
 							case 5:
-								scores.puntuacion2 += 16000;
+								scores.SumarPuntuacionP2(16000);
 								break;
 							case 6:
-								scores.puntuacion2 += 32000;
+								scores.SumarPuntuacionP2(32000);
 								break;
 							default:
-								scores.puntuacion1 += 64000;
+								scores.SumarPuntuacionP2(64000);
 							};
 						}
 						else {
-							scores.puntuacion2 += 10;
+							scores.SumarPuntuacionP2(10);
 						}
 					}
 					for (int j = 0; j < pompas.size(); j++) {
