@@ -378,7 +378,7 @@ public:
         this->listaPlataforma.resize(this->listaPlataformaSiguiente.size());
     }
 
-    void SeñalHurryUp() {
+    void SenalHurryUp() {
         if (!empezar_contador2) {
             if (!mute_effect) {
                 PlaySound(sound);

@@ -300,7 +300,7 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);  
 
                 if (admin.hurryUp) {
-                    plataformas.SeñalHurryUp();
+                    plataformas.SenalHurryUp(); 
                     admin.hurryUp = false;
                 }
 
@@ -411,7 +411,7 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
-                    plataformas.SeñalHurryUp();
+                    plataformas.SenalHurryUp();
                     admin.hurryUp = false;
                 }
 
@@ -522,7 +522,7 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
-                    plataformas.SeñalHurryUp();
+                    plataformas.SenalHurryUp();
                     admin.hurryUp = false;
                 }
 
@@ -641,7 +641,7 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos); 
 
                 if (admin.hurryUp) {
-                    plataformas.SeñalHurryUp();
+                    plataformas.SenalHurryUp();
                     admin.hurryUp = false;
                 }
 
@@ -753,7 +753,7 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
-                    plataformas.SeñalHurryUp();
+                    plataformas.SenalHurryUp();
                     admin.hurryUp = false;
                 }
 
@@ -866,7 +866,7 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
-                    plataformas.Se�alHurryUp();
+                    plataformas.SenalHurryUp();
                     admin.hurryUp = false;
                 }
 
@@ -978,7 +978,7 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
-                    plataformas.Se�alHurryUp();
+                    plataformas.SenalHurryUp();
                     admin.hurryUp = false;
                 }
 
@@ -1090,7 +1090,7 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
-                    plataformas.Se�alHurryUp();
+                    plataformas.SenalHurryUp();
                     admin.hurryUp = false;
                 }
 
@@ -1202,7 +1202,7 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
-                    plataformas.Se�alHurryUp();
+                    plataformas.SenalHurryUp();
                     admin.hurryUp = false;
                 }
 
@@ -1314,7 +1314,7 @@ int main(void)
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
-                    plataformas.Se�alHurryUp();
+                    plataformas.SenalHurryUp();
                     admin.hurryUp = false;
                 }
 
