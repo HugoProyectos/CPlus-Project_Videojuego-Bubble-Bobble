@@ -141,16 +141,35 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 			if (lastHeight != GetScreenHeight()) {
 				p.destRec.height = GetScreenHeight() / 14.0625f;
 				p.origin.y = p.destRec.height / 2;
-				/*p.destRec.y = GetScreenHeight() * (p.destRec.y / lastHeight);
-				*/
-				//p.lastHeight = lastHeight;
 			}
 			if (lastWidth != GetScreenWidth()) {
 				p.destRec.width = GetScreenWidth() / 25.0f;
 				p.origin.x = p.destRec.width / 2;
-				/*p.destRec.x = GetScreenWidth() * (p.destRec.x / lastWidth);
-				*/
-				//p.lastWidth = lastWidth;
+			}
+			resultado.push_back(std::make_shared<Pompa>(p));
+			break;
+		}
+		case 6:
+		{
+			Pompa p;
+			Rectangle r[2] = { { GetScreenWidth() * 0.35, -(GetScreenHeight() * 0.0711), 32, 32}, { GetScreenWidth() * 0.65, -(GetScreenHeight() * 0.0711), 32, 32 } };
+			int numRand = rand() % 100;
+			//for (int i = 0; i < 2; i++) {
+			int i = rand() % 2;
+			//Selección del color de la pompa
+			if (numRand < 50) { //verde
+				p = Pompa(verde, r[i], 0, 0, false, 60 * 120);
+			}
+			else { //azul
+				p = Pompa(azul, r[i], 0, 0, false, 60 * 120);
+			}
+			if (lastHeight != GetScreenHeight()) {
+				p.destRec.height = GetScreenHeight() / 14.0625f;
+				p.origin.y = p.destRec.height / 2;
+			}
+			if (lastWidth != GetScreenWidth()) {
+				p.destRec.width = GetScreenWidth() / 25.0f;
+				p.origin.x = p.destRec.width / 2;
 			}
 			resultado.push_back(std::make_shared<Pompa>(p));
 			break;
