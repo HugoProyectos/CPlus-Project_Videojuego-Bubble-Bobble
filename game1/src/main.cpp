@@ -157,6 +157,8 @@ int main(void)
     bob.right = controls.right_p2;
     bob.jump = controls.jump_p2;
     bob.shoot = controls.spit_p2;
+    Pompa::jumpJ1 = controls.jump_p1;
+    Pompa::jumpJ2 = controls.jump_p2;
     //--------------------------------------------------------------------------------------
     
     bool jugando_nivel = true; 
@@ -757,6 +759,8 @@ int main(void)
                 bob.jump = controls.jump_p2; 
                 bob.shoot = controls.spit_p2;
                 //Pompa::controlesJugador = controls;
+                Pompa::jumpJ1 = controls.jump_p1;
+                Pompa::jumpJ2 = controls.jump_p2;
 
                 currentScreen = MAIN_MENU;
             }
