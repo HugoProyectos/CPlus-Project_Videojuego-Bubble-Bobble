@@ -16,8 +16,8 @@ const double ratioAspecto = 800 / 450;
 class Plataforma {
 public:
     // Posicion en la cuadricula [1..ancho] [1..alto]
-    unsigned int positionX = 0;
-    unsigned int positionY = 0;
+    float positionX = 0;
+    float positionY = 0;
 
     // Forma del rectangulo
     unsigned int tamanoX = 1;
@@ -34,11 +34,11 @@ public:
 
     Plataforma() = default;
 
-    Plataforma(unsigned int positionX, unsigned int positionY, unsigned int tamanoX, unsigned int tamanoY) {
+    Plataforma(float positionX, float positionY, unsigned int tamanoX, unsigned int tamanoY) {
         Inicializador(positionX, positionY, tamanoX, tamanoY);
     }
 
-    void Inicializador(unsigned int positionX, unsigned int positionY, unsigned int tamanoX, unsigned int tamanoY)
+    void Inicializador(float positionX, float positionY, unsigned int tamanoX, unsigned int tamanoY)
     {
         this->positionX = positionX;
         this->positionY = positionY;
@@ -228,16 +228,16 @@ public:
         float tamanoMargenSup = ratioMargenSup != 0 ? GetScreenHeight() / ratioMargenSup : 0;
         float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
         // Destination rectangle (screen rectangle where drawing part of texture)
-        float altura_bloque = (GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO;
-        float anchura_bloque = GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO;
+        float altura_bloque = (float)(GetScreenHeight() - tamanoMargenSup - tamanoMargenInf) / (float)BLOQUE_PEQUENO_ALTO;
+        float anchura_bloque = (float)GetScreenWidth() / (float)BLOQUE_PEQUENO_ANCHO;
 
         if (!cargando_nivel_siguiente) {
             for (int i = 0; i < listaPlataforma.size(); i++) {
                 destRect = {
                     listaPlataforma[i].left, // Posicion x de la esquina topleft
                     listaPlataforma[i].top, // Posicion y de la esquina topleft
-                    modo_2d ? anchura_bloque : anchura_bloque + anchura_bloque/2,  // anchura bloque
-                    modo_2d ? altura_bloque : altura_bloque  + altura_bloque/2 // altura bloque
+                    modo_2d ? anchura_bloque : anchura_bloque + anchura_bloque/2.0f,  // anchura bloque
+                    modo_2d ? altura_bloque : altura_bloque  + altura_bloque/2.0f // altura bloque
                 };
                 for (int tamanoX = 0; tamanoX < listaPlataforma[i].tamanoX; tamanoX++) {
                     int bloques_a_dibujar = listaPlataforma[i].tamanoY;
@@ -255,7 +255,7 @@ public:
             }
             if (mostrar_hurryup) {
                 float tamanoPantalla = (float)GetScreenHeight() - tamanoMargenSup - tamanoMargenInf;
-                int tamano = MeasureText(texto_hurryup.c_str(), 40);
+                float tamano = MeasureText(texto_hurryup.c_str(), 40);
                 DrawText(texto_hurryup.c_str(), (GetScreenWidth() - tamano) / 2, tamanoMargenSup + (tamanoPantalla / 2) - 20, GetScreenHeight() /  ratio, colores[indice]);
             }
             DrawRectangle(listaPlataforma[0].left, 0, GetScreenWidth() - listaPlataforma[0].left, tamanoMargenSup, BLACK);
@@ -324,7 +324,7 @@ public:
         }
         if (mostrar_inicio_ronda) {
             float tamanoPantalla = (float)GetScreenHeight() - tamanoMargenSup - tamanoMargenInf;
-            int tamano = MeasureText(texto_inicio_ronda.c_str(), GetScreenHeight() / ratio);
+            float tamano = MeasureText(texto_inicio_ronda.c_str(), GetScreenHeight() / ratio);
             DrawText(texto_inicio_ronda.c_str(), (GetScreenWidth() - tamano) / 2, tamanoMargenSup + (tamanoPantalla / 2) - 20, GetScreenHeight() / ratio, WHITE);
         }
 
@@ -491,7 +491,7 @@ public:
             }
 
             // Poner nº de nivel
-            int tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
+            float tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
             DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
         }
         else {
@@ -513,7 +513,7 @@ public:
 
 
             // Poner nº de nivel
-            int tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
+            float tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
             DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
 
         }

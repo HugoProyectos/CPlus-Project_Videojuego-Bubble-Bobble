@@ -21,6 +21,10 @@ public:
     unsigned int play1 = 0;
     unsigned int play2 = 0;
     
+    Texture2D fondo = LoadTexture("resources/main_menu/controls.png");
+    Rectangle srcRect;
+    Rectangle dstRect;
+
     Sound rollover = LoadSound("resources/music/rollover.mp3");
     Sound clic = LoadSound("resources/music/clic.mp3");
 
@@ -112,6 +116,7 @@ public:
     void Inicializador(std::string ruta_fichero_configuracion)
     {
         cargarControles(ruta_fichero_configuracion);
+        srcRect = { 0,0, (float)fondo.width, (float)fondo.height };
     }
 
     ~Controls() {
@@ -296,14 +301,18 @@ public:
         // Si ponemos el cursor encima
         if (CheckCollisionPointRec(mousePoint, rectAux)) {
             // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
-            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && resoluciones2_mode != 2 && resoluciones1_pulsado == false) {
-                PlaySound(clic);
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && resoluciones2_mode == 0 && resoluciones1_pulsado == false) {
+                if (effect_modo == 0) {
+                    PlaySound(clic);
+                }
                 resoluciones1_mode = (resoluciones1_mode + 1) % 6;
                 SetWindowSize(resoluciones1_width[resoluciones1_mode], resoluciones1_height[resoluciones1_mode]);
                 resoluciones1_pulsado = true;
             }
-            else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) && resoluciones2_mode != 2 && resoluciones1_pulsado == false) {
-                PlaySound(clic);
+            else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) && resoluciones2_mode == 0 && resoluciones1_pulsado == false) {
+                if (effect_modo == 0) {
+                    PlaySound(clic);
+                }
                 resoluciones1_mode = (resoluciones1_mode + 6 - 1) % 6;
                 SetWindowSize(resoluciones1_width[resoluciones1_mode], resoluciones1_height[resoluciones1_mode]);
                 resoluciones1_pulsado = true;
@@ -330,9 +339,12 @@ public:
         if (CheckCollisionPointRec(mousePoint, rectAux)) {
             // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && resoluciones2_pulsado == false) {
-                PlaySound(clic);
+                if (effect_modo == 0) {
+                    PlaySound(clic);
+                }
                 resoluciones2_mode = (resoluciones2_mode + 1) % 3;
                 if (resoluciones2_mode == 1) {
+                    SetWindowSize(GetMonitorWidth(GetCurrentMonitor()), GetMonitorHeight(GetCurrentMonitor()));
                     ToggleFullscreen();
                 }
                 else if (resoluciones2_mode == 2) {
@@ -394,7 +406,9 @@ public:
         if (CheckCollisionPointRec(mousePoint, rectAux)) {
             // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && skin_pulsado == false) {
-                PlaySound(clic);
+                if (effect_modo == 0) {
+                    PlaySound(clic);
+                }
                 skin_modo = (skin_modo + 1) % 2;
                 skin_pulsado = true;
             }
@@ -477,10 +491,11 @@ public:
         if (CheckCollisionPointRec(mousePoint, rectAux)) {
             // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && effect_pulsado == false) {
+                effect_modo = (effect_modo + 1) % 2;
                 if (effect_modo == 0) {
                     PlaySound(clic);
                 }
-                effect_modo = (effect_modo + 1) % 2;
+                
                 effect_pulsado = true;
             }
             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
@@ -494,6 +509,10 @@ public:
     void Dibujar() {
 
         ClearBackground(BLACK);
+
+        dstRect = { 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+        DrawTexturePro(fondo, srcRect, dstRect, Vector2{ 0,0 }, 0, WHITE);
+
         unsigned int positionX;
         unsigned int positionY;
         Color color;
@@ -526,6 +545,10 @@ public:
             rectAux = { (float)positionX, (float)positionY, (float)tamano_texto, 20 };
             //DrawRectangle(20, 20 + 30 * i, 200, 30, SKYBLUE);
             mousePoint = GetMousePosition();
+
+            if (i >= 8) {
+                DrawRectangle(positionX - 3, positionY, tamano_texto + 6, 20+ 6, BLACK);
+            }
 
             // Si ponemos el cursor encima
             if (CheckCollisionPointRec(mousePoint, rectAux)) {

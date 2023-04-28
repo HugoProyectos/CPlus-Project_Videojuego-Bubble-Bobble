@@ -41,7 +41,7 @@ class Bub : public Sprite {
 
     const int anchoOriginal = 800;
     Texture2D sprite2;
-    bool segundaSkin = false;
+    
 public:
     //Variable de controles
     Controls controles;
@@ -50,6 +50,7 @@ public:
     unsigned int jump;
     unsigned int shoot;
 
+    bool segundaSkin = false;
     bool mute_sound = false;
     //Variable de identidad
     bool eresBub = true;
