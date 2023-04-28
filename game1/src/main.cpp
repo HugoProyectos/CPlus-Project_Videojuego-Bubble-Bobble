@@ -126,7 +126,7 @@ int main(void)
     //admin.pompas.push_back(std::make_shared<Pompa>(p2));
     */
 
-    Rectangle destBub = { GetScreenWidth() - 50, 50, 32, 32};//{ 100, GetScreenHeight() - 50, 32, 32 };
+    Rectangle destBub = { 750, 50, 32, 32};//{ 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true); 
     //bub.imTheThunder = true;//DEBUG
     Bub bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
@@ -169,6 +169,14 @@ int main(void)
                 credits.creditos -= 1;
                 admin.scores.hayP1 = true;
                 plataformas.inicio_de_ronda(1);
+                bub.destRec = {(float) 750, 50, 32, 32 };
+                // bub.resizeMe();
+                bub.lastWidth = 800;
+                bub.lastHeight = 450;
+                bub.resetPosicionOriginal();
+                bob.lastWidth = 800;
+                bob.lastHeight = 450;
+                bob.resetPosicionOriginal();
             }
             else if (IsKeyPressed(tecla_p2) && credits.creditos >= 2) {
                 currentScreen = NIVEL_1;
@@ -178,6 +186,18 @@ int main(void)
                 contadorVidas.hayP2 = true;
                 gameover.hayP2 = true;
                 plataformas.inicio_de_ronda(1);
+                bub.destRec = { (float)750, 50, 32, 32 };
+                bob.destRec = { (float)750, 50, 32, 32 };
+                //bub.destRec.x =(float)GetScreenWidth() - 50;
+                // bub.resizeMe(); 
+                //bob.destRec.x =(float)GetScreenWidth() - 50;
+                bub.lastWidth = 800;
+                bub.lastHeight = 450;
+                bub.resetPosicionOriginal();
+                bob.lastWidth = 800;
+                bob.lastHeight = 450;
+                bob.resetPosicionOriginal();
+                // bob.resizeMe();
                 //bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
             }
         } break;
@@ -250,6 +270,8 @@ int main(void)
                     admin.scores.hayP2 = true;
                     contadorVidas.hayP2 = true;
                     gameover.hayP2 = true;
+                    //bob.destRec.x = (float)GetScreenWidth() - 50;
+                    //bob.resizeMe();
                 }
 
             }
@@ -358,7 +380,9 @@ int main(void)
                     credits.creditos -= 1;
                     admin.scores.hayP2 = true;
                     contadorVidas.hayP2 = true;
-                    gameover.hayP2 = true;
+                    gameover.hayP2 = true; 
+                    //bob.destRec.x = (float)GetScreenWidth() - 50;
+                    //bob.resizeMe();
                 }
 
             }
@@ -468,6 +492,8 @@ int main(void)
                     admin.scores.hayP2 = true;
                     contadorVidas.hayP2 = true;
                     gameover.hayP2 = true;
+                    //bob.destRec.x = (float)GetScreenWidth() - 50;
+                    //bob.resizeMe();
                 }
 
             }
@@ -585,6 +611,8 @@ int main(void)
                     admin.scores.hayP2 = true;
                     contadorVidas.hayP2 = true;
                     gameover.hayP2 = true;
+                    //bob.destRec.x = (float)GetScreenWidth() - 50;
+                    //bob.resizeMe();
                 }
 
             }
@@ -695,6 +723,8 @@ int main(void)
                     admin.scores.hayP2 = true;
                     contadorVidas.hayP2 = true;
                     gameover.hayP2 = true;
+                    //bob.destRec.x = (float)GetScreenWidth() - 50;
+                    //bob.resizeMe();
                 }
 
             }
@@ -745,18 +775,20 @@ int main(void)
                 currentScreen = MAIN_MENU;
                 admin.scores.hayP1 = false;
                 bub.numVidas = 2;
-                bub.destRec = {GetScreenWidth() * (destBub.x / 800), GetScreenHeight() * (destBub.y/450), GetScreenWidth() / 25.0f, GetScreenHeight() / 14.0625f };
+                //bub.destRec = {GetScreenWidth() * (destBub.x / 800), GetScreenHeight() * (destBub.y/450), GetScreenWidth() / 25.0f, GetScreenHeight() / 14.0625f };
                 bub.cambioMapa = 2;
                 bub.muerto = false;
                 bub.muriendo = false;
+                bub.primeraActualizacion = true;
                 if (admin.scores.hayP2) {
                     admin.scores.hayP2 = false;
                     contadorVidas.hayP2 = false;
                     bob.numVidas = 2;
-                    bob.destRec = { GetScreenWidth() * (destBub.x / 800), GetScreenHeight() * (destBub.y / 450), GetScreenWidth() / 25.0f, GetScreenHeight() / 14.0625f };
+                    //bob.destRec = { GetScreenWidth() * (destBub.x / 800), GetScreenHeight() * (destBub.y / 450), GetScreenWidth() / 25.0f, GetScreenHeight() / 14.0625f };
                     bob.cambioMapa = 2;
                     bob.muerto = false;
                     bob.muriendo = false;
+                    bob.primeraActualizacion = true;
                 }
                 gameover.clear = false;
                 gameover.hayP2 = false;
@@ -768,18 +800,20 @@ int main(void)
                 admin.CambioDeMapa(0);
                 columnas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_grande.png", 1);
                 plataformas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt");
-
-                destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
-                //fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
-                //admin.enemigos.push_back(fantasma);
-
-                destRob = { (float)GetScreenWidth() / 2, 70, 32, 32 };
-                rosa = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
-                admin.enemigos.push_back(rosa);
-
+                
+                Rectangle destRob = { GetScreenWidth() / 2, 30, 32, 32 };
+                sh_Enemigo rosa = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 destRob = { (float)GetScreenWidth() / 2, 80, 32, 32 };
-                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                sh_Enemigo robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
+                sh_Enemigo robot2 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                destRob = { (float)GetScreenWidth() / 2, 70, 36, 32 };
+                sh_Enemigo robot3 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+
+                admin.enemigos.push_back(rosa);
                 admin.enemigos.push_back(robot);
+                admin.enemigos.push_back(robot2);
+                admin.enemigos.push_back(robot3);
             }
         } break;
         default: break;

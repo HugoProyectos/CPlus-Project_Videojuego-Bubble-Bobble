@@ -64,6 +64,7 @@ public:
     const int LIMITE_FRAMES_TRASLACION = 180; //3 segundos = 3 * 60 frames = 180 frames
     double razonX = 0;
     double razonY = 0;
+    bool primeraActualizacion = true; //Se pone a false al final de la primera iteración de Actualización
     
     // VARIABLE DE ULTIMA PLATAFORMA SUELO
     Plataforma lastGround;
@@ -180,6 +181,45 @@ public:
         UnloadTexture(sprite);
     };
 
+    void resetPosicionOriginal() {
+        if (eresBub) {
+            posicionOriginalBub = { (float)100, (float)400, 32, 32 };
+        }
+        else {
+            posicionOriginalBob = { (float)700, (float)400, 32, 32 };
+        }
+    }
+
+    //Llamar al inicio de la partida
+    /*void resizeMe() {
+        if (lastHeight != GetScreenHeight()) {
+            destRec.height = GetScreenHeight() / 14.0625f;
+            destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+            origin.y = destRec.height / 2;
+            if (eresBub) {
+                posicionOriginalBub.y = GetScreenHeight() * (posicionOriginalBub.y / lastHeight);
+            }
+            else {
+                posicionOriginalBob.y = GetScreenHeight() * (posicionOriginalBob.y / lastHeight);
+            }
+            lastHeight = GetScreenHeight();
+        }
+        if (lastWidth != GetScreenWidth()) {
+           
+            destRec.width = GetScreenWidth() / 25.0f;
+            destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+            origin.x = destRec.width / 2;
+            if (eresBub) {
+                posicionOriginalBub.x = GetScreenWidth() * (posicionOriginalBub.x / lastWidth);
+            }
+            else {
+                posicionOriginalBob.x = GetScreenWidth() * (posicionOriginalBob.x / lastWidth);
+            }
+           
+            lastWidth = GetScreenWidth();
+        }
+    }*/
+
     void Actualizar() {
         if (framesInvulnerabilidad > 0) {
             framesInvulnerabilidad--;
@@ -192,7 +232,7 @@ public:
             dibuja = true;
         }
         if (lastHeight != GetScreenHeight()) {
-            if (cambioMapa > 0) {
+            if (cambioMapa > 0 && !primeraActualizacion) {
                 destRec.height /= 2;
                 destRec.width /= 2;
                 destRec.x += destRec.width / 2.0f;
@@ -207,7 +247,7 @@ public:
             else {
                 posicionOriginalBob.y = GetScreenHeight() * (posicionOriginalBob.y / lastHeight);
             }
-            if (cambioMapa > 0) {
+            if (cambioMapa > 0 && !primeraActualizacion) {
                 destRec.height *= 2;
                 destRec.width *= 2;
                 if (eresBub) {
@@ -220,7 +260,7 @@ public:
             lastHeight = GetScreenHeight();
         }
         if (lastWidth != GetScreenWidth()) {
-            if (cambioMapa > 0) {
+            if (cambioMapa > 0 && !primeraActualizacion) {
                 destRec.height /= 2;
                 destRec.width /= 2;
                 destRec.x += destRec.width / 2.0f;
@@ -236,7 +276,7 @@ public:
             else {
                 posicionOriginalBob.x = GetScreenWidth() * (posicionOriginalBob.x / lastWidth);
             }
-            if (cambioMapa > 0) {
+            if (cambioMapa > 0 && !primeraActualizacion) {
                 destRec.height *= 2;
                 destRec.width *= 2;
                 if (eresBub) {
@@ -269,6 +309,7 @@ public:
         //Gesti�n de desplazamiento lateral
         if (cambioMapa > 0) {
             if (cambioMapa == 2) {
+                primeraActualizacion = false;
                 switchOrientacion = 1;
                 //Reiniciamos su orientación
                 if (orientacionActual == 3) {
