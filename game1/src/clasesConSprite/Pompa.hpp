@@ -104,6 +104,7 @@ public:
 	float distanciaRecorrida = 0;
 	float distanciaDisparo = 0;
 	int disparada = 2;
+	static bool warpVertical;
 
 	//Control de animaciones
 	int animacionActiva;

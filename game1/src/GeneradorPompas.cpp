@@ -97,6 +97,7 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 			if (numRand < 50) { //Que contenga agua
 				p.modulo = Pompa::MODULO_AGUA;
 				p.tVida = Pompa::INFINITA;
+				p.indiceAnimacion = 6;
 			}
 			if (lastHeight != GetScreenHeight()) {
 				p.destRec.height = GetScreenHeight() / 14.0625f;
@@ -135,6 +136,7 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 			if (numRand < 50) { //Que contenga agua
 				p.modulo = Pompa::MODULO_AGUA;
 				p.tVida = Pompa::INFINITA;
+				p.indiceAnimacion = 6;
 			}
 			if (lastHeight != GetScreenHeight()) {
 				p.destRec.height = GetScreenHeight() / 14.0625f;
@@ -150,6 +152,7 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 				*/
 				//p.lastWidth = lastWidth;
 			}
+			resultado.push_back(std::make_shared<Pompa>(p));
 			break;
 		}
 		default:

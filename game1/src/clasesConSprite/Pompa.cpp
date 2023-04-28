@@ -5,6 +5,7 @@
 uint8_t Pompa::ID_MAPA = 0;
 uint32_t Pompa::ID_GLOBAL = 0;
 Controls Pompa::controlesJugador = Controls();
+bool Pompa::warpVertical = false; //Poner a true en algunos mapas
 
 sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 	sh_Enemigo resultado = NULL;
@@ -497,6 +498,8 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			/////INICIO DESPLAZAMIENTO POR EL MAPA
 			double screenHeight = GetScreenHeight();
 			double screenWidth = GetScreenWidth();
+			warpVertical = false;
+			oscilando = false;
 			switch ((int)ID_MAPA) {
 			case 2:
 			{
@@ -780,6 +783,52 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 				break;
 			}
+			case 5: //Mapa del agua 2
+			{
+				warpVertical = true;
+
+				if (destRec.y < (screenHeight * 0.82) && destRec.y > (screenHeight * 0.70) && destRec.x >= screenWidth * 0.85 && destRec.x <= screenWidth * 0.88) {
+					oscilando = true;
+				}
+				else if (destRec.y > screenHeight * 0.87 && destRec.x > screenWidth * 0.65) {
+					destRec.x -= 1.2 * ratioX;
+				}
+				else if (destRec.y > screenHeight * 0.87 && ((destRec.x < screenWidth * 0.30) || (destRec.x > screenWidth * 0.35 && destRec.x < screenWidth * 0.62))) {
+					destRec.x += 1.2 * ratioX;
+				}
+				else if (destRec.y > screenHeight * 0.70 && destRec.y < screenHeight * 0.76 && destRec.x <= screenWidth * 0.91) {
+					destRec.x += 1.2 * ratioX;
+				}
+				else if (destRec.y > screenHeight * 0.53 && destRec.y < screenHeight * 0.56 && destRec.x > screenWidth * 0.135) {
+					destRec.x -= 1.2 * ratioX;
+				}
+				else if (destRec.y > screenHeight * 0.38 && destRec.y < screenHeight * 0.41 && destRec.x < screenWidth * 0.85) {
+					destRec.x += 1.2 * ratioX;
+				}
+				else if (destRec.y < screenHeight * 0.35 && destRec.y > screenHeight * 0.20 && destRec.x > screenWidth * 0.135) {
+					destRec.x -= 1.2 * ratioX;
+				}
+				else {
+					destRec.y += 0.9 * ratioY;
+				}
+				
+
+				if (oscilando) {
+					if (abajo) {
+						destRec.y += 0.9 * ratioY;
+					}
+					else {
+						destRec.y += -0.9 * ratioY;
+					}
+					contador++;
+					if (contador >= 20) {
+						abajo = !abajo;
+						contador = 0;
+					}
+				}
+
+				break;
+			}
 
 			default:
 				if (!oscilando) {
@@ -821,6 +870,15 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					}
 				}
 			};
+			
+			if (warpVertical) {
+				if (destRec.y > GetScreenHeight() * 1.0771) {
+					destRec.y = -(GetScreenHeight() * 0.07);
+				}
+				else if (destRec.y < -(GetScreenHeight() * 0.0771)) {
+					destRec.y = GetScreenHeight() * 1.07;
+				}
+			}
 
 			//Evitar que la pompa se salga por arriba
 			/*if (destRec.y < screenHeight * 0.1333) {
@@ -828,7 +886,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			}*/
 			//Evitar que la pompa se salga por los lados
 			if (destRec.x < GetScreenWidth() * 0.07) {
-				destRec.x = GetScreenWidth() * 0.05;
+				destRec.x = GetScreenWidth() * 0.07;
 			}
 			else if (destRec.x > GetScreenWidth() * 0.93) {
 				destRec.x = GetScreenWidth() * 0.93;
