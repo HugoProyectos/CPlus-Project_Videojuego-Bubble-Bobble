@@ -173,6 +173,38 @@ std::vector<sh_Pompa> GeneradorPompas::generarPompa() {
 			}
 			resultado.push_back(std::make_shared<Pompa>(p));
 			break;
+		}case 7: //Mapa del agua
+		{
+			Pompa p;
+			Rectangle r[2] = { { GetScreenWidth() * 0.35, -(GetScreenHeight() * 0.0711), 32, 32}, { GetScreenWidth() * 0.65, -(GetScreenHeight() * 0.0711), 32, 32 } };
+			//resultado.push_back(std::make_shared<Pompa>(p1));
+			//resultado.push_back(std::make_shared<Pompa>(p2));
+			int numRand = rand() % 100;
+			//for (int i = 0; i < 2; i++) {
+			int i = rand() % 2;
+			//Selección del color de la pompa
+			if (numRand < 50) { //verde
+				p = Pompa(verde, r[i], 0, 0, false, 60 * 120);
+			}
+			else { //azul
+				p = Pompa(azul, r[i], 0, 0, false, 60 * 120);
+			}
+			numRand = rand() % 100;
+			if (numRand < 50) { //Que contenga agua
+				p.modulo = Pompa::MODULO_AGUA;
+				p.tVida = Pompa::INFINITA;
+				p.indiceAnimacion = 6;
+			}
+			if (lastHeight != GetScreenHeight()) {
+				p.destRec.height = GetScreenHeight() / 14.0625f;
+				p.origin.y = p.destRec.height / 2;
+			}
+			if (lastWidth != GetScreenWidth()) {
+				p.destRec.width = GetScreenWidth() / 25.0f;
+				p.origin.x = p.destRec.width / 2;
+			}
+			resultado.push_back(std::make_shared<Pompa>(p));
+			break;
 		}
 		default:
 			break;

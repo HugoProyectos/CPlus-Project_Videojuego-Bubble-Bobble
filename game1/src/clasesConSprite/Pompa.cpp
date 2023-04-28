@@ -905,6 +905,93 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 				break;
 			}
+			case 7:
+			{
+				if (destRec.y < (screenHeight * 0.5) && destRec.y >(screenHeight * 0.10) && destRec.x >= screenWidth * 0.41 && destRec.x <= screenWidth * 0.59) {
+					oscilando = true;
+				}
+				else if (destRec.x < screenWidth / 2) {
+					if (destRec.y < (screenHeight * 0.18) && destRec.y >(screenHeight * 0.10) && destRec.x < screenWidth * 0.20) {
+						destRec.x += 1.2 * ratioX;
+					}
+					else if (destRec.x >= screenWidth * 0.20 && destRec.x < screenWidth * 0.22 && destRec.y < (screenHeight * 0.32)) {
+						destRec.y += 0.9 * ratioY;
+					}
+					else if (destRec.x >= screenWidth * 0.20 && destRec.x < screenWidth * 0.27 && destRec.y < (screenHeight * 0.40)) {
+						destRec.x += 1.2 * ratioX;
+					}
+					else if (destRec.x >= screenWidth * 0.27 && destRec.x < screenWidth * 0.33 && destRec.y < (screenHeight * 0.40)) {
+						destRec.y += 0.9 * ratioY;
+					}
+					else if (destRec.x >= screenWidth * 0.27 && destRec.x < screenWidth * 0.33 && destRec.y < (screenHeight * 0.47)) {
+						destRec.x += 1.2 * ratioX;
+					}
+					else if (destRec.x >= screenWidth * 0.33 && destRec.x < screenWidth * 0.39 && destRec.y < (screenHeight * 0.47)) {
+						destRec.y += 0.9 * ratioY;
+					}
+					else if (destRec.x >= screenWidth * 0.33 && destRec.x < screenWidth * 0.39 && destRec.y < (screenHeight * 0.55)) {
+						destRec.x += 1.2 * ratioX;
+					}
+					else if (destRec.x >= screenWidth * 0.39 && destRec.x < screenWidth * 0.45 && destRec.y < (screenHeight * 0.55)) {
+						destRec.y += 0.9 * ratioY;
+					}
+					else if (destRec.x >= screenWidth * 0.39 && destRec.x < screenWidth * 0.45 && destRec.y <= (screenHeight * 0.56)) {
+						destRec.x += 1.2 * ratioX;
+					}
+					else {
+						destRec.y -= 0.9 * ratioY;
+					}
+				}
+				else {
+					if (destRec.y < (screenHeight * 0.18) && destRec.y >(screenHeight * 0.10) && destRec.x > screenWidth * 0.80) {
+						destRec.x -= 1.2 * ratioX;
+					}
+					else if (destRec.x <= screenWidth * 0.80 && destRec.x > screenWidth * 0.78 && destRec.y < (screenHeight * 0.32)) {
+						destRec.y += 0.9 * ratioY;
+					}
+					else if (destRec.x <= screenWidth * 0.80 && destRec.x > screenWidth * 0.73 && destRec.y < (screenHeight * 0.40)) {
+						destRec.x -= 1.2 * ratioX;
+					}
+					else if (destRec.x <= screenWidth * 0.73 && destRec.x > screenWidth * 0.67 && destRec.y < (screenHeight * 0.40)) {
+						destRec.y += 0.9 * ratioY;
+					}
+					else if (destRec.x <= screenWidth * 0.73 && destRec.x > screenWidth * 0.67 && destRec.y < (screenHeight * 0.47)) {
+						destRec.x -= 1.2 * ratioX;
+					}
+					else if (destRec.x <= screenWidth * 0.67 && destRec.x > screenWidth * 0.61 && destRec.y < (screenHeight * 0.47)) {
+						destRec.y += 0.9 * ratioY;
+					}
+					else if (destRec.x <= screenWidth * 0.67 && destRec.x > screenWidth * 0.61 && destRec.y < (screenHeight * 0.55)) {
+						destRec.x -= 1.2 * ratioX;
+					}
+					else if (destRec.x <= screenWidth * 0.61 && destRec.x > screenWidth * 0.55 && destRec.y < (screenHeight * 0.55)) {
+						destRec.y += 0.9 * ratioY;
+					}
+					else if (destRec.x <= screenWidth * 0.61 && destRec.x > screenWidth * 0.55 && destRec.y <= (screenHeight * 0.56)) {
+						destRec.x -= 1.2 * ratioX;
+					}
+					else {
+						destRec.y -= 0.9 * ratioY;
+					}
+				}
+
+
+				if (oscilando) { //Oscila horizontalmente
+					if (abajo) {
+						destRec.x += 0.9 * ratioY;
+					}
+					else {
+						destRec.x += -0.9 * ratioY;
+					}
+					contador++;
+					if (contador >= 10) {
+						abajo = !abajo;
+						contador = 0;
+					}
+				}
+
+				break;
+			}
 			default:
 				if (!oscilando) {
 					if (destRec.y > GetScreenHeight() * 0.21) {
