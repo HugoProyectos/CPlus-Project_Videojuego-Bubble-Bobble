@@ -64,7 +64,9 @@ public:
 	double ratioY = 1;
 
 	//Controles del jugador
-	static Controls controlesJugador;
+	//static Controls controlesJugador; //DEPRECATED
+	static unsigned int jumpJ1;
+	static unsigned int jumpJ2;
 
 	//Para las pompas con agua
 	static const int INFINITA = -25;

@@ -18,7 +18,7 @@
 class AdministradorPompas {
 public:
 	Sound sonidoMuerteEnemigo = LoadSound("resources/music/sonido_muerte_enemigo.mp3");
-
+	bool mute_sound = false;
 	//Referencias a plataformas y columnas para la colision de pompas
 	Columnas* col;
 	Plataformas* plat;
@@ -246,7 +246,9 @@ public:
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 					if (enemigo->muerto) {
-						PlaySound(sonidoMuerteEnemigo);
+						if (!mute_sound) {
+							PlaySound(sonidoMuerteEnemigo);
+						}
 						enemigosPorMatar--;
 						std::cout << "Quedan " << enemigosPorMatar << " enemigos por matar." << std::endl;
 					}
@@ -372,7 +374,9 @@ public:
 				if (enemigo != NULL) {
 					enemigos.push_back(enemigo);
 					if (enemigo->muerto) {
-						PlaySound(sonidoMuerteEnemigo);
+						if (!mute_sound) {
+							PlaySound(sonidoMuerteEnemigo);
+						}
 						enemigosPorMatar--;
 						std::cout << "Quedan " << (int)enemigosPorMatar << " enemigos por matar." << std::endl;
 					}

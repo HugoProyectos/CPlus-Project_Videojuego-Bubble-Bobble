@@ -20,6 +20,8 @@ public:
         LoadTexture("resources/gameover/pantalla_clear_p1.png"),
         LoadTexture("resources/gameover/pantalla_clear_p2.png") };
 
+    bool mute_music = false;
+
     Music music = LoadMusicStream("resources/music/sonido_pantalla_final.mp3");
     Sound sound = LoadSound("resources/music/sonido_gameover.mp3");
 
@@ -43,6 +45,8 @@ public:
     unsigned int ronda = 0;
     bool clear = false;
 
+    float ratio = 0;
+
     std::string texto_gameover = "GAME OVER";
 
     GameOver() = default; //Debe llamarsse a Inicializador
@@ -58,13 +62,15 @@ public:
 
         this->ratioMargenSup = margenSuperior != 0 ? GetScreenHeight() / margenSuperior : 0;
         this->ratioMargenInf = margenInferior != 0 ? GetScreenHeight() / margenInferior : 0;
-
+        this->ratio = (GetScreenHeight() - margenInferior - margenSuperior) / 35;
         this->tiempo_duracion = tiempo_duracion;
 
         PlayMusicStream(music);
     }
 
     ~GameOver() {
+        UnloadMusicStream(music);
+        UnloadSound(sound);
         UnloadTexture(main_screen);
         UnloadTexture(gameover_screen[0]);
         UnloadTexture(gameover_screen[1]);
@@ -73,6 +79,8 @@ public:
     };
 
     void Unload() {
+        UnloadMusicStream(music);
+        UnloadSound(sound);
         UnloadTexture(main_screen);
         UnloadTexture(gameover_screen[0]);
         UnloadTexture(gameover_screen[1]);
@@ -83,10 +91,16 @@ public:
     bool Actualizar() {
         iteraciones++;
         if (iteraciones < tiempo_duracion) {
-            UpdateMusicStream(music);
+            if (!mute_music) {
+                UpdateMusicStream(music);
+            }
+            
         }
         if (iteraciones == tiempo_duracion) {
-            PlaySound(sound);
+            if (!mute_music) {
+                PlaySound(sound);
+            }
+            
             mostrar_gameover = true;
         }
         if (iteraciones >= (tiempo_duracion * 2)) {
@@ -114,7 +128,7 @@ public:
                 DrawTexturePro(clear_screen[0], srcRect2, destRect2, Vector2{ 0,0 }, 0, WHITE);
             }
 
-            DrawText(std::to_string(ronda).c_str(), float(GetScreenWidth() * 0.069), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda - 1)) + (float)(tamanoPantalla * 0.196 * 0.498), 35, BLACK);
+            DrawText(std::to_string(ronda).c_str(), float(GetScreenWidth() * 0.069), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda - 1)) + (float)(tamanoPantalla * 0.196 * 0.498), GetScreenHeight() / ratio, BLACK);
 
             if (hayP2) {
                 destRect2 = {  float(GetScreenWidth() * 0.532), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda - 1)), float(GetScreenWidth() * 0.443), (float)(tamanoPantalla * 0.196) };
@@ -125,14 +139,14 @@ public:
                     DrawTexturePro(clear_screen[1], srcRect2, destRect2, Vector2{ 0,0 }, 0, WHITE);
                 }
 
-                DrawText(std::to_string(ronda).c_str(), float(GetScreenWidth() * (1 - (0.069 * 2))), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda - 1)) + (float)(tamanoPantalla * 0.196 * 0.498), 35, BLACK);
+                DrawText(std::to_string(ronda).c_str(), float(GetScreenWidth() * (1 - (0.069 * 2))), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda - 1)) + (float)(tamanoPantalla * 0.196 * 0.498), GetScreenHeight() / ratio, BLACK);
             }
 
         }
         else {
 
-            int tamano = MeasureText(texto_gameover.c_str(), 40);
-            DrawText(texto_gameover.c_str(), (GetScreenWidth() - tamano) / 2, tamanoMargenSup + (tamanoPantalla / 2) - 20, 40, WHITE);
+            int tamano = MeasureText(texto_gameover.c_str(), GetScreenHeight()/ratio);
+            DrawText(texto_gameover.c_str(), (GetScreenWidth() - tamano) / 2, tamanoMargenSup + (tamanoPantalla / 2) - 20, GetScreenHeight() / ratio, WHITE);
         }
         
 
