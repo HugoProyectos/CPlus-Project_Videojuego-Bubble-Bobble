@@ -73,9 +73,11 @@ int main(void)
     int Mute_music = controls.music_modo; // 1 -> muted
     int Mute_effect = controls.effect_modo; // 1 -> muted
     main_menu.mute_music = Mute_music == 1 ? true : false;  
+    main_menu.mute_sound = Mute_effect == 1 ? true : false;
     credits.mute_sound = Mute_effect == 1 ? true : false;   
     plataformas.mute_effect = Mute_effect == 1 ? true : false;
     plataformas.mute_music = Mute_music == 1 ? true : false; 
+    
     //--------------------------------------------------------------------------------------
 
     // GameOver:
@@ -115,6 +117,7 @@ int main(void)
 
     admin.enemigos.push_back(rosa);
     admin.enemigos.push_back(robot);
+    admin.mute_sound = Mute_effect == 1 ? true : false;
 
     /*
 
@@ -141,6 +144,8 @@ int main(void)
     Rectangle destBub = { GetScreenWidth() - 50, 50, GetScreenHeight() / 14.0625f, GetScreenWidth() / 25.0f };//{ 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true); 
     Bub bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
+    bub.mute_sound = Mute_effect == 1 ? true : false;
+    bob.mute_sound = Mute_effect == 1 ? true : false;
     //bub.nivel = 4;
     //bob.nivel = 4;
 
@@ -734,10 +739,14 @@ int main(void)
                 columnas.modo_2d = Modo_mapa == 1 ? true : false;
                 plataformas.modo_2d = Modo_mapa == 1 ? true : false;
                 main_menu.mute_music = Mute_music == 1 ? true : false;
+                main_menu.mute_sound = Mute_effect == 1 ? true : false;
                 credits.mute_sound = Mute_effect == 1 ? true : false;
                 plataformas.mute_effect = Mute_effect == 1 ? true : false;
                 plataformas.mute_music = Mute_music == 1 ? true : false;
                 gameover.mute_music = Mute_music == 1 ? true : false;
+                bub.mute_sound = Mute_effect == 1 ? true : false;
+                bob.mute_sound = Mute_effect == 1 ? true : false;
+                admin.mute_sound = Mute_effect == 1 ? true : false;
                 // ...
                 // Asignamos los controles de los jugadores 
                 /*controls.keys[0] = controls.left_p1;
@@ -756,6 +765,7 @@ int main(void)
                 bob.right = controls.right_p2;
                 bob.jump = controls.jump_p2; 
                 bob.shoot = controls.spit_p2;
+
                 //Pompa::controlesJugador = controls;
 
                 currentScreen = MAIN_MENU;

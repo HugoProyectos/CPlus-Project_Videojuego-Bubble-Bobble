@@ -20,6 +20,9 @@ public:
 
     bool mute_music = false;
     Music music = LoadMusicStream("resources/music/sonido_main_menu.mp3");
+
+    Sound sound = LoadSound("resources/music/clic.mp3");
+    bool mute_sound = false;
     
     unsigned int frecuencia;
     unsigned int iteraciones = 0;
@@ -98,6 +101,9 @@ public:
         destRect = { 0, (float)GetScreenHeight() - margenInferior / 2, (float)margenInferior / 2, (float)margenInferior / 2 };
         if (CheckCollisionPointRec(mousePosition, destRect) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             // El clic se ha hecho dentro de la imagen
+            if (!mute_sound) {
+                PlaySound(sound);
+            }
             return true;
         }
         return false;

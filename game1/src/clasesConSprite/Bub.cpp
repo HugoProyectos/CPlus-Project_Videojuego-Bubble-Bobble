@@ -25,7 +25,6 @@ class Bub : public Sprite {
     const Sound sonidoSaltar = LoadSound("resources/music/sonido_salto.mp3");
     const Sound sonidoFruta = LoadSound("resources/music/sonido_comer_fruta.mp3");
 
-
     const int NUM_FILAS = 4; //n�mero de filas en el animation_set
 
     int fStandingAnimation = 4; //N�mero de fotogramas de la StandingAnimation
@@ -50,7 +49,8 @@ public:
     unsigned int right;
     unsigned int jump;
     unsigned int shoot;
-    
+
+    bool mute_sound = false;
     //Variable de identidad
     bool eresBub = true;
 
@@ -311,7 +311,10 @@ public:
                     destRec.y -= velocidadActual;
                     saltoRecorrido += velocidadActual;
                     velocidadActual -= deceleracion;
-                    PlaySound(sonidoSaltar);
+                    if (!mute_sound) {
+                        PlaySound(sonidoSaltar);
+                    }
+                    
                 } else if (admin->j2.debeRebotar > 0 && !eresBub) {
                     //std::cout << "Me dicen que rebote" << std::endl;
                     saltoRecorrido = 0;
@@ -325,7 +328,10 @@ public:
                     destRec.y -= velocidadActual;
                     saltoRecorrido += velocidadActual;
                     velocidadActual -= deceleracion;
-                    PlaySound(sonidoSaltar);
+                    if (!mute_sound) {
+                        PlaySound(sonidoSaltar);
+                    }
+                    
                 }
 
                 if (enElAire) {
@@ -431,7 +437,10 @@ public:
                     }
                     //std::cout << "Dimensiones pompa; " <<p.destRec.x << "," << p.destRec.y << "/" << p.lastHeight << "," << p.lastWidth << std::endl;
                     admin->pompas.push_back(std::make_shared<Pompa>(p));
-                    PlaySound(sonidoDisparar);
+                    if (!mute_sound) {
+                        PlaySound(sonidoDisparar);
+                    }
+                    
                 }
                 else if (!enElAire) {
                     if (IsKeyDown(left) && !muriendo) { //if (IsKeyDown(KEY_A)) {
@@ -478,7 +487,10 @@ public:
                     destRec.y -= velocidadActual;
                     saltoRecorrido += velocidadActual;
                     velocidadActual -= deceleracion;
-                    PlaySound(sonidoSaltar);
+                    if (!mute_sound) {
+                        PlaySound(sonidoSaltar);
+                    }
+                    
                 }
                 else if (velocidadActual > 0 && enElAire && !cayendo) {
                     if (!disparando && !muriendo) animacionActiva = JUMPING;
@@ -541,7 +553,10 @@ public:
                         else {
                             admin->scores.SumarPuntuacionP2((unsigned int)admin->frutas.at(i)->puntuacion);
                         }
-                        PlaySound(sonidoFruta);
+                        if (!mute_sound) {
+                            PlaySound(sonidoFruta);
+                        }
+                        
                         admin->frutas.at(i)->muerto = true;
                     }
                 }
