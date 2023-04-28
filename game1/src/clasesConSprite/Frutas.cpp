@@ -10,13 +10,51 @@ class Frutas : public Sprite {
 
 public:
 	// Animacion y sprites -------------------------------------------------------
+    int i = 0; 
 	std::string path = "resources/frutas/";
-    Texture2D walkAnimation = LoadTexture("resources/frutas/cereza.png");
-    Texture2D deadAnimation = LoadTexture("resources/frutas/500.png");
-	Texture2D animations[2] = { walkAnimation, deadAnimation };
+    Texture2D walkAnimation[7] = {
+        LoadTexture("resources/frutas/platano.png"),
+        LoadTexture("resources/frutas/naranja.png"),
+        LoadTexture("resources/frutas/melocoton.png"),
+        LoadTexture("resources/frutas/sandia.png"),
+        LoadTexture("resources/frutas/uva.png"),
+        LoadTexture("resources/frutas/pina.png"),
+        LoadTexture("resources/frutas/diamante.png"),
+    };
+    
+    Texture2D deadAnimation[7] = {
+        LoadTexture("resources/frutas/500_bub.png"),
+        LoadTexture("resources/frutas/1000_bub.png"),
+        LoadTexture("resources/frutas/2000_bub.png"),
+        LoadTexture("resources/frutas/3000_bub.png"),
+        LoadTexture("resources/frutas/4000_bub.png"),
+        LoadTexture("resources/frutas/5000_bub.png"),
+        LoadTexture("resources/frutas/6000_bub.png"),
+
+    };
+    Texture2D deadAnimation2[7] = {
+        LoadTexture("resources/frutas/500_bob.png"),
+        LoadTexture("resources/frutas/1000_bob.png"),
+        LoadTexture("resources/frutas/2000_bob.png"),
+        LoadTexture("resources/frutas/3000_bob.png"),
+        LoadTexture("resources/frutas/4000_bob.png"),
+        LoadTexture("resources/frutas/5000_bob.png"),
+        LoadTexture("resources/frutas/6000_bob.png"),
+
+    };
+	Texture2D animations[3*7] = { walkAnimation[0], deadAnimation[0], deadAnimation2[0],
+                                  walkAnimation[1], deadAnimation[1], deadAnimation2[1],
+                                  walkAnimation[2], deadAnimation[2], deadAnimation2[2],
+                                  walkAnimation[3], deadAnimation[3], deadAnimation2[3],
+                                  walkAnimation[4], deadAnimation[4], deadAnimation2[4], 
+                                  walkAnimation[5], deadAnimation[5], deadAnimation2[5],
+                                  walkAnimation[6], deadAnimation[6], deadAnimation2[6],
+    
+    };
 	int fWalkAnimation = 1; 
 	int fDeadAnimation = 1;
-	int fAnimation[2] = { fWalkAnimation , fDeadAnimation };
+    int fDeadAnimation2 = 1;
+	int fAnimation[3] = { fWalkAnimation , fDeadAnimation , fDeadAnimation2 };
 	int widthAnimation; 
 	int heightAnimation;
 	int animacionActiva = 0; 
@@ -28,7 +66,8 @@ public:
 	//----------------------------------------------------------------------------
 	int velCaida;
 	unsigned int puntuacion;
-    bool muerto;
+    bool muerto_bob;
+    bool muerto_bub;
 	bool borrame;
     bool enElAire;
     bool eliminame;
@@ -36,6 +75,8 @@ public:
     int alturaMax;
     clock_t temp;
     Scores* score;
+    int asciende = 0;
+
 
 	Frutas() = default;
 
@@ -44,14 +85,20 @@ public:
 		Inicializador(rutaTextura, velCaida, tamano, puntuacion, targetFrames, destino);
 	}
 
-	void Inicializador(std::string fruta, int velCaida ,float tamano, unsigned int puntuacion, int targetFrames, Rectangle destino) {
-		/*
+    void Inicializador(std::string fruta, int velCaida, float tamano, unsigned int puntuacion, int targetFrames, Rectangle destino) {
+        /*
         sprite = LoadTexture((path.assign(fruta).assign(".png")).c_str());
-		walkAnimation = LoadTexture((path.assign(fruta).assign(".png")).c_str());
-		deadAnimation = LoadTexture(( path.assign(( std::to_string(puntuacion) )).assign(".png")).c_str() );
+        walkAnimation = LoadTexture((path.assign(fruta).assign(".png")).c_str());
+        deadAnimation = LoadTexture(( path.assign(( std::to_string(puntuacion) )).assign(".png")).c_str() );
         */
         sprite = LoadTexture(fruta.c_str());
-        
+        this->puntuacion = puntuacion;
+        if (puntuacion == 500) {
+            i = 0;
+        }
+        else{
+            i = puntuacion / 1000;
+        }
 
 		frameWidth = 16;
 		frameHeight = 16;
@@ -61,13 +108,15 @@ public:
 		destRec = { GetScreenWidth() / 2.0f - 50, GetScreenHeight() / 2.0f - 20, (float)frameWidth * tamano, (float)frameHeight * tamano }; 
 		origin = { (float)frameWidth * tamano / 2, (float)frameHeight * tamano / 2 }; 
 		this->velCaida = velCaida;
-        muerto = false;
+        muerto_bob = false;
+        muerto_bub = false;
         borrame = false;
-        enElAire = true;
+        enElAire = false;
         destRec = destino;
         alturaMax = destRec.y - 5;
         eliminame = false;
-        this->puntuacion = puntuacion;
+        animacionActiva = (i * 3);
+        
 	}
 
 	~Frutas() {
@@ -85,6 +134,8 @@ public:
 
     void Actualizar() {
 
+        
+
         if (eliminame) {
             if ((clock() - temp) > 2 * CLOCKS_PER_SEC) {
                 borrame = true;
@@ -93,31 +144,38 @@ public:
         
         
 
-        if (muerto) {
-            animacionActiva = 1;
+        if (muerto_bub) {
+            animacionActiva = (i*3) + 1;
+            velCaida = 2;
+            Asciende();
+        }
+        if (muerto_bob) {
+            animacionActiva = (i * 3) + 2;
+            velCaida = 2;
             Asciende();
         }
 
-        if (enElAire && !muerto) {
+        if (enElAire && !muerto_bob && !muerto_bub) {
             CaerLento();
         }
 
         cuentaFrames++;
         if (cuentaFrames >= (targetFrames / velocidadFrames)) {
             cuentaFrames = 0;
-            switch (animacionActiva) {
-            case 0:
+            if (animacionActiva == (i*3)){
                 indiceAnimacion = (indiceAnimacion + 1) % fWalkAnimation;
-                widthAnimation = walkAnimation.width / fWalkAnimation;
-                heightAnimation = walkAnimation.height;
-                break;
-            case 1:
+                widthAnimation = walkAnimation[0+ i].width / fWalkAnimation;
+                heightAnimation = walkAnimation[0+i].height;
+            }
+            else if (animacionActiva == (i * 3) + 1){
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
-                widthAnimation = deadAnimation.width / fAnimation[1];
-                heightAnimation = deadAnimation.height;
-                break;
-            default:
-                break;
+                widthAnimation = deadAnimation[1].width / fAnimation[1];
+                heightAnimation = deadAnimation[1].height;
+            }
+            else if (animacionActiva == (i * 3) + 2){
+                indiceAnimacion = (indiceAnimacion + 1) % fAnimation[2];
+                widthAnimation = deadAnimation2[2].width / fAnimation[2];
+                heightAnimation = deadAnimation2[2].height;
             }
         }
     }
@@ -128,7 +186,8 @@ public:
 	}
 
     void Asciende() {
-        if( (destRec.y - velCaida / 2) > alturaMax ){
+        if( asciende < 50){
+            asciende += 1;
             destRec.y -= velCaida / 2;
         }
         else if (!eliminame) {
@@ -295,11 +354,7 @@ public:
                 )
             ) {
             // No colisiona con plataforma
-            enElAire = true;
-        }
-        else if (muerto) {
             enElAire = false;
-            animacionActiva = 1;
         }
         else {
             enElAire = false;

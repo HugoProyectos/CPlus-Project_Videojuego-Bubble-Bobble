@@ -55,7 +55,7 @@ public:
     float velMin = 0;
     float anchosX = 15.0f;
     float anchosY = 15.0f; 
-
+    bool frutaProducida = false;
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
@@ -128,7 +128,7 @@ public:
 
             if (muerto) {
                 animacionActiva = 1;
-                Caer();
+                CaerLento();
             }
             else if (colision == 0) {
                 SeguirJugador(playerPosition);
@@ -156,16 +156,6 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
-                if (indiceAnimacion == 3) {
-                    if (!muertePorAgua && !frutaGenerada) {
-                        frutaGenerada = true;
-                        Frutas f = Frutas();
-                        f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
-                        admin->frutas.push_back(std::make_shared<Frutas>(f));
-                    }
-
-                    borrame = true;
-                }
                 break;
             case 2:
                 //Actualizar width&height animacion
@@ -528,11 +518,50 @@ public:
             else if (muerto) {
                 enElAire = false;
                 cayendo = false;
-                if (!muertePorAgua && !frutaGenerada) {
-                    frutaGenerada = true;
-                    Frutas f = Frutas();
-                    f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
-                    admin->frutas.push_back(std::make_shared<Frutas>(f));
+                if (!muertePorAgua && !frutaProducida) {
+                    frutaProducida = true;
+                    Rectangle  aux = destRec;
+                    if (killCount == 0) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)500, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                    }
+                    else if (killCount == 1) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)1000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 2) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)2000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 3) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)3000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 4) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)4000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 5) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)5000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 6) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)6000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
                 }
                 borrame = true;
             }

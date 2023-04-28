@@ -15,10 +15,11 @@ public:
     //double razonY = 0;
     ////////////////////
 
-    int tipo = -1; // -2->No atrapable por pompa 1->Robot 2-> Agua NO USAR 3->Fantasma 4-> Monsta 5-> Rosa
+    int tipo = -1; // -2->No atrapable por pompa 1->Robot 2-> Agua NO USAR 3->Fantasma 4-> Monsta 5-> Rosa 6->Rayo
     bool borrame = false; //Eliminarlo de la lista
     bool muerto = false; //Iniciar animacion de muerte
-    bool muertePorAgua = false;
+    bool muertePorAgua = false; 
+    bool muertePorRayo = false;
     
     bool saltando = false;
     bool finSaltando = false;
@@ -32,6 +33,7 @@ public:
     float distanciaSaltoMax = 0;
     int lastHeight = 450;
     int lastWidth = 800;
+    int killCount = 0;
     bool IAoriginal = true;
 
     Enemigo() = default; //Debe llamarsse a Inicializador

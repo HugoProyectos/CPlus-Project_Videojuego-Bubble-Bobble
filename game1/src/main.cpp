@@ -1,4 +1,4 @@
-#include "MainMenu.cpp"
+ï»¿#include "MainMenu.cpp"
 #include "mapa.cpp"
 #include "AdministradorPompas.cpp"
 #include "clasesConSprite/Bub.cpp"
@@ -23,7 +23,7 @@ typedef enum GameScreen { MAIN_MENU, NIVEL_1, NIVEL_2, NIVEL_3, NIVEL_4, NIVEL_5
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
-int main(void) 
+int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -43,8 +43,8 @@ int main(void)
     // Global:
     //--------------------------------------------------------------------------------------
     Credits credits = Credits(15, 10, 20, KEY_SIX);
-    
-    ContadorVidas contadorVidas = ContadorVidas("resources/Players/Bobblun/ContadorVida.png", "resources/Players/Bobblun/ContadorVida2.png", 40.0f, 0.0f); 
+
+    ContadorVidas contadorVidas = ContadorVidas("resources/Players/Bobblun/ContadorVida.png", "resources/Players/Bobblun/ContadorVida2.png", 40.0f, 0.0f);
     //-------------------------------------------------------------------------------------- 
 
     // Main Menu:
@@ -57,7 +57,7 @@ int main(void)
     // Nivel 1:
     //--------------------------------------------------------------------------------------
     Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f);  
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f);
     //--------------------------------------------------------------------------------------
 
     // Controls:
@@ -69,37 +69,40 @@ int main(void)
     //--------------------------------------------------------------------------------------
     GameOver gameover = GameOver(300, 40.0f, 0.0f);
     //--------------------------------------------------------------------------------------
-    
+
     //int numPlat = plataformas.listaPlataforma.size();
 
     AdministradorPompas admin = AdministradorPompas();
     Texture2D spriteAgua = LoadTexture("resources/agua.png");
-    Rectangle destAgua = { -100, -100, 13, 13 };
+    Rectangle destAgua = { -100, -100, GetScreenHeight() / 34.6f, 61.5f };
     admin.agua = Agua(destAgua, true, spriteAgua, plataformas.listaPlataforma.size());
     admin.agua.existe = false;
     admin.col = &columnas;
     admin.plat = &plataformas;
-    admin.iniciaMapa(3, 300*60);
-    admin.CambioDeMapa(0); //DEBUG 4->0
-
+    admin.iniciaMapa(4, 30*60);
+    admin.CambioDeMapa(0); 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
-     
 
 
-    
+
+
     Rectangle destRob = { GetScreenWidth() / 2, 30, 32, 32 };
-    sh_Enemigo fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
-    admin.enemigos.push_back(fantasma);
-    destRob = { (float)GetScreenWidth() / 2, 70, 32, 32 };
-    sh_Enemigo rosa = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+
+    sh_Enemigo rosa = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
     destRob = { (float)GetScreenWidth() / 2, 80, 32, 32 };
     sh_Enemigo robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+    destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
+    sh_Enemigo robot2 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+    destRob = { (float)GetScreenWidth() / 2, 70, 36, 32 };
+    sh_Enemigo robot3 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
 
     admin.enemigos.push_back(rosa);
     admin.enemigos.push_back(robot);
+    admin.enemigos.push_back(robot2);
+    admin.enemigos.push_back(robot3);
 
     /*
 
@@ -125,12 +128,13 @@ int main(void)
 
     Rectangle destBub = { GetScreenWidth() - 50, 50, 32, 32};//{ 100, GetScreenHeight() - 50, 32, 32 };
     Bub bub = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, true); 
+    //bub.imTheThunder = true;//DEBUG
     Bub bob = Bub(2.0f, 30.0f, 4.0f, 2.0f, TARGET_FPS, destBub, admin, false);
     //bub.nivel = 4;
     //bob.nivel = 4;
 
-    
-    bool jugando_nivel = true; 
+
+    bool jugando_nivel = true;
 
     //bub.destRec.x = 100; bub.destRec.y = 100;
 
@@ -211,24 +215,26 @@ int main(void)
                         bob.enElAgua = admin.agua.colisionBub(bob.destRec, bob.waterlessFrames);
                     }
                 }
-                
+
                 admin.agua.Actualizar(plataformas, columnas);
                 admin.actualizaPompas();
                 for (int i = 0; i < admin.enemigos.size(); i++) {
-               		admin.agua.colisionEnemigo(*admin.enemigos.at(i));
-            	}
-            
+                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                }
+
                 admin.actualizaEnemigos(plataformas, columnas);
 
                 admin.actualizaFrutas(plataformas);
 
+                admin.actualizaRayos();
+
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);  
 
                 if (admin.hurryUp) {
-                    plataformas.SeñalHurryUp();
-                    admin.hurryUp = false; 
+                    plataformas.SeÃ±alHurryUp();
+                    admin.hurryUp = false;
                 }
-                
+
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
                     gameover.ronda = 1;
                     currentScreen = GAME_OVER;
@@ -239,21 +245,21 @@ int main(void)
                 }
 
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
-           		{
-                	credits.creditos -= 1;
+                {
+                    credits.creditos -= 1;
                     admin.scores.hayP2 = true;
                     contadorVidas.hayP2 = true;
                     gameover.hayP2 = true;
-            	}
-                  
+                }
+
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(4, 60*30);
+                admin.iniciaMapa(4, 60 * 30);
                 admin.CambioDeMapa(1);
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_grande.png", 2);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_pequeno.png", "resources/mapa_nivel_2/mapa.txt");
                 contadorVidas.cargar_siguiente_nivel();
-                bub.cambioMapa = 2; 
+                bub.cambioMapa = 2;
                 bob.cambioMapa = 2;
                 bub.nivel = 1;
                 bob.nivel = 1;
@@ -325,14 +331,16 @@ int main(void)
                 for (int i = 0; i < admin.enemigos.size(); i++) {
                     admin.agua.colisionEnemigo(*admin.enemigos.at(i));
                 }
-                
+
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
+
+                admin.actualizaRayos();
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
-                    plataformas.SeñalHurryUp();
+                    plataformas.SeÃ±alHurryUp();
                     admin.hurryUp = false;
                 }
 
@@ -346,16 +354,16 @@ int main(void)
                 }
 
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
-           		{
-                	credits.creditos -= 1;
+                {
+                    credits.creditos -= 1;
                     admin.scores.hayP2 = true;
                     contadorVidas.hayP2 = true;
                     gameover.hayP2 = true;
-            	}
+                }
 
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(4, 30*60); // TODO
+                admin.iniciaMapa(4, 30*60); // TODO 
                 admin.CambioDeMapa(2); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_grande.png", 3);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_3/bloque_pequeno.png", "resources/mapa_nivel_3/mapa.txt");
@@ -432,14 +440,16 @@ int main(void)
                 for (int i = 0; i < admin.enemigos.size(); i++) {
                     admin.agua.colisionEnemigo(*admin.enemigos.at(i));
                 }
-                
+
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
+
+                admin.actualizaRayos();
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
-                    plataformas.SeñalHurryUp();
+                    plataformas.SeÃ±alHurryUp();
                     admin.hurryUp = false;
                 }
 
@@ -462,7 +472,7 @@ int main(void)
 
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(6, 30*60); // TODO
+                admin.iniciaMapa(6, 30*60); // TODO 
                 admin.CambioDeMapa(3); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_4/bloque_grande.png", 4);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_4/bloque_pequeno.png", "resources/mapa_nivel_4/mapa.txt");
@@ -506,7 +516,7 @@ int main(void)
 
                 jugando_nivel = true;
                 plataformas.inicio_de_ronda(4);
-            }     
+            }
         } break;
         case NIVEL_4:
         {
@@ -539,7 +549,7 @@ int main(void)
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
                     else if (admin.agua.existe) {
-                        bob.enElAgua = admin.agua.colisionBub(bob.destRec, bob.waterlessFrames); 
+                        bob.enElAgua = admin.agua.colisionBub(bob.destRec, bob.waterlessFrames);
                     }
                 }
                 admin.agua.Actualizar(plataformas, columnas);
@@ -548,13 +558,15 @@ int main(void)
                     admin.agua.colisionEnemigo(*admin.enemigos.at(i));
                 }
 
-                admin.actualizaEnemigos(plataformas, columnas); 
+                admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
+
+                admin.actualizaRayos();
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos); 
 
                 if (admin.hurryUp) {
-                    plataformas.SeñalHurryUp();
+                    plataformas.SeÃ±alHurryUp();
                     admin.hurryUp = false;
                 }
 
@@ -577,7 +589,8 @@ int main(void)
 
             }
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(4, 30*60); // TODO
+                //CAMBIADO PARA PRUEBAS DE AGUA
+                admin.iniciaMapa(4, 30 * 60); // TODO
                 admin.CambioDeMapa(4); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_grande.png", 5);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt");
@@ -615,7 +628,7 @@ int main(void)
                 plataformas.inicio_de_ronda(5);
             }
         } break;
-        case NIVEL_5: 
+        case NIVEL_5:
         {
             // TODO: Update NIVEL_5 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
@@ -654,14 +667,16 @@ int main(void)
                 for (int i = 0; i < admin.enemigos.size(); i++) {
                     admin.agua.colisionEnemigo(*admin.enemigos.at(i));
                 }
-                
+
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
+
+                admin.actualizaRayos();
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
-                    plataformas.SeñalHurryUp();
+                    plataformas.SeÃ±alHurryUp();
                     admin.hurryUp = false;
                 }
 
@@ -688,7 +703,7 @@ int main(void)
                 gameover.clear = true;
                 admin.frutas.clear();
                 currentScreen = GAME_OVER;
-            }  
+            }
         } break;
         case CONTROLS_MENU:
         {
@@ -723,14 +738,14 @@ int main(void)
             }
         } break;
         case GAME_OVER:
-        { 
-            admin.scores.Actualizar(); 
-            credits.Actualizar(); 
+        {
+            admin.scores.Actualizar();
+            credits.Actualizar();
             if (gameover.Actualizar()) {
-                currentScreen = MAIN_MENU; 
+                currentScreen = MAIN_MENU;
                 admin.scores.hayP1 = false;
                 bub.numVidas = 2;
-                bub.destRec = destBub;
+                bub.destRec = {GetScreenWidth() * (destBub.x / 800), GetScreenHeight() * (destBub.y/450), GetScreenWidth() / 25.0f, GetScreenHeight() / 14.0625f };
                 bub.cambioMapa = 2;
                 bub.muerto = false;
                 bub.muriendo = false;
@@ -738,7 +753,7 @@ int main(void)
                     admin.scores.hayP2 = false;
                     contadorVidas.hayP2 = false;
                     bob.numVidas = 2;
-                    bob.destRec = destBub;
+                    bob.destRec = { GetScreenWidth() * (destBub.x / 800), GetScreenHeight() * (destBub.y / 450), GetScreenWidth() / 25.0f, GetScreenHeight() / 14.0625f };
                     bob.cambioMapa = 2;
                     bob.muerto = false;
                     bob.muriendo = false;
@@ -749,19 +764,19 @@ int main(void)
                 admin.scores.puntuacion2 = 0;
 
                 //Reseteo del nivel
-                admin.iniciaMapa(3, 30*60);
+                admin.iniciaMapa(3, 30*60); 
                 admin.CambioDeMapa(0);
                 columnas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_grande.png", 1);
                 plataformas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt");
-                
+
                 destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
-                fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
-                admin.enemigos.push_back(fantasma);
-                
+                //fantasma = std::make_shared<Fantasma>(Fantasma("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                //admin.enemigos.push_back(fantasma);
+
                 destRob = { (float)GetScreenWidth() / 2, 70, 32, 32 };
                 rosa = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(rosa);
-                
+
                 destRob = { (float)GetScreenWidth() / 2, 80, 32, 32 };
                 robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
@@ -774,14 +789,14 @@ int main(void)
         if (IsKeyDown(KEY_D)) {
             char a;
             std::cin >> a;
-        }*/ 
+        }*/
 
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
         ClearBackground(BLACK);
-        ///DEBUG
+        /// DEBUG
         //DrawLine(0, bub.posicionOriginalBub.y + bub.destRec.height/2, GetScreenWidth(), bub.posicionOriginalBub.y + bub.destRec.height / 2, GRAY);
         //DrawLine(bub.posicionOriginalBub.x + bub.destRec.width / 2, 0, bub.posicionOriginalBub.x + bub.destRec.width / 2, GetScreenHeight(), GRAY);
         /// DEBUG
@@ -799,7 +814,8 @@ int main(void)
         } break;
         case NIVEL_1:
         {
-            // TODO: Draw NIVEL_1 screen here! 
+            // TODO: Draw NIVEL_1 screen here!
+            admin.dibujarPuntosCadena();
             columnas.Dibujar();
             plataformas.Dibujar();
             //scores.Dibujar();   
@@ -815,6 +831,8 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
+            admin.DibujaRayos();
+            admin.dibujarPuntosCadena();
         } break;
         case NIVEL_2:
         {
@@ -833,6 +851,8 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
+            admin.DibujaRayos();
+            admin.dibujarPuntosCadena();
 
         } break;
         case NIVEL_3:
@@ -852,6 +872,8 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
+            admin.DibujaRayos();
+            admin.dibujarPuntosCadena();
 
         } break;
         case NIVEL_4:
@@ -871,6 +893,8 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
+            admin.DibujaRayos();
+            admin.dibujarPuntosCadena();
 
         } break;
         case NIVEL_5:
@@ -890,20 +914,22 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
+            admin.DibujaRayos();
+            admin.dibujarPuntosCadena();
 
         } break;
         case CONTROLS_MENU:
         {
-            controls.Dibujar(); 
+            controls.Dibujar();
         } break;
         case GAME_OVER:
-        {  
+        {
             admin.scores.Dibujar();
-            gameover.Dibujar();   
+            gameover.Dibujar();
         } break;
         default: break;
         }
-         
+
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
@@ -918,11 +944,11 @@ int main(void)
         plataformas.listaPlataforma[i].Unload();
     }
     plataformas.Unload();
-    credits.Unload(); 
+    credits.Unload();
     admin.scores.Unload();
     gameover.Unload();
     controls.Unload();
-    contadorVidas.Unload();  
+    contadorVidas.Unload();
 
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
