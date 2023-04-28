@@ -27,7 +27,7 @@ const int FANTASMA = 8;
  * 5,6,7 -> Pompas verde-naranja-rojo (3-3-3) de un enemigo (así con todos)
  */
 class Pompa : public Sprite {
-	
+
 	int contadorFrames = -1;
 	const int maxFrames = 10;
 
@@ -36,7 +36,7 @@ class Pompa : public Sprite {
 	const int NARANJA = 1;
 	const int ROJO = 2;
 
-	
+
 	const int widthAnimation = 16;
 	const int heightAnimation = 16;
 
@@ -46,10 +46,11 @@ class Pompa : public Sprite {
 
 	//Razón a la que se va restando la vida a la pompa
 	const int VELOCIDAD_MUERTE = 1;
-	
+
 	//Modo oscilacion
 	bool oscilando = false;
 	bool abajo = true;
+	bool ignorar = false;
 	uint8_t contador = 0;
 
 	//Abstracción de generación de enemigo al explotar
@@ -70,6 +71,9 @@ public:
 	//Para las pompas con agua
 	static const int INFINITA = -25;
 	static const int MODULO_AGUA = 2;
+	static const int MODULO_RAYO = 6;
+	bool izquierdaRayo = true;
+	int sentidoJugador = 1;
 
 	//Indice de animación básicos
 	static const int DISPARO = 0;
@@ -113,14 +117,14 @@ public:
 
 	Pompa() = default;
 	Pompa(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
-	
+
 	bool operator==(const Pompa& p);
 
 	void Inicializador(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);
 
-	sh_Enemigo Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua, Columnas *col, Plataformas *plat, Scores *scr); //3->Derecha, 2->Izquierda
+	sh_Enemigo Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAgua, Columnas* col, Plataformas* plat, Scores* scr); //3->Derecha, 2->Izquierda
 
-	Pompa &operator=(const Pompa& p);
+	Pompa& operator=(const Pompa& p);
 	void explota();
 
 	void Dibujar();

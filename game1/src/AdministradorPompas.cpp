@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "mapa.cpp"
 #include "clasesConSprite/Pompa.hpp"
 #include "clasesConSprite/Enemigo.cpp"
@@ -9,18 +9,19 @@
 #include <iostream> //Para debuggear
 #include <clasesConSprite/Blanco.cpp>
 #include <mapa.cpp>
+#include "clasesConSprite/Rayo.hpp"
 
 
 
 
 
-class AdministradorPompas{
+class AdministradorPompas {
 public:
 	Sound sonidoMuerteEnemigo = LoadSound("resources/music/sonido_muerte_enemigo.mp3");
 	bool mute_sound = false;
 	//Referencias a plataformas y columnas para la colision de pompas
-	Columnas *col;
-	Plataformas *plat;
+	Columnas* col;
+	Plataformas* plat;
 	//Texturas para puntuacion de cadena
 	Texture2D bubPoints = LoadTexture("resources/puntos/puntosBub.png");
 	Rectangle pointSourceBub;
@@ -33,17 +34,17 @@ public:
 	int lastHeight;
 	int lastWidth;
 	Rectangle lastPopped;
-	//Gestión de tiempo de mapa
+	//Gestiï¿½n de tiempo de mapa
 	uint32_t contadorSkull = 0;
 	uint32_t limiteContadorSkull = 60 * 90;
-	bool hurryUp = false; //Se podrá usar para saber cuando mostrar el mensaje de hurry up
+	bool hurryUp = false; //Se podrï¿½ usar para saber cuando mostrar el mensaje de hurry up
 	Scores scores = Scores(0, 0, 20, SKYBLUE);
-	//Gestión de cambio de nivel
+	//Gestiï¿½n de cambio de nivel
 	bool cambiaNivel = false;
 	uint32_t contadorFrames = 0;
 	const uint32_t CUENTA_MAXIMA_FIN_NIVEL = 60 * 10;
 	int8_t enemigosPorMatar = 0;
-	
+
 	int killCountBub = 0;
 	int lastKCBub = 0;
 	int killCountBob = 0;
@@ -55,17 +56,19 @@ public:
 	bool muriendo = false;
 	int j1DebeRebotar = 0; //0->No
 	int j1VelLateral = 0;*/
+	Texture2D spriteRayo = LoadTexture("resources/rayo/rayo.png");
 	DatosJugador j1, j2;
 	Agua agua = Agua();
 	GeneradorPompas generador = GeneradorPompas();
 
 	std::vector<sh_Pompa> pompas;
 	std::vector<sh_Enemigo> enemigos;
+	std::vector<Rayo> rayos;
 	
 	// Frutas -------
 	std::vector<sh_Frutas> frutas;
 	//---------------
-	
+
 	AdministradorPompas() = default;
 
 	//Funciones a llamar cuando se cambia de mapa
@@ -95,9 +98,59 @@ public:
 		generador.cambiarModo(idMapa);
 	}
 	////////////////////////////////////////
-	
 
-	//Sección pompas
+	//Secciï¿½n rayos
+	std::vector<Rayo> eliminaRayo(int i) {
+		std::vector<Rayo> auxiliar;
+		for (int j = 0; j < rayos.size(); j++) {
+			if (j != i) {
+				auxiliar.push_back(rayos.at(j));
+			}
+		}
+		return auxiliar;
+	}
+
+	void actualizaRayos() {
+		for (int i = 0; i < rayos.size(); i++) {
+			//std::cout << "Dimensiones pompa; " << pompas.at(i)->destRec.x << "," << pompas.at(i)->destRec.y << "/" << pompas.at(i)->lastHeight << "," << pompas.at(i)->lastWidth << std::endl;
+
+			if (rayos.at(i).borrame) {
+				//auto aBorrar = pompas.begin() + i;
+				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas			
+				rayos = eliminaRayo(i);
+				i--;
+			}
+			else {
+				rayos.at(i).Actualizar(j1,j2);
+				for (int j = 0; j < enemigos.size(); j++) {
+					if (!enemigos.at(j)->borrame && !enemigos.at(j)->muerto && (enemigos.at(j)->tipo != -2)
+						&& ((rayos.at(i).destRec.y + rayos.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
+							&& (rayos.at(i).destRec.y - rayos.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
+							|| (rayos.at(i).destRec.y + rayos.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
+							&& (rayos.at(i).destRec.y - rayos.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2))
+						&& ((rayos.at(i).destRec.x + rayos.at(i).destRec.width / 2 - rayos.at(i).destRec.width * 0.125) >= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
+							&& (rayos.at(i).destRec.x - rayos.at(i).destRec.width / 2 + rayos.at(i).destRec.width * 0.125) <= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
+							|| (rayos.at(i).destRec.x + rayos.at(i).destRec.width / 2 - rayos.at(i).destRec.width * 0.125) >= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)
+							&& (rayos.at(i).destRec.x - rayos.at(i).destRec.width / 2 + rayos.at(i).destRec.width * 0.125) <= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2))) { //Si choca con el enemigo, lo marca para que se borre y se cambia el estado de la pompa
+						enemigos.at(j)->muertePorRayo = true;
+						enemigos.at(j)->muerto = true;
+						rayos.at(i).animacionActiva = 1;
+						rayos.at(i).indiceAnimacion = 0;
+						enemigosPorMatar--;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	void DibujaRayos() {
+		for (int i = 0; i < rayos.size(); i++) {
+			rayos[i].Dibujar();
+		}
+	}
+
+	//Secciï¿½n pompas
 	std::vector<sh_Pompa> elimina(int i) {
 		std::vector<sh_Pompa> auxiliar;
 		for (int j = 0; j < pompas.size(); j++) {
@@ -154,21 +207,30 @@ public:
 			if (pompas.at(i)->matame) {
 				//auto aBorrar = pompas.begin() + i;
 				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas			
+				if (pompas.at(i)->modulo == Pompa::MODULO_RAYO) {
+					int val = pompas.at(i)->sentidoJugador;
+					bool izq = val == 3;
+					Rayo r = Rayo(spriteRayo, pompas.at(i)->destRec, izq);
+					//std::cout << "Direccion del rayo: " << r.izquierda << "Deberia ser: " << izq << std::endl;
+					r.izquierda = izq;
+					rayos.push_back(r);
+				}
 				pompas = elimina(i);
 				i--;
-			} else if (pompas.at(i)->disparada > 0) { //comprueba contacto con los enemigos
+			}
+			else if (pompas.at(i)->disparada > 0) { //comprueba contacto con los enemigos
 				//std::cout << "CHECK DISPARADA" << std::endl;
 
 				for (int j = 0; j < enemigos.size(); j++) {
 					if (!enemigos.at(j)->borrame && !enemigos.at(j)->muerto && (enemigos.at(j)->tipo != -2)
-					&& ((pompas.at(i)->destRec.y + pompas.at(i)->destRec.height / 2) >= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
-					&& (pompas.at(i)->destRec.y - pompas.at(i)->destRec.height / 2) <= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
-					|| (pompas.at(i)->destRec.y + pompas.at(i)->destRec.height / 2) >= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
-					&& (pompas.at(i)->destRec.y - pompas.at(i)->destRec.height / 2) <= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2))
-						&& ((pompas.at(i)->destRec.x + pompas.at(i)->destRec.width/2) >= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width/2)
-					&& (pompas.at(i)->destRec.x - pompas.at(i)->destRec.width / 2) <= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
-					|| (pompas.at(i)->destRec.x + pompas.at(i)->destRec.width / 2) >= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)
-					&& (pompas.at(i)->destRec.x - pompas.at(i)->destRec.width / 2) <= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2))) { //Si choca con el enemigo, lo marca para que se borre y se cambia el estado de la pompa
+						&& ((pompas.at(i)->destRec.y + pompas.at(i)->destRec.height / 2) >= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
+							&& (pompas.at(i)->destRec.y - pompas.at(i)->destRec.height / 2) <= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
+							|| (pompas.at(i)->destRec.y + pompas.at(i)->destRec.height / 2) >= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
+							&& (pompas.at(i)->destRec.y - pompas.at(i)->destRec.height / 2) <= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2))
+						&& ((pompas.at(i)->destRec.x + pompas.at(i)->destRec.width / 2) >= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
+							&& (pompas.at(i)->destRec.x - pompas.at(i)->destRec.width / 2) <= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
+							|| (pompas.at(i)->destRec.x + pompas.at(i)->destRec.width / 2) >= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)
+							&& (pompas.at(i)->destRec.x - pompas.at(i)->destRec.width / 2) <= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2))) { //Si choca con el enemigo, lo marca para que se borre y se cambia el estado de la pompa
 						//std::cout << "Entro" << std::endl;
 						enemigos.at(j)->borrame = true;
 						//std::cout << "Salgo" << std::endl;
@@ -273,7 +335,8 @@ public:
 						}
 					}
 				}
-			} else {
+			}
+			else {
 				uint8_t creaAgua = false;
 				sh_Enemigo enemigo = pompas.at(i)->Actualizar(j1, j2, creaAgua, col, plat, &scores);
 				if (pompas.at(i)->animacionActiva != Pompa::EXPLOTA && i < pompas.size() - 1) {
@@ -282,12 +345,12 @@ public:
 						Rectangle pompa1 = pompas.at(i)->destRec;
 						Rectangle pompa2 = pompas.at(j)->destRec;
 						if (pompas.at(j)->disparada == 0 && pompas.at(j)->animacionActiva != Pompa::EXPLOTA) {
-							//Empuja la pompa2, que se mete por debajo (disminuye y) (se ha creado más tarde, por lo que está en una etapa más tardía de la ruta).
+							//Empuja la pompa2, que se mete por debajo (disminuye y) (se ha creado mï¿½s tarde, por lo que estï¿½ en una etapa mï¿½s tardï¿½a de la ruta).
 							//Choca por la derecha de la que empuja -> Empuja hacia la derecha
 							if ((pompa1.x - pompa1.width / 3 < pompa2.x + pompa2.width / 3 ) && (pompa1.x + pompa1.width / 3  >= pompa2.x + pompa2.width / 3 ) && !((pompa1.y - pompa1.height / 3  > pompa2.y + pompa2.height / 3 ) || (pompa1.y + pompa1.height / 3  < pompa2.y - pompa2.height / 3 ))) {
-								pompas.at(i)->destRec.x += pompa1.width / 8;
-								pompas.at(i)->destRec.y -= pompa1.width / 8;
-								pompas.at(j)->destRec.y += pompa1.width / 8;
+								pompas.at(i)->destRec.x += pompa1.width / 16;
+								pompas.at(i)->destRec.y -= pompa1.width / 16;
+								pompas.at(j)->destRec.y += pompa1.width / 16;
 								if(pompas.at(i)->tVida != Pompa::INFINITA) pompas.at(i)->tVida -= 5;
 								if (pompas.at(j)->tVida != Pompa::INFINITA) pompas.at(j)->tVida -= 5;
 							}
@@ -309,7 +372,7 @@ public:
 					}
 				}
 				if (enemigo != NULL) {
-					enemigos.push_back(enemigo); 
+					enemigos.push_back(enemigo);
 					if (enemigo->muerto) {
 						if (!mute_sound) {
 							PlaySound(sonidoMuerteEnemigo);
@@ -344,6 +407,9 @@ public:
 							killCountBub++;
 							lastPopped = pompas.at(i)->destRec;
 							pompas.at(i)->killCount = killCountBub;
+							pompas.at(i)->enemigoContenido->killCount = killCountBub-1;
+							//std::cout << "-------------------------------     " + std::to_string(pompas.at(i)->killCount) << std::endl;
+							//while (true) {}
 							switch (killCountBub) {
 							case 1:
 								scores.puntuacion1 += 1000;
@@ -404,8 +470,8 @@ public:
 						}
 					}
 					for (int j = 0; j < pompas.size(); j++) {
-						//Si es candidata a continuar la cadena y está en contacto con la pompa de la cadena
-						if (!pompas.at(j)->cadena && pompas.at(j)->animacionActiva != Pompa::EXPLOTA ) {
+						//Si es candidata a continuar la cadena y estï¿½ en contacto con la pompa de la cadena
+						if (!pompas.at(j)->cadena && pompas.at(j)->animacionActiva != Pompa::EXPLOTA) {
 							Rectangle ini = pompas.at(i)->destRec;
 							Rectangle candidata = pompas.at(j)->destRec;
 							//Choca por izquierda
@@ -418,26 +484,26 @@ public:
 								|| (ini.y - ini.height / 2 + 2 < candidata.y - candidata.height / 2 + 2) && (ini.y + ini.height / 2 - 2 >= candidata.y - candidata.height / 2 + 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))) {
 								pompas.at(j)->cadena = pompas.at(i)->cadena;
 							}
-							
+
 						}
 					}
 				}
 			}
-			
+
 		}
 		if (pompas.size() == 0) {
 			//std::cout << "Sin pompas que actualizar" << std::endl;
 		}
 
 
-		//incrementamos el número de iteraciones si numEnemigos = 0;
+		//incrementamos el nï¿½mero de iteraciones si numEnemigos = 0;
 		if (enemigosPorMatar == 0 && !cambiaNivel) {
 			if (contadorFrames == 0) {
 				for (int i = 0; i < pompas.size(); i++) {
 					pompas.at(i)->explota();
 				}
 				//Para borrar a SKULL
-				for (int i = 0; i < enemigos.size(); i++) { 
+				for (int i = 0; i < enemigos.size(); i++) {
 					enemigos.at(i)->muerto = true;
 					if (enemigos.at(i)->tipo == -2) {
 						enemigos = eliminaEnemigo(i); //Esto borra todos los enemigos (razï¿½n por la que el ï¿½ltimo no genera fruta?)
@@ -451,24 +517,24 @@ public:
 			}
 		}
 		else if (enemigosPorMatar < 0) {
-			enemigosPorMatar = 0; //Esto es porque por alguna razón algun enemigo se resta dos veces
+			enemigosPorMatar = 0; //Esto es porque por alguna razï¿½n algun enemigo se resta dos veces
 		}
 		if (enemigosPorMatar > 0) {
-			//Contador de aparición de SKULL (Monsta blanco)
+			//Contador de apariciï¿½n de SKULL (Monsta blanco)
 			if (contadorSkull < limiteContadorSkull) {
 				contadorSkull++;
 			}
-			else if(j1.muriendo || j2.muriendo) {
+			else if (j1.muriendo || j2.muriendo) {
 				contadorSkull = 0;
 				hurryUp = false;
 			}
 			else {
 				if (contadorSkull == limiteContadorSkull) {
 					hurryUp = true;
-					//Crear a Skull y añadirlo a enemigos.
+					//Crear a Skull y aï¿½adirlo a enemigos.
 					Rectangle destRob = { GetScreenWidth() / 2, 70, 32, 32 };
 					Blanco skull;
-					skull = Blanco("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 2.0f, 60.0, destRob,j1,j2);
+					skull = Blanco("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 2.0f, 60.0, destRob, j1, j2);
 					enemigos.push_back(std::make_shared<Blanco>(skull));
 					contadorSkull++;
 					for (int j = 0; j < enemigos.size(); j++) {
@@ -508,7 +574,7 @@ public:
 				pointsTimeBub = 300;
 				lastHeight = GetScreenHeight();
 				lastWidth = GetScreenWidth();
-				destRecBub = { lastPopped.x, lastPopped.y,  ((float)GetScreenWidth() / 200)*pointSourceBub.width, ((float)GetScreenHeight() / 200)*pointSourceBub.height };
+				destRecBub = { lastPopped.x, lastPopped.y,  ((float)GetScreenWidth() / 200) * pointSourceBub.width, ((float)GetScreenHeight() / 200) * pointSourceBub.height };
 			}
 			if (killCountBub != 0) {
 				killCountBub = 0;
@@ -559,7 +625,7 @@ public:
 		}
 	};
 
-	//Sección enemigos
+	//Secciï¿½n enemigos
 	std::vector<sh_Enemigo> eliminaEnemigo(int i) {
 		std::vector<sh_Enemigo> auxiliar;
 		for (int j = 0; j < enemigos.size(); j++) {

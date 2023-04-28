@@ -5,18 +5,18 @@
 
 class Robot : public Enemigo {
 public:
-    //Gestión de transición de nivel
-    int8_t cambioMapa = 2; //2->Primera Iteración 1->Desplazándose 0->Ya no
-    Rectangle posicionPartida = { (float)GetScreenWidth()/2, (float)50, 32, 32};
+    //Gestiï¿½n de transiciï¿½n de nivel
+    int8_t cambioMapa = 2; //2->Primera Iteraciï¿½n 1->Desplazï¿½ndose 0->Ya no
+    Rectangle posicionPartida = { (float)GetScreenWidth() / 2, (float)50, 32, 32 };
     int cuentaFramesTraslacion = 0; //3 segundos = 3 * 60 frames = 180 frames
     const int LIMITE_FRAMES_TRASLACION = 180; //3 segundos = 3 * 60 frames = 180 frames
     double razonX = 0;
     double razonY = 0;
     ////////////////////
-    
+
     //Sprite pixels
     int pixels = 16; //El numero de pixeles del sprite
-    
+
     //Animation
     Texture2D walkAnimation = LoadTexture("resources/enemyRobot/robotWalk.png");
     Texture2D deadAnimation = LoadTexture("resources/enemyRobot/robotDead.png");
@@ -24,17 +24,17 @@ public:
     Texture2D angryAnimation = LoadTexture("resources/enemyRobot/robotAngry.png");
     Texture2D animations[4] = { walkAnimation, deadAnimation, waterAnimation, angryAnimation };
 
-    int fWalkAnimation = 4; //Número de fotogramas de la animacion camniar
-    int fDeadAnimation = 4; //Número de fotogramas de la animacion muerte
-    int fWaterAnimation = 4; //Número de fotogramas de la animacion muerte agua
-    int fAngryAnimation = 4; //Número de fotogramas de la animacion enfado
+    int fWalkAnimation = 4; //Nï¿½mero de fotogramas de la animacion camniar
+    int fDeadAnimation = 4; //Nï¿½mero de fotogramas de la animacion muerte
+    int fWaterAnimation = 4; //Nï¿½mero de fotogramas de la animacion muerte agua
+    int fAngryAnimation = 4; //Nï¿½mero de fotogramas de la animacion enfado
     int fAnimation[4] = { fWalkAnimation , fDeadAnimation, fWaterAnimation, fAngryAnimation };
 
-    int widthAnimation; // Se actualiza para cada animación activa
+    int widthAnimation; // Se actualiza para cada animaciï¿½n activa
     int heightAnimation;
 
-    int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation, 1->DeadAnimation, 2->WaterAniamtion, 3->AngryAnimation
-    int indiceAnimacion = 0; //Indica el número de frame actual de la animación activa
+    int animacionActiva = 0; //Indica la animaciï¿½n activa: 0->WalkAnimation, 1->DeadAnimation, 2->WaterAniamtion, 3->AngryAnimation
+    int indiceAnimacion = 0; //Indica el nï¿½mero de frame actual de la animaciï¿½n activa
 
     //Frames
     int targetFrames;
@@ -46,10 +46,18 @@ public:
     AdministradorPompas* admin;
 
 
-    //Lógica
+    //Lï¿½gica
     int direccionX = 1; //0 para izquierda, 1 para derecha
-    float anchosX = 15.0f; 
-
+    float anchosX = 15.0f;
+    bool sueloArriba = false;
+    bool sueloDerecha = false;
+    bool sueloIzquierda = false;
+    bool saltandoDer = false;
+    bool saltandoDerCorto = false;
+    bool saltandoIzq = false;
+    bool saltandoIzqCorto = false;
+    int contador = 0;
+    bool frutaProducida = false;
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
@@ -74,102 +82,167 @@ public:
 
     // Controlador de comportamiento
     void Actualizar(Rectangle playerPosition) override {
-    if (cambioMapa > 0){
-        if (cambioMapa == 2) {
-            cambioMapa = 1;
-            razonX = (destRec.x - posicionPartida.x) / LIMITE_FRAMES_TRASLACION;
-            razonY = (destRec.y - posicionPartida.y) / LIMITE_FRAMES_TRASLACION;
-            destRec.x = posicionPartida.x;
-            destRec.y = posicionPartida.y;
+        if (cambioMapa > 0) {
+            if (cambioMapa == 2) {
+                cambioMapa = 1;
+                razonX = (destRec.x - posicionPartida.x) / LIMITE_FRAMES_TRASLACION;
+                razonY = (destRec.y - posicionPartida.y) / LIMITE_FRAMES_TRASLACION;
+                destRec.x = posicionPartida.x;
+                destRec.y = posicionPartida.y;
+            }
+            destRec.x += razonX;
+            destRec.y += razonY;
+
+            cuentaFramesTraslacion++;
+            if (cuentaFramesTraslacion >= LIMITE_FRAMES_TRASLACION) {
+                cambioMapa = 0;
+            }
         }
-        destRec.x += razonX;
-        destRec.y += razonY;
+        else {
+            if (IAoriginal) {
+                if (lastHeight != GetScreenHeight()) {
+                    destRec.height = GetScreenHeight() / 14.0625f;
+                    destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+                    distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
+                    origin.y = destRec.height / 2;
+                    lastHeight = GetScreenHeight();
+                }
+                if (lastWidth != GetScreenWidth()) {
+                    destRec.width = GetScreenWidth() / 25.0f;
+                    destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+                    anchosX = anchosX * ((float)GetScreenWidth() / (float)lastWidth);
+                    origin.x = destRec.width / 2;
+                    lastWidth = GetScreenWidth();
+                }
 
-        cuentaFramesTraslacion++;
-        if (cuentaFramesTraslacion >= LIMITE_FRAMES_TRASLACION) {
-            cambioMapa = 0;
-        }
-    } else {
-            
-            if (lastHeight != GetScreenHeight()) {
-                destRec.height = GetScreenHeight() / 14.0625f;
-                destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
-                distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
-                origin.y = destRec.height / 2;
-                lastHeight = GetScreenHeight();
-            }
-            if (lastWidth != GetScreenWidth()) {
-                destRec.width = GetScreenWidth() / 25.0f;
-                destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
-                anchosX = anchosX * ((float)GetScreenWidth() / (float)lastWidth);
-                origin.x = destRec.width / 2;
-                lastWidth = GetScreenWidth();
-            }
-
-            if (enfadado) {
-                animacionActiva = 3;
-                velocidadLateral = 2 * destRec.width / 16.0f;
-                velocidadSalto = destRec.height / 10.0f;
-            }
-            else {
-                velocidadLateral = destRec.width / 16.0f;
-                velocidadSalto = destRec.height / 10.0f;
-            }
-
-            if (muerto) {
-                //std::cout << "mueto" << std::endl;
-                animacionActiva = 1;
-                Caer();
-            }
-            else if (!saltando && enElAire) {
-                //std::cout << "lento" << std::endl;
-
-                CaerLento();
-            }
-            else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - anchosX && destRec.x < playerPosition.x + anchosX)) { //Si el personaje esta encima
-                //std::cout << "salto" << std::endl;
-
-                Salto(playerPosition);
-            }
-            else if (destRec.y != playerPosition.y) {
-                if (direccionX == 0) {
-                    //Izquierda
-                    //std::cout << "izq random" << std::endl;
-
-                    MoverIzq();
+                if (enfadado) {
+                    animacionActiva = 3;
+                    velocidadLateral = 2 * destRec.width / 16.0f;
+                    velocidadSalto = destRec.height / 10.0f;
                 }
                 else {
-                    //Derecha
-                    //std::cout << "der random" << std::endl;
+                    velocidadLateral = destRec.width / 16.0f;
+                    velocidadSalto = destRec.height / 10.0f;
+                }
 
+                if (muerto) {
+                    animacionActiva = 1;
+                    CaerLento();
+                }
+                else if (!saltando && enElAire) {
+                    CaerLento();
+                }
+                else if (saltandoDerCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloDerecha && destRec.x < playerPosition.x - anchosX) {
+                    Salto(playerPosition, 2);
+                }
+                else if (saltandoIzqCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloIzquierda && destRec.x > playerPosition.x + anchosX) {
+                    Salto(playerPosition, -2);
+                }
+                else if (saltando || contador > 180 && sueloArriba && playerPosition.y + destRec.height < destRec.y) {
+                    Salto(playerPosition);
+                    //contador = 120;
+                }
+                else if (destRec.y != playerPosition.y) {
+                    if (direccionX == 0) {
+                        //Izquierda
+                        MoverIzq();
+                        contador++;
+                    }
+                    else {
+                        //Derecha
+                        MoverDer();
+                        contador++;
+                    }
+                }
+                else if (destRec.x > playerPosition.x + anchosX) { //Si el personaje esta a la izquierda
+                    MoverIzq();
+                    contador = 0;
+                }
+                else if (destRec.x < playerPosition.x - anchosX) { //Si el personaje esta a la 
+                    MoverDer();
+                    contador = 0;
+                }
+
+            }
+            else {
+                if (lastHeight != GetScreenHeight()) {
+                    destRec.height = GetScreenHeight() / 14.0625f;
+                    destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+                    distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
+                    origin.y = destRec.height / 2;
+                    lastHeight = GetScreenHeight();
+                }
+                if (lastWidth != GetScreenWidth()) {
+                    destRec.width = GetScreenWidth() / 25.0f;
+                    destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+                    anchosX = anchosX * ((float)GetScreenWidth() / (float)lastWidth);
+                    origin.x = destRec.width / 2;
+                    lastWidth = GetScreenWidth();
+                }
+
+                if (enfadado) {
+                    animacionActiva = 3;
+                    velocidadLateral = 2 * destRec.width / 16.0f;
+                    velocidadSalto = destRec.height / 10.0f;
+                }
+                else {
+                    velocidadLateral = destRec.width / 16.0f;
+                    velocidadSalto = destRec.height / 10.0f;
+                }
+
+                if (muerto) {
+                    animacionActiva = 1;
+                    CaerLento();
+                }
+                else if (!saltando && enElAire) {
+                    CaerLento();
+                }
+                else if (saltandoDerCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloDerecha && destRec.x < playerPosition.x - anchosX) {
+                    Salto(playerPosition, 2);
+                }
+                else if (saltandoIzqCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloIzquierda && destRec.x > playerPosition.x + anchosX) {
+                    Salto(playerPosition, -2);
+                }
+                //Salto a la derecha, player esta a +distancia
+                else if (saltandoDer || (destRec.y > playerPosition.y && destRec.x + distanciaSaltoMax > playerPosition.x - anchosX && destRec.x + distanciaSaltoMax < playerPosition.x + anchosX)) { //Si el personaje esta encima
+                    Salto(playerPosition, 1);
+                }
+                //Salto a la izquierda, player esta a -distancia
+                else if (saltandoIzq || (destRec.y > playerPosition.y && destRec.x - distanciaSaltoMax > playerPosition.x - anchosX && destRec.x - distanciaSaltoMax < playerPosition.x + anchosX)) { //Si el personaje esta encima
+
+                    Salto(playerPosition, -1);
+                }
+                else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - anchosX && destRec.x < playerPosition.x + anchosX)) { //Si el personaje esta encima
+
+                    Salto(playerPosition);
+                }
+                else if (destRec.y != playerPosition.y) {
+                    if (direccionX == 0) {
+                        //Izquierda
+                        MoverIzq();
+                    }
+                    else {
+                        //Derecha
+                        MoverDer();
+                    }
+                }
+                else if (destRec.x > playerPosition.x + anchosX) { //Si el personaje esta a la izquierda
+                    MoverIzq();
+                }
+                else if (destRec.x < playerPosition.x - anchosX) { //Si el personaje esta a la 
                     MoverDer();
                 }
+
+                //Actualizar posicion no salir de la pantalla
+                if (destRec.y > GetScreenHeight() + 50) {
+                    destRec.y = -10;
+                    enElAire = true;
+                    cayendo = true;
+                }
+                else if (destRec.y < -50) {
+                    destRec.y = GetScreenHeight() + 5;
+                }
             }
-            else if (destRec.x > playerPosition.x + anchosX) { //Si el personaje esta a la izquierda
-                //std::cout << "izq siguendo" << std::endl;
-
-                MoverIzq();
-            }
-            else if (destRec.x < playerPosition.x - anchosX) { //Si el personaje esta a la derecha
-                //std::cout << "der siguiendo" << std::endl;
-
-                MoverDer();
-            }
-
-            //Actualizar posicion no salir de la pantalla
-            if (destRec.y > GetScreenHeight() + 50) {
-                //std::cout << "me salgo por abajo" << std::endl;
-
-                destRec.y = -10;
-                enElAire = true;
-                cayendo = true;
-            }
-            else if (destRec.y < -50) {
-                //std::cout << "me salgo por arriba?" << std::endl;
-
-                destRec.y = GetScreenHeight() + 5;
-            }
-
         }
 
         //Actualizar puntero de animacion
@@ -188,14 +261,14 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
-                if (indiceAnimacion == 3) {
-                    if (!muertePorAgua) {
-                        Frutas f = Frutas();
-                        f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
-                        admin->frutas.push_back(std::make_shared<Frutas>(f));
-                    }
-                    borrame = true;
-                }
+                //if (indiceAnimacion == 3) {
+                //    if (!muertePorAgua) {
+                //        Frutas f = Frutas();
+                //        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
+                //        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                //    }
+                //    borrame = true;
+                //}
                 break;
             case 2:
                 //Actualizar width&height animacion
@@ -213,6 +286,9 @@ public:
                 break;
             }
         }
+        sueloArriba = false;
+        sueloDerecha = false;
+        sueloIzquierda = false;
     }
 
     void Dibujar() override {
@@ -238,13 +314,13 @@ public:
     }
 
     void CaerLento() {
-        destRec.y += velocidadSalto/2;
+        destRec.y += velocidadSalto / 2;
     }
 
-    void Salto(Rectangle player) {
-        //Gestión de salto
+
+    void Salto(Rectangle player, int tipo = 0) {
+        //Gestiï¿½n de salto
         if (!saltando) {
-            //std::cout << "Inicio Salto" << std::endl;
             saltando = true;
             finSaltando = false;
             enElAire = true;
@@ -252,27 +328,96 @@ public:
         }
         //Subiendo
         else if ((saltoRecorrido <= distanciaSaltoMax) && !finSaltando) {
-            //std::cout << "Subida Salto" << std::endl;
-            destRec.y -= velocidadSalto;
-            saltoRecorrido += velocidadSalto;
+            if (tipo == -1) {
+                destRec.x -= velocidadLateral;
+                srcRec.width = pixels;
+                direccionX = 0;
+                saltandoIzq = true;
+                destRec.y -= velocidadSalto;
+                saltoRecorrido += velocidadSalto;
+            }
+            else if (tipo == 1) {
+                destRec.x += velocidadLateral;
+                srcRec.width = -pixels;
+                direccionX = 1;
+                saltandoDer = true;
+                destRec.y -= velocidadSalto;
+                saltoRecorrido += velocidadSalto;
+            }
+            else if (tipo == -2) {
+                destRec.x -= velocidadSalto * 2;
+                srcRec.width = pixels;
+                direccionX = 0;
+                saltandoIzqCorto = true;
+                destRec.y -= velocidadSalto;
+                saltoRecorrido += velocidadSalto * 3;
+            }
+            else if (tipo == 2) {
+                destRec.x += velocidadSalto * 2;
+                srcRec.width = -pixels;
+                direccionX = 1;
+                saltandoDerCorto = true;
+                destRec.y -= velocidadSalto;
+                saltoRecorrido += velocidadSalto * 3;
+            }
+            else {
+                destRec.y -= velocidadSalto;
+                saltoRecorrido += velocidadSalto;
+            }
         }
-        //Hemos llegado al máximo
+        //Hemos llegado al mï¿½ximo
         else if (saltoRecorrido >= distanciaSaltoMax) {
-            //std::cout << "max salto" << std::endl;
             finSaltando = true;
             destRec.y += velocidadSalto;
             saltoRecorrido -= velocidadSalto;
         }
         //Bajar
         else if (saltoRecorrido > 0 && finSaltando && enElAire) {
-            //std::cout << "Bajar Salto" << std::endl;
-            destRec.y += velocidadSalto;
-            saltoRecorrido -= velocidadSalto;
+            if (tipo == -1) {
+                destRec.x -= velocidadLateral;
+                srcRec.width = pixels;
+                direccionX = 0;
+                saltandoIzq = true;
+                destRec.y += velocidadSalto;
+                saltoRecorrido -= velocidadSalto;
+            }
+            else if (tipo == 1) {
+                destRec.x += velocidadLateral;
+                srcRec.width = -pixels;
+                direccionX = 1;
+                saltandoDer = true;
+                destRec.y += velocidadSalto;
+                saltoRecorrido -= velocidadSalto;
+            }
+            else if (tipo == -2) {
+                destRec.x -= velocidadSalto * 2;
+                srcRec.width = pixels;
+                direccionX = 0;
+                saltandoIzqCorto = true;
+                destRec.y += velocidadSalto;
+                saltoRecorrido -= velocidadSalto * 3;
+            }
+            else if (tipo == 2) {
+                destRec.x += velocidadSalto * 2;
+                srcRec.width = -pixels;
+                direccionX = 1;
+                saltandoDerCorto = true;
+                destRec.y += velocidadSalto;
+                saltoRecorrido -= velocidadSalto * 3;
+            }
+            else {
+                destRec.y += velocidadSalto;
+                saltoRecorrido -= velocidadSalto * 2;
+            }
         }
         else if (saltoRecorrido < 5) {
-            //std::cout << " Salto acabado" << std::endl;
             saltando = false;
             finSaltando = true;
+            saltandoDer = false;
+            saltandoIzq = false;
+            saltandoDerCorto = false;
+            saltandoIzqCorto = false;
+
             if (player.x > destRec.x) {
                 direccionX = 1;
             }
@@ -281,7 +426,6 @@ public:
             }
         }
         else {
-            //std::cout << " Salto perdido" << std::endl;
             saltando = false;
             finSaltando = true;
             if (player.x > destRec.x) {
@@ -340,13 +484,13 @@ public:
                     //Derecha
                     destRec.x = s.left - destRec.width / 2.0f;
                     direccionX = 0; //Colisiona derecha, ahora se mueve izquierda
-                    //Se puede añadir un movimiento random en eje Y
+                    //Se puede aï¿½adir un movimiento random en eje Y
                     break;
                 case 2:
                     //Izquierda
                     destRec.x = s.right + destRec.width / 2.0f;
                     direccionX = 1; //Colisiona izquierda, hora se mueve derecha
-                    //Se puede añadir un movimiento random en eje Y
+                    //Se puede aï¿½adir un movimiento random en eje Y
                     break;
                 case 3:
                     destRec.y = s.top - destRec.height / 2.0f;
@@ -357,7 +501,7 @@ public:
                     break;
                 }
             }
-            //Comprobamos si se esta acercando a la superficie desde alguna dirección
+            //Comprobamos si se esta acercando a la superficie desde alguna direcciï¿½n
             else {
                 //Izquierda
                 if (
@@ -437,6 +581,34 @@ public:
                     s.aproach[enemyNum + 2] = 4;
                 }
             }
+
+            destRec.y = destRec.y - distanciaSaltoMax + destRec.height;
+            //Comporbaciones adicionales
+            if ((((s.bot) > (destRec.y)) && ((destRec.y) > (s.top)) &&
+                ((s.right - 8) > (destRec.x)) && ((destRec.x) > (s.left + 8)))) {
+                sueloArriba = true;
+            }
+            destRec.y = destRec.y + distanciaSaltoMax - destRec.height;
+
+            destRec.y = destRec.y + destRec.height * 3 / 4;
+            destRec.x = destRec.x - destRec.width * 3 / 4;
+            //Comporbaciones adicionales
+            if ((((s.bot) > (destRec.y)) && ((destRec.y) > (s.top)) &&
+                ((s.right) > (destRec.x)) && ((destRec.x) > (s.left)))) {
+                sueloIzquierda = true;
+            }
+            destRec.y = destRec.y - destRec.height * 3 / 4;
+            destRec.x = destRec.x + destRec.width * 3 / 4;
+
+            destRec.y = destRec.y + destRec.height * 3 / 4;
+            destRec.x = destRec.x + destRec.width * 3 / 4;
+            //Comporbaciones adicionales
+            if ((((s.bot) > (destRec.y)) && ((destRec.y) > (s.top)) &&
+                ((s.right) > (destRec.x)) && ((destRec.x) > (s.left)))) {
+                sueloDerecha = true;
+            }
+            destRec.y = destRec.y - destRec.height * 3 / 4;
+            destRec.x = destRec.x - destRec.width * 3 / 4;
         }
     }
 
@@ -468,10 +640,57 @@ public:
                 cayendo = true;
             }
             else if (muerto) {
-                animacionActiva = 1;
                 enElAire = false;
                 cayendo = false;
+                if (!muertePorAgua && !frutaProducida) {
+                    frutaProducida = true;
+                    //std::cout << "-------------------------------     " + std::to_string(killCount) << std::endl;
+                    //while (true) {}
+                    Rectangle  aux = destRec;
+                    if (killCount == 0) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)500, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                    }
+                    else if (killCount == 1) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)1000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
 
+                    }
+                    else if (killCount == 2) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)2000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 3) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)3000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 4) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)4000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 5) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)5000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+                    else if (killCount == 6) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)6000, 60, aux, admin->scores);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+
+                    }
+
+                }
+                borrame = true;
             }
             else {
                 enElAire = false;
