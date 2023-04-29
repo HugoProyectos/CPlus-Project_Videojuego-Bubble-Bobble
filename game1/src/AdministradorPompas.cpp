@@ -133,6 +133,12 @@ public:
 							|| (rayos.at(i).destRec.x + rayos.at(i).destRec.width / 2 - rayos.at(i).destRec.width * 0.125) >= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)
 							&& (rayos.at(i).destRec.x - rayos.at(i).destRec.width / 2 + rayos.at(i).destRec.width * 0.125) <= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2))) { //Si choca con el enemigo, lo marca para que se borre y se cambia el estado de la pompa
 						enemigos.at(j)->muertePorRayo = true;
+						if (rayos.at(i).soyDeBub) {
+							scores.SumarPuntuacionP1((unsigned int) 1000);
+						}
+						else {
+							scores.SumarPuntuacionP2((unsigned int) 1000);
+						}
 						enemigos.at(j)->muerto = true;
 						rayos.at(i).animacionActiva = 1;
 						rayos.at(i).indiceAnimacion = 0;
@@ -213,6 +219,9 @@ public:
 					Rayo r = Rayo(spriteRayo, pompas.at(i)->destRec, izq);
 					//std::cout << "Direccion del rayo: " << r.izquierda << "Deberia ser: " << izq << std::endl;
 					r.izquierda = izq;
+					if (!pompas.at(i)->rayoDeBub) {
+						r.soyDeBub = false;
+					}
 					rayos.push_back(r);
 				}
 				pompas = elimina(i);

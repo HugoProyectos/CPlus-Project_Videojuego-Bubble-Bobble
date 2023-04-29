@@ -72,6 +72,7 @@ public:
 	static const int MODULO_RAYO = 6;
 	bool izquierdaRayo = true;
 	int sentidoJugador = 1;
+	bool rayoDeBub = true;
 
 	//Indice de animación básicos
 	static const int DISPARO = 0;

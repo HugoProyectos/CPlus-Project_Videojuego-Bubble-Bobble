@@ -19,6 +19,9 @@ public:
 	float velocidadDesplazamiento = 6;
 	bool izquierda = true;
 
+	//A quien dar puntos
+	bool soyDeBub = true;
+
 	//Control de animaciones
 	int animacionActiva;
 	int indiceAnimacion = 0;

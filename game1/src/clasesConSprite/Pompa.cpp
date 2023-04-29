@@ -418,6 +418,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 						}
 						else if (modulo == MODULO_RAYO) {
 							sentidoJugador = j2.sentidoJugador;
+							rayoDeBub = false;
 						}
 						else {
 							result = extraeEnemigo(true);
@@ -450,6 +451,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					}
 					else if (modulo == MODULO_RAYO) {
 						sentidoJugador = j2.sentidoJugador;
+						rayoDeBub = false;
 					}
 					else {
 						result = extraeEnemigo(true);
@@ -471,6 +473,8 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					}
 					else if (modulo == MODULO_RAYO) {
 						sentidoJugador = j2.sentidoJugador;
+							rayoDeBub = false;
+						rayoDeBub = false;
 					}
 					else {
 						result = extraeEnemigo(true);
@@ -990,6 +994,39 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					}
 				}
 
+				break;
+			}
+			case 9: //Mapa de rayos 2
+			{
+				warpVertical = true;
+				if (destRec.x < (screenWidth * 0.5)) {
+					if (destRec.y < screenHeight * 0.85 && destRec.y > screenHeight * 0.80 && destRec.x > screenWidth * 0.14) {
+						destRec.x -= 1.2 * ratioX;
+					}
+					else if (destRec.y < screenHeight * 0.18 && destRec.y > screenHeight * 0.14 && destRec.x < screenWidth * 0.35) {
+						destRec.x += 1.2 * ratioX;
+					}
+					else if (destRec.y < screenHeight * 0.18 && destRec.y > screenHeight * 0.14 && destRec.x > screenWidth * 0.38) {
+						destRec.x -= 1.2 * ratioX;
+					}
+					else {
+						destRec.y -= 0.9 * ratioY;
+					}
+				}
+				else {
+					if (destRec.y < screenHeight * 0.85 && destRec.y > screenHeight * 0.80 && destRec.x < screenWidth * 0.86) {
+						destRec.x += 1.2 * ratioX;
+					}
+					else if (destRec.y < screenHeight * 0.18 && destRec.y > screenHeight * 0.14 && destRec.x > screenWidth * 0.65) {
+						destRec.x -= 1.2 * ratioX;
+					}
+					else if (destRec.y < screenHeight * 0.18 && destRec.y > screenHeight * 0.14 && destRec.x < screenWidth * 0.62) {
+						destRec.x += 1.2 * ratioX;
+					}
+					else {
+						destRec.y -= 0.9 * ratioY;
+					}
+				}
 				break;
 			}
 			default:
