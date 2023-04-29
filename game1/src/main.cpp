@@ -116,7 +116,6 @@ int main(void)
 
 
     Rectangle destRob = { GetScreenWidth() / 2, 30, 32, 32 };
-
     sh_Enemigo rosa = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
     destRob = { (float)GetScreenWidth() / 2, 80, 32, 32 };
     sh_Enemigo robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
