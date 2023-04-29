@@ -524,9 +524,10 @@ public:
                     } else {
                         p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa[nivel]);
                     }
-                    if (imTheThunder) {
+                    if (imTheThunder) { // Debería estar solo en el jefe (si se llega a hacer)
                         p.modulo = Pompa::MODULO_RAYO;
                         p.indiceAnimacion = 18;
+                        p.tVida = Pompa::INFINITA;
                     }
                     //std::cout << "Dimensiones pompa; " <<p.destRec.x << "," << p.destRec.y << "/" << p.lastHeight << "," << p.lastWidth << std::endl;
                     admin->pompas.push_back(std::make_shared<Pompa>(p));
