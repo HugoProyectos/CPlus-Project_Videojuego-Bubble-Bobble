@@ -8,10 +8,12 @@ public:
     //Gestión de transición de nivel
     int8_t cambioMapa = 2; //2->Primera Iteración 1->Desplazándose 0->Ya no
     Rectangle posicionPartida = { (float)GetScreenWidth() / 2, (float)50, 32, 32 };
+    Rectangle posicionDestino = { (float)GetScreenWidth() / 2, (float)50, 32, 32 };
     int cuentaFramesTraslacion = 0; //3 segundos = 3 * 60 frames = 180 frames
     const int LIMITE_FRAMES_TRASLACION = 180; //3 segundos = 3 * 60 frames = 180 frames
     double razonX = 0;
     double razonY = 0;
+    bool primeraActualizacion = true;
     ////////////////////
 
     //Sprite pixels
@@ -66,7 +68,8 @@ public:
         }
         velMax = 2 * velLateral;
         velMin = velLateral / 2;
-        destRec = destino;
+        destRec = posicionPartida;
+        posicionDestino = destino;
         tipo = 5;
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
@@ -82,11 +85,35 @@ public:
 
     // Controlador de comportamiento
     void Actualizar(Rectangle playerPosition) override {
+        if (lastHeight != GetScreenHeight()) {
+            destRec.height = GetScreenHeight() / 14.0625f;
+            destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+            posicionDestino.y = GetScreenHeight() * (posicionDestino.y / lastHeight);
+            if (cambioMapa > 0 && !primeraActualizacion) {
+                razonY = ((posicionDestino.y - posicionDestino.y * 0.05) - destRec.y) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
+            }
+            distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
+            anchosY = anchosY * ((float)GetScreenHeight() / (float)lastHeight);
+            origin.y = destRec.height / 2;
+            lastHeight = GetScreenHeight();
+        }
+        if (lastWidth != GetScreenWidth()) {
+            destRec.width = GetScreenWidth() / 25.0f;
+            destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+            posicionDestino.x = GetScreenWidth() * (posicionDestino.x / lastWidth);
+            if (cambioMapa > 0 && !primeraActualizacion) {
+                razonX = (posicionDestino.x - destRec.x) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
+            }
+            anchosX = anchosX * ((float)GetScreenWidth() / (float)lastWidth);
+            origin.x = destRec.width / 2;
+            lastWidth = GetScreenWidth();
+        }
         if (cambioMapa > 0) {
             if (cambioMapa == 2) {
+                primeraActualizacion = false;
                 cambioMapa = 1;
-                razonX = (destRec.x - posicionPartida.x) / LIMITE_FRAMES_TRASLACION;
-                razonY = (destRec.y - posicionPartida.y) / LIMITE_FRAMES_TRASLACION;
+                razonX = (posicionDestino.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
+                razonY = (posicionDestino.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
                 destRec.x = posicionPartida.x;
                 destRec.y = posicionPartida.y;
             }

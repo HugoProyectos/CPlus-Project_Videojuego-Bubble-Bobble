@@ -6,7 +6,7 @@
 class Robot : public Enemigo {
 public:
     //Gesti�n de transici�n de nivel
-    int8_t cambioMapa = 0; //2->Primera Iteraci�n 1->Desplaz�ndose 0->Ya no
+    int8_t cambioMapa = 2; //2->Primera Iteraci�n 1->Desplaz�ndose 0->Ya no
     Rectangle posicionPartida = { (float)GetScreenWidth() / 2, (float)50, 32, 32 };
     Rectangle posicionDestino = { (float)GetScreenWidth() / 2, (float)50, 32, 32 };
     int cuentaFramesTraslacion = 0; //3 segundos = 3 * 60 frames = 180 frames
@@ -88,8 +88,8 @@ public:
         if (lastHeight != GetScreenHeight()) {
             destRec.height = GetScreenHeight() / 14.0625f;
             destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+            posicionDestino.y = GetScreenHeight() * (posicionDestino.y / lastHeight);
             if (cambioMapa > 0 && !primeraActualizacion) {
-                posicionDestino.y = GetScreenHeight() * (posicionDestino.y / lastHeight);
                 razonY = ((posicionDestino.y - posicionDestino.y * 0.05) - destRec.y) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
             }
             distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
@@ -97,11 +97,12 @@ public:
             lastHeight = GetScreenHeight();
         }
         if (lastWidth != GetScreenWidth()) {
+            double width = GetScreenWidth();
             destRec.width = GetScreenWidth() / 25.0f;
             destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+            posicionDestino.x = GetScreenWidth() * (posicionDestino.x / lastWidth);
             if (cambioMapa > 0 && !primeraActualizacion) {
-                posicionDestino.x = GetScreenWidth() * (posicionDestino.x / lastWidth);
-                razonX = (posicionDestino.x - destRec.y) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
+                razonX = (posicionDestino.x - destRec.x) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
             }
             anchosX = anchosX * ((float)GetScreenWidth() / (float)lastWidth);
             origin.x = destRec.width / 2;
@@ -111,8 +112,8 @@ public:
             if (cambioMapa == 2) {
                 primeraActualizacion = false;
                 cambioMapa = 1;
-                razonX = (posicionDestino.x - posicionPartida.x) / LIMITE_FRAMES_TRASLACION;
-                razonY = (posicionDestino.y - posicionPartida.y) / LIMITE_FRAMES_TRASLACION;
+                razonX = (posicionDestino.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
+                razonY = (posicionDestino.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
                 /*destRec.x = posicionPartida.x;
                 destRec.y = posicionPartida.y;*/
             }
