@@ -996,6 +996,95 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 
 				break;
 			}
+			case 8:
+			{
+				if (destRec.x < screenWidth / 2) {
+					if (destRec.y < screenHeight * 0.65 && destRec.y > screenHeight * 0.55 && destRec.x < screenWidth * 0.25) {
+						oscilando = true;
+					}
+					else if (destRec.y > screenHeight * 0.15 && destRec.y < screenHeight * 0.23 && destRec.x > screenWidth * 0.18) {
+						destRec.x -= 1.2 * ratioX;
+					}
+					else if (destRec.y >= screenHeight * 0.23 && destRec.y < screenHeight * 0.60 && destRec.x > screenWidth * 0.21) {
+						destRec.y -= 0.9 * ratioY;
+					}
+					else if (destRec.y > screenHeight * 0.35 && destRec.y < screenHeight * 0.40 && destRec.x > screenWidth * 0.15) {
+						destRec.x -= 1.2 * ratioX;
+					}
+					else if (destRec.x > screenWidth * 0.15 && destRec.y > screenHeight * 0.65) {
+						destRec.x -= 1.2 * ratioX;
+					}
+					else if (destRec.y > screenHeight * 0.65) {
+						destRec.y -= 0.9 * ratioY;
+					}
+					else {
+						destRec.y += 0.9 * ratioY;
+					}
+				}
+				else {
+					if (destRec.y < screenHeight * 0.65 && destRec.y > screenHeight * 0.55 && destRec.x > screenWidth * 0.75) {
+						oscilando = true;
+					}
+					else if (destRec.y > screenHeight * 0.15 && destRec.y < screenHeight * 0.23 && destRec.x < screenWidth * 0.82) {
+						destRec.x += 1.2 * ratioX;
+					}
+					else if (destRec.y >= screenHeight * 0.23 && destRec.y < screenHeight * 0.60 && destRec.x < screenWidth * 0.79) {
+						destRec.y -= 0.9 * ratioY;
+					}
+					else if (destRec.y > screenHeight * 0.35 && destRec.y < screenHeight * 0.40 && destRec.x < screenWidth * 0.85) {
+						destRec.x += 1.2 * ratioX;
+					}
+					else if (destRec.x < screenWidth * 0.85 && destRec.y > screenHeight * 0.65) {
+						destRec.x += 1.2 * ratioX;
+					}
+					else if (destRec.y > screenHeight * 0.65) {
+						destRec.y -= 0.9 * ratioY;
+					}
+					else {
+						destRec.y += 0.9 * ratioY;
+					}
+				}
+				if (oscilando) {
+					if (destRec.x < screenWidth / 2) {
+						if (destRec.x <= screenWidth * 0.10 && destRec.y < GetScreenHeight() * 0.60) {
+							destRec.y += 0.9 * ratioY;
+							//std::cout << "Abajo" << std::endl;
+						}
+						else if (destRec.x >= screenWidth * 0.19 && destRec.y > GetScreenHeight() * 0.56) {
+							destRec.y -= 0.9 * ratioY;
+							//std::cout << "Arriba" << std::endl;
+						}
+						else if (destRec.y >= screenHeight * 0.59) {
+							destRec.x += 1.2 * ratioX;
+							//std::cout << "Derecha" << std::endl;
+						}
+						else {
+							destRec.x -= 1.2 * ratioX;
+							//std::cout << "Izquierda" << std::endl;
+						}
+					}
+					else {
+						if (destRec.x >= screenWidth * 0.90 && destRec.y < GetScreenHeight() * 0.60) {
+							destRec.y += 0.9 * ratioY;
+							//std::cout << "Abajo" << std::endl;
+						}
+						else if (destRec.x <= screenWidth * 0.81 && destRec.y > GetScreenHeight() * 0.56) {
+							destRec.y -= 0.9 * ratioY;
+							//std::cout << "Arriba" << std::endl;
+						}
+						else if (destRec.y >= screenHeight * 0.59) {
+							destRec.x -= 1.2 * ratioX;
+							//std::cout << "Derecha" << std::endl;
+						}
+						else {
+							destRec.x += 1.2 * ratioX;
+							//std::cout << "Izquierda" << std::endl;
+						}
+					}
+					
+				}
+				break;
+			}
 			case 9: //Mapa de rayos 2
 			{
 				warpVertical = true;
