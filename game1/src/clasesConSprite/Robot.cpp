@@ -7,8 +7,8 @@ class Robot : public Enemigo {
 public:
     //Gesti�n de transici�n de nivel
     int8_t cambioMapa = 2; //2->Primera Iteraci�n 1->Desplaz�ndose 0->Ya no
-    Rectangle posicionPartida = { (float)GetScreenWidth() / 2, (float)50, 32, 32 };
-    Rectangle posicionDestino = { (float)GetScreenWidth() / 2, (float)50, 32, 32 };
+    Rectangle posicionPartida = { (float)400, (float)50, 32, 32 };
+    Rectangle posicionDestino = { (float)400, (float)50, 32, 32 };
     int cuentaFramesTraslacion = 0; //3 segundos = 3 * 60 frames = 180 frames
     const int LIMITE_FRAMES_TRASLACION = 180; //3 segundos = 3 * 60 frames = 180 frames
     double razonX = 0;
@@ -114,8 +114,6 @@ public:
                 cambioMapa = 1;
                 razonX = (posicionDestino.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
                 razonY = (posicionDestino.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
-                /*destRec.x = posicionPartida.x;
-                destRec.y = posicionPartida.y;*/
             }
             destRec.x += razonX;
             destRec.y += razonY;

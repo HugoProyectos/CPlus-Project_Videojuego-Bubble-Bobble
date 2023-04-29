@@ -7,8 +7,8 @@ class Rosa : public Enemigo {
 public:
     //Gestión de transición de nivel
     int8_t cambioMapa = 2; //2->Primera Iteración 1->Desplazándose 0->Ya no
-    Rectangle posicionPartida = { (float)GetScreenWidth() / 2, (float)50, 32, 32 };
-    Rectangle posicionDestino = { (float)GetScreenWidth() / 2, (float)50, 32, 32 };
+    Rectangle posicionPartida = { 400, (float)50, 32, 32 };
+    Rectangle posicionDestino = { 400, (float)50, 32, 32 };
     int cuentaFramesTraslacion = 0; //3 segundos = 3 * 60 frames = 180 frames
     const int LIMITE_FRAMES_TRASLACION = 180; //3 segundos = 3 * 60 frames = 180 frames
     double razonX = 0;
@@ -114,8 +114,6 @@ public:
                 cambioMapa = 1;
                 razonX = (posicionDestino.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
                 razonY = (posicionDestino.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
-                destRec.x = posicionPartida.x;
-                destRec.y = posicionPartida.y;
             }
             destRec.x += razonX;
             destRec.y += razonY;
@@ -127,21 +125,6 @@ public:
         }
         else {
 
-            if (lastHeight != GetScreenHeight()) {
-                destRec.height = GetScreenHeight() / 14.0625f;
-                destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
-                distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
-                anchosY = anchosY * ((float)GetScreenHeight() / (float)lastHeight);
-                origin.y = destRec.height / 2;
-                lastHeight = GetScreenHeight();
-            }
-            if (lastWidth != GetScreenWidth()) {
-                destRec.width = GetScreenWidth() / 25.0f;
-                destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
-                anchosX = anchosX * ((float)GetScreenWidth() / (float)lastWidth);
-                origin.x = destRec.width / 2;
-                lastWidth = GetScreenWidth();
-            }
             
             if (enfadado) {
                 animacionActiva = 3;
