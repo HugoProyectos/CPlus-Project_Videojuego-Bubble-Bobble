@@ -17,9 +17,6 @@ class Botellas : public Enemigo {
 	double razonX = 0;
 	double razonY = 0;
 
-	float tamano;
-	float velSalto;
-	float velLateral;
 	float _targetFPS;
 	int lastHeight = 450;
 	int lastWidth = 800;
@@ -64,15 +61,14 @@ class Botellas : public Enemigo {
 	// --------------------------------------------------------
 
 	Botellas() = default;
-	Botellas(float tamano, float velSalto, float velLateral, float _targetFPS, Rectangle destino, int ID);
-	void Unload();
+	Botellas(float tamano, float velSalto, float velLateral, float _targetFPS, Rectangle destino, int ID, int direccion);
 	void Actualizar();
 	void Dibujar();
 	void MoverIzq();
 	void MoverDer();
-	void compruebaColision();
+	void compruebaColision(Plataforma& s, int enemyNum);
 	void compruebaSuelo();
-	void compruebaPared();
+	void compruebaPared(const Columnas& s);
 
 };
 
