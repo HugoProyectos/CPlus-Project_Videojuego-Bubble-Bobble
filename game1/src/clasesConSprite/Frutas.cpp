@@ -76,6 +76,10 @@ public:
     clock_t temp;
     Scores* score;
     int asciende = 0;
+    int lastHeight;
+    int lastWidth;
+    int ratioX;
+    int ratioY;
 
 
 	Frutas() = default;
@@ -116,6 +120,8 @@ public:
         alturaMax = destRec.y - 5;
         eliminame = false;
         animacionActiva = (i * 3);
+        lastHeight = GetScreenHeight();
+        lastWidth = GetScreenWidth();
         
 	}
 
@@ -129,11 +135,31 @@ public:
 
 	void Dibujar() {
 		srcRec.x = (float)widthAnimation * (float)indiceAnimacion;
+        srcRec.y = (float)heightAnimation * (float)animacionActiva; 
 		DrawTexturePro(animations[animacionActiva], srcRec, destRec, origin, 0.0f, WHITE);
 	}
 
     void Actualizar() {
+        // Reescalado --------------------------------------------------------------------
+        if (lastHeight != GetScreenHeight()) {
+            destRec.height = GetScreenHeight() / 14.0625f;
+            destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+            origin.y = destRec.height / 2;
 
+            ratioY = destRec.height / 32;
+            lastHeight = GetScreenHeight();
+        }
+        if (lastWidth != GetScreenWidth()) {
+            destRec.width = GetScreenWidth() / 25.0f;
+            destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+            origin.x = destRec.width / 2;
+
+            ratioX = destRec.width / 32;
+            lastWidth = GetScreenWidth();
+        }
+        ratioY = destRec.height / 32;
+        ratioX = destRec.width / 32;
+        // --------------------------------------------------------------------------------
         
 
         if (eliminame) {
@@ -182,13 +208,13 @@ public:
 
 	void CaerLento() {
         velCaida = 2;
-		destRec.y += velCaida / 2;
+		destRec.y += (velCaida / 2) * ratioY;
 	}
 
     void Asciende() {
         if( asciende < 50){
             asciende += 1;
-            destRec.y -= velCaida / 2;
+            destRec.y -= (velCaida / 2) * ratioY;
         }
         else if (!eliminame) {
             eliminame = true;
@@ -244,7 +270,7 @@ public:
                 //destRec.x = s.right + destRec.width / 2;
                 break;
             case 3:
-                destRec.y = s.top - destRec.height / 2;
+                destRec.y = (s.top - destRec.height / 2) * ratioY;
                 enElAire = false;
                 lastGround = s;
                 break;

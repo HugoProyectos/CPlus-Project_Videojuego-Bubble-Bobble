@@ -4,7 +4,8 @@
 
 uint8_t Pompa::ID_MAPA = 0;
 uint32_t Pompa::ID_GLOBAL = 0;
-Controls Pompa::controlesJugador = Controls();
+unsigned int Pompa::jumpJ1 = 0;
+unsigned int Pompa::jumpJ2 = 0;
 bool Pompa::warpVertical = false; //Poner a true en algunos mapas
 
 sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
@@ -18,7 +19,6 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->enfadado = true;
 		if (matalo) {
 			enemigoContenido->killCount = this->killCount;
-			std::cout << "-------------------------------     " + std::to_string(enemigoContenido->killCount) << std::endl;
 		}
 
 		resultado = enemigoContenido;
@@ -124,7 +124,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 		origin.x = destRec.width / 2;
 
 		ratioX = destRec.width / 32;
-		lastWidth = GetScreenWidth();
+		
 	}
 	ratioY = destRec.height / 32;
 	ratioX = destRec.width / 32;
@@ -285,7 +285,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					|| (destRec.x + destRec.width / 2) > (j1.posicionJugador.x - j1.posicionJugador.width) && (destRec.x - destRec.width / 2) < (j1.posicionJugador.x - j1.posicionJugador.width / 2))
 					&& (j1.posicionJugador.y + j1.posicionJugador.height / 2) > (destRec.y - destRec.height / 2) && (j1.posicionJugador.y + j1.posicionJugador.height / 2) < (destRec.y + destRec.height / 2)
 					&& j1.jugadorCayendo && animacionActiva != EXPLOTA) { //Choque en ca�da
-					if (j1.debeRebotar == 0 && !IsKeyDown(controlesJugador.jump_p1)) { // Explota la pompa
+					if (j1.debeRebotar == 0 && !IsKeyDown(this->jumpJ1)) { // Explota la pompa
 						animacionActiva = EXPLOTA;
 						indiceAnimacion = 0;
 						tVida = -1;
@@ -303,7 +303,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 							result = extraeEnemigo(true);
 						}
 					}
-					else if (IsKeyDown(controlesJugador.jump_p1) && (j1.posicionJugador.y + j1.posicionJugador.height / 2) < (destRec.y - destRec.height / 4)) { //Debe rebotar sin explotar la pompa
+					else if (IsKeyDown(jumpJ1) && (j1.posicionJugador.y + j1.posicionJugador.height / 2) < (destRec.y - destRec.height / 4)) { //Debe rebotar sin explotar la pompa
 						//std::cout << "DEBES REBOTAR" << std::endl;
 						//int u; //DEBUG bloqueante
 						//std::cin >> u;
@@ -404,8 +404,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 				if (((destRec.x - destRec.width / 2) < (j2.posicionJugador.x + j2.posicionJugador.width / 2) && (destRec.x + destRec.width / 2) > (j2.posicionJugador.x + j2.posicionJugador.width / 2)
 					|| (destRec.x + destRec.width / 2) > (j2.posicionJugador.x - j2.posicionJugador.width) && (destRec.x - destRec.width / 2) < (j2.posicionJugador.x - j2.posicionJugador.width / 2))
 					&& (j2.posicionJugador.y + j2.posicionJugador.height / 2) > (destRec.y - destRec.height / 2) && (j2.posicionJugador.y + j2.posicionJugador.height / 2) < (destRec.y + destRec.height / 2)
+
 					&& j2.jugadorCayendo && animacionActiva != EXPLOTA) { //Choque en ca�da
-					if (j2.debeRebotar == 0 && !IsKeyDown(controlesJugador.jump_p2)) { // Explota la pompa
+					if (j2.debeRebotar == 0 && !IsKeyDown(this->jumpJ2)) { // Explota la pompa
 						animacionActiva = EXPLOTA;
 						indiceAnimacion = 0;
 						tVida = -1;
@@ -424,7 +425,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 							result = extraeEnemigo(true);
 						}
 					}
-					else if (IsKeyDown(controlesJugador.jump_p2) && (j2.posicionJugador.y + j2.posicionJugador.height / 2) < (destRec.y - destRec.height / 4)) { //Debe rebotar sin explotar la pompa
+					else if (IsKeyDown(jumpJ2) && (j2.posicionJugador.y + j2.posicionJugador.height / 2) < (destRec.y - destRec.height / 4)) { //Debe rebotar sin explotar la pompa
 						//std::cout << "DEBES REBOTAR" << std::endl;
 						//int u; //DEBUG bloqueante
 						//std::cin >> u;

@@ -9,15 +9,20 @@
 class MainMenu{
 public:
 
-    Texture2D menu[5] = { 
+    Texture2D menu[6] = { 
         LoadTexture("resources/main_menu/menu_1.png"),
         LoadTexture("resources/main_menu/menu_2.png"),
         LoadTexture("resources/main_menu/menu_3.png"),
         LoadTexture("resources/main_menu/menu_4.png"),
-        LoadTexture("resources/main_menu/menu_5.png") };
+        LoadTexture("resources/main_menu/menu_5.png"),
+        LoadTexture("resources/main_menu/options.png")};
     Texture2D currentMenu = menu[0];
 
+    bool mute_music = false;
     Music music = LoadMusicStream("resources/music/sonido_main_menu.mp3");
+
+    Sound sound = LoadSound("resources/music/clic.mp3");
+    bool mute_sound = false;
     
     unsigned int frecuencia;
     unsigned int iteraciones = 0;
@@ -25,10 +30,14 @@ public:
     Rectangle srcRect;
     Rectangle destRect;
 
+    Rectangle srcRectOptions;
+
     unsigned int indice = 0;
 
     unsigned int margenSuperior = 0;
     unsigned int margenInferior = 0;
+
+    Vector2 mousePosition;
 
     MainMenu() = default; //Debe llamarsse a Inicializador
 
@@ -40,6 +49,8 @@ public:
         this->frecuencia = frecuencia;
         // Source rectangle (part of the texture to use for drawing)
         srcRect = { 0.0f, 0.0f, (float)currentMenu.width, (float)currentMenu.height };
+
+        srcRectOptions = { 0.0f, 0.0f, (float)menu[5].width, (float)menu[5].height };
 
         PlayMusicStream(music);
 
@@ -54,6 +65,7 @@ public:
         UnloadTexture(menu[2]);
         UnloadTexture(menu[3]);
         UnloadTexture(menu[4]);
+        UnloadTexture(menu[5]);
     };
 
     void Unload() {
@@ -63,9 +75,10 @@ public:
         UnloadTexture(menu[2]);
         UnloadTexture(menu[3]);
         UnloadTexture(menu[4]);
+        UnloadTexture(menu[5]);
     };
 
-    void Actualizar(int credits) {
+    bool Actualizar(int credits) {
         if (credits == 1) {
             currentMenu = menu[3];
         }
@@ -73,7 +86,10 @@ public:
             currentMenu = menu[4];
         }
         else {
-            UpdateMusicStream(music);
+            if (!mute_music) {
+                UpdateMusicStream(music);
+            }
+            
             iteraciones++;
             if (iteraciones == frecuencia) {
                 indice = (indice + 1) % 3;
@@ -81,6 +97,16 @@ public:
             }
             currentMenu = menu[indice];
         }
+        mousePosition = GetMousePosition();
+        destRect = { 0, (float)GetScreenHeight() - margenInferior / 2, (float)margenInferior / 2, (float)margenInferior / 2 };
+        if (CheckCollisionPointRec(mousePosition, destRect) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            // El clic se ha hecho dentro de la imagen
+            if (!mute_sound) {
+                PlaySound(sound);
+            }
+            return true;
+        }
+        return false;
         
     };
 
@@ -89,6 +115,9 @@ public:
         int altura = GetScreenHeight();
         destRect = { 0, (float)GetScreenHeight() / 14 , (float)GetScreenWidth(), (float)altura * 12 / 14 };
         DrawTexturePro(currentMenu, srcRect, destRect, Vector2 {0,0}, 0, WHITE);
+
+        destRect = { 0, (float)GetScreenHeight() - margenInferior/2, (float)margenInferior / 2, (float)margenInferior / 2};
+        DrawTexturePro(menu[5], srcRectOptions, destRect, Vector2{0,0}, 0, WHITE);
     }
 
 };
