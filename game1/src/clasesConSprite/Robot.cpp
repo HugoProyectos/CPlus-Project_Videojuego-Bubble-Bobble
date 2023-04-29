@@ -6,12 +6,14 @@
 class Robot : public Enemigo {
 public:
     //Gesti�n de transici�n de nivel
-    int8_t cambioMapa = 2; //2->Primera Iteraci�n 1->Desplaz�ndose 0->Ya no
+    int8_t cambioMapa = 0; //2->Primera Iteraci�n 1->Desplaz�ndose 0->Ya no
     Rectangle posicionPartida = { (float)GetScreenWidth() / 2, (float)50, 32, 32 };
+    Rectangle posicionDestino = { (float)GetScreenWidth() / 2, (float)50, 32, 32 };
     int cuentaFramesTraslacion = 0; //3 segundos = 3 * 60 frames = 180 frames
     const int LIMITE_FRAMES_TRASLACION = 180; //3 segundos = 3 * 60 frames = 180 frames
     double razonX = 0;
     double razonY = 0;
+    bool primeraActualizacion = true;
     ////////////////////
 
     //Sprite pixels
@@ -66,7 +68,8 @@ public:
         if (enfadado) {
             animacionActiva = 3;
         }
-        destRec = destino;
+        destRec = posicionPartida;
+        posicionDestino = destino;
         tipo = 1;
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
@@ -82,13 +85,36 @@ public:
 
     // Controlador de comportamiento
     void Actualizar(Rectangle playerPosition) override {
+        if (lastHeight != GetScreenHeight()) {
+            destRec.height = GetScreenHeight() / 14.0625f;
+            destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+            if (cambioMapa > 0 && !primeraActualizacion) {
+                posicionDestino.y = GetScreenHeight() * (posicionDestino.y / lastHeight);
+                razonY = ((posicionDestino.y - posicionDestino.y * 0.05) - destRec.y) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
+            }
+            distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
+            origin.y = destRec.height / 2;
+            lastHeight = GetScreenHeight();
+        }
+        if (lastWidth != GetScreenWidth()) {
+            destRec.width = GetScreenWidth() / 25.0f;
+            destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+            if (cambioMapa > 0 && !primeraActualizacion) {
+                posicionDestino.x = GetScreenWidth() * (posicionDestino.x / lastWidth);
+                razonX = (posicionDestino.x - destRec.y) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
+            }
+            anchosX = anchosX * ((float)GetScreenWidth() / (float)lastWidth);
+            origin.x = destRec.width / 2;
+            lastWidth = GetScreenWidth();
+        }
         if (cambioMapa > 0) {
             if (cambioMapa == 2) {
+                primeraActualizacion = false;
                 cambioMapa = 1;
-                razonX = (destRec.x - posicionPartida.x) / LIMITE_FRAMES_TRASLACION;
-                razonY = (destRec.y - posicionPartida.y) / LIMITE_FRAMES_TRASLACION;
-                destRec.x = posicionPartida.x;
-                destRec.y = posicionPartida.y;
+                razonX = (posicionDestino.x - posicionPartida.x) / LIMITE_FRAMES_TRASLACION;
+                razonY = (posicionDestino.y - posicionPartida.y) / LIMITE_FRAMES_TRASLACION;
+                /*destRec.x = posicionPartida.x;
+                destRec.y = posicionPartida.y;*/
             }
             destRec.x += razonX;
             destRec.y += razonY;
@@ -100,21 +126,6 @@ public:
         }
         else {
             if (IAoriginal) {
-                if (lastHeight != GetScreenHeight()) {
-                    destRec.height = GetScreenHeight() / 14.0625f;
-                    destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
-                    distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
-                    origin.y = destRec.height / 2;
-                    lastHeight = GetScreenHeight();
-                }
-                if (lastWidth != GetScreenWidth()) {
-                    destRec.width = GetScreenWidth() / 25.0f;
-                    destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
-                    anchosX = anchosX * ((float)GetScreenWidth() / (float)lastWidth);
-                    origin.x = destRec.width / 2;
-                    lastWidth = GetScreenWidth();
-                }
-
                 if (enfadado) {
                     animacionActiva = 3;
                     velocidadLateral = 2 * destRec.width / 16.0f;
@@ -165,20 +176,6 @@ public:
 
             }
             else {
-                if (lastHeight != GetScreenHeight()) {
-                    destRec.height = GetScreenHeight() / 14.0625f;
-                    destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
-                    distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
-                    origin.y = destRec.height / 2;
-                    lastHeight = GetScreenHeight();
-                }
-                if (lastWidth != GetScreenWidth()) {
-                    destRec.width = GetScreenWidth() / 25.0f;
-                    destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
-                    anchosX = anchosX * ((float)GetScreenWidth() / (float)lastWidth);
-                    origin.x = destRec.width / 2;
-                    lastWidth = GetScreenWidth();
-                }
 
                 if (enfadado) {
                     animacionActiva = 3;

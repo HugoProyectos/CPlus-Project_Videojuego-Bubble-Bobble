@@ -56,8 +56,8 @@ int main(void)
 
     // Nivel 1:
     //--------------------------------------------------------------------------------------
-    Columnas columnas = Columnas("resources/mapa_nivel_9/bloque_grande.png", 40.0f, 0.0f, 1); //DEBUG
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_9/bloque_pequeno.png", "resources/mapa_nivel_9/mapa.txt", 40.0f, 0.0f);
+    Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f);
     //--------------------------------------------------------------------------------------
 
     // Controls:
@@ -105,8 +105,8 @@ int main(void)
     admin.agua.existe = false;
     admin.col = &columnas;
     admin.plat = &plataformas;
-    admin.iniciaMapa(4, 3000000*60); //DEBUG
-    admin.CambioDeMapa(8); //DEBUG
+    admin.iniciaMapa(4, 30*60); 
+    admin.CambioDeMapa(0); 
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
@@ -125,12 +125,11 @@ int main(void)
     destRob = { (float)GetScreenWidth() / 2, 70, 36, 32 };
     sh_Enemigo robot3 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
 
-    /*admin.enemigos.push_back(rosa); //DEBUG -> DESCOMENTAR EN VERSION FINAL
+    admin.enemigos.push_back(rosa);
     admin.enemigos.push_back(robot);
     admin.mute_sound = Mute_effect == 1 ? true : false;
     admin.enemigos.push_back(robot2);
     admin.enemigos.push_back(robot3);
-    */
     /*
 
     destRob = { (float)GetScreenWidth() / 2, 60, 32, 32 };
