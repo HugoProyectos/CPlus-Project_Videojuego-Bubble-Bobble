@@ -223,7 +223,7 @@ void Boss::disparar() {
     tempDisparo = clock();
 }
 
-void Boss::administrarFuegos() {
+void Boss::administrarBotellas() {
     // for 0 to 5 fuegos
     //      actualizar
     //      borrar
@@ -231,7 +231,7 @@ void Boss::administrarFuegos() {
     // igual que con las bolas en admin pompas
 }
 
-void Boss::eliminarFuegos() {
+void Boss::eliminarBotellas() {
     // for 0 to 5 fuegos
     // if borrar == true
     //      fuegos = fuegos sin i

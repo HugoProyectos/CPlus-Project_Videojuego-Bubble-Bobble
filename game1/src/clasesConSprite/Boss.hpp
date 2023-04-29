@@ -101,6 +101,6 @@ public:
     void compruebaSuelo();
     void compruebaPared(const Columnas& s);
     void disparar();
-    void administrarFuegos();
-    void eliminarFuegos();
+    void administrarBotellas();
+    void eliminarBotellas();
 };
