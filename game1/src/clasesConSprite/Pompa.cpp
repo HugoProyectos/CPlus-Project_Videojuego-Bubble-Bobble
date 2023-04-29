@@ -18,7 +18,6 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->enfadado = true;
 		if (matalo) {
 			enemigoContenido->killCount = this->killCount;
-			std::cout << "-------------------------------     " + std::to_string(enemigoContenido->killCount) << std::endl;
 		}
 
 		resultado = enemigoContenido;
@@ -124,7 +123,7 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 		origin.x = destRec.width / 2;
 
 		ratioX = destRec.width / 32;
-		lastWidth = GetScreenWidth();
+		
 	}
 	ratioY = destRec.height / 32;
 	ratioX = destRec.width / 32;
