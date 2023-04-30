@@ -3,7 +3,8 @@
 #include "AdministradorPompas.cpp"
 #include "clasesConSprite/Bub.cpp"
 #include "Controls.cpp"
-
+#include "clasesConSprite/Boss.hpp"
+#include <cstdlib>
 #include "clasesConSprite/Agua.hpp"
 #include <clasesConSprite/Fantasma.cpp>
 #include <clasesConSprite/Morado.cpp>
@@ -124,12 +125,17 @@ int main(void)
     sh_Enemigo robot2 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
     destRob = { (float)GetScreenWidth() / 2, 70, 36, 32 };
     sh_Enemigo robot3 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
-
+    /* 
+    
     admin.enemigos.push_back(rosa);
     admin.enemigos.push_back(robot);
     admin.mute_sound = Mute_effect == 1 ? true : false;
     admin.enemigos.push_back(robot2);
     admin.enemigos.push_back(robot3);
+    */
+    destRob = { (float)GetScreenWidth() / 2, 10, 36, 32 };
+    sh_Enemigo boss = std::make_shared<Boss>(Boss(2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob,admin));
+    admin.enemigos.push_back(boss);
 
     /*
 

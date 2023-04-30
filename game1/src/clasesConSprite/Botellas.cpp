@@ -10,12 +10,11 @@ Botellas::Botellas(float tamano, float velSalto, float velLateral, float _target
     targetFrames = _targetFPS;
     enElAire = true;
     cayendo = false;
-    this->ID = ID;
     borrame = false;
     direccionX = direccion;
 }
 
-void Botellas::Actualizar() {
+void Botellas::Actualizar(Rectangle playerPosition)  {
     // Gestion logica -----------------------------------------
 
     if (direccionX == 0) {

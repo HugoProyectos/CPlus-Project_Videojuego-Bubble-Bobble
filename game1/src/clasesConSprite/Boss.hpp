@@ -2,9 +2,12 @@
 #include "Sprite.hpp"
 #include "Suelo.cpp"
 #include "mapa.cpp"
+#include "Botellas.hpp"
+#include "../AdministradorPompas.cpp"
 #include <iostream>
+#include <cstdlib>
 
-class Boss :public Sprite {
+class Boss :public Enemigo {
 public:
     // Render --------------------------------------------------
 
@@ -19,14 +22,8 @@ public:
     double razonX = 0;
     double razonY = 0;
 
-    float tamano;
-    float saltoMax;
-    float velSalto;
-    float velLateral;
     float _targetFPS;
-    int lastHeight = 450;
-    int lastWidth = 800;
-    Rectangle destino;
+    
     
     // --------------------------------------------------------
 	// Animacion ----------------------------------------------
@@ -67,32 +64,31 @@ public:
     // Colisiones ---------------------------------------------
 
     Plataforma lastGround;
-    bool enElAire = true;
-    bool cayendo = true;
 
     // --------------------------------------------------------
 	// Logica -------------------------------------------------
 
     int direccionX = 0; 
     int direccionY = 0; 
-    bool enfadado;
     clock_t tempDisparo;
     clock_t tempAngry;
     const int disparoCoolDown = 10;
     bool disparando;
     bool sinVida;
-    bool muerto;
     bool hit;
     int vida;
+    AdministradorPompas* admin;
+    int colision = 0; 
+    int colisionAux = 0;
 
 	// --------------------------------------------------------
 
 	Boss() = default;
-    Boss(float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino);
+    Boss(float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin);
     void enfadar();
-    void Actualizar(Rectangle playerPosition);
+    void Actualizar(Rectangle playerPosition) override;
     void Ia(Rectangle playerPosition);
-    void Dibujar();
+    void Dibujar() override;
     void MoverIzqArriba();
     void MoverIzqAbajo();
     void MoverDerArriba();

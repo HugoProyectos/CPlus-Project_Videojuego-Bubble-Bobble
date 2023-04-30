@@ -3,7 +3,7 @@
 #include <ctime>
 
 class Botellas : public Enemigo {
-
+public:
 	// Render --------------------------------------------------
 
 	int8_t cambioMapa = 2;
@@ -26,14 +26,13 @@ class Botellas : public Enemigo {
 	// Animacion ----------------------------------------------
 
 	int pixels = 16;
-	Texture2D walk = LoadTexture("resources/enemyBotellas/walk.png");
+	Texture2D walk = LoadTexture("resources/enemyBotella/walk.png");
 	int fWalk = 4;
 
 	int widthAnimation; // Se actualiza para cada animación activa
 	int heightAnimation;
 	Texture2D animations[1] = { walk };
 	int fAnimation[2] = { fWalk };
-	int ID;
 
 
 	int animacionActiva = 0; 
@@ -62,8 +61,8 @@ class Botellas : public Enemigo {
 
 	Botellas() = default;
 	Botellas(float tamano, float velSalto, float velLateral, float _targetFPS, Rectangle destino, int ID, int direccion);
-	void Actualizar();
-	void Dibujar();
+	void Actualizar(Rectangle playerPosition) override;
+	void Dibujar() override;
 	void MoverIzq();
 	void MoverDer();
 	void compruebaColision(Plataforma& s, int enemyNum);
@@ -72,4 +71,4 @@ class Botellas : public Enemigo {
 
 };
 
-typedef std::shared_ptr<Botellas> sh_Botellas;
+//typedef std::shared_ptr<Botellas> sh_Botellas;
