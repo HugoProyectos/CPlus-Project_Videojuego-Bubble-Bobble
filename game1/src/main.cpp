@@ -57,8 +57,8 @@ int main(void)
 
     // Nivel 1:
     //--------------------------------------------------------------------------------------
-    Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f);
+    Columnas columnas = Columnas("resources/mapa_boss/bloque_grande.png", 40.0f, 0.0f, 1);
+    Plataformas plataformas = Plataformas("resources/mapa_boss/bloque_pequeno.png", "resources/mapa_boss/mapa.txt", 40.0f, 0.0f);
     //--------------------------------------------------------------------------------------
 
     // Controls:
@@ -133,8 +133,8 @@ int main(void)
     admin.enemigos.push_back(robot2);
     admin.enemigos.push_back(robot3);
     */
-    destRob = { (float)GetScreenWidth() / 2, 10, 36, 32 };
-    sh_Enemigo boss = std::make_shared<Boss>(Boss(2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob,admin));
+    destRob = { (float)GetScreenWidth() / 2, 30, 132, 128 };
+    sh_Enemigo boss = std::make_shared<Boss>(Boss(2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob,admin));
     admin.enemigos.push_back(boss);
 
     /*

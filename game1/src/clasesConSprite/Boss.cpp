@@ -3,11 +3,16 @@
 Boss::Boss(float tamano, float distanciaSaltoMax, float velocidadSalto, float velocidadLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin) {
 
     Inicializador("resources/boss/walkUp.png",  tamano, distanciaSaltoMax,  velocidadSalto,  velocidadLateral);
-
+    frameWidth = 128;
+    frameHeight = 128;
+    srcRec = { 0.0f, 0.0f, (float)frameWidth, (float)frameHeight };
+    origin = { (float)frameWidth * tamano / 2, (float)frameHeight * tamano / 2 }; //En principio no lo necesitamos
+    pixels = 128;
     this->_targetFPS = _targetFPS;
     this->targetFrames = _targetFPS;
     enfadado = false;
     this->admin = &admin;
+    tipo = 7;
 
     if (enfadado) {
         animacionActiva = 3;
@@ -24,7 +29,7 @@ Boss::Boss(float tamano, float distanciaSaltoMax, float velocidadSalto, float ve
     muerto = false;
     vida = 100;
     hit = false;
-    animacionActiva = 1;
+    animacionActiva = 0;
     borrame = false;
     // vector de fuegos tamano 5
 
@@ -145,12 +150,9 @@ void Boss::Ia(Rectangle playerPosition) {
         }
 
         if (enfadado) {
-            velocidadLateral = 1.5 * destRec.width / 16.0f;
-            velocidadSalto = destRec.height / 10.0f;
-        }
-        else {
-            velocidadLateral = destRec.width / 16.0f;
-            velocidadSalto = destRec.height / 10.0f;
+            velocidadLateral = 2.0f;
+            velocidadSalto = 2.0f;
+            animacionActiva = 3;
         }
 
         if (direccionX == 0) {
@@ -213,11 +215,12 @@ void Boss::enfadar() {
 
 void Boss::disparar() {
     disparando = true;
-    Botellas botella1 = Botellas(2.0f, 0, 4.0f, _targetFPS, destRec, 1, 0);
-    Botellas botella2 = Botellas(2.0f, 0.5f, 3.5f, _targetFPS, destRec, 2, 0);
-    Botellas botella3 = Botellas(2.0f, 1.0f, 3.0f, _targetFPS, destRec, 3, 0);
-    Botellas botella4 = Botellas(2.0f, 2.0f, 2.0f, _targetFPS, destRec, 4, 0);
-    Botellas botella5 = Botellas(2.0f, 3.0f, 0.0f, _targetFPS, destRec, 5, 0);
+    Rectangle auxDest = { destRec.x, destRec.y, 32, 32 };
+    Botellas botella1 = Botellas(2.0f, 0, 4.0f, _targetFPS, auxDest, 1, 0);
+    Botellas botella2 = Botellas(2.0f, 0.5f, 3.5f, _targetFPS, auxDest, 2, 0);
+    Botellas botella3 = Botellas(2.0f, 1.0f, 3.0f, _targetFPS, auxDest, 3, 0);
+    Botellas botella4 = Botellas(2.0f, 2.0f, 2.0f, _targetFPS, auxDest, 4, 0);
+    Botellas botella5 = Botellas(2.0f, 3.0f, 0.0f, _targetFPS, auxDest, 5, 0);
     admin->enemigos.push_back(std::make_shared<Botellas>(botella1));
     admin->enemigos.push_back(std::make_shared<Botellas>(botella2));
     admin->enemigos.push_back(std::make_shared<Botellas>(botella3));
@@ -245,7 +248,7 @@ void Boss::eliminarBotellas() {
 }
 
 void Boss::compruebaColision(Plataforma& s, int enemyNum) {
-    if (cambioMapa == 0) {
+    if (cambioMapa == 0  ) {
         //Comprobamos si colisiona con la superficie
         if (
             (
