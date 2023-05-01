@@ -690,7 +690,6 @@ public:
 			else {
 				frutas.at(i)->Actualizar();
 				for (int j = 0; j < plataformas.listaPlataforma.size(); j++) {
-					frutas.at(i)->compruebaSuelo();
 					frutas.at(i)->compruebaColision(plataformas.listaPlataforma[j], (i + enemigos.size()));
 				}
 			}
