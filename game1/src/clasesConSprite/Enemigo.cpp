@@ -3,6 +3,8 @@
 #include "Suelo.cpp"
 #include "mapa.cpp"
 #include <iostream>
+#include<time.h>
+
 
 class Enemigo : public Sprite {
 public:

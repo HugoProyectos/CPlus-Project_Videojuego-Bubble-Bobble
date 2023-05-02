@@ -1,7 +1,6 @@
 #pragma once
 #include"AdministradorPompas.cpp"
 #include "Enemigo.cpp"
-#include<time.h>
 
 
 class Morado : public Enemigo {
@@ -85,7 +84,6 @@ public:
 
     // Controlador de comportamiento
     void Actualizar(Rectangle playerPosition) override {
-        std::cout << num << std::endl;
         if (lastHeight != GetScreenHeight()) {
             destRec.height = GetScreenHeight() / 14.0625f;
             destRec.y = GetScreenHeight() * (destRec.y / lastHeight);

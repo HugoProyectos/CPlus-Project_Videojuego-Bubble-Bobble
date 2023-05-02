@@ -2,7 +2,6 @@
 #include "AdministradorPompas.cpp"
 #include "Enemigo.cpp"
 
-
 class Rosa : public Enemigo {
 public:
     //Gestión de transición de nivel
@@ -49,6 +48,8 @@ public:
     //Variables lógicas
     int direccionX = 0; //0->izquierda, 1->derecha
     int direccionY = 0; //0->abajo, 1->arriba
+    int velocidadX = 0; //0->izquierda, 1->derecha
+    int velocidadY = 0; //0->abajo, 1->arriba
     int colision = 0; //0->No hay colision, 1->colisiona con paredes(debe variar el movimiento vertical), 2->colision techo(varia movimeitno horizontal)
     int colisionAux = 0;
     bool frutaGenerada = false;
@@ -58,6 +59,8 @@ public:
     float anchosX = 15.0f;
     float anchosY = 15.0f; 
     bool frutaProducida = false;
+    int num = 0;
+    int contadorCambio = 0;
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
@@ -66,8 +69,16 @@ public:
         if (enfadado) {
             animacionActiva = 3;
         }
-        velMax = 2 * velLateral;
+        velMax = velLateral;
         velMin = velLateral / 2;
+        srand(time(NULL));
+        num = (rand() % (int)(velMax - velMin)) + velMin;
+        velocidadX = num;
+        if (rand() % 2 == 0) {
+            velocidadX = -velocidadX;
+        }
+        velocidadY = velMax;
+
         destRec = posicionPartida;
         posicionDestino = destino;
         tipo = 5;
@@ -124,30 +135,72 @@ public:
             }
         }
         else {
+            if (IAoriginal) {
+                if (enfadado) {
+                    animacionActiva = 3;
+                    velocidadLateral = 1.5f * destRec.width / 16.0f;
+                    velocidadSalto = 1.5f * destRec.height / 10.0f;
+                    velMax = velocidadLateral;
+                    velMin = velocidadLateral / 2;
+                }
+                else {
+                    velocidadLateral = destRec.width / 16.0f;
+                    velocidadSalto = destRec.height / 10.0f;
+                    velMax = velocidadLateral;
+                    velMin = velocidadLateral / 2;
+                }
 
-            
-            if (enfadado) {
-                animacionActiva = 3;
-                velocidadLateral =1.5f* destRec.width / 16.0f;
-                velocidadSalto =1.5f* destRec.height / 10.0f;
+                if (muerto) {
+                    animacionActiva = 1;
+                    CaerLento();
+                }
+                else if (contadorCambio >= 120 || (contadorCambio>=60 && enfadado)) {
+                    RecalcularVelocidad();
+                    contadorCambio = 0;
+                }
+                else {
+                    MoverRebotes();
+                    contadorCambio++;
+                }
             }
             else {
-                velocidadLateral = destRec.width / 16.0f;
-                velocidadSalto = destRec.height / 10.0f;
+                if (enfadado) {
+                    animacionActiva = 3;
+                    velocidadLateral = 1.5f * destRec.width / 16.0f;
+                    velocidadSalto = 1.5f * destRec.height / 10.0f;
+                    velMax = velocidadLateral;
+                    velMin = velocidadLateral / 2;
+                }
+                else {
+                    velocidadLateral = destRec.width / 16.0f;
+                    velocidadSalto = destRec.height / 10.0f;
+                    velMax = velocidadLateral;
+                    velMin = velocidadLateral / 2;
+                }
+
+                if (muerto) {
+                    animacionActiva = 1;
+                    CaerLento();
+                }
+                else if (colision == 0) {
+                    SeguirJugador(playerPosition);
+                }
+                else if (colision == 2) {
+                    MoverHorizontal(playerPosition);
+                }
+                else if (colision == 1) {
+                    MoverVertical(playerPosition);
+                }
             }
 
-            if (muerto) {
-                animacionActiva = 1;
-                CaerLento();
+            //Actualizar posicion no salir de la pantalla
+            if (destRec.y > GetScreenHeight() + 50) {
+                destRec.y = -10;
+                enElAire = true;
+                cayendo = true;
             }
-            else if (colision == 0) {
-                SeguirJugador(playerPosition);
-            }
-            else if (colision == 2) {
-                MoverHorizontal(playerPosition);
-            }
-            else if (colision == 1) {
-                MoverVertical(playerPosition);
+            else if (destRec.y < -50) {
+                destRec.y = GetScreenHeight() + 5;
             }
         }
         //Actualizar puntero de animacion
@@ -190,6 +243,30 @@ public:
     void Dibujar() override {
         srcRec.x = (float)widthAnimation * (float)indiceAnimacion;
         DrawTexturePro(animations[animacionActiva], srcRec, destRec, origin, 0.0f, WHITE);
+    }
+
+    //Funcion de IA original
+    void  MoverRebotes() {
+        if (velocidadX > 0) {
+            srcRec.width = -pixels;
+        }
+        else {
+            srcRec.width = pixels;
+        }
+        destRec.y += velocidadY;
+        destRec.x += velocidadX;
+    }
+
+    void RecalcularVelocidad() {
+        velocidadX = (rand() % (int)(velMax - velMin)) + velMin;
+        if (rand() % 2 == 0) {
+            velocidadX = -velocidadX;
+        }
+
+        velocidadY = (rand() % (int)(velMax - velMin)) + velMin;
+        if (rand() % 2 == 0) {
+            velocidadY = -velocidadY;
+        }
     }
 
     //funciones de comportamiento
@@ -350,6 +427,15 @@ public:
                     destRec.x = s.left - destRec.width / 2;
                     direccionX = 0; //Colisiona derecha, ahora se mueve izquierda
                     colision = 1;
+
+                    if (IAoriginal) {
+                        contadorCambio = 0;
+                        velocidadX = -velMax;
+                        velocidadY = (rand() % (int)(velMax-velMin)) + velMin;
+                        if (rand() % 2 == 0) {
+                            velocidadY = -velocidadY;
+                        }
+                    }
                     //Se puede añadir un movimiento random en eje Y
                     break;
                 case 2:
@@ -358,7 +444,14 @@ public:
                     direccionX = 1; //Colisiona izquierda, hora se mueve derecha
                     colision = 1;
 
-
+                    if (IAoriginal) {
+                        contadorCambio = 0;
+                        velocidadX = velMax;
+                        velocidadY = (rand() % (int)(velMax - velMin)) + velMin;
+                        if (rand() % 2 == 0) {
+                            velocidadY = -velocidadY;
+                        }
+                    }
                     //Se puede añadir un movimiento random en eje Y
                     break;
                 case 3:
@@ -368,6 +461,14 @@ public:
                     direccionY = 1; //Colisiona abajo, ahora se mueve arriba
                     colision = 2;
 
+                    if (IAoriginal) {
+                        contadorCambio = 0;
+                        velocidadY = -velMax;
+                        velocidadX = (rand() % (int)(velMax - velMin)) + velMin;
+                        if (rand() % 2 == 0) {
+                            velocidadX = -velocidadX;
+                        }
+                    }
 
                     //Se puede añadir un movimiento random en eje X
                     break;
@@ -377,6 +478,14 @@ public:
                     direccionY = 0; //Colisiona arriba, ahora se mueve abajo
                     colision = 2;
 
+                    if (IAoriginal) {
+                        contadorCambio = 0;
+                        velocidadY = velMax;
+                        velocidadX = (rand() % (int)(velMax - velMin)) + velMin;
+                        if (rand() % 2 == 0) {
+                            velocidadX = -velocidadX;
+                        }
+                    }
 
                     //Se puede añadir un movimiento random en eje X
                     break;

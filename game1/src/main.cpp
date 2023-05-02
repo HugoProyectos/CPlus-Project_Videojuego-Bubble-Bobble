@@ -573,7 +573,7 @@ int main(void)
             else {
                 currentScreen = NIVEL_4;
                 destRob = { (float)(144), 90, 32, 32 };
-                robot = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 40.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)(656), 90, 32, 32 };
@@ -585,7 +585,7 @@ int main(void)
                 admin.enemigos.push_back(robot);
 
                 destRob = { (float)(600), 160, 32, 32 };
-                robot = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 40.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
                 destRob = { 200, (float)450 - 150, 32, 32 };
