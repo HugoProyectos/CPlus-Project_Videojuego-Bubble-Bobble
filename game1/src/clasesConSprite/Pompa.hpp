@@ -74,6 +74,7 @@ public:
 	static const int MODULO_RAYO = 6;
 	bool izquierdaRayo = true;
 	int sentidoJugador = 1;
+	bool rayoDeBub = true;
 
 	//Indice de animación básicos
 	static const int DISPARO = 0;
@@ -106,6 +107,7 @@ public:
 	float distanciaRecorrida = 0;
 	float distanciaDisparo = 0;
 	int disparada = 2;
+	static bool warpVertical;
 
 	//Control de animaciones
 	int animacionActiva;
