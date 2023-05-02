@@ -74,7 +74,7 @@ public:
     bool disparando = false;
     int multiplicadorVelocidadDisparo = 1;
     int multiplicadorDistanciaDisparo = 1;
-    int vidaPompa[10] = {60 * 60, 60 * 60, 60 * 60, 60 * 60, 60*120, 60 * 60, 60 * 60, 60 * 60, 60 * 60, 60 * 60 };
+    int vidaPompa[11] = {60 * 60, 60 * 60, 60 * 60, 60 * 60, 60*120, 60 * 60, 60 * 60, 60 * 60, 60 * 60, 60 * 60, 60 * 60 };
     int nivel = 0;
 
     // Referencia al administrador de pompas
@@ -522,7 +522,7 @@ public:
                         //std::cout << "Dimensiones pompa; " <<p.destRec.x << "," << p.destRec.y << "/" << p.lastHeight << "," << p.lastWidth << std::endl;
                     
                     } else {
-                        p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * sentido, DISTANCIA_DISPARO * multiplicadorDistanciaDisparo, true, vidaPompa[nivel]);
+                        p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * ((double)lastWidth / (double)anchoOriginal * sentido), (double)(DISTANCIA_DISPARO * multiplicadorDistanciaDisparo * ((double)lastWidth / (double)anchoOriginal)), true, vidaPompa[nivel]);
                     }
                     if (imTheThunder) { // Debería estar solo en el jefe (si se llega a hacer)
                         p.modulo = Pompa::MODULO_RAYO;
@@ -615,7 +615,7 @@ public:
 
                 //Comprueba choque con los enemigos
                 for (int i = 0; i < admin->enemigos.size(); i++) {
-                    if (!admin->enemigos.at(i)->borrame && !admin->enemigos.at(i)->muerto && !muriendo && !invulnerable
+                    if (!admin->enemigos.at(i)->borrame && !admin->enemigos.at(i)->muerto && !admin->enemigos.at(i)->muertePorAgua && !muriendo && !invulnerable
                         && ((destRec.y + destRec.height / 2.0f) >= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2.0f)
                             && (destRec.y - destRec.height / 2.0f) <= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2.0f)
                             || (destRec.y + destRec.height / 2.0f) >= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2.0f)

@@ -506,6 +506,14 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			warpVertical = false;
 			oscilando = false;
 			switch ((int)ID_MAPA) {
+			case 10: //Boss
+			{
+				destRec.y -= 0.9 * ratioY;
+				if (destRec.y < -destRec.height) { //Si se sale del mapa
+					borrame = true;
+				}
+				break;
+			}
 			case 2:
 			{
 				if (destRec.y > screenHeight * 0.95) {

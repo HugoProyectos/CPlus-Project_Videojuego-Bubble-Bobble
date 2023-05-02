@@ -12,6 +12,7 @@ class Rayo : public Sprite{
 public:
 	int lastHeight = GetScreenHeight();
 	int lastWidth = GetScreenWidth();
+	static const int DANYO_RAYO = 2;
 
 	double ratioX = 1;
 
@@ -28,6 +29,7 @@ public:
 	int cuentaFrames = 0;
 	int velocidadFrames = 0;
 	bool borrame = false;
+	bool golpeJefe = false;
 
 
 	Rayo() = default;

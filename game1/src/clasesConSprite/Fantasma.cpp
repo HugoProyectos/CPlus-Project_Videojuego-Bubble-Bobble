@@ -233,7 +233,9 @@ public:
                     disparando = false;
                     animacionActiva = 0;
                     Bola b;
-                    b =Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir, IDBola);
+                    b =Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir, IDBola, lastWidth, lastHeight); 
+                    b.lastHeight = lastHeight;
+                    b.lastWidth = lastWidth;
                     admin->enemigos.push_back(std::make_shared<Bola>(b));
                     i = (i + 1) % 3;
                     IDBola++;
@@ -256,7 +258,9 @@ public:
                     disparando = false;
                     animacionActiva = 3;
                     Bola b;
-                    b = Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir, IDBola);
+                    b = Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir, IDBola, lastWidth, lastHeight);
+                    b.lastHeight = lastHeight;
+                    b.lastWidth = lastWidth;
                     admin->enemigos.push_back(std::make_shared<Bola>(b));
                     i = (i + 1) % 3;
                     IDBola++;

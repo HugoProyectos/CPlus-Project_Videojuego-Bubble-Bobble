@@ -116,6 +116,7 @@ public:
 	int cuentaFrames = 0;
 	int velocidadFrames = 0;
 
+	bool borrame = false;
 
 	Pompa() = default;
 	Pompa(Texture2D spriteSheet, const Rectangle origen, float velDisparo, float distanciaDisparo, bool esDisparada, int tiempoVida);

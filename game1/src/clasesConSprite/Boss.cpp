@@ -45,6 +45,8 @@ void Boss::Actualizar(Rectangle playerPosition) {
 
     if (hit) {
         animacionActiva = 2;
+        hit = false;
+        contadorParpadeo = 0;
     }
     else if (((clock() - tempAngry) > disparoCoolDown * CLOCKS_PER_SEC) && sinVida) {
         enfadado = true;
@@ -91,7 +93,16 @@ void Boss::Actualizar(Rectangle playerPosition) {
             heightAnimation = walkDown.height;
             break;
         case 2:
-            indiceAnimacion = (indiceAnimacion + 1) % fDead;
+            indiceAnimacion = (indiceAnimacion + 1);
+            if (indiceAnimacion >= fDead) {
+                indiceAnimacion = 0;
+                if (contadorParpadeo >= ITERACIONES_PARPADEO) {
+                    animacionActiva = 0;
+                }
+                else {
+                    contadorParpadeo++;
+                }
+            }
             widthAnimation = dead.width / fDead;
             heightAnimation = dead.height;
             break;
@@ -118,6 +129,19 @@ void Boss::Dibujar() {
 }
 
 void Boss::Ia(Rectangle playerPosition) {
+    if (lastHeight != GetScreenHeight()) {
+        destRec.height = GetScreenHeight() / 14.0625f * 4;
+        destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+        distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
+        origin.y = destRec.height / 2;
+        lastHeight = GetScreenHeight();
+    }
+    if (lastWidth != GetScreenWidth()) {
+        destRec.width = GetScreenWidth() / 25.0f * 4;
+        destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+        origin.x = destRec.width / 2;
+        lastWidth = GetScreenWidth();
+    }
     if (cambioMapa > 0) {
         if (cambioMapa == 2) {
             cambioMapa = 1;
@@ -135,20 +159,6 @@ void Boss::Ia(Rectangle playerPosition) {
         }
     }
     else {
-        if (lastHeight != GetScreenHeight()) {
-            destRec.height = GetScreenHeight() / 14.0625f;
-            destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
-            distanciaSaltoMax = distanciaSaltoMax * ((float)GetScreenHeight() / (float)lastHeight);
-            origin.y = destRec.height / 2;
-            lastHeight = GetScreenHeight();
-        }
-        if (lastWidth != GetScreenWidth()) {
-            destRec.width = GetScreenWidth() / 25.0f;
-            destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
-            origin.x = destRec.width / 2;
-            lastWidth = GetScreenWidth();
-        }
-
         if (enfadado) {
             velocidadLateral = 2.0f;
             velocidadSalto = 2.0f;
