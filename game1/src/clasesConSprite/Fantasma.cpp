@@ -264,17 +264,19 @@ public:
                 else if (destRec.x < playerPosition.x - anchosX && !hayBola) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
                     BolaDer();
                 }
-
-                //Actualizar posicion no salir de la pantalla
-                if (destRec.y > GetScreenHeight() + 50) {
-                    destRec.y = -10;
-                    enElAire = true;
-                    cayendo = true;
-                }
-                else if (destRec.y < -50) {
-                    destRec.y = GetScreenHeight() + 5;
-                }
             }
+
+            //Actualizar posicion no salir de la pantalla
+            if (destRec.y > GetScreenHeight() + 50) {
+                destRec.y = -10;
+                enElAire = true;
+                cayendo = true;
+            }
+            else if (destRec.y < -50) {
+                destRec.y = GetScreenHeight() + 5;
+            }
+
+
         }
 
         //Actualizar puntero de animacion

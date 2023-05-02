@@ -116,41 +116,45 @@ public:
             }
         }
         else {
+            if (IAoriginal) {
 
-            if (enfadado) {
-                animacionActiva = 3;
-                velocidadLateral = 1.5 * destRec.width / 16.0f;
-                velocidadSalto = destRec.height / 10.0f;
             }
             else {
-                velocidadLateral = destRec.width / 16.0f;
-                velocidadSalto = destRec.height / 10.0f;
-            }
+                if (enfadado) {
+                    animacionActiva = 3;
+                    velocidadLateral = 1.5 * destRec.width / 16.0f;
+                    velocidadSalto = destRec.height / 10.0f;
+                }
+                else {
+                    velocidadLateral = destRec.width / 16.0f;
+                    velocidadSalto = destRec.height / 10.0f;
+                }
 
-            if (muerto) {
-                animacionActiva = 1;
-                CaerLento();
-            }
-            //Si va a la izquierda
-            else if (direccionX == 0) {
-                //Si va hacia abajo
-                if (direccionY == 0) {
-                    MoverIzqAbajo();
+                if (muerto) {
+                    animacionActiva = 1;
+                    CaerLento();
                 }
-                //Si va hacia arriba
-                else {
-                    MoverIzqArriba();
+                //Si va a la izquierda
+                else if (direccionX == 0) {
+                    //Si va hacia abajo
+                    if (direccionY == 0) {
+                        MoverIzqAbajo();
+                    }
+                    //Si va hacia arriba
+                    else {
+                        MoverIzqArriba();
+                    }
                 }
-            }
-            //Si va hacia la derecha
-            else if (direccionX == 1) {
-                //Si va hacia abajo
-                if (direccionY == 0) {
-                    MoverDerAbajo();
-                }
-                //Si va hacia arriba
-                else {
-                    MoverDerArriba();
+                //Si va hacia la derecha
+                else if (direccionX == 1) {
+                    //Si va hacia abajo
+                    if (direccionY == 0) {
+                        MoverDerAbajo();
+                    }
+                    //Si va hacia arriba
+                    else {
+                        MoverDerArriba();
+                    }
                 }
             }
 
@@ -168,6 +172,8 @@ public:
                 destRec.y = GetScreenHeight() + 5;
             }
         }
+
+
 
         //Actualizar puntero de animacion
         cuentaFrames++;

@@ -229,16 +229,16 @@ public:
                 else if (destRec.x < playerPosition.x - anchosX) { //Si el personaje esta a la 
                     MoverDer();
                 }
-
-                //Actualizar posicion no salir de la pantalla
-                if (destRec.y > GetScreenHeight() + 50) {
-                    destRec.y = -10;
-                    enElAire = true;
-                    cayendo = true;
-                }
-                else if (destRec.y < -50) {
-                    destRec.y = GetScreenHeight() + 5;
-                }
+            }
+        
+            //Actualizar posicion no salir de la pantalla
+            if (destRec.y > GetScreenHeight() + 50) {
+                destRec.y = -10;
+                enElAire = true;
+                cayendo = true;
+            }
+            else if (destRec.y < -50) {
+                destRec.y = GetScreenHeight() + 5;
             }
         }
 
