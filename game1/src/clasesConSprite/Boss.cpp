@@ -45,6 +45,8 @@ void Boss::Actualizar(Rectangle playerPosition) {
 
     if (hit) {
         animacionActiva = 2;
+        hit = false;
+        contadorParpadeo = 0;
     }
     else if (((clock() - tempAngry) > disparoCoolDown * CLOCKS_PER_SEC) && sinVida) {
         enfadado = true;
@@ -91,7 +93,16 @@ void Boss::Actualizar(Rectangle playerPosition) {
             heightAnimation = walkDown.height;
             break;
         case 2:
-            indiceAnimacion = (indiceAnimacion + 1) % fDead;
+            indiceAnimacion = (indiceAnimacion + 1);
+            if (indiceAnimacion >= fDead) {
+                indiceAnimacion = 0;
+                if (contadorParpadeo >= ITERACIONES_PARPADEO) {
+                    animacionActiva = 0;
+                }
+                else {
+                    contadorParpadeo++;
+                }
+            }
             widthAnimation = dead.width / fDead;
             heightAnimation = dead.height;
             break;

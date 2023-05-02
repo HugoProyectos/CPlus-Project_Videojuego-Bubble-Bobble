@@ -123,7 +123,7 @@ public:
 			else {
 				rayos.at(i).Actualizar(j1,j2);
 				for (int j = 0; j < enemigos.size(); j++) {
-					if (!enemigos.at(j)->borrame && !enemigos.at(j)->muerto && (enemigos.at(j)->tipo != -2)
+					if (!rayos.at(i).golpeJefe && !enemigos.at(j)->borrame && !enemigos.at(j)->muerto && (enemigos.at(j)->tipo != -2)
 						&& ((rayos.at(i).destRec.y + rayos.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
 							&& (rayos.at(i).destRec.y - rayos.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
 							|| (rayos.at(i).destRec.y + rayos.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
@@ -132,17 +132,27 @@ public:
 							&& (rayos.at(i).destRec.x - rayos.at(i).destRec.width / 2 + rayos.at(i).destRec.width * 0.125) <= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
 							|| (rayos.at(i).destRec.x + rayos.at(i).destRec.width / 2 - rayos.at(i).destRec.width * 0.125) >= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)
 							&& (rayos.at(i).destRec.x - rayos.at(i).destRec.width / 2 + rayos.at(i).destRec.width * 0.125) <= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2))) { //Si choca con el enemigo, lo marca para que se borre y se cambia el estado de la pompa
-						enemigos.at(j)->muertePorRayo = true;
+						
 						if (rayos.at(i).soyDeBub) {
 							scores.SumarPuntuacionP1((unsigned int) 1000);
 						}
 						else {
 							scores.SumarPuntuacionP2((unsigned int) 1000);
 						}
-						enemigos.at(j)->muerto = true;
-						rayos.at(i).animacionActiva = 1;
-						rayos.at(i).indiceAnimacion = 0;
-						enemigosPorMatar--;
+						if (enemigos.at(j)->tipo == 7) {
+							enemigos.at(j)->hit = true;
+							enemigos.at(j)->vida -= Rayo::DANYO_RAYO;
+							rayos.at(i).golpeJefe = true;
+							rayos.at(i).animacionActiva = 1;
+							rayos.at(i).indiceAnimacion = 0;
+						}
+						else {
+							enemigos.at(j)->muertePorRayo = true;
+							enemigos.at(j)->muerto = true;
+							rayos.at(i).animacionActiva = 1;
+							rayos.at(i).indiceAnimacion = 0;
+							enemigosPorMatar--;
+						}
 						break;
 					}
 				}

@@ -74,9 +74,11 @@ public:
     clock_t tempAngry;
     const int disparoCoolDown = 10;
     bool disparando;
-    bool sinVida;
+    /*bool sinVida;
     bool hit;
-    int vida;
+    int vida;*/
+    int contadorParpadeo;
+    const int ITERACIONES_PARPADEO = 5;
     AdministradorPompas* admin;
     int colision = 0; 
     int colisionAux = 0;
