@@ -510,8 +510,9 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 			{
 				destRec.y -= 0.9 * ratioY;
 				if (destRec.y < -destRec.height) { //Si se sale del mapa
-					animacionActiva = EXPLOTA;
+					borrame = true;
 				}
+				break;
 			}
 			case 2:
 			{
