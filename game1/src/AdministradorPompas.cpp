@@ -668,6 +668,7 @@ public:
 					}
 					else {
 						if (j == 0 ||  j == plataformas.listaPlataforma.size() - 1) {
+							
 							enemigos.at(i)->compruebaSuelo();
 							enemigos.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
 							enemigos.at(i)->compruebaPared(columnas);

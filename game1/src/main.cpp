@@ -133,7 +133,7 @@ int main(void)
     admin.enemigos.push_back(robot2);
     admin.enemigos.push_back(robot3);
     */
-    destRob = { (float)GetScreenWidth() / 2, 30, 132, 128 };
+    destRob = { (float)GetScreenWidth() / 2, 30, 128, 128 };
     sh_Enemigo boss = std::make_shared<Boss>(Boss(2.0f, 80.0f, 1.0f, 1.0f, TARGET_FPS, destRob,admin));
     admin.enemigos.push_back(boss);
 
