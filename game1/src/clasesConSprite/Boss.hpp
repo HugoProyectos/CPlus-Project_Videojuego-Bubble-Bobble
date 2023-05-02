@@ -14,7 +14,7 @@ public:
     int8_t cambioMapa = 2; 
     Rectangle posicionPartida = 
     { 
-        (float)GetScreenWidth() / 2, 
+        (float)400, 
         (float)50, 32, 32 
     };
     int cuentaFramesTraslacion = 0;
