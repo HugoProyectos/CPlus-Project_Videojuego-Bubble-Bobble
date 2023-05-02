@@ -222,7 +222,8 @@ public:
 
 			if (pompas.at(i)->matame) {
 				//auto aBorrar = pompas.begin() + i;
-				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas			
+				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas		
+				int mod = pompas.at(i)->modulo;
 				if (pompas.at(i)->modulo == Pompa::MODULO_RAYO) {
 					int val = pompas.at(i)->sentidoJugador;
 					bool izq = val == 3;
@@ -565,6 +566,7 @@ public:
 			std::vector<sh_Pompa> pompasGeneradas = generador.generarPompa();
 			for (int i = 0; i < pompasGeneradas.size(); i++) {
 				//std::cout << "Creo pompa" << std::endl;
+				int mod = pompasGeneradas.at(i)->modulo;
 				pompas.push_back(pompasGeneradas.at(i));
 			}
 		}

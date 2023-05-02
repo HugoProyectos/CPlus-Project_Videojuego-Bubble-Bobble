@@ -19,7 +19,7 @@ const int TARGET_FPS = 60;
 //------------------------------------------------------------------------------------------
 // Types and Structures Definition
 //------------------------------------------------------------------------------------------
-typedef enum GameScreen { MAIN_MENU, NIVEL_1, NIVEL_2, NIVEL_3, NIVEL_4, NIVEL_5, NIVEL_6, NIVEL_7, NIVEL_8, NIVEL_9, NIVEL_10, CONTROLS_MENU, GAME_OVER } GameScreen;
+typedef enum GameScreen { MAIN_MENU, NIVEL_1, NIVEL_2, NIVEL_3, NIVEL_4, NIVEL_5, NIVEL_6, NIVEL_7, NIVEL_8, NIVEL_9, NIVEL_10, NIVEL_BOSS, CONTROLS_MENU, GAME_OVER } GameScreen;
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -107,7 +107,7 @@ int main(void)
     admin.col = &columnas;
     admin.plat = &plataformas;
     admin.iniciaMapa(4, 30*60); 
-    admin.CambioDeMapa(0); 
+    admin.CambioDeMapa(0);
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
@@ -126,12 +126,13 @@ int main(void)
     sh_Enemigo robot3 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
     
     
+    
     admin.enemigos.push_back(rosa);
     admin.enemigos.push_back(robot);
-    admin.mute_sound = Mute_effect == 1 ? true : false;
     admin.enemigos.push_back(robot2);
     admin.enemigos.push_back(robot3);
 
+    admin.mute_sound = Mute_effect == 1 ? true : false;
     /* 
     
     destRob = { (float)GetScreenWidth() / 2, 30, 128, 128 };
@@ -805,20 +806,19 @@ int main(void)
                 currentScreen = NIVEL_6;
 
                 // ----------------------------------------------------------------------------------------------------------
-                // Poner enemigos correctos
-                destRob = {(float)GetScreenWidth() / 2 + 70, 60, 32, 32};
+                destRob = { (float)630, 100, 32, 32 };
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                admin.enemigos.push_back(robot);
+
+                destRob = { (float)700, 250, 32, 32 };
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                admin.enemigos.push_back(robot);
+
+                destRob = { (float)500, 150, 32, 32 };
                 robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)GetScreenWidth() / 2 + 20, 160, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
-                admin.enemigos.push_back(robot);
-
-                destRob = { (float)GetScreenWidth() / 2 - 20, 240, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
-                admin.enemigos.push_back(robot);
-
-                destRob = { (float)GetScreenWidth() / 2 - 70, 320, 32, 32 };
+                destRob = { (float)400, 250, 32, 32 };
                 robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
                 // ----------------------------------------------------------------------------------------------------------
@@ -916,20 +916,19 @@ int main(void)
                 currentScreen = NIVEL_7;
 
                 // ----------------------------------------------------------------------------------------------------------
-                // Poner enemigos correctos
-                destRob = { (float)GetScreenWidth() / 2 + 70, 60, 32, 32 };
+                destRob = { (float)70, 100, 32, 32 };
                 robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)GetScreenWidth() / 2 + 20, 160, 32, 32 };
+                destRob = { (float)730, 100, 32, 32 };
                 robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)GetScreenWidth() / 2 - 20, 240, 32, 32 };
+                destRob = { (float)660, 150, 32, 32 };
                 robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)GetScreenWidth() / 2 - 70, 320, 32, 32 };
+                destRob = { (float)140, 150, 32, 32 };
                 robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
                 // ----------------------------------------------------------------------------------------------------------
@@ -1010,7 +1009,7 @@ int main(void)
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
-                admin.iniciaMapa(4, 30 * 60); // TODO
+                admin.iniciaMapa(7, 30 * 60); // TODO
                 admin.CambioDeMapa(7); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_8/bloque_grande.png", 8);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_8/bloque_pequeno.png", "resources/mapa_nivel_8/mapa.txt");
@@ -1028,21 +1027,32 @@ int main(void)
                 currentScreen = NIVEL_8;
 
                 // ----------------------------------------------------------------------------------------------------------
-                // Poner enemigos correctos
-                destRob = { (float)GetScreenWidth() / 2 + 70, 60, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                destRob = { (float)400, 160, 32, 32 };
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)GetScreenWidth() / 2 + 20, 160, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                destRob = { (float)350, 190, 32, 32 };
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)GetScreenWidth() / 2 - 20, 240, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                destRob = { (float)450, 190, 32, 32 };
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)GetScreenWidth() / 2 - 70, 320, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                destRob = { (float)170, 150, 32, 32 };
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                admin.enemigos.push_back(robot);
+
+                destRob = { (float)630, 150, 32, 32 };
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                admin.enemigos.push_back(robot);
+
+                destRob = { (float)380, 400, 32, 32 };
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                admin.enemigos.push_back(robot);
+
+                destRob = { (float)420, 400, 32, 32 };
+                robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
                 // ----------------------------------------------------------------------------------------------------------
 
@@ -1122,7 +1132,7 @@ int main(void)
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
-                admin.iniciaMapa(4, 30 * 60); // TODO
+                admin.iniciaMapa(7, 30 * 60); // TODO
                 admin.CambioDeMapa(8); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_9/bloque_grande.png", 9);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_9/bloque_pequeno.png", "resources/mapa_nivel_9/mapa.txt");
@@ -1140,21 +1150,32 @@ int main(void)
                 currentScreen = NIVEL_9;
 
                 // ----------------------------------------------------------------------------------------------------------
-                // Poner enemigos correctos
-                destRob = { (float)GetScreenWidth() / 2 + 70, 60, 32, 32 };
+                destRob = { (float)300, 240, 32, 32 };
                 robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)GetScreenWidth() / 2 + 20, 160, 32, 32 };
+                destRob = { (float)500, 240, 32, 32 };
                 robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)GetScreenWidth() / 2 - 20, 240, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                destRob = { (float)400, 280, 32, 32 };
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)GetScreenWidth() / 2 - 70, 320, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                destRob = { (float)340, 280, 32, 32 };
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                admin.enemigos.push_back(robot);
+
+                destRob = { (float)280, 280, 32, 32 };
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                admin.enemigos.push_back(robot);
+
+                destRob = { (float)460, 280, 32, 32 };
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                admin.enemigos.push_back(robot);
+
+                destRob = { (float)520, 280, 32, 32 };
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
                 // ----------------------------------------------------------------------------------------------------------
 
@@ -1252,21 +1273,20 @@ int main(void)
                 currentScreen = NIVEL_10;
 
                 // ----------------------------------------------------------------------------------------------------------
-                // Poner enemigos correctos
-                destRob = { (float)GetScreenWidth() / 2 + 70, 60, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                destRob = { (float)180, 275, 32, 32 };
+                robot = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)GetScreenWidth() / 2 + 20, 160, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                destRob = { (float)650, 275, 32, 32 };
+                robot = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)GetScreenWidth() / 2 - 20, 240, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                destRob = { (float)340, 240, 32, 32 };
+                robot = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)GetScreenWidth() / 2 - 70, 320, 32, 32 };
-                robot = std::make_shared<Fantasma>(Fantasma("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                destRob = { (float)500, 240, 32, 32 };
+                robot = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
                 // ----------------------------------------------------------------------------------------------------------
 
@@ -1350,7 +1370,113 @@ int main(void)
                 admin.frutas.clear();
                 currentScreen = GAME_OVER;
             }
+            else if (admin.cambiaNivel) {
+                //CAMBIADO PARA PRUEBAS DE AGUA
+                admin.iniciaMapa(1, 3000000 * 60); // TODO
+                admin.CambioDeMapa(10); // TODO
+                columnas.CargarSiguienteNivel("resources/mapa_boss/bloque_grande.png", 10);
+                plataformas.CargarSiguienteNivel("resources/mapa_boss/bloque_pequeno.png", "resources/mapa_boss/mapa.txt");
+                contadorVidas.cargar_siguiente_nivel();
+                bub.cambioMapa = 2; // TODO
+                bob.cambioMapa = 2; // TODO
+                bub.nivel = 9;
+                bob.nivel = 9;
+                jugando_nivel = false;
+                for (int i = 0; i < 10; i++) {
+                    admin.agua.stream[i].numPlataformas = plataformas.listaPlataformaSiguiente.size();
+                }
+            }
+            else {
+                currentScreen = NIVEL_BOSS;
+
+                // ----------------------------------------------------------------------------------------------------------
+                destRob = { (float)400, 50, 32, 32 };
+                robot = std::make_shared<Boss>(Boss(2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                admin.enemigos.push_back(robot);
+                // ----------------------------------------------------------------------------------------------------------
+
+                admin.frutas.clear();
+
+                jugando_nivel = true;
+                plataformas.inicio_de_ronda(11);
+            }
         } break;
+        case NIVEL_BOSS:
+        {
+            // TODO: Update NIVEL_10 screen variables here!
+            if (!admin.cambiaNivel && jugando_nivel) {
+                columnas.Actualizar();
+                plataformas.Actualizar();
+                credits.Actualizar();
+                admin.scores.Actualizar();
+                bub.Actualizar();
+                for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
+                    bub.compruebaColision(plataformas.listaPlataforma[i]);
+                }
+                bub.compruebaPared(columnas);
+                if (bub.enElAgua) {
+                    bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
+                    bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
+                }
+                else if (admin.agua.existe) {
+                    bub.enElAgua = admin.agua.colisionBub(bub.destRec, bub.waterlessFrames);
+                }
+                if (contadorVidas.hayP2) {
+                    bob.Actualizar();
+                    for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
+                        bob.compruebaColision(plataformas.listaPlataforma[i]);
+                    }
+                    bob.compruebaPared(columnas);
+                    if (bob.enElAgua) {
+                        bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
+                        bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
+                    }
+                    else if (admin.agua.existe) {
+                        bob.enElAgua = admin.agua.colisionBub(bob.destRec, bob.waterlessFrames);
+                    }
+                }
+                admin.agua.Actualizar(plataformas, columnas);
+                admin.actualizaPompas();
+                for (int i = 0; i < admin.enemigos.size(); i++) {
+                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                }
+
+                admin.actualizaEnemigos(plataformas, columnas);
+                admin.actualizaFrutas(plataformas);
+
+                contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
+
+                if (admin.hurryUp) {
+                    plataformas.SenalHurryUp();
+                    admin.hurryUp = false;
+                }
+
+                if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
+                    gameover.ronda = 10;
+                    currentScreen = GAME_OVER;
+                }
+                else if (gameover.hayP2 && bub.muerto && bob.muerto && bub.numVidas == 0 && bob.numVidas == 0) {
+                    gameover.ronda = 10;
+                    currentScreen = GAME_OVER;
+                }
+
+                if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
+                {
+                    credits.creditos -= 1;
+                    admin.scores.hayP2 = true;
+                    contadorVidas.hayP2 = true;
+                    gameover.hayP2 = true;
+                }
+
+            }
+            else if (admin.cambiaNivel) {
+                gameover.ronda = 10;
+                gameover.clear = true;
+                admin.frutas.clear();
+                currentScreen = GAME_OVER;
+            }
+            break;
+        }
         case CONTROLS_MENU:
         { 
             controls.Actualizar(Modo_IA, Modo_skins, Modo_mapa, Mute_music, Mute_effect);
@@ -1412,6 +1538,8 @@ int main(void)
                 bub.muerto = false;
                 bub.muriendo = false;
                 bub.primeraActualizacion = true;
+                bub.imTheThunder = false;
+                bob.imTheThunder = false;
                 if (admin.scores.hayP2) {
                     admin.scores.hayP2 = false;
                     contadorVidas.hayP2 = false;
@@ -1498,6 +1626,7 @@ int main(void)
             admin.dibujaPompas();
             admin.dibujaEnemigos();
             admin.dibujaFrutas();
+            admin.DibujaRayos();
             admin.dibujarPuntosCadena();
         } break;
         case NIVEL_2:
@@ -1677,6 +1806,28 @@ int main(void)
 
         } break;
         case NIVEL_10:
+        {
+            // TODO: Draw NIVEL_10 screen here!
+            columnas.DibujarIzquierda();
+            plataformas.Dibujar();
+            columnas.DibujarDerecha();
+            admin.scores.Dibujar();
+            admin.agua.Dibujar();
+            contadorVidas.Dibujar();
+            if (!bub.muerto) {
+                bub.Dibujar();
+            }
+            if (contadorVidas.hayP2 && !bob.muerto) {
+                bob.Dibujar();
+            }
+            admin.dibujaPompas();
+            admin.dibujaEnemigos();
+            admin.dibujaFrutas();
+            admin.DibujaRayos();
+            admin.dibujarPuntosCadena();
+
+        } break;
+        case NIVEL_BOSS:
         {
             // TODO: Draw NIVEL_10 screen here!
             columnas.DibujarIzquierda();
