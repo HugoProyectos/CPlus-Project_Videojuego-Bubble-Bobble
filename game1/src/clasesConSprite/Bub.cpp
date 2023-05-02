@@ -74,7 +74,7 @@ public:
     bool disparando = false;
     int multiplicadorVelocidadDisparo = 1;
     int multiplicadorDistanciaDisparo = 1;
-    int vidaPompa[10] = {60 * 60, 60 * 60, 60 * 60, 60 * 60, 60*120, 60 * 60, 60 * 60, 60 * 60, 60 * 60, 60 * 60 };
+    int vidaPompa[11] = {60 * 60, 60 * 60, 60 * 60, 60 * 60, 60*120, 60 * 60, 60 * 60, 60 * 60, 60 * 60, 60 * 60, 60 * 60 };
     int nivel = 0;
 
     // Referencia al administrador de pompas

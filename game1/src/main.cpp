@@ -1387,9 +1387,10 @@ int main(void)
             }
             else {
                 currentScreen = NIVEL_BOSS;
-
+                bub.imTheThunder = true;
+                bob.imTheThunder = true;
                 // ----------------------------------------------------------------------------------------------------------
-                destRob = { (float)400, 50, 32, 32 };
+                destRob = { (float)400, 30, 128, 128 };
                 robot = std::make_shared<Boss>(Boss(2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 admin.enemigos.push_back(robot);
                 // ----------------------------------------------------------------------------------------------------------

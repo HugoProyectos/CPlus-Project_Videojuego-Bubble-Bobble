@@ -17,6 +17,9 @@ public:
     int fAnimation[2] = { fWalkAnimation, fDeadAnimation };
     int ID;
 
+    int lastWitdh = 800;
+    int lastHeight = 450;
+    double ratioX = 1;
 
     int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation, 1->DeadAnimation, 2->BallLeft,
     int indiceAnimacion = 0; //Indica el número de frame actual de la animación activa
@@ -32,9 +35,11 @@ public:
 
     Bola() = default;
 
-    Bola(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, bool direccion, int ID) {
+    Bola(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, bool direccion, int ID, int lastW, int lastH) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         destRec = destino;
+        lastWitdh = lastW;
+        lastHeight = lastH;
         tipo = -2;
         widthAnimation = walkAnimation.width / fWalkAnimation;
         heightAnimation = walkAnimation.height;
@@ -48,7 +53,21 @@ public:
     };
 
     void Actualizar(Rectangle playerPosition) override {
+        if (lastHeight != GetScreenHeight()) {
+            destRec.height = GetScreenHeight() / 14.0625f;
+            destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+            origin.y = destRec.height / 2;
 
+            lastHeight = GetScreenHeight();
+        }
+        if (lastWidth != GetScreenWidth()) {
+            destRec.width = GetScreenWidth() / 25.0f;
+            destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+            origin.x = destRec.width / 2;
+
+            lastWidth = GetScreenWidth();
+        }
+        ratioX = destRec.width / 32;
 
         if (!direccion && animacionActiva == 0) { //Si el personaje esta a la izquierda
             MoverIzq();
@@ -92,12 +111,12 @@ public:
     }
 
     void MoverIzq() {
-        destRec.x -= velocidadLateral;
+        destRec.x -= velocidadLateral * ratioX;
         srcRec.width = pixels;
     }
 
     void MoverDer() {
-        destRec.x += velocidadLateral;
+        destRec.x += velocidadLateral * ratioX;
         srcRec.width = -pixels;
     }
 
@@ -142,7 +161,7 @@ public:
                         )
                 )
             ) {
-            switch (s.aproach[enemyNum + 1]) {
+            switch (s.aproach[enemyNum + 20]) {
             case 1:
                 destRec.x = s.left - destRec.width / 2;
                 break;
@@ -182,7 +201,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 1;
+                s.aproach[enemyNum + 20] = 1;
             }
             //Derecha
             else if (
@@ -206,7 +225,7 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 2;
+                s.aproach[enemyNum + 20] = 2;
             }
             //Arriba
             else if (
@@ -230,12 +249,12 @@ public:
                             )
                     )
                 ) {
-                s.aproach[enemyNum + 1] = 3;
+                s.aproach[enemyNum + 20] = 3;
             }
             //Abajo
             else {
                 //Si no se cumplen anteriores asumimos que se acerca por debajo
-                s.aproach[enemyNum + 1] = 4;
+                s.aproach[enemyNum + 20] = 4;
             }
         }
     }
