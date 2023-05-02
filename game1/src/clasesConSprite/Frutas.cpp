@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 #include "Sprite.hpp"
 #include "Suelo.cpp"
 #include "mapa.cpp"

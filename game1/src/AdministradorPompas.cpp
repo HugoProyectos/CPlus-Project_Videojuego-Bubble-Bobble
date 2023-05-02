@@ -685,7 +685,9 @@ public:
 				for (int j = 0; j < plataformas.listaPlataforma.size(); j++) {
 					if (enemigos.at(i)->tipo != 7) {
 						enemigos.at(i)->compruebaSuelo();
-						enemigos.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
+						if (enemigos.at(i)->tipo != -2) {
+							enemigos.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
+						}
 						enemigos.at(i)->compruebaPared(columnas);
 					}
 					else {
