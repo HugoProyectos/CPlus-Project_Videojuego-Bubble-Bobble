@@ -58,7 +58,9 @@ public:
     bool saltandoDerCorto = false;
     bool saltandoIzq = false;
     bool saltandoIzqCorto = false;
+    bool saltandoRecto = false;
     int contador = 0;
+    int contadorPreSalto = 0;
     bool frutaProducida = false;
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
@@ -142,15 +144,14 @@ public:
                 else if (!saltando && enElAire) {
                     CaerLento();
                 }
-                else if (saltandoDerCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloDerecha && destRec.x < playerPosition.x - anchosX) {
+                else if (!saltandoRecto && (saltandoDerCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloDerecha && destRec.x < playerPosition.x - anchosX)) {
                     Salto(playerPosition, 2);
                 }
-                else if (saltandoIzqCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloIzquierda && destRec.x > playerPosition.x + anchosX) {
+                else if (!saltandoRecto && (saltandoIzqCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloIzquierda && destRec.x > playerPosition.x + anchosX)) {
                     Salto(playerPosition, -2);
                 }
                 else if (saltando || contador > 180 && sueloArriba && playerPosition.y + destRec.height < destRec.y) {
                     Salto(playerPosition);
-                    //contador = 120;
                 }
                 else if (destRec.y != playerPosition.y) {
                     if (direccionX == 0) {
@@ -193,18 +194,18 @@ public:
                 else if (!saltando && enElAire) {
                     CaerLento();
                 }
-                else if (saltandoDerCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloDerecha && destRec.x < playerPosition.x - anchosX) {
+                else if (!saltandoRecto && (saltandoDerCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloDerecha && destRec.x < playerPosition.x - anchosX)) {
                     Salto(playerPosition, 2);
                 }
-                else if (saltandoIzqCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloIzquierda && destRec.x > playerPosition.x + anchosX) {
+                else if (!saltandoRecto && (saltandoIzqCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloIzquierda && destRec.x > playerPosition.x + anchosX)) {
                     Salto(playerPosition, -2);
                 }
                 //Salto a la derecha, player esta a +distancia
-                else if (saltandoDer || (destRec.y > playerPosition.y && destRec.x + distanciaSaltoMax > playerPosition.x - anchosX && destRec.x + distanciaSaltoMax < playerPosition.x + anchosX)) { //Si el personaje esta encima
+                else if (!saltandoRecto && (saltandoDer || (destRec.y > playerPosition.y && destRec.x + distanciaSaltoMax > playerPosition.x - anchosX && destRec.x + distanciaSaltoMax < playerPosition.x + anchosX))) { //Si el personaje esta encima
                     Salto(playerPosition, 1);
                 }
                 //Salto a la izquierda, player esta a -distancia
-                else if (saltandoIzq || (destRec.y > playerPosition.y && destRec.x - distanciaSaltoMax > playerPosition.x - anchosX && destRec.x - distanciaSaltoMax < playerPosition.x + anchosX)) { //Si el personaje esta encima
+                else if (!saltandoRecto && (saltandoIzq || (destRec.y > playerPosition.y && destRec.x - distanciaSaltoMax > playerPosition.x - anchosX && destRec.x - distanciaSaltoMax < playerPosition.x + anchosX))){ //Si el personaje esta encima
 
                     Salto(playerPosition, -1);
                 }
@@ -322,6 +323,16 @@ public:
             enElAire = true;
             cayendo = false;
         }
+        else if (contadorPreSalto < 30 && tipo == 0) {
+            contadorPreSalto++;
+            srcRec.width = pixels;
+            saltandoRecto = true;
+        }
+        else if (contadorPreSalto < 60 && tipo == 0) {
+            contadorPreSalto++;
+            srcRec.width = -pixels;
+            saltandoRecto = true;
+        }
         //Subiendo
         else if ((saltoRecorrido <= distanciaSaltoMax) && !finSaltando) {
             if (tipo == -1) {
@@ -359,6 +370,7 @@ public:
             else {
                 destRec.y -= velocidadSalto;
                 saltoRecorrido += velocidadSalto;
+                saltandoRecto = true;
             }
         }
         //Hemos llegado al m�ximo
@@ -413,6 +425,9 @@ public:
             saltandoIzq = false;
             saltandoDerCorto = false;
             saltandoIzqCorto = false;
+            saltandoRecto = false;
+
+            contadorPreSalto = 0;
 
             if (player.x > destRec.x) {
                 direccionX = 1;
@@ -424,6 +439,7 @@ public:
         else {
             saltando = false;
             finSaltando = true;
+            contadorPreSalto = 0;
             if (player.x > destRec.x) {
                 direccionX = 1;
             }
