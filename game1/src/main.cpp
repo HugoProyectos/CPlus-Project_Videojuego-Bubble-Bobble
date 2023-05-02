@@ -106,7 +106,7 @@ int main(void)
     admin.agua.existe = false;
     admin.col = &columnas;
     admin.plat = &plataformas;
-    admin.iniciaMapa(1, 30*60); 
+    admin.iniciaMapa(4, 30*60); 
     admin.CambioDeMapa(0);
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
@@ -117,20 +117,20 @@ int main(void)
 
 
     Rectangle destRob = { GetScreenWidth() / 2, 30, 32, 32 };
+    sh_Enemigo rosa = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+    destRob = { (float)GetScreenWidth() / 2, 80, 32, 32 };
     sh_Enemigo robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
-    //destRob = { (float)GetScreenWidth() / 2, 80, 32, 32 };
-    //sh_Enemigo robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
-    //destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
-    //sh_Enemigo robot2 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
-    //destRob = { (float)GetScreenWidth() / 2, 70, 36, 32 };
-    //sh_Enemigo robot3 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+    destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
+    sh_Enemigo robot2 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+    destRob = { (float)GetScreenWidth() / 2, 70, 36, 32 };
+    sh_Enemigo robot3 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
     
     
     
+    admin.enemigos.push_back(rosa);
     admin.enemigos.push_back(robot);
-    //admin.enemigos.push_back(robot);
-    //admin.enemigos.push_back(robot2);
-    //admin.enemigos.push_back(robot3);
+    admin.enemigos.push_back(robot2);
+    admin.enemigos.push_back(robot3);
 
     admin.mute_sound = Mute_effect == 1 ? true : false;
     /* 

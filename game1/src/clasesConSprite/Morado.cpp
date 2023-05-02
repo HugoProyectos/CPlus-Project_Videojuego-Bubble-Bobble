@@ -1,6 +1,7 @@
 #pragma once
 #include"AdministradorPompas.cpp"
 #include "Enemigo.cpp"
+#include<time.h>
 
 
 class Morado : public Enemigo {
@@ -45,12 +46,15 @@ public:
 
     //Colisiones
     Plataforma lastGround;
+    Rectangle player;
 
     //Variables lógicas
     int direccionX = 0; //0->izquierda, 1->derecha
     int direccionY = 0; //0->abajo, 1->arriba
     AdministradorPompas* admin;
     bool frutaProducida = false;
+    int num = 0;
+    int prob = 90;
 
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
@@ -71,6 +75,8 @@ public:
         enElAire = true;
         cayendo = true;
         this->admin = &admin;
+        srand(time(NULL));
+        player = destino;
     };
 
     void enfadar() {
@@ -79,6 +85,7 @@ public:
 
     // Controlador de comportamiento
     void Actualizar(Rectangle playerPosition) override {
+        std::cout << num << std::endl;
         if (lastHeight != GetScreenHeight()) {
             destRec.height = GetScreenHeight() / 14.0625f;
             destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
@@ -116,59 +123,52 @@ public:
             }
         }
         else {
-            if (IAoriginal) {
+            player = playerPosition;
 
+            if (enfadado) {
+                animacionActiva = 3;
+                velocidadLateral = 1.5 * destRec.width / 16.0f;
+                velocidadSalto = destRec.height / 10.0f;
             }
             else {
-                if (enfadado) {
-                    animacionActiva = 3;
-                    velocidadLateral = 1.5 * destRec.width / 16.0f;
-                    velocidadSalto = destRec.height / 10.0f;
-                }
-                else {
-                    velocidadLateral = destRec.width / 16.0f;
-                    velocidadSalto = destRec.height / 10.0f;
-                }
+                velocidadLateral = destRec.width / 16.0f;
+                velocidadSalto = destRec.height / 10.0f;
+            }
 
-                if (muerto) {
-                    animacionActiva = 1;
-                    CaerLento();
+            if (muerto) {
+                animacionActiva = 1;
+                CaerLento();
+            }
+            //Si va a la izquierda
+            else if (direccionX == 0) {
+                //Si va hacia abajo
+                if (direccionY == 0) {
+                    MoverIzqAbajo();
                 }
-                //Si va a la izquierda
-                else if (direccionX == 0) {
-                    //Si va hacia abajo
-                    if (direccionY == 0) {
-                        MoverIzqAbajo();
-                    }
-                    //Si va hacia arriba
-                    else {
-                        MoverIzqArriba();
-                    }
+                //Si va hacia arriba
+                else {
+                    MoverIzqArriba();
                 }
-                //Si va hacia la derecha
-                else if (direccionX == 1) {
-                    //Si va hacia abajo
-                    if (direccionY == 0) {
-                        MoverDerAbajo();
-                    }
-                    //Si va hacia arriba
-                    else {
-                        MoverDerArriba();
-                    }
+            }
+            //Si va hacia la derecha
+            else if (direccionX == 1) {
+                //Si va hacia abajo
+                if (direccionY == 0) {
+                    MoverDerAbajo();
+                }
+                //Si va hacia arriba
+                else {
+                    MoverDerArriba();
                 }
             }
 
             //Actualizar posicion no salir de la pantalla
             if (destRec.y > GetScreenHeight() + 50) {
-                std::cout << "me salgo por abajo" << std::endl;
-
                 destRec.y = -10;
                 enElAire = true;
                 cayendo = true;
             }
             else if (destRec.y < -50) {
-                std::cout << "me salgo por arriba?" << std::endl;
-
                 destRec.y = GetScreenHeight() + 5;
             }
         }
@@ -293,12 +293,30 @@ public:
                     //Derecha
                     //destRec.x = s.left - destRec.width / 2;
                     direccionX = 0; //Colisiona derecha, ahora se mueve izquierda
+                    num = 1 + rand() % (101 - 1);
+                    if (!IAoriginal && num > prob) {
+                        if (player.y > destRec.y) {
+                            direccionY = 1;
+                        }
+                        else {
+                            direccionY = 0;
+                        }
+                    }
                     //Se puede añadir un movimiento random en eje Y
                     break;
                 case 2:
                     //Izquierda
                     //destRec.x = s.right + destRec.width / 2;
                     direccionX = 1; //Colisiona izquierda, hora se mueve derecha
+                    num = 1 + rand() % (101 - 1);
+                    if (!IAoriginal && num > prob) {
+                        if (player.y > destRec.y) {
+                            direccionY = 1;
+                        }
+                        else {
+                            direccionY = 0;
+                        }
+                    }
                     //Se puede añadir un movimiento random en eje Y
                     break;
                 case 3:
@@ -306,12 +324,30 @@ public:
                     //destRec.y = s.top - destRec.height / 2;
                     lastGround = s;
                     direccionY = 1; //Colisiona abajo, ahora se mueve arriba
+                    num = 1 + rand() % (101 - 1);
+                    if (!IAoriginal && num > prob) {
+                        if (player.x > destRec.x) {
+                            direccionX = 1;
+                        }
+                        else {
+                            direccionX = 0;
+                        }
+                    }
                     //Se puede añadir un movimiento random en eje X
                     break;
                 case 4:
                     //Arriba
                     //destRec.y = s.bot + destRec.height / 2;
                     direccionY = 0; //Colisiona arriba, ahora se mueve abajo
+                    num = 1 + rand() % (101 - 1);
+                    if (!IAoriginal && num > prob) {
+                        if (player.x > destRec.x) {
+                            direccionX = 1;
+                        }
+                        else {
+                            direccionX = 0;
+                        }
+                    }
                     //Se puede añadir un movimiento random en eje X
                     break;
                 }
