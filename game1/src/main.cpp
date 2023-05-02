@@ -1370,12 +1370,6 @@ int main(void)
 
             }
             else if (admin.cambiaNivel) {
-                gameover.ronda = 10;
-                gameover.clear = true;
-                admin.frutas.clear();
-                currentScreen = GAME_OVER;
-            }
-            else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
                 admin.iniciaMapa(1, 3000000 * 60); // TODO
                 admin.CambioDeMapa(10); // TODO
@@ -1384,8 +1378,8 @@ int main(void)
                 contadorVidas.cargar_siguiente_nivel();
                 bub.cambioMapa = 2; // TODO
                 bob.cambioMapa = 2; // TODO
-                bub.nivel = 9;
-                bob.nivel = 9;
+                bub.nivel = 10;
+                bob.nivel = 10;
                 jugando_nivel = false;
                 for (int i = 0; i < 10; i++) {
                     admin.agua.stream[i].numPlataformas = plataformas.listaPlataformaSiguiente.size();
@@ -1408,7 +1402,7 @@ int main(void)
         } break;
         case NIVEL_BOSS:
         {
-            // TODO: Update NIVEL_10 screen variables here!
+            // TODO: Update NIVEL_BOSS screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
                 columnas.Actualizar();
                 plataformas.Actualizar();
