@@ -870,6 +870,7 @@ int main(void)
 
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
+                admin.actualizaRayos();
 
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
@@ -982,6 +983,7 @@ int main(void)
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
 
+                admin.actualizaRayos();
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
@@ -1105,6 +1107,7 @@ int main(void)
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
 
+                admin.actualizaRayos();
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
@@ -1228,6 +1231,7 @@ int main(void)
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
 
+                admin.actualizaRayos();
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
@@ -1339,6 +1343,7 @@ int main(void)
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
 
+                admin.actualizaRayos();
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
@@ -1444,6 +1449,7 @@ int main(void)
                 admin.actualizaEnemigos(plataformas, columnas);
                 admin.actualizaFrutas(plataformas);
 
+                admin.actualizaRayos();
                 contadorVidas.Actualizar(bub.numVidas, bob.numVidas, credits.creditos);
 
                 if (admin.hurryUp) {
@@ -1533,7 +1539,9 @@ int main(void)
                 currentScreen = MAIN_MENU;
                 admin.scores.hayP1 = false;
                 bub.numVidas = 2;
-                //bub.destRec = {GetScreenWidth() * (destBub.x / 800), GetScreenHeight() * (destBub.y/450), GetScreenWidth() / 25.0f, GetScreenHeight() / 14.0625f };
+                bub.destRec = { 750, 50, 32, 32 };
+                bub.lastWidth = 800;
+                bub.lastHeight = 450;
                 bub.cambioMapa = 2;
                 bub.muerto = false;
                 bub.muriendo = false;
@@ -1544,7 +1552,9 @@ int main(void)
                     admin.scores.hayP2 = false;
                     contadorVidas.hayP2 = false;
                     bob.numVidas = 2;
-                    //bob.destRec = { GetScreenWidth() * (destBub.x / 800), GetScreenHeight() * (destBub.y / 450), GetScreenWidth() / 25.0f, GetScreenHeight() / 14.0625f };
+                    bob.destRec = { 750, 50, 32, 32 };
+                    bob.lastWidth = 800;
+                    bob.lastHeight = 450;
                     bob.cambioMapa = 2;
                     bob.muerto = false;
                     bob.muriendo = false;
