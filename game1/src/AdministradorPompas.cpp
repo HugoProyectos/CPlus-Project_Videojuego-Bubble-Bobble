@@ -670,9 +670,19 @@ public:
 			else {
 				enemigos.at(i)->Actualizar(j1.posicionJugador);
 				for (int j = 0; j < plataformas.listaPlataforma.size(); j++) {
-					enemigos.at(i)->compruebaSuelo();
-					enemigos.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
-					enemigos.at(i)->compruebaPared(columnas);
+					if (enemigos.at(i)->tipo != 7) {
+						enemigos.at(i)->compruebaSuelo();
+						enemigos.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
+						enemigos.at(i)->compruebaPared(columnas);
+					}
+					else {
+						if (j == 0 ||  j == plataformas.listaPlataforma.size() - 1) {
+							
+							enemigos.at(i)->compruebaSuelo();
+							enemigos.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
+							enemigos.at(i)->compruebaPared(columnas);
+						}
+					}
 				}
 			}
 		}
