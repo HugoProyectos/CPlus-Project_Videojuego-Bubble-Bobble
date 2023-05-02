@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Enemigo.cpp"
 #include "Bola.cpp"
 #include "AdministradorPompas.cpp"
@@ -6,8 +6,8 @@
 
 class Fantasma : public Enemigo {
 public:
-    //Gestión de transición de nivel
-    int8_t cambioMapa = 2; //2->Primera Iteración 1->Desplazándose 0->Ya no
+    //GestiÃ³n de transiciÃ³n de nivel
+    int8_t cambioMapa = 2; //2->Primera IteraciÃ³n 1->DesplazÃ¡ndose 0->Ya no
     Rectangle posicionPartida = { (float)400, (float)50, 32, 32 };
     Rectangle posicionDestino = { (float)400, (float)50, 32, 32 };
     int cuentaFramesTraslacion = 0; //3 segundos = 3 * 60 frames = 180 frames
@@ -32,18 +32,18 @@ public:
 
     int indexBolas = 0;
     
-    int fWalkAnimation = 2; //Número de fotogramas de la animacion camniar
-    int fAngryWalkAnimation = 4; //Número de fotogramas de la animacion camniar
-    int fDeadAnimation = 2; //Número de fotogramas de la animacion muerte
+    int fWalkAnimation = 2; //NÃºmero de fotogramas de la animacion camniar
+    int fAngryWalkAnimation = 4; //NÃºmero de fotogramas de la animacion camniar
+    int fDeadAnimation = 2; //NÃºmero de fotogramas de la animacion muerte
     int fBallAnimation = 4;
     int fAngryBallAnimation = 4;
     int fAnimation[6] = { fWalkAnimation , fDeadAnimation, fBallAnimation, fAngryWalkAnimation, fAngryBallAnimation };
 
-    int widthAnimation; // Se actualiza para cada animación activa
+    int widthAnimation; // Se actualiza para cada animaciÃ³n activa
     int heightAnimation;
 
-    int animacionActiva = 0; //Indica la animación activa: 0->WalkAnimation, 1->DeadAnimation, 2->BallLeft,
-    int indiceAnimacion = 0; //Indica el número de frame actual de la animación activa
+    int animacionActiva = 0; //Indica la animaciÃ³n activa: 0->WalkAnimation, 1->DeadAnimation, 2->BallLeft,
+    int indiceAnimacion = 0; //Indica el nÃºmero de frame actual de la animaciÃ³n activa
 
     //Frames
     int targetFrames;
@@ -66,6 +66,16 @@ public:
     int direccionX = 1;
     float anchosX = 15.0f;
     bool postEnfado = false;
+    bool sueloArriba = false;
+    bool sueloDerecha = false;
+    bool sueloIzquierda = false;
+    bool saltandoDerCorto = false;
+    bool saltandoIzqCorto = false;
+    bool saltandoRecto = false;
+    int contadorPreSalto = 0;
+    int contador = 0;
+
+
     bool frutaProducida = false;
 
     //Muerto -> Ahora esta en Enemigo
@@ -137,66 +147,133 @@ public:
             }
         }
         else {
-
-            if (postEnfado) {
-                velocidadLateral = 2 * destRec.width / 16.0f;
-                velocidadSalto = destRec.height / 10.0f;
-            }
-            else {
-                velocidadLateral = destRec.width / 16.0f;
-                velocidadSalto = destRec.height / 10.0f;
-            }
-
-            if ((clock() - temp) > 5 * CLOCKS_PER_SEC) {
-                velocidadFrames = 2;
-                hayBola = false;
-            }
-
-            if (muerto) {
-                animacionActiva = 1;
-                CaerLento();
-            }
-            else if (enfadado) {
-                enfadar();
-                enfadado = false;
-            }
-            else if (!saltando && enElAire) {
-                CaerLento();
-            }
-            else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - anchosX && destRec.x < playerPosition.x + anchosX) && !disparando) { //Si el personaje esta encima
-                Salto(playerPosition);
-            }
-            else if (destRec.y != playerPosition.y) {
-                if (direccionX == 0) {
-                    //Izquierda
-                    MoverIzq();
+            if (IAoriginal) {
+                if (enfadado) {
+                    animacionActiva = 3;
+                    postEnfado = true;
+                    velocidadLateral = 2 * destRec.width / 16.0f;
+                    velocidadSalto = destRec.height / 10.0f;
                 }
                 else {
-                    //Derecha
+                    velocidadLateral = destRec.width / 16.0f;
+                    velocidadSalto = destRec.height / 10.0f;
+                }
+
+                if ((clock() - temp) > 5 * CLOCKS_PER_SEC) {
+                    velocidadFrames = 2;
+                    hayBola = false;
+                }
+
+                if (muerto) {
+                    animacionActiva = 1;
+                    CaerLento();
+                }
+                else if (!saltando && enElAire) {
+                    CaerLento();
+                }
+                else if (!saltandoRecto && (saltandoDerCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloDerecha && destRec.x < playerPosition.x - anchosX)) {
+                    Salto(playerPosition, 2);
+                }
+                else if (!saltandoRecto && (saltandoIzqCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloIzquierda && destRec.x > playerPosition.x + anchosX)) {
+                    Salto(playerPosition, -2);
+                }
+                else if (saltando || contador > 180 && sueloArriba && playerPosition.y + destRec.height < destRec.y) {
+                    Salto(playerPosition);
+                }
+                else if (destRec.y != playerPosition.y) {
+                    if (direccionX == 0) {
+                        //Izquierda
+                        MoverIzq();
+                        contador++;
+                    }
+                    else {
+                        //Derecha
+                        MoverDer();
+                        contador++;
+                    }
+                }
+                else if (destRec.x > playerPosition.x + anchosX * 10 && !disparando) { //Si el personaje esta a la izquierda      
+                    MoverIzq();
+                    contador = 0;
+                }
+                else if (destRec.x < playerPosition.x - anchosX * 10 && !disparando) { //Si el personaje esta a la derecha
                     MoverDer();
+                    contador = 0;
+                }
+                else if (destRec.x > playerPosition.x + anchosX && !hayBola) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
+                    BolaIzq();
+                    contador = 0;
+                }
+                else if (destRec.x < playerPosition.x - anchosX && !hayBola) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
+                    BolaDer();
+                    contador = 0;
                 }
             }
-            else if (destRec.x > playerPosition.x + anchosX*10 && !disparando) { //Si el personaje esta a la izquierda      
-                MoverIzq();
-            }
-            else if (destRec.x < playerPosition.x - anchosX*10 && !disparando) { //Si el personaje esta a la derecha
-                MoverDer();
-            }
-            else if (destRec.x > playerPosition.x + anchosX && !hayBola) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
-                BolaIzq();
-            }
-            else if (destRec.x < playerPosition.x - anchosX && !hayBola) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
-                BolaDer();
-            }
+            else {
+                if (enfadado) {
+                    animacionActiva = 3;
+                    postEnfado = true;
+                    velocidadLateral = 2 * destRec.width / 16.0f;
+                    velocidadSalto = destRec.height / 10.0f;
+                }
+                else {
+                    velocidadLateral = destRec.width / 16.0f;
+                    velocidadSalto = destRec.height / 10.0f;
+                }
 
-            //Actualizar posicion no salir de la pantalla
-            if (destRec.y > GetScreenHeight() + 50) {
-                destRec.y = -10;
-                enElAire = true;
-                cayendo = true;
-            }
-            else if (destRec.y < -50) {
-                destRec.y = GetScreenHeight() + 5;
+                if ((clock() - temp) > 5 * CLOCKS_PER_SEC) {
+                    velocidadFrames = 2;
+                    hayBola = false;
+                }
+
+                if (muerto) {
+                    animacionActiva = 1;
+                    CaerLento();
+                }
+                else if (!saltando && enElAire) {
+                    CaerLento();
+                }
+                else if (!saltandoRecto && (saltandoDerCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloDerecha && destRec.x < playerPosition.x - anchosX)) {
+                    Salto(playerPosition, 2);
+                }
+                else if (!saltandoRecto && (saltandoIzqCorto || destRec.y <= playerPosition.y && destRec.y + destRec.height >= playerPosition.y && !sueloIzquierda && destRec.x > playerPosition.x + anchosX)) {
+                    Salto(playerPosition, -2);
+                }
+                else if (saltando || (sueloArriba && destRec.y > playerPosition.y && destRec.x > playerPosition.x - anchosX*5 && destRec.x < playerPosition.x + anchosX*5)) { //Si el personaje esta encima
+                    Salto(playerPosition);
+                }
+                else if (destRec.y != playerPosition.y) {
+                    if (direccionX == 0) {
+                        //Izquierda
+                        MoverIzq();
+                    }
+                    else {
+                        //Derecha
+                        MoverDer();
+                    }
+                }
+                else if (destRec.x > playerPosition.x + anchosX * 10 && !disparando) { //Si el personaje esta a la izquierda      
+                    MoverIzq();
+                }
+                else if (destRec.x < playerPosition.x - anchosX * 10 && !disparando) { //Si el personaje esta a la derecha
+                    MoverDer();
+                }
+                else if (destRec.x > playerPosition.x + anchosX && !hayBola) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
+                    BolaIzq();
+                }
+                else if (destRec.x < playerPosition.x - anchosX && !hayBola) { //Si el personaje esta suficientemente cerca a la izquierda lanza bola
+                    BolaDer();
+                }
+
+                //Actualizar posicion no salir de la pantalla
+                if (destRec.y > GetScreenHeight() + 50) {
+                    destRec.y = -10;
+                    enElAire = true;
+                    cayendo = true;
+                }
+                else if (destRec.y < -50) {
+                    destRec.y = GetScreenHeight() + 5;
+                }
             }
         }
 
@@ -273,6 +350,9 @@ public:
                 break;
             }
         }
+        sueloArriba = false;
+        sueloDerecha = false;
+        sueloIzquierda = false;
     }
 
     void Dibujar() override {
@@ -317,38 +397,86 @@ public:
         else { animacionActiva = 4; }
     }
 
-    void Salto(Rectangle player) {
-        //Gestión de salto
+    void Salto(Rectangle player, int tipo = 0) {
+        //Gestion de salto
         if (!saltando) {
-            //std::cout << "Inicio Salto" << std::endl;
             saltando = true;
             finSaltando = false;
             enElAire = true;
             cayendo = false;
         }
+        else if (contadorPreSalto < 30 && tipo == 0) {
+            contadorPreSalto++;
+            srcRec.width = pixels;
+            saltandoRecto = true;
+        }
+        else if (contadorPreSalto < 60 && tipo == 0) {
+            contadorPreSalto++;
+            srcRec.width = -pixels;
+            saltandoRecto = true;
+        }
         //Subiendo
         else if ((saltoRecorrido <= distanciaSaltoMax) && !finSaltando) {
-            //std::cout << "Subida Salto" << std::endl;
-            destRec.y -= velocidadSalto;
-            saltoRecorrido += velocidadSalto;
+            if (tipo == -2) {
+                destRec.x -= velocidadSalto * 2;
+                srcRec.width = pixels;
+                direccionX = 0;
+                saltandoIzqCorto = true;
+                destRec.y -= velocidadSalto;
+                saltoRecorrido += velocidadSalto * 3;
+            }
+            else if (tipo == 2) {
+                destRec.x += velocidadSalto * 2;
+                srcRec.width = -pixels;
+                direccionX = 1;
+                saltandoDerCorto = true;
+                destRec.y -= velocidadSalto;
+                saltoRecorrido += velocidadSalto * 3;
+            }
+            else {
+                destRec.y -= velocidadSalto;
+                saltoRecorrido += velocidadSalto;
+                saltandoRecto = true;
+            }
         }
-        //Hemos llegado al máximo
+        //Hemos llegado al maximo
         else if (saltoRecorrido >= distanciaSaltoMax) {
-            //std::cout << "max salto" << std::endl;
             finSaltando = true;
             destRec.y += velocidadSalto;
             saltoRecorrido -= velocidadSalto;
         }
         //Bajar
         else if (saltoRecorrido > 0 && finSaltando && enElAire) {
-            //std::cout << "Bajar Salto" << std::endl;
-            destRec.y += velocidadSalto;
-            saltoRecorrido -= velocidadSalto;
+            if (tipo == -2) {
+                destRec.x -= velocidadSalto * 2;
+                srcRec.width = pixels;
+                direccionX = 0;
+                saltandoIzqCorto = true;
+                destRec.y += velocidadSalto;
+                saltoRecorrido -= velocidadSalto * 3;
+            }
+            else if (tipo == 2) {
+                destRec.x += velocidadSalto * 2;
+                srcRec.width = -pixels;
+                direccionX = 1;
+                saltandoDerCorto = true;
+                destRec.y += velocidadSalto;
+                saltoRecorrido -= velocidadSalto * 3;
+            }
+            else {
+                destRec.y += velocidadSalto;
+                saltoRecorrido -= velocidadSalto * 2;
+            }
         }
         else if (saltoRecorrido < 5) {
-            //std::cout << " Salto acabado" << std::endl;
             saltando = false;
             finSaltando = true;
+            saltandoDerCorto = false;
+            saltandoIzqCorto = false;
+            saltandoRecto = false;
+
+            contadorPreSalto = 0;
+
             if (player.x > destRec.x) {
                 direccionX = 1;
             }
@@ -357,9 +485,9 @@ public:
             }
         }
         else {
-            //std::cout << " Salto perdido" << std::endl;
             saltando = false;
             finSaltando = true;
+            contadorPreSalto = 0;
             if (player.x > destRec.x) {
                 direccionX = 1;
             }
@@ -416,13 +544,13 @@ public:
                     //Derecha
                     destRec.x = s.left - destRec.width / 2;
                     direccionX = 0; //Colisiona derecha, ahora se mueve izquierda
-                    //Se puede añadir un movimiento random en eje Y
+                    //Se puede aÃ±adir un movimiento random en eje Y
                     break;
                 case 2:
                     //Izquierda
                     destRec.x = s.right + destRec.width / 2;
                     direccionX = 1; //Colisiona izquierda, hora se mueve derecha
-                    //Se puede añadir un movimiento random en eje Y
+                    //Se puede aÃ±adir un movimiento random en eje Y
                     break;
                 case 3:
                     destRec.y = s.top - destRec.height / 2;
@@ -433,7 +561,7 @@ public:
                     break;
                 }
             }
-            //Comprobamos si se esta acercando a la superficie desde alguna dirección
+            //Comprobamos si se esta acercando a la superficie desde alguna direcciÃ³n
             else {
                 //Izquierda
                 if (
@@ -513,6 +641,35 @@ public:
                     s.aproach[enemyNum + 2] = 4;
                 }
             }
+
+            destRec.y = destRec.y - distanciaSaltoMax + destRec.height;
+            //Comporbaciones adicionales
+            if ((((s.bot) > (destRec.y)) && ((destRec.y) > (s.top)) &&
+                ((s.right - 8) > (destRec.x)) && ((destRec.x) > (s.left + 8)))) {
+                sueloArriba = true;
+            }
+            destRec.y = destRec.y + distanciaSaltoMax - destRec.height;
+
+            destRec.y = destRec.y + destRec.height * 3 / 4;
+            destRec.x = destRec.x - destRec.width * 3 / 4;
+            //Comporbaciones adicionales
+            if ((((s.bot) > (destRec.y)) && ((destRec.y) > (s.top)) &&
+                ((s.right) > (destRec.x)) && ((destRec.x) > (s.left)))) {
+                sueloIzquierda = true;
+            }
+            destRec.y = destRec.y - destRec.height * 3 / 4;
+            destRec.x = destRec.x + destRec.width * 3 / 4;
+
+            destRec.y = destRec.y + destRec.height * 3 / 4;
+            destRec.x = destRec.x + destRec.width * 3 / 4;
+            //Comporbaciones adicionales
+            if ((((s.bot) > (destRec.y)) && ((destRec.y) > (s.top)) &&
+                ((s.right) > (destRec.x)) && ((destRec.x) > (s.left)))) {
+                sueloDerecha = true;
+            }
+            destRec.y = destRec.y - destRec.height * 3 / 4;
+            destRec.x = destRec.x - destRec.width * 3 / 4;
+
         }
     }
 

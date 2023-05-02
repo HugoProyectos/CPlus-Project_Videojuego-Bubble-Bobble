@@ -209,7 +209,7 @@ public:
 
                     Salto(playerPosition, -1);
                 }
-                else if (saltando || (destRec.y > playerPosition.y && destRec.x > playerPosition.x - anchosX && destRec.x < playerPosition.x + anchosX)) { //Si el personaje esta encima
+                else if (saltando || (sueloArriba && destRec.y > playerPosition.y && destRec.x > playerPosition.x - anchosX && destRec.x < playerPosition.x + anchosX)) { //Si el personaje esta encima
 
                     Salto(playerPosition);
                 }
@@ -316,7 +316,7 @@ public:
 
 
     void Salto(Rectangle player, int tipo = 0) {
-        //Gesti�n de salto
+        //Gestion de salto
         if (!saltando) {
             saltando = true;
             finSaltando = false;
