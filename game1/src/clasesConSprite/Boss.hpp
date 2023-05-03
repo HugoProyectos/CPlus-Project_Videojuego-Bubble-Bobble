@@ -22,6 +22,7 @@ public:
     double razonX = 0;
     double razonY = 0;
 
+
     float _targetFPS;
     
     
@@ -82,6 +83,12 @@ public:
     AdministradorPompas* admin;
     int colision = 0; 
     int colisionAux = 0;
+
+    int ratioX = 1;
+    int ratioY = 1;
+    bool muertoPorPrimeraVez = false;
+    bool muertoInterno = false;
+    bool parpadeo = false;
 
 	// --------------------------------------------------------
 

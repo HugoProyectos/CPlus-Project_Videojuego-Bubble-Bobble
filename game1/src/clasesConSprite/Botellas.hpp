@@ -22,6 +22,8 @@ public:
 	int lastWidth = 800;
 	Rectangle destino;
 
+	double ratioX = 1;
+	double ratioY = 1;
 	// --------------------------------------------------------
 	// Animacion ----------------------------------------------
 

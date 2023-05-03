@@ -5,6 +5,7 @@ Botellas::Botellas(float tamano, float velSalto, float velLateral, float _target
 	Botellas::Inicializador("resources/enemyBotellas/walk.png", tamano, 2, velSalto, velLateral);
 	this->ID = ID;
 	destRec = destino;
+    tipo = -2;
     widthAnimation = walk.width / fWalk;
     heightAnimation = walk.height;
     targetFrames = _targetFPS;
@@ -16,7 +17,22 @@ Botellas::Botellas(float tamano, float velSalto, float velLateral, float _target
 
 void Botellas::Actualizar(Rectangle playerPosition1, Rectangle playerPosition2)  {
     // Gestion logica -----------------------------------------
+    if (lastHeight != GetScreenHeight()) {
+        destRec.height = GetScreenHeight() / 14.0625f;
+        destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+        origin.y = destRec.height / 2;
 
+        lastHeight = GetScreenHeight();
+    }
+    if (lastWidth != GetScreenWidth()) {
+        destRec.width = GetScreenWidth() / 25.0f;
+        destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+        origin.x = destRec.width / 2;
+
+        lastWidth = GetScreenWidth();
+    }
+    ratioX = destRec.width / 32;
+    ratioY = destRec.width / 32;
     if (direccionX == 0) {
         MoverIzq();
     }
@@ -50,14 +66,14 @@ void Botellas::Dibujar() {
 }
 
 void Botellas::MoverIzq() {
-    destRec.x -= velocidadLateral;
-    destRec.y += velocidadSalto;
+    destRec.x -= velocidadLateral * ratioX;
+    destRec.y += velocidadSalto * ratioY;
     srcRec.width = pixels;
 }
 
 void Botellas::MoverDer() {
-    destRec.x += velocidadLateral;
-    destRec.y += velocidadSalto;
+    destRec.x += velocidadLateral * ratioX;
+    destRec.y += velocidadSalto * ratioY;
     srcRec.width = -pixels;
 }
 

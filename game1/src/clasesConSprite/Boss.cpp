@@ -37,35 +37,46 @@ Boss::Boss(float tamano, float distanciaSaltoMax, float velocidadSalto, float ve
 
 void Boss::Actualizar(Rectangle playerPosition1, Rectangle playerPosition2) {
     // Gestion logica -----------------------------------------
+    double val = (clock() - tempAngry);
+    double val2 = disparoCoolDown * CLOCKS_PER_SEC;
     if (vida <= 0) {
+        if (enfadado) {
+            muertoInterno = true;
+        }
         sinVida = true;
     }
 
-    if (hit) {
+    if (hit && !sinVida && !muertoInterno && !muertoPorPrimeraVez) {
+        
         animacionActiva = 2;
         hit = false;
         contadorParpadeo = 0;
     }
-    else if (((clock() - tempAngry) > disparoCoolDown * CLOCKS_PER_SEC) && sinVida) {
+    else if (((clock() - tempAngry) > disparoCoolDown * CLOCKS_PER_SEC) && muertoPorPrimeraVez) {
+        muerto = false;
+        muertoPorPrimeraVez = false;
         enfadado = true;
         animacionActiva = 3;
     }
-    else if (direccionY == 1 && !enfadado) {
+    else if (direccionY == 1 && !enfadado && !muertoPorPrimeraVez && !sinVida) {
         animacionActiva = 0;
     }
-    else if (direccionY == 0 && !enfadado) {
+    else if (direccionY == 0 && !enfadado && !muertoPorPrimeraVez && !sinVida) {
         animacionActiva = 1;
     }
-    else if (sinVida && !muerto) {
+    else if (sinVida && !muertoInterno && !enfadado && !muertoPorPrimeraVez) {
         animacionActiva = 4;
+        muerto = true;
+        vida = 100;
+        muertoPorPrimeraVez = true;
         tempAngry = clock();
     }
-    else if (muerto) {
+    else if (muertoInterno) {
         // Asciende arriba a la izquierda
         animacionActiva = 2;
     }
 
-    if ((clock() - tempDisparo) > disparoCoolDown * CLOCKS_PER_SEC) {
+    if ((clock() - tempDisparo) > disparoCoolDown * CLOCKS_PER_SEC && !muertoInterno && !muertoPorPrimeraVez) {
         disparar();
     }
 
@@ -117,14 +128,17 @@ void Boss::Actualizar(Rectangle playerPosition1, Rectangle playerPosition2) {
             break;
         case 2:
             indiceAnimacion = (indiceAnimacion + 1);
-            if (indiceAnimacion >= fDead) {
+            if (parpadeo) {
                 indiceAnimacion = 0;
+                contadorParpadeo++;
                 if (contadorParpadeo >= ITERACIONES_PARPADEO) {
+                    parpadeo = false;
                     animacionActiva = 0;
                 }
-                else {
-                    contadorParpadeo++;
-                }
+            } 
+            else if (indiceAnimacion >= fDead) {
+                indiceAnimacion = 0;
+                borrame = true;
             }
             widthAnimation = dead.width / fDead;
             heightAnimation = dead.height;
@@ -165,6 +179,8 @@ void Boss::Ia(Rectangle playerPosition) {
         origin.x = destRec.width / 2;
         lastWidth = GetScreenWidth();
     }
+    ratioX = destRec.width / 128;
+    ratioY = destRec.height / 128;
     if (cambioMapa > 0) {
         if (cambioMapa == 2) {
             cambioMapa = 1;
@@ -182,63 +198,65 @@ void Boss::Ia(Rectangle playerPosition) {
         }
     }
     else {
-        if (enfadado) {
-            velocidadLateral = 2.0f;
-            velocidadSalto = 2.0f;
-            animacionActiva = 3;
-        }
+        if (!muertoInterno && !muertoPorPrimeraVez) {
+            if (enfadado) {
+                velocidadLateral = 2.0f;
+                velocidadSalto = 2.0f;
+                animacionActiva = 3;
+            }
 
-        if (direccionX == 0) {
-            if (direccionY == 0) {
-                MoverIzqAbajo();
+            if (direccionX == 0) {
+                if (direccionY == 0) {
+                    MoverIzqAbajo();
+                }
+                else {
+                    MoverIzqArriba();
+                }
             }
-            else {
-                MoverIzqArriba();
-            }
-        }
 
-        else if (direccionX == 1) {
-            if (direccionY == 0) {
-                MoverDerAbajo();
+            else if (direccionX == 1) {
+                if (direccionY == 0) {
+                    MoverDerAbajo();
+                }
+                else {
+                    MoverDerArriba();
+                }
             }
-            else {
-                MoverDerArriba();
-            }
-        }
 
-        
-        if (destRec.y > GetScreenHeight() + 50) {
-            destRec.y = -10;
-            enElAire = true;
-            cayendo = true;
-        }
-        else if (destRec.y < -50) {
-            destRec.y = GetScreenHeight() + 5;
+
+            if (destRec.y > GetScreenHeight() + 50) {
+                destRec.y = -10;
+                enElAire = true;
+                cayendo = true;
+            }
+            else if (destRec.y < -50) {
+                destRec.y = GetScreenHeight() + 5;
+            }
         }
     }
 }
 
 void Boss::MoverIzqArriba() {
-    destRec.x -= velocidadLateral;
-    destRec.y -= velocidadSalto;
+    destRec.x -= velocidadLateral * ratioX;
+    destRec.y -= velocidadSalto * ratioY;
     srcRec.width = pixels;
 }
 
 void Boss::MoverIzqAbajo() {
-    destRec.x -= velocidadLateral;
-    destRec.y += velocidadSalto;
+    destRec.x -= velocidadLateral * ratioX;
+    destRec.y += velocidadSalto * ratioY;
     srcRec.width = pixels;
 }
 
 void Boss::MoverDerArriba() {
-    destRec.x += velocidadLateral;
-    destRec.y -= velocidadSalto;
+    destRec.x += velocidadLateral * ratioX;
+    destRec.y -= velocidadSalto * ratioY;
     srcRec.width = -pixels;
 }
 
 void Boss::MoverDerAbajo() {
-    destRec.x += velocidadLateral;
-    destRec.y += velocidadSalto;
+    destRec.x += velocidadLateral * ratioX;
+    destRec.y += velocidadSalto * ratioY;
     srcRec.width = -pixels;
 }
 
@@ -248,12 +266,22 @@ void Boss::enfadar() {
 
 void Boss::disparar() {
     disparando = true;
-    Rectangle auxDest = { destRec.x, destRec.y, 32, 32 };
-    Botellas botella1 = Botellas(2.0f, 0, 4.0f, _targetFPS, auxDest, 1, 0);
-    Botellas botella2 = Botellas(2.0f, 0.5f, 3.5f, _targetFPS, auxDest, 2, 0);
-    Botellas botella3 = Botellas(2.0f, 1.0f, 3.0f, _targetFPS, auxDest, 3, 0);
-    Botellas botella4 = Botellas(2.0f, 2.0f, 2.0f, _targetFPS, auxDest, 4, 0);
-    Botellas botella5 = Botellas(2.0f, 3.0f, 0.0f, _targetFPS, auxDest, 5, 0);
+    Rectangle auxDest = { destRec.x, destRec.y, GetScreenWidth() / 25.0f, GetScreenHeight() / 14.0625f};
+    Botellas botella1 = Botellas(2.0f, 0, 4.0f, _targetFPS, auxDest, 1, direccionX);
+    botella1.lastWidth = GetScreenWidth();
+    botella1.lastHeight = GetScreenHeight();
+    Botellas botella2 = Botellas(2.0f, 0.5f, 3.5f, _targetFPS, auxDest, 2, direccionX);
+    botella2.lastWidth = GetScreenWidth();
+    botella2.lastHeight = GetScreenHeight();
+    Botellas botella3 = Botellas(2.0f, 1.0f, 3.0f, _targetFPS, auxDest, 3, direccionX);
+    botella3.lastWidth = GetScreenWidth();
+    botella3.lastHeight = GetScreenHeight();
+    Botellas botella4 = Botellas(2.0f, 2.0f, 2.0f, _targetFPS, auxDest, 4, direccionX);
+    botella4.lastWidth = GetScreenWidth();
+    botella4.lastHeight = GetScreenHeight();
+    Botellas botella5 = Botellas(2.0f, 3.0f, 0.0f, _targetFPS, auxDest, 5, direccionX);
+    botella5.lastWidth = GetScreenWidth();
+    botella5.lastHeight = GetScreenHeight();
     admin->enemigos.push_back(std::make_shared<Botellas>(botella1));
     admin->enemigos.push_back(std::make_shared<Botellas>(botella2));
     admin->enemigos.push_back(std::make_shared<Botellas>(botella3));
@@ -284,11 +312,11 @@ void Boss::compruebaColision(Plataforma& s, int enemyNum) {
     if (cambioMapa == 0) {
 
 
-        if (   (s.bot > (destRec.y - 127 )  ) && ( (destRec.y - 127) > s.top)   ) {
+        if (   (s.bot > (destRec.y - destRec.height/2)  ) && ( (destRec.y + destRec.height/2) > s.top) && s.top < GetScreenHeight() * 0.10  ) {
             direccionY = 0;
             //destRec.y = s.bot;
         }
-        else if ( (s.top  <  (destRec.y)) && ((destRec.y ) < s.bot) && (s.top > 50)) {
+        else if ( (s.top  <  (destRec.y + destRec.height/2)) && ((destRec.y + destRec.height/2 ) < s.bot) && (s.top > 50)) {
             direccionY = 1;
             //destRec.y = s.top + 128;
         }
@@ -335,13 +363,13 @@ void Boss::compruebaSuelo() {
 void Boss::compruebaPared(const Columnas& s) {
     if (cambioMapa == 0) {
         //Comprobamos columna derecha
-        if (s.left_der < (destRec.x )) {
-            destRec.x = s.left_der;
+        if (s.left_der < (destRec.x + destRec.width/2)) {
+            destRec.x = s.left_der - destRec.width/2;
             direccionX = 0;
         }
         //Comprobamos columna izquierda
-        else if (s.right_izq > (destRec.x - destRec.width)) {
-            destRec.x = s.right_izq + destRec.width;
+        else if (s.right_izq > (destRec.x - destRec.width/2)) {
+            destRec.x = s.right_izq + destRec.width/2;
             direccionX = 1;
         }
     }

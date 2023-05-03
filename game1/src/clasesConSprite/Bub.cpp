@@ -72,6 +72,7 @@ public:
 
     // VARIABLES PARA LA GENERACI�N DE POMPAS
     bool disparando = false;
+    bool permitirDisparo = false;
     int multiplicadorVelocidadDisparo = 1;
     int multiplicadorDistanciaDisparo = 1;
     int vidaPompa[11] = {60 * 60, 60 * 60, 60 * 60, 60 * 60, 60*120, 60 * 60, 60 * 60, 60 * 60, 60 * 60, 60 * 60, 60 * 60 };
@@ -507,13 +508,14 @@ public:
                 // Se puede disparar en el aire. Las acciones en el aire no se ven limitadas por el disparo, 
                 // pero las del suelo s�. Para mantener la idea if/else de en el aire o en el suelo, 
                 // al del suelo se le ha a�aido la restricci�n opuesta al de en el aire (!enElAire)
-                if (IsKeyPressed(shoot) && !disparando && !muriendo && !electrocutado) { //if (IsKeyDown(KEY_F)) {
+                if (IsKeyPressed(shoot) && (!disparando || permitirDisparo) && !muriendo && !electrocutado) { //if (IsKeyDown(KEY_F)) {
                     //std::cout << "Dispara" << std::endl;
                     int sentido = 1; //Hacia la derecha
                     if (orientacionActual == 2) { //Si es hacia la izquierda
                         sentido = -1;
                     }
                     disparando = true;
+                    permitirDisparo = false;
                     animacionActiva = SHOOTING;
                     indiceAnimacion = 6; //Es el 0 de la segunda parte de animaciones
                     Pompa p;
@@ -699,6 +701,9 @@ public:
 					break;
 				case 4:
 					indiceAnimacion++;
+                    if (imTheThunder && indiceAnimacion == 9) {
+                        permitirDisparo = true;
+                    }
 					if (indiceAnimacion >= (fShootingAnimation+6)) {
 						//std::cout << "Puede volver a disparar" << std::endl;
 						disparando = false;
