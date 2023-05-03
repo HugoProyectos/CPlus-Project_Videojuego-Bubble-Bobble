@@ -83,6 +83,9 @@ public:
     int colision = 0; 
     int colisionAux = 0;
 
+    int ratioX = 1;
+    int ratioY = 1;
+
 	// --------------------------------------------------------
 
 	Boss() = default;

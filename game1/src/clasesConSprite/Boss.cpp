@@ -165,6 +165,8 @@ void Boss::Ia(Rectangle playerPosition) {
         origin.x = destRec.width / 2;
         lastWidth = GetScreenWidth();
     }
+    ratioX = destRec.width / 128;
+    ratioY = destRec.height / 128;
     if (cambioMapa > 0) {
         if (cambioMapa == 2) {
             cambioMapa = 1;
@@ -219,26 +221,26 @@ void Boss::Ia(Rectangle playerPosition) {
 }
 
 void Boss::MoverIzqArriba() {
-    destRec.x -= velocidadLateral;
-    destRec.y -= velocidadSalto;
+    destRec.x -= velocidadLateral * ratioX;
+    destRec.y -= velocidadSalto * ratioY;
     srcRec.width = pixels;
 }
 
 void Boss::MoverIzqAbajo() {
-    destRec.x -= velocidadLateral;
-    destRec.y += velocidadSalto;
+    destRec.x -= velocidadLateral * ratioX;
+    destRec.y += velocidadSalto * ratioY;
     srcRec.width = pixels;
 }
 
 void Boss::MoverDerArriba() {
-    destRec.x += velocidadLateral;
-    destRec.y -= velocidadSalto;
+    destRec.x += velocidadLateral * ratioX;
+    destRec.y -= velocidadSalto * ratioY;
     srcRec.width = -pixels;
 }
 
 void Boss::MoverDerAbajo() {
-    destRec.x += velocidadLateral;
-    destRec.y += velocidadSalto;
+    destRec.x += velocidadLateral * ratioX;
+    destRec.y += velocidadSalto * ratioY;
     srcRec.width = -pixels;
 }
 
@@ -284,11 +286,11 @@ void Boss::compruebaColision(Plataforma& s, int enemyNum) {
     if (cambioMapa == 0) {
 
 
-        if (   (s.bot > (destRec.y - 127 )  ) && ( (destRec.y - 127) > s.top)   ) {
+        if (   (s.bot > (destRec.y - destRec.height/2)  ) && ( (destRec.y + destRec.height/2) > s.top) && s.top < GetScreenHeight() * 0.10  ) {
             direccionY = 0;
             //destRec.y = s.bot;
         }
-        else if ( (s.top  <  (destRec.y)) && ((destRec.y ) < s.bot) && (s.top > 50)) {
+        else if ( (s.top  <  (destRec.y + destRec.height/2)) && ((destRec.y + destRec.height/2 ) < s.bot) && (s.top > 50)) {
             direccionY = 1;
             //destRec.y = s.top + 128;
         }
@@ -335,13 +337,13 @@ void Boss::compruebaSuelo() {
 void Boss::compruebaPared(const Columnas& s) {
     if (cambioMapa == 0) {
         //Comprobamos columna derecha
-        if (s.left_der < (destRec.x )) {
-            destRec.x = s.left_der;
+        if (s.left_der < (destRec.x + destRec.width/2)) {
+            destRec.x = s.left_der - destRec.width/2;
             direccionX = 0;
         }
         //Comprobamos columna izquierda
-        else if (s.right_izq > (destRec.x - destRec.width)) {
-            destRec.x = s.right_izq + destRec.width;
+        else if (s.right_izq > (destRec.x - destRec.width/2)) {
+            destRec.x = s.right_izq + destRec.width/2;
             direccionX = 1;
         }
     }
