@@ -88,7 +88,7 @@ public:
 	Boss() = default;
     Boss(float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin);
     void enfadar();
-    void Actualizar(Rectangle playerPosition) override;
+    void Actualizar(Rectangle playerPosition1, Rectangle playerPosition2) override;
     void Ia(Rectangle playerPosition);
     void Dibujar() override;
     void MoverIzqArriba();

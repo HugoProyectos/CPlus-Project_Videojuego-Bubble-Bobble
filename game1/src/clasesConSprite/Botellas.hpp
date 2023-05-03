@@ -61,7 +61,7 @@ public:
 
 	Botellas() = default;
 	Botellas(float tamano, float velSalto, float velLateral, float _targetFPS, Rectangle destino, int ID, int direccion);
-	void Actualizar(Rectangle playerPosition) override;
+	void Actualizar(Rectangle playerPosition1, Rectangle playerPosition2) override;
 	void Dibujar() override;
 	void MoverIzq();
 	void MoverDer();

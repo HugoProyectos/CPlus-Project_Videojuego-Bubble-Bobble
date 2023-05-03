@@ -35,9 +35,7 @@ Boss::Boss(float tamano, float distanciaSaltoMax, float velocidadSalto, float ve
 
 }
 
-void Boss::Actualizar(Rectangle playerPosition) {
-    std::cout << destRec.y << std::endl;
-
+void Boss::Actualizar(Rectangle playerPosition1, Rectangle playerPosition2) {
     // Gestion logica -----------------------------------------
     if (vida <= 0) {
         sinVida = true;
@@ -74,6 +72,31 @@ void Boss::Actualizar(Rectangle playerPosition) {
     // --------------------------------------------------------
     // IA -----------------------------------------------------
     
+    //Obtener el rectangulo del jugador a seguir
+    Rectangle playerPosition;
+    if (playerPosition2.x == -1 && playerPosition2.y == -1) {
+        playerPosition = playerPosition1;
+    }
+    else if (playerPosition1.x == -1 && playerPosition1.y == -1) {
+        playerPosition = playerPosition2;
+    }
+    else if (destRec.y <= playerPosition1.y && destRec.y + destRec.height >= playerPosition1.y) {
+        playerPosition = playerPosition1;
+    }
+    else if (destRec.y <= playerPosition2.y && destRec.y + destRec.height >= playerPosition2.y) {
+        playerPosition = playerPosition2;
+    }
+    else {
+        float dist1 = sqrt(pow(playerPosition1.x - destRec.x, 2) + pow(playerPosition1.y - destRec.y, 2));
+        float dist2 = sqrt(pow(playerPosition2.x - destRec.x, 2) + pow(playerPosition2.y - destRec.y, 2));
+        if (dist1 <= dist2) {
+            playerPosition = playerPosition1;
+        }
+        else {
+            playerPosition = playerPosition2;
+        }
+    }
+
     Ia(playerPosition);
 
     // --------------------------------------------------------

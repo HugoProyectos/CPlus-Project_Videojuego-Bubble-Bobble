@@ -14,7 +14,7 @@ Botellas::Botellas(float tamano, float velSalto, float velLateral, float _target
     direccionX = direccion;
 }
 
-void Botellas::Actualizar(Rectangle playerPosition)  {
+void Botellas::Actualizar(Rectangle playerPosition1, Rectangle playerPosition2)  {
     // Gestion logica -----------------------------------------
 
     if (direccionX == 0) {

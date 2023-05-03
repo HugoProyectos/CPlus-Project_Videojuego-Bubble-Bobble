@@ -52,7 +52,7 @@ public:
         borrame = false;
     };
 
-    void Actualizar(Rectangle playerPosition) override {
+    void Actualizar(Rectangle playerPosition1, Rectangle playerPosition2) override {
         if (lastHeight != GetScreenHeight()) {
             destRec.height = GetScreenHeight() / 14.0625f;
             destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
