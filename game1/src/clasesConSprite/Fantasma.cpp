@@ -320,14 +320,6 @@ public:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[1];
                 widthAnimation = deadAnimation.width / fAnimation[1];
                 heightAnimation = deadAnimation.height;
-                if (indiceAnimacion == 1) {
-                    if (!muertePorAgua) {
-                        Frutas f = Frutas();
-                        f = Frutas("resources/frutas/cereza.png", 1.0f, 2.0f, (unsigned int)500, 60, destRec, admin->scores);
-                        admin->frutas.push_back(std::make_shared<Frutas>(f));
-                    }
-                    borrame = true;
-                }
                 break;
             case 2:
                 indiceAnimacion = (indiceAnimacion + 1) % fAnimation[2];
@@ -736,42 +728,42 @@ public:
                     Rectangle  aux = destRec;
                     if (killCount == 0) {
                         Frutas f = Frutas();
-                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)500, 60, aux, admin->scores);
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)500, 60, aux, admin->scores, lastHeight, lastWidth, razonX, razonY, origin);
                         admin->frutas.push_back(std::make_shared<Frutas>(f));
                     }
                     else if (killCount == 1) {
                         Frutas f = Frutas();
-                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)1000, 60, aux, admin->scores);
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)1000, 60, aux, admin->scores, lastHeight, lastWidth, razonX, razonY, origin);
                         admin->frutas.push_back(std::make_shared<Frutas>(f));
 
                     }
                     else if (killCount == 2) {
                         Frutas f = Frutas();
-                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)2000, 60, aux, admin->scores);
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)2000, 60, aux, admin->scores, lastHeight, lastWidth, razonX, razonY, origin);
                         admin->frutas.push_back(std::make_shared<Frutas>(f));
 
                     }
                     else if (killCount == 3) {
                         Frutas f = Frutas();
-                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)3000, 60, aux, admin->scores);
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)3000, 60, aux, admin->scores, lastHeight, lastWidth, razonX, razonY, origin);
                         admin->frutas.push_back(std::make_shared<Frutas>(f));
 
                     }
                     else if (killCount == 4) {
                         Frutas f = Frutas();
-                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)4000, 60, aux, admin->scores);
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)4000, 60, aux, admin->scores, lastHeight, lastWidth, razonX, razonY, origin);
                         admin->frutas.push_back(std::make_shared<Frutas>(f));
 
                     }
                     else if (killCount == 5) {
                         Frutas f = Frutas();
-                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)5000, 60, aux, admin->scores);
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)5000, 60, aux, admin->scores, lastHeight, lastWidth, razonX, razonY, origin);
                         admin->frutas.push_back(std::make_shared<Frutas>(f));
 
                     }
                     else if (killCount == 6) {
                         Frutas f = Frutas();
-                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)6000, 60, aux, admin->scores);
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)6000, 60, aux, admin->scores, lastHeight, lastWidth, razonX, razonY, origin);
                         admin->frutas.push_back(std::make_shared<Frutas>(f));
 
                     }

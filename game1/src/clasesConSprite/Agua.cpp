@@ -32,13 +32,17 @@ void Agua::Actualizar(Plataformas& plat, Columnas& col) {
 			lastWidth = GetScreenWidth();
 		}
 		Response next = stream[0].ActualizarHead(plat);
-		if (stream[0].destRec.y < GetScreenHeight() + 160) {
+		if (stream[0].destRec.y < GetScreenHeight() + 50) {
 			for (int i = 1; i < 10; i++) {
 				next = stream[i].Actualizar(next);
 			}
 			stream[0].comprobarColisionParedes(col);
 		}
 		else {
+			for (int i = 1; i < 10; i++) {
+				stream[i].destRec.x = -20;
+				stream[i].destRec.y = -20;
+			}
 			existe = false;
 		}
 	}

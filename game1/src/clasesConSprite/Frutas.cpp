@@ -53,12 +53,14 @@ public:
 
 	Frutas() = default;
 
-	Frutas(std::string rutaTextura, int velCaida, float tamano, unsigned int puntuacion, int targetFrames, Rectangle destino, Scores& score) {
+	Frutas(std::string rutaTextura, int velCaida, float tamano, unsigned int puntuacion, int targetFrames, Rectangle destino, Scores& score, int lastHeight, int lastWidth
+            , int ratioX, int ratioY, Vector2 origin) {
         this->score = &score;
-		Inicializador(rutaTextura, velCaida, tamano, puntuacion, targetFrames, destino);
+		Inicializador(rutaTextura, velCaida, tamano, puntuacion, targetFrames, destino, lastHeight, lastWidth, ratioX, ratioY, origin);
 	}
 
-    void Inicializador(std::string fruta, int velCaida, float tamano, unsigned int puntuacion, int targetFrames, Rectangle destino) {
+    void Inicializador(std::string fruta, int velCaida, float tamano, unsigned int puntuacion, int targetFrames, Rectangle destino, int lastHeight, int lastWidth, int ratioX, 
+        int ratioY, Vector2 origin) {
         /*
         sprite = LoadTexture((path.assign(fruta).assign(".png")).c_str());
         walkAnimation = LoadTexture((path.assign(fruta).assign(".png")).c_str());
@@ -79,7 +81,7 @@ public:
 		srcRec = { i*16.0f, 0.0f, 16.0f, 16.0f };
 		this->tamano = tamano;
 		destRec = { GetScreenWidth() / 2.0f - 50, GetScreenHeight() / 2.0f - 20, (float)frameWidth * tamano, (float)frameHeight * tamano }; 
-		origin = { (float)frameWidth * tamano / 2, (float)frameHeight * tamano / 2 }; 
+		this->origin = origin;
 		this->velCaida = velCaida;
         muerto_bob = false;
         muerto_bub = false;
@@ -89,8 +91,10 @@ public:
         alturaMax = destRec.y - 5;
         eliminame = false;
         animacionActiva = 0;
-        lastHeight = GetScreenHeight();
-        lastWidth = GetScreenWidth();
+        this->lastHeight = lastHeight;
+        this->lastWidth = lastWidth;
+        this->ratioX = ratioX;
+        this->ratioY = ratioY;
         
 	}
 
@@ -124,8 +128,7 @@ public:
             ratioX = destRec.width / 32;
             lastWidth = GetScreenWidth();
         }
-        ratioY = destRec.height / 32;
-        ratioX = destRec.width / 32;
+
         // --------------------------------------------------------------------------------
         
 
@@ -171,6 +174,7 @@ public:
             Asciende();
         }
 
+
         if (enElAire && !muerto_bob && !muerto_bub) {
             CaerLento();
         }
@@ -206,28 +210,15 @@ public:
         //Comprobamos si colisiona con la superficie
         if (
             (
-                //Comprobamos colision esquina inferior derecha
-                (((s.bot) > (destRec.y + destRec.height / 2)) &&
-                    ((destRec.y + destRec.height / 2) > (s.top))
-                    ) && (
-                        ((s.right) > (destRec.x + destRec.width / 2)) &&
-                        ((destRec.x + destRec.width / 2) > (s.left))
-                        )
-                ) ||
-            (
-                //Comprobamos colision esquina inferior izquierda
-                (((s.bot) > (destRec.y + destRec.height / 2)) &&
-                    ((destRec.y + destRec.height / 2) > (s.top))
-                    ) && (
-                        ((s.right) > (destRec.x - destRec.width / 2)) &&
-                        ((destRec.x - destRec.width / 2) > (s.left))
-                        )
-                )
-            ){
-                destRec.y = (s.top - destRec.height / 2) * ratioY;
+                (s.bot > ( destRec.y + 16 ))
+                &&
+                (s.top < (destRec.y +16 ))
+            )){
+                std::cout << "sdsd" << std::endl;
+                destRec.y = (s.top - destRec.height / 2.0f) + ratioY;
                 enElAire = false;
                 lastGround = s;
-        }
+                }
     }
 };
 
