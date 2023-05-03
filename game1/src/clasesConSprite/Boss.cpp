@@ -37,35 +37,46 @@ Boss::Boss(float tamano, float distanciaSaltoMax, float velocidadSalto, float ve
 
 void Boss::Actualizar(Rectangle playerPosition1, Rectangle playerPosition2) {
     // Gestion logica -----------------------------------------
+    double val = (clock() - tempAngry);
+    double val2 = disparoCoolDown * CLOCKS_PER_SEC;
     if (vida <= 0) {
+        if (enfadado) {
+            muertoInterno = true;
+        }
         sinVida = true;
     }
 
-    if (hit) {
+    if (hit && !sinVida && !muertoInterno && !muertoPorPrimeraVez) {
+        
         animacionActiva = 2;
         hit = false;
         contadorParpadeo = 0;
     }
-    else if (((clock() - tempAngry) > disparoCoolDown * CLOCKS_PER_SEC) && sinVida) {
+    else if (((clock() - tempAngry) > disparoCoolDown * CLOCKS_PER_SEC) && muertoPorPrimeraVez) {
+        muerto = false;
+        muertoPorPrimeraVez = false;
         enfadado = true;
         animacionActiva = 3;
     }
-    else if (direccionY == 1 && !enfadado) {
+    else if (direccionY == 1 && !enfadado && !muertoPorPrimeraVez && !sinVida) {
         animacionActiva = 0;
     }
-    else if (direccionY == 0 && !enfadado) {
+    else if (direccionY == 0 && !enfadado && !muertoPorPrimeraVez && !sinVida) {
         animacionActiva = 1;
     }
-    else if (sinVida && !muerto) {
+    else if (sinVida && !muertoInterno && !enfadado && !muertoPorPrimeraVez) {
         animacionActiva = 4;
+        muerto = true;
+        vida = 100;
+        muertoPorPrimeraVez = true;
         tempAngry = clock();
     }
-    else if (muerto) {
+    else if (muertoInterno) {
         // Asciende arriba a la izquierda
         animacionActiva = 2;
     }
 
-    if ((clock() - tempDisparo) > disparoCoolDown * CLOCKS_PER_SEC) {
+    if ((clock() - tempDisparo) > disparoCoolDown * CLOCKS_PER_SEC && !muertoInterno && !muertoPorPrimeraVez) {
         disparar();
     }
 
@@ -117,14 +128,17 @@ void Boss::Actualizar(Rectangle playerPosition1, Rectangle playerPosition2) {
             break;
         case 2:
             indiceAnimacion = (indiceAnimacion + 1);
-            if (indiceAnimacion >= fDead) {
+            if (parpadeo) {
                 indiceAnimacion = 0;
+                contadorParpadeo++;
                 if (contadorParpadeo >= ITERACIONES_PARPADEO) {
+                    parpadeo = false;
                     animacionActiva = 0;
                 }
-                else {
-                    contadorParpadeo++;
-                }
+            } 
+            else if (indiceAnimacion >= fDead) {
+                indiceAnimacion = 0;
+                borrame = true;
             }
             widthAnimation = dead.width / fDead;
             heightAnimation = dead.height;
@@ -184,38 +198,40 @@ void Boss::Ia(Rectangle playerPosition) {
         }
     }
     else {
-        if (enfadado) {
-            velocidadLateral = 2.0f;
-            velocidadSalto = 2.0f;
-            animacionActiva = 3;
-        }
+        if (!muertoInterno && !muertoPorPrimeraVez) {
+            if (enfadado) {
+                velocidadLateral = 2.0f;
+                velocidadSalto = 2.0f;
+                animacionActiva = 3;
+            }
 
-        if (direccionX == 0) {
-            if (direccionY == 0) {
-                MoverIzqAbajo();
+            if (direccionX == 0) {
+                if (direccionY == 0) {
+                    MoverIzqAbajo();
+                }
+                else {
+                    MoverIzqArriba();
+                }
             }
-            else {
-                MoverIzqArriba();
-            }
-        }
 
-        else if (direccionX == 1) {
-            if (direccionY == 0) {
-                MoverDerAbajo();
+            else if (direccionX == 1) {
+                if (direccionY == 0) {
+                    MoverDerAbajo();
+                }
+                else {
+                    MoverDerArriba();
+                }
             }
-            else {
-                MoverDerArriba();
-            }
-        }
 
-        
-        if (destRec.y > GetScreenHeight() + 50) {
-            destRec.y = -10;
-            enElAire = true;
-            cayendo = true;
-        }
-        else if (destRec.y < -50) {
-            destRec.y = GetScreenHeight() + 5;
+
+            if (destRec.y > GetScreenHeight() + 50) {
+                destRec.y = -10;
+                enElAire = true;
+                cayendo = true;
+            }
+            else if (destRec.y < -50) {
+                destRec.y = GetScreenHeight() + 5;
+            }
         }
     }
 }

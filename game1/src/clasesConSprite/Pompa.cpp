@@ -17,6 +17,8 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->cayendo = true;
 		enemigoContenido->muerto = matalo;
 		enemigoContenido->enfadado = true;
+		enemigoContenido->lastWidth = lastWidth;
+		enemigoContenido->lastHeight = lastHeight;
 		if (matalo) {
 			enemigoContenido->killCount = this->killCount;
 		}
@@ -30,6 +32,8 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->cayendo = true;
 		enemigoContenido->muerto = matalo;
 		enemigoContenido->enfadado = true;
+		enemigoContenido->lastWidth = lastWidth;
+		enemigoContenido->lastHeight = lastHeight;
 		if (matalo) {
 			enemigoContenido->killCount = this->killCount;
 		}
@@ -43,6 +47,8 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->cayendo = true;
 		enemigoContenido->muerto = matalo;
 		enemigoContenido->enfadado = true;
+		enemigoContenido->lastWidth = lastWidth;
+		enemigoContenido->lastHeight = lastHeight;
 		if (matalo) {
 			enemigoContenido->killCount = this->killCount;
 		}
@@ -56,6 +62,8 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->cayendo = true;
 		enemigoContenido->muerto = matalo;
 		enemigoContenido->enfadado = true;
+		enemigoContenido->lastWidth = lastWidth;
+		enemigoContenido->lastHeight = lastHeight;
 		if (matalo) {
 			enemigoContenido->killCount = this->killCount;
 		}
@@ -228,7 +236,12 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 				creaAgua = j1.sentidoJugador;
 			}
 			else if (modulo == MODULO_RAYO) {
-				sentidoJugador = j1.sentidoJugador;
+				if (rayoDeBub) {
+					sentidoJugador = j1.sentidoJugador;
+				}
+				else {
+					sentidoJugador = j2.sentidoJugador;
+				}
 			}
 			else {
 				result = extraeEnemigo(true);
@@ -474,7 +487,6 @@ sh_Enemigo Pompa::Actualizar(DatosJugador& j1, DatosJugador& j2, uint8_t& creaAg
 					}
 					else if (modulo == MODULO_RAYO) {
 						sentidoJugador = j2.sentidoJugador;
-							rayoDeBub = false;
 						rayoDeBub = false;
 					}
 					else {

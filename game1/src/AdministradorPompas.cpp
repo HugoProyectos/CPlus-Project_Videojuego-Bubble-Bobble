@@ -127,7 +127,10 @@ public:
 						&& ((rayos.at(i).destRec.y + rayos.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
 							&& (rayos.at(i).destRec.y - rayos.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
 							|| (rayos.at(i).destRec.y + rayos.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
-							&& (rayos.at(i).destRec.y - rayos.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2))
+							&& (rayos.at(i).destRec.y - rayos.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
+							|| (enemigos.at(j)->tipo == 7
+							&& ((rayos.at(i).destRec.y + rayos.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
+								&& (rayos.at(i).destRec.y - rayos.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2))))
 						&& ((rayos.at(i).destRec.x + rayos.at(i).destRec.width / 2 - rayos.at(i).destRec.width * 0.125) >= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
 							&& (rayos.at(i).destRec.x - rayos.at(i).destRec.width / 2 + rayos.at(i).destRec.width * 0.125) <= (enemigos.at(j)->destRec.x - enemigos.at(j)->destRec.width / 2)
 							|| (rayos.at(i).destRec.x + rayos.at(i).destRec.width / 2 - rayos.at(i).destRec.width * 0.125) >= (enemigos.at(j)->destRec.x + enemigos.at(j)->destRec.width / 2)
@@ -352,6 +355,7 @@ public:
 								|| (ini.y - ini.height / 2 + 2 < candidata.y - candidata.height / 2 + 2) && (ini.y + ini.height / 2 - 2 >= candidata.y - candidata.height / 2 + 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))) {
 								pompas.at(j)->cadena = pompas.at(i)->cadena;
 								pompas.at(j)->sentidoJugador = pompas.at(i)->sentidoJugador;
+								pompas.at(j)->rayoDeBub = pompas.at(i)->rayoDeBub;
 							}
 						}
 					}
@@ -504,6 +508,11 @@ public:
 								|| (ini.y - ini.height / 2 + 2 < candidata.y + candidata.height / 2 - 2) && (ini.y + ini.height / 2 - 2 >= candidata.y + candidata.height / 2 - 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))
 								|| (ini.y - ini.height / 2 + 2 < candidata.y - candidata.height / 2 + 2) && (ini.y + ini.height / 2 - 2 >= candidata.y - candidata.height / 2 + 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))) {
 								pompas.at(j)->cadena = pompas.at(i)->cadena;
+								int a = pompas.at(j)->sentidoJugador;
+								int b = pompas.at(i)->sentidoJugador;
+								pompas.at(j)->sentidoJugador = pompas.at(i)->sentidoJugador;
+								a = pompas.at(j)->sentidoJugador;
+								pompas.at(j)->rayoDeBub = pompas.at(i)->rayoDeBub;
 							}
 
 						}
@@ -673,9 +682,12 @@ public:
 			if (enemigos.at(i)->borrame) {
 				//auto aBorrar = pompas.begin() + i;
 				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas
-				if (enemigos.at(i)->muertePorAgua) {
+				if (enemigos.at(i)->muertePorAgua && !enemigos.at(i)->muerto) {
 					enemigosPorMatar--;
 					std::cout << "Quedan " << (int)enemigosPorMatar << " enemigos por matar." << std::endl;
+				}
+				else if (enemigos.at(i)->tipo == 7) {
+					enemigosPorMatar--;
 				}
 				enemigos = eliminaEnemigo(i);
 				i--;
