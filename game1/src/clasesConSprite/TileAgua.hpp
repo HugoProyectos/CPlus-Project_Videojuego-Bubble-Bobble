@@ -46,6 +46,6 @@ public:
     void comprobarColisionParedes(Columnas& col);
     void comprobarSuelo(Plataforma& lastGround);
     bool colisionBub(Rectangle bub);
-    bool colisionEnemigo(Enemigo& e);
+    void colisionEnemigo(Enemigo& e);
     void Dibujar(int pos);
 };

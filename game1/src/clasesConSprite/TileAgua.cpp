@@ -293,7 +293,7 @@ bool tileAgua::colisionBub(Rectangle bub) {
 	}
 }
 
-bool tileAgua::colisionEnemigo(Enemigo& e) {
+void tileAgua::colisionEnemigo(Enemigo& e) {
 	if (
 		(
 			//Comprobamos colision esquina inferior derecha
@@ -334,10 +334,6 @@ bool tileAgua::colisionEnemigo(Enemigo& e) {
 		) {
 		e.muerto = true;
 		e.muertePorAgua = true;
-		return true;
-	}
-	else {
-		return false;
 	}
 }
 
