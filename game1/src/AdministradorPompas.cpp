@@ -553,7 +553,7 @@ public:
 				if (contadorSkull == limiteContadorSkull) {
 					hurryUp = true;
 					//Crear a Skull y a�adirlo a enemigos.
-					Rectangle destRob = { GetScreenWidth() / 2, 70, 32, 32 };
+					Rectangle destRob = { 400, 70, 32, 32 };
 					Blanco skull;
 					skull = Blanco("resources/enemyFantasma/fantasmaBasic.png", 2.0f, 40.0f, 1.0f, 2.0f, 60.0, destRob, j1, j2);
 					enemigos.push_back(std::make_shared<Blanco>(skull));

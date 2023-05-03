@@ -530,8 +530,8 @@ public:
             if (
                 (
                     //Comprobamos colision esquina inferior derecha
-                    (((s.bot) > (destRec.y + destRec.height / 2)) &&
-                        ((destRec.y + destRec.height / 2) > (s.top))
+                    (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                        ((destRec.y + destRec.height * 0.49) > (s.top))
                         ) && (
                             ((s.right) > (destRec.x + destRec.width / 2)) &&
                             ((destRec.x + destRec.width / 2) > (s.left))
@@ -557,8 +557,8 @@ public:
                     ) ||
                 (
                     //Comprobamos colision esquina inferior izquierda
-                    (((s.bot) > (destRec.y + destRec.height / 2)) &&
-                        ((destRec.y + destRec.height / 2) > (s.top))
+                    (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                        ((destRec.y + destRec.height * 0.49) > (s.top))
                         ) && (
                             ((s.right) > (destRec.x - destRec.width / 2)) &&
                             ((destRec.x - destRec.width / 2) > (s.left))
@@ -603,8 +603,8 @@ public:
                     ||
                     //Comprobamos colision esquina inferior derecha
                     (
-                        (((s.bot) > (destRec.y + destRec.height / 2)) &&
-                            ((destRec.y + destRec.height / 2) > (s.top))
+                        (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                            ((destRec.y + destRec.height * 0.49) > (s.top))
                             ) && (
                                 ((s.right) > (destRec.x + destRec.width / 2 + 5)) &&
                                 ((destRec.x + destRec.width / 2 + 5) > (s.left))
@@ -627,8 +627,8 @@ public:
                     ||
                     //Comprobamos colision esquina inferior derecha
                     (
-                        (((s.bot) > (destRec.y + destRec.height / 2)) &&
-                            ((destRec.y + destRec.height / 2) > (s.top))
+                        (((s.bot) > (destRec.y + destRec.height * 0.49)) &&
+                            ((destRec.y + destRec.height * 0.49) > (s.top))
                             ) && (
                                 ((s.right) > (destRec.x - destRec.width / 2 - 5)) &&
                                 ((destRec.x - destRec.width / 2 - 5) > (s.left))

@@ -56,7 +56,7 @@ void Rayo::Actualizar(DatosJugador& j1, DatosJugador& j2) {
 				indiceAnimacion = 0;
 			}
 		}
-		if ((!j2.muriendo && !j2.electrocutado && j2.thunderLessFrames <= 0 && !j1.heIsTheThunder && !golpeJefe
+		if ((!j2.muriendo && !j2.electrocutado && j2.thunderLessFrames <= 0 && !j2.heIsTheThunder && !golpeJefe
 			&& ((destRec.y + destRec.height / 2.0f) >= (j2.posicionJugador.y + j2.posicionJugador.height / 2.0f)
 				&& (destRec.y - destRec.height / 2.0f) <= (j2.posicionJugador.y + j2.posicionJugador.height / 2.0f)
 				|| (destRec.y + destRec.height / 2.0f) >= (j2.posicionJugador.y - j2.posicionJugador.height / 2.0f)

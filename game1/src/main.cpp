@@ -333,8 +333,22 @@ int main(void)
                 }
 
             }
+
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(4, 60 * 30);
+                admin.iniciaMapa(1, 3000000 * 60); // TODO
+                admin.CambioDeMapa(10); // TODO
+                columnas.CargarSiguienteNivel("resources/mapa_boss/bloque_grande.png", 10);
+                plataformas.CargarSiguienteNivel("resources/mapa_boss/bloque_pequeno.png", "resources/mapa_boss/mapa.txt");
+                contadorVidas.cargar_siguiente_nivel();
+                bub.cambioMapa = 2; // TODO
+                bob.cambioMapa = 2; // TODO
+                bub.nivel = 10;
+                bob.nivel = 10;
+                jugando_nivel = false;
+                for (int i = 0; i < 10; i++) {
+                    admin.agua.stream[i].numPlataformas = plataformas.listaPlataformaSiguiente.size();
+                }
+                /*admin.iniciaMapa(4, 60 * 30);
                 admin.CambioDeMapa(1);
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_grande.png", 2);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_pequeno.png", "resources/mapa_nivel_2/mapa.txt");
@@ -346,10 +360,19 @@ int main(void)
                 jugando_nivel = false;
                 for (int i = 0; i < 10; i++) {
                     admin.agua.stream[i].numPlataformas = plataformas.listaPlataformaSiguiente.size();
-                }
+                }*/
             }
             else {
-                currentScreen = NIVEL_2;
+                currentScreen = NIVEL_BOSS;
+                bub.imTheThunder = true;
+                bob.imTheThunder = true;
+                // ----------------------------------------------------------------------------------------------------------
+                destRob = { (float)400, 100, 128, 128 };
+                robot = std::make_shared<Boss>(Boss(2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                robot->tipo = 7;
+                robot->vida = 100;
+                admin.enemigos.push_back(robot);
+                /*currentScreen = NIVEL_2;
                 destRob = { (float)400 + 20, 100, 32, 32 };
                 robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin, Modo_IA));
                 admin.enemigos.push_back(robot);
@@ -365,7 +388,7 @@ int main(void)
                 destRob = { (float)400 - 50, 190, 32, 32 };
                 robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin, Modo_IA));
                 admin.enemigos.push_back(robot);
-
+                */
                 admin.frutas.clear();
 
                 jugando_nivel = true;
