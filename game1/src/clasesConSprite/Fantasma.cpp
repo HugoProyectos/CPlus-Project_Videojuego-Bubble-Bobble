@@ -191,7 +191,7 @@ public:
                     velocidadSalto = destRec.height / 10.0f;
                 }
 
-                if ((clock() - temp) > 5 * CLOCKS_PER_SEC) {
+                if ((clock() - temp) > 5 * CLOCKS_PER_SEC && hayBola) {
                     velocidadFrames = 2;
                     hayBola = false;
                 }
@@ -212,23 +212,27 @@ public:
                 else if (saltando || contador > 180 && sueloArriba && playerPosition.y + destRec.height < destRec.y) {
                     Salto(playerPosition);
                 }
-                else if (destRec.y != playerPosition.y) {
-                    if (direccionX == 0) {
+                else if ( (destRec.y != playerPosition.y) && (direccionX == 0) ) {
                         //Izquierda
+                        std::cout << destRec.y << std::endl;
+                        std::cout << playerPosition.y << std::endl;
                         MoverIzq();
                         contador++;
-                    }
-                    else {
+                }
+                else if ( (destRec.y != playerPosition.y) && ( direccionX == 1) ) {
                         //Derecha
+                        std::cout << "cabron" << std::endl;
                         MoverDer();
                         contador++;
-                    }
+                    
                 }
-                else if (destRec.x > playerPosition.x + anchosX * 10 && !disparando) { //Si el personaje esta a la izquierda      
+                else if (destRec.x > (playerPosition.x + anchosX) * 10 && !disparando) { //Si el personaje esta a la izquierda      
+                    std::cout << "gil" << std::endl;
                     MoverIzq();
                     contador = 0;
                 }
-                else if (destRec.x < playerPosition.x - anchosX * 10 && !disparando) { //Si el personaje esta a la derecha
+                else if (destRec.x < (playerPosition.x - anchosX) * 10 && !disparando) { //Si el personaje esta a la derecha
+                    std::cout << "gil" << std::endl;
                     MoverDer();
                     contador = 0;
                 }
@@ -336,7 +340,7 @@ public:
                     disparando = false;
                     animacionActiva = 0;
                     Bola b;
-                    b =Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir, IDBola, lastWidth, lastHeight); 
+                    b =Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir, IDBola, lastWidth, lastHeight, origin); 
                     b.lastHeight = lastHeight;
                     b.lastWidth = lastWidth;
                     admin->enemigos.push_back(std::make_shared<Bola>(b));
@@ -361,7 +365,7 @@ public:
                     disparando = false;
                     animacionActiva = 3;
                     Bola b;
-                    b = Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir, IDBola, lastWidth, lastHeight);
+                    b = Bola("resources/enemyBola/bolaBasic.png", 2.0f, 40.0f, 1.0f, 1.0f, targetFrames, destRec, dir, IDBola, lastWidth, lastHeight, origin);
                     b.lastHeight = lastHeight;
                     b.lastWidth = lastWidth;
                     admin->enemigos.push_back(std::make_shared<Bola>(b));

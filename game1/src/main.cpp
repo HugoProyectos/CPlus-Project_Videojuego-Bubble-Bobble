@@ -116,9 +116,9 @@ int main(void)
 
 
 
-    Rectangle destRob = { GetScreenWidth() / 2, 30, 32, 32 };
+    Rectangle destRob = { (float)400 + 70, 60, 32, 32 };
     sh_Enemigo rosa = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
-    destRob = { (float)GetScreenWidth() / 2, 80, 32, 32 };
+    destRob = { (float)400 + 20, 160, 32, 32 };
     sh_Enemigo robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
     destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
     sh_Enemigo robot2 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
@@ -129,6 +129,7 @@ int main(void)
     
     admin.enemigos.push_back(rosa);
     admin.enemigos.push_back(robot);
+    
     admin.enemigos.push_back(robot2);
     admin.enemigos.push_back(robot3);
 

@@ -215,7 +215,7 @@ public:
                 (s.top < (destRec.y +16 ))
             )){
                 //std::cout << "sdsd" << std::endl;
-                destRec.y = (s.top - destRec.height / 2.0f) + ratioY;
+                //destRec.y = (s.top - destRec.height / 2.0f) + ratioY;
                 enElAire = false;
                 lastGround = s;
                 }
