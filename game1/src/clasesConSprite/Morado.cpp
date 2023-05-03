@@ -54,13 +54,14 @@ public:
     bool frutaProducida = false;
     int num = 0;
     int prob = 90;
+    bool IAoriginal = false;
 
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
     Morado() = default;
 
-    Morado(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin) {
+    Morado(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin, int modoIA) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         if (enfadado) {
             animacionActiva = 3;
@@ -76,6 +77,12 @@ public:
         this->admin = &admin;
         srand(time(NULL));
         player = destino;
+        if (modoIA == 0) {
+            IAoriginal = true;
+        }
+        else {
+            IAoriginal = false;
+        }
     };
 
     void enfadar() {

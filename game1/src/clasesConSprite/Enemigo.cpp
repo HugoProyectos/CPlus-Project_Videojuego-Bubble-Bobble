@@ -41,7 +41,6 @@ public:
     int lastHeight = 450;
     int lastWidth = 800;
     int killCount = 0;
-    bool IAoriginal = false;
 
     Enemigo() = default; //Debe llamarsse a Inicializador
 

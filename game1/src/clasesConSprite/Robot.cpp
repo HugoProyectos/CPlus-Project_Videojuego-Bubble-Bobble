@@ -62,10 +62,12 @@ public:
     int contador = 0;
     int contadorPreSalto = 0;
     bool frutaProducida = false;
+    bool IAoriginal = false;
+
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
 
-    Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin) {
+    Robot(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral, float _targetFPS, Rectangle destino, AdministradorPompas& admin, int modoIA) {
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
         if (enfadado) {
             animacionActiva = 3;
@@ -79,6 +81,14 @@ public:
         enElAire = true;
         cayendo = true;
         this->admin = &admin;
+        if (modoIA == 0) {
+            IAoriginal = true;
+
+        }
+        else {
+            IAoriginal = false;
+
+        }
     };
 
     void enfadar() {
