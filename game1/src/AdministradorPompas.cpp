@@ -681,7 +681,7 @@ public:
 				i--;
 			}
 			else {
-				enemigos.at(i)->Actualizar(j1.posicionJugador);
+				enemigos.at(i)->Actualizar(j1.posicionJugador, j2.posicionJugador);
 				for (int j = 0; j < plataformas.listaPlataforma.size(); j++) {
 					if (enemigos.at(i)->tipo != 7) {
 						enemigos.at(i)->compruebaSuelo();

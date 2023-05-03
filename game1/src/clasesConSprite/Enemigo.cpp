@@ -49,7 +49,7 @@ public:
         Inicializador(rutaTextura, tamano, saltoMax, velSalto, velLateral);
     };
 
-    void virtual Actualizar(Rectangle playerPosition) = 0;
+    void virtual Actualizar(Rectangle playerPosition1, Rectangle playerPosition2) = 0;
     void virtual Dibujar() = 0;
 
     void Inicializador(std::string rutaTextura, float tamano, float saltoMax, float velSalto, float velLateral)

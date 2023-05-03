@@ -86,7 +86,7 @@ public:
     }
 
     // Controlador de comportamiento
-    void Actualizar(Rectangle playerPosition) override {
+    void Actualizar(Rectangle playerPosition1, Rectangle playerPosition2) override {
         if (lastHeight != GetScreenHeight()) {
             destRec.height = GetScreenHeight() / 14.0625f;
             destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
@@ -126,6 +126,32 @@ public:
             }
         }
         else {
+            //Obtener el rectangulo del jugador a seguir
+            Rectangle playerPosition;
+            if (playerPosition2.x == -1 && playerPosition2.y == -1) {
+                playerPosition = playerPosition1;
+            }
+            else if (playerPosition1.x == -1 && playerPosition1.y == -1) {
+                playerPosition = playerPosition2;
+            }
+            else if (destRec.y <= playerPosition1.y && destRec.y + destRec.height >= playerPosition1.y) {
+                playerPosition = playerPosition1;
+            }
+            else if (destRec.y <= playerPosition2.y && destRec.y + destRec.height >= playerPosition2.y) {
+                playerPosition = playerPosition2;
+            }
+            else {
+                float dist1 = sqrt(pow(playerPosition1.x - destRec.x, 2) + pow(playerPosition1.y - destRec.y, 2));
+                float dist2 = sqrt(pow(playerPosition2.x - destRec.x, 2) + pow(playerPosition2.y - destRec.y, 2));
+                if (dist1 <= dist2) {
+                    playerPosition = playerPosition1;
+                }
+                else {
+                    playerPosition = playerPosition2;
+                }
+            }
+
+
             if (IAoriginal) {
                 if (enfadado) {
                     animacionActiva = 3;
