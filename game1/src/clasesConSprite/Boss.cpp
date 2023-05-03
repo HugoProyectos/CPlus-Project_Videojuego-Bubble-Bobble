@@ -250,12 +250,22 @@ void Boss::enfadar() {
 
 void Boss::disparar() {
     disparando = true;
-    Rectangle auxDest = { destRec.x, destRec.y, 32, 32 };
-    Botellas botella1 = Botellas(2.0f, 0, 4.0f, _targetFPS, auxDest, 1, 0);
-    Botellas botella2 = Botellas(2.0f, 0.5f, 3.5f, _targetFPS, auxDest, 2, 0);
-    Botellas botella3 = Botellas(2.0f, 1.0f, 3.0f, _targetFPS, auxDest, 3, 0);
-    Botellas botella4 = Botellas(2.0f, 2.0f, 2.0f, _targetFPS, auxDest, 4, 0);
-    Botellas botella5 = Botellas(2.0f, 3.0f, 0.0f, _targetFPS, auxDest, 5, 0);
+    Rectangle auxDest = { destRec.x, destRec.y, GetScreenWidth() / 25.0f, GetScreenHeight() / 14.0625f};
+    Botellas botella1 = Botellas(2.0f, 0, 4.0f, _targetFPS, auxDest, 1, direccionX);
+    botella1.lastWidth = GetScreenWidth();
+    botella1.lastHeight = GetScreenHeight();
+    Botellas botella2 = Botellas(2.0f, 0.5f, 3.5f, _targetFPS, auxDest, 2, direccionX);
+    botella2.lastWidth = GetScreenWidth();
+    botella2.lastHeight = GetScreenHeight();
+    Botellas botella3 = Botellas(2.0f, 1.0f, 3.0f, _targetFPS, auxDest, 3, direccionX);
+    botella3.lastWidth = GetScreenWidth();
+    botella3.lastHeight = GetScreenHeight();
+    Botellas botella4 = Botellas(2.0f, 2.0f, 2.0f, _targetFPS, auxDest, 4, direccionX);
+    botella4.lastWidth = GetScreenWidth();
+    botella4.lastHeight = GetScreenHeight();
+    Botellas botella5 = Botellas(2.0f, 3.0f, 0.0f, _targetFPS, auxDest, 5, direccionX);
+    botella5.lastWidth = GetScreenWidth();
+    botella5.lastHeight = GetScreenHeight();
     admin->enemigos.push_back(std::make_shared<Botellas>(botella1));
     admin->enemigos.push_back(std::make_shared<Botellas>(botella2));
     admin->enemigos.push_back(std::make_shared<Botellas>(botella3));
