@@ -192,6 +192,9 @@ public:
         this->music_modo = stoi(ini["sound"]["mute_music"]);
         this->alt_music = stoi(ini["sound"]["alt_music"]);
         this->effect_modo = stoi(ini["sound"]["mute_effects"]);
+        if ((alt_music == 1) && (skin_modo == 1)) {
+            alt_music = 2;
+        }
     }
 
     void guardarControlesNuevos() {
@@ -224,6 +227,7 @@ public:
         ini["screen"]["resolution"] = std::to_string(this->resoluciones1_mode);
 
         ini["sound"]["mute_music"] = std::to_string(this->music_modo);
+        ini["sound"]["alt_music"] = std::to_string(this->alt_music);
         ini["sound"]["mute_effects"] = std::to_string(this->effect_modo);
 
         // generate an INI file (overwrites any previous file)

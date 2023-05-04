@@ -528,6 +528,7 @@ public:
 
 		//incrementamos el n�mero de iteraciones si numEnemigos = 0;
 		if (enemigosPorMatar == 0 && !cambiaNivel) {
+			plat->hurry = false;
 			if (contadorFrames == 0) {
 				for (int i = 0; i < pompas.size(); i++) {
 					pompas.at(i)->explota();
@@ -557,6 +558,7 @@ public:
 			else if (j1.muriendo || j2.muriendo) {
 				contadorSkull = 0;
 				hurryUp = false;
+				plat->hurry = false;
 			}
 			else {
 				if (contadorSkull == limiteContadorSkull) {

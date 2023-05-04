@@ -122,8 +122,21 @@ public:
 
     int musicNum = 0;
     int lastMusicNum = 0;
-    Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
-    Music music2 = LoadMusicStream("resources/music/sonido_gigachad.mp3");
+    //Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
+    Music music = LoadMusicStream("resources/music/sonido_boss_gigachad.mp3");
+    Music music2 = LoadMusicStream("resources/music/sonido_niveles_alternativo.mp3");
+    Music music3 = LoadMusicStream("resources/music/sonido_niveles_gigachad.mp3");
+    Music musicHurry = LoadMusicStream("resources/music/sonido_prisa.mp3");
+    Music musicHurry2 = LoadMusicStream("resources/music/sonido_prisa.mp3");
+    Music musicHurry3 = LoadMusicStream("resources/music/sonido_prisa_gigachad.mp3");
+    Music musicboss = LoadMusicStream("resources/music/sonido_boss.mp3");
+    Music musicboss2 = LoadMusicStream("resources/music/sonido_boss.mp3");
+    Music musicboss3 = LoadMusicStream("resources/music/sonido_boss_gigachad.mp3");
+
+    bool lastHurry = false;
+    bool hurry = false;
+    bool lastBoss = false;
+    bool boss = false;
 
     bool mute_music = false;
     bool mute_effect = false;
@@ -138,14 +151,24 @@ public:
 
     void Inicializador(std::string ruta_bloque_pequeno, std::string ruta_ubicacion_bloques, float margenSuperior, float margenInferior, int musicN)
     {
+        //Cambiamos el volumen de la musica demasiado alta
+        SetMusicVolume(music2, 0.25f);
+        SetMusicVolume(music3, 0.5f);
+        SetMusicVolume(musicHurry, 0.5f);
+        SetMusicVolume(musicboss3, 0.15f);
+        //Pitch
+        SetMusicPitch(musicHurry3, 0.75f);
         //Seleccionar musica
         lastMusicNum = musicN;
         musicNum = musicN;
         if (musicNum == 0) {
             PlayMusicStream(music);
         }
-        else {
+        else if(musicNum == 1){
             PlayMusicStream(music2);
+        }
+        else {
+            PlayMusicStream(music3);
         }
 
         // Guardar textura 
@@ -193,6 +216,7 @@ public:
         UnloadTexture(bloque_pequeno);
         UnloadMusicStream(music);
         UnloadMusicStream(music2);
+        UnloadMusicStream(music3);
         UnloadSound(sound);
     }
 
@@ -200,34 +224,120 @@ public:
         UnloadTexture(bloque_pequeno);
         UnloadMusicStream(music);
         UnloadMusicStream(music2);
+        UnloadMusicStream(music3);
         UnloadSound(sound);
     }
 
     void Actualizar() {
+        //SetMasterVolume(1.0f);
         if (!mute_music) {
             if (musicNum != lastMusicNum) {
                 if (lastMusicNum == 0) {
                     StopMusicStream(music);
                 }
-                else {
+                else if(lastMusicNum == 1){
                     StopMusicStream(music2);
+                }
+                else {
+                    StopMusicStream(music3);
                 }
                 if (musicNum == 0) {
                     PlayMusicStream(music);
                 }
-                else {
+                else if(musicNum == 1){
                     PlayMusicStream(music2);
+                }
+                else {
+                    PlayMusicStream(music3);
                 }
                 lastMusicNum = musicNum;
             }
             if (musicNum == 0) {
-                std::cout << "Musica 1" << std::endl;
-                UpdateMusicStream(music);
+                if (boss) {
+                    if (!lastBoss) {
+                        if (!lastHurry) {
+                            StopMusicStream(music);
+                        }
+                        else {
+                            StopMusicStream(musicHurry);
+                        }
+                        PlayMusicStream(musicboss);
+                    }
+                    UpdateMusicStream(musicboss);
+                }
+                else if (hurry) {
+                    if (!lastHurry) {
+                        StopMusicStream(music);
+                        PlayMusicStream(musicHurry);
+                    }
+                    UpdateMusicStream(musicHurry);
+                }
+                else {
+                    if (lastHurry) {
+                        StopMusicStream(musicHurry);
+                        PlayMusicStream(music);
+                    }
+                    UpdateMusicStream(music);
+                }  
+            }
+            else if(musicNum == 1){
+                if (boss) {
+                    if (!lastBoss) {
+                        if (!lastHurry) {
+                            StopMusicStream(music2);
+                        }
+                        else {
+                            StopMusicStream(musicHurry);
+                        }
+                        PlayMusicStream(musicboss2);
+                    }
+                    UpdateMusicStream(musicboss2);
+                }
+                else if (hurry) {
+                    if (!lastHurry) {
+                        StopMusicStream(music2);
+                        PlayMusicStream(musicHurry2);
+                    }
+                    UpdateMusicStream(musicHurry2);
+                }
+                else {
+                    if (lastHurry) {
+                        StopMusicStream(musicHurry2);
+                        PlayMusicStream(music2);
+                    }
+                    UpdateMusicStream(music2);
+                }
             }
             else {
-                std::cout << "Musica 2" << std::endl;
-                UpdateMusicStream(music2);
+                if (boss) {
+                    if (!lastBoss) {
+                        if (!lastHurry) {
+                            StopMusicStream(music3);
+                        }
+                        else {
+                            StopMusicStream(musicHurry3);
+                        }
+                        PlayMusicStream(musicboss3);
+                    }
+                    UpdateMusicStream(musicboss3);
+                }
+                else if (hurry) {
+                    if (!lastHurry) {
+                        StopMusicStream(music3);
+                        PlayMusicStream(musicHurry3);
+                    }
+                    UpdateMusicStream(musicHurry3);
+                }
+                else {
+                    if (lastHurry) {
+                        StopMusicStream(musicHurry3);
+                        PlayMusicStream(music3);
+                    }
+                    UpdateMusicStream(music3);
+                }
             }
+            lastHurry = hurry;
+            lastBoss = boss;
         }
         
         for (int i = 0; i < listaPlataforma.size(); i++) {
@@ -368,6 +478,7 @@ public:
 
     void CargarSiguienteNivel(std::string ruta_bloque_pequeno_siguiente, std::string ruta_ubicacion_bloques_siguiente) {
         if (this->cargando_nivel_siguiente == false) {
+            this->hurry = false;
             this->cargando_nivel_siguiente = true;
             this->bloque_pequeno_siguiente = LoadTexture(ruta_bloque_pequeno_siguiente.c_str());
             ruta_bloque_pequeno_siguiente.resize(ruta_bloque_pequeno_siguiente.length() - 4);
@@ -421,6 +532,7 @@ public:
             iteraciones2 = 0;
             empezar_contador2 = true;
             mostrar_hurryup = true;
+            hurry = true;
         }
     }
 };
