@@ -119,9 +119,11 @@ void Botellas::compruebaColision(Plataforma& s, int enemyNum) {
         switch (s.aproach[enemyNum + 1]) {
         case 1:
             destRec.x = s.left - destRec.width / 2;
+            borrame = true;
             break;
         case 2:
             destRec.x = s.right + destRec.width / 2;
+            borrame = true;
             break;
         case 3:
             destRec.y = s.top - destRec.height / 2;

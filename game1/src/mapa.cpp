@@ -127,10 +127,10 @@ public:
     Music music2 = LoadMusicStream("resources/music/sonido_niveles_alternativo.mp3");
     Music music3 = LoadMusicStream("resources/music/sonido_niveles_gigachad.mp3");
     Music musicHurry = LoadMusicStream("resources/music/sonido_prisa.mp3");
-    Music musicHurry2 = LoadMusicStream("resources/music/sonido_prisa.mp3");
+    Music musicHurry2 = LoadMusicStream("resources/music/sonido_prisa_alternativo.mp3");
     Music musicHurry3 = LoadMusicStream("resources/music/sonido_prisa_gigachad.mp3");
     Music musicboss = LoadMusicStream("resources/music/sonido_boss.mp3");
-    Music musicboss2 = LoadMusicStream("resources/music/sonido_boss.mp3");
+    Music musicboss2 = LoadMusicStream("resources/music/sonido_boss_alternativo.mp3");
     Music musicboss3 = LoadMusicStream("resources/music/sonido_boss_gigachad.mp3");
 
     bool lastHurry = false;
