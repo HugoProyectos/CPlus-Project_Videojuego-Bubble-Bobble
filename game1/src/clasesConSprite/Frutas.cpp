@@ -133,7 +133,9 @@ public:
         }
 
         // --------------------------------------------------------------------------------
-        
+        if (destRec.y > (GetScreenHeight() + 10)) {
+            destRec.y = -50;
+        }
 
         if (eliminame) {
             if ((clock() - temp) > 2 * CLOCKS_PER_SEC) {
@@ -145,25 +147,28 @@ public:
         if (muerto_bub || muerto_bob) {
             switch (i) {
                 case 0:
-                    srcRec = {306,0,15,8};
+                    srcRec = { 306,0,15,8};
                     break;
                 case 1:
-                    srcRec = {487,0,15,9 };
+                    srcRec = { 487,0,15,9 };
                     break;
                 case 2:
-                    srcRec = {522,0,16,9 };
+                    srcRec = { 522,0,16,9 };
                     break;
                 case 3:
-                    srcRec = {540,0,16,9 };
+                    srcRec = { 540,0,16,9 };
                     break;
                 case 4:
-                    srcRec = {558,0,16,9 };
+                    srcRec = { 558,0,16,9 };
                     break;
                 case 5:
-                    srcRec = {576,0,16,9 };
+                    srcRec = { 576,0,16,9 };
+                    break;
+                case 6:
+                    srcRec = { 594,0,16,9 };
                     break;
                 default:
-                    srcRec = { 594,0,16,9 };
+                    srcRec = { 0,14,16,9 };
             }
         }
         if (muerto_bub) {
