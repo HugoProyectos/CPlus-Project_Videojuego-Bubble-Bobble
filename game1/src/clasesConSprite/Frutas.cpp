@@ -49,6 +49,7 @@ public:
     int lastWidth;
     int ratioX;
     int ratioY;
+    int ascenso;
 
 
 	Frutas() = default;
@@ -95,6 +96,8 @@ public:
         this->lastWidth = lastWidth;
         this->ratioX = ratioX;
         this->ratioY = ratioY;
+        asciende = 0;
+        ascenso = 50 + rand()%(50-101);
         
 	}
 
@@ -192,13 +195,14 @@ public:
 
 	void CaerLento() {
         velCaida = 2;
-		destRec.y += (velCaida / 2) * ratioY;
+		destRec.y += (velCaida / 2);
 	}
 
     void Asciende() {
-        if( asciende < 50){
+        if( asciende < ascenso){
+            std::cout << "hola" << std::endl;
             asciende += 1;
-            destRec.y -= (velCaida / 2) * ratioY;
+            destRec.y -= (velCaida / 2);
         }
         else if (!eliminame) {
             eliminame = true;
