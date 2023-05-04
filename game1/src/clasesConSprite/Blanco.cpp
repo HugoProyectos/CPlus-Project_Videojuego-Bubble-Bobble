@@ -81,6 +81,9 @@ public:
             lastWidth = GetScreenWidth();
         }
 
+        //Posicion para pasarle a BOB
+        posicion = destRec;
+
         velocidadLateral = destRec.width / 16.0f;
         velocidadSalto = destRec.height / 10.0f;
 

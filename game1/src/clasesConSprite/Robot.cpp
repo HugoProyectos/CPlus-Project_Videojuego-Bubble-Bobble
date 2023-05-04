@@ -122,6 +122,10 @@ public:
             origin.x = destRec.width / 2;
             lastWidth = GetScreenWidth();
         }
+        
+        //Posicion para pasarle a BOB
+        posicion = destRec;
+
         if (cambioMapa > 0) {
             if (cambioMapa == 2) {
                 primeraActualizacion = false;
