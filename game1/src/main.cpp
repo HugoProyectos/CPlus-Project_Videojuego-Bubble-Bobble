@@ -58,7 +58,7 @@ int main(void)
     // Nivel 1:
     //--------------------------------------------------------------------------------------
     Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f);
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f,1);
     //--------------------------------------------------------------------------------------
 
     // Controls:
@@ -72,11 +72,13 @@ int main(void)
     plataformas.modo_2d = Modo_mapa == 1 ? true : false;
     columnas.modo_2d = Modo_mapa == 1 ? true : false;
     int Mute_music = controls.music_modo; // 1 -> muted
+    int Alt_music = controls.alt_music; // 0->  normal  1-> alternativa  2-> gigachad
     int Mute_effect = controls.effect_modo; // 1 -> muted
     main_menu.mute_music = Mute_music == 1 ? true : false;  
     main_menu.mute_sound = Mute_effect == 1 ? true : false;
     credits.mute_sound = Mute_effect == 1 ? true : false;   
     plataformas.mute_effect = Mute_effect == 1 ? true : false;
+    plataformas.musicNum = Alt_music;
     plataformas.mute_music = Mute_music == 1 ? true : false; 
 
     SetWindowSize((controls.resoluciones1_width[controls.resoluciones1_mode]), (controls.resoluciones1_height[controls.resoluciones1_mode]));
@@ -1520,7 +1522,7 @@ int main(void)
         }
         case CONTROLS_MENU:
         { 
-            controls.Actualizar(Modo_IA, Modo_skins, Modo_mapa, Mute_music, Mute_effect);
+            controls.Actualizar(Modo_IA, Modo_skins, Modo_mapa, Mute_music, Alt_music, Mute_effect);
             if (IsKeyPressed(KEY_ENTER)) {
                 // ASIGNAR TODOS LOS BOTONES
                 controls.guardarControlesNuevos();
@@ -1530,9 +1532,17 @@ int main(void)
                 columnas.modo_2d = Modo_mapa == 1 ? true : false;
                 plataformas.modo_2d = Modo_mapa == 1 ? true : false;
                 main_menu.mute_music = Mute_music == 1 ? true : false;
+                main_menu.alt_music = Alt_music == 1 ? true : false;
                 main_menu.mute_sound = Mute_effect == 1 ? true : false;
                 credits.mute_sound = Mute_effect == 1 ? true : false;
                 plataformas.mute_effect = Mute_effect == 1 ? true : false;
+                //Si skins alternativas, la musica alternativa es gigachad
+                if ((Modo_skins == 1) && (Alt_music == 1)) {
+                    plataformas.musicNum = 2;
+                }
+                else {
+                    plataformas.musicNum = Alt_music;
+                }
                 plataformas.mute_music = Mute_music == 1 ? true : false;
                 gameover.mute_music = Mute_music == 1 ? true : false;
                 bub.mute_sound = Mute_effect == 1 ? true : false;
