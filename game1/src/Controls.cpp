@@ -90,6 +90,12 @@ public:
         "ON", "OFF"
     };
 
+    unsigned int alt_music = 0;
+    bool alt_music_pulsado = false;
+    const char* ALT_MUSIC_MODE[2] = {
+        "OFF", "ON"
+    };
+
     unsigned int effect_modo = 0;
     bool effect_pulsado = false;
     const char* EFFECT_MODE[2] = {
@@ -184,6 +190,7 @@ public:
         this->resoluciones2_mode = stoi(ini["screen"]["screen_mode"]);
         this->resoluciones1_mode = stoi(ini["screen"]["resolution"]);
         this->music_modo = stoi(ini["sound"]["mute_music"]);
+        this->alt_music = stoi(ini["sound"]["alt_music"]);
         this->effect_modo = stoi(ini["sound"]["mute_effects"]);
     }
 
@@ -223,7 +230,7 @@ public:
         file.write(ini);
     }
 
-    void Actualizar(int & IA_MODE, int  &SKIN_MODE, int & MAPA_MODE, int &MUSIC_OUT, int & EFFECT_OUT) {
+    void Actualizar(int & IA_MODE, int  &SKIN_MODE, int & MAPA_MODE, int &MUSIC_OUT, int &ALT_MUSIC_OUT ,int & EFFECT_OUT) {
         this->actualizarControlesProvisionales();
 
         /*if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -475,6 +482,34 @@ public:
         }
         MUSIC_OUT = music_modo;
 
+        // Modos ALT_MUSIC
+        positionX = 20;
+        positionY = 20 + 30 * (4 + 5);
+        // Calculo el tamaño para hacer el rectangulo a medida
+        texto = TextFormat("Musica alternativa: %s", this->ALT_MUSIC_MODE[music_modo]);
+        tamano_texto = MeasureText(texto.c_str(), 20);
+
+        // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
+        rectAux = { (float)positionX, (float)positionY, (float)tamano_texto, 20 };
+        //DrawRectangle(20, 20 + 30 * i, 200, 30, SKYBLUE);
+        mousePoint = GetMousePosition();
+
+        // Si ponemos el cursor encima
+        if (CheckCollisionPointRec(mousePoint, rectAux)) {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && music_pulsado == false) {
+                if (effect_modo == 0) {
+                    PlaySound(clic);
+                }
+                alt_music = (alt_music + 1) % 2;
+                alt_music_pulsado = true;
+            }
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+                music_pulsado = false;
+            }
+        }
+        ALT_MUSIC_OUT = alt_music;
+
         // Modos EFFECT
         positionX = 20 + (GetScreenWidth() / 2);
         positionY = 20 + 30 * (4 + 4);
@@ -680,6 +715,28 @@ public:
         positionY = 20 + 30 * (4 + 4);
         // Calculo el tamaño para hacer el rectangulo a medida
         texto = TextFormat("Musica: %s", this->MUSIC_MODE[music_modo]);
+        tamano_texto = MeasureText(texto.c_str(), 20);
+
+        // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
+        rectAux = { (float)positionX, (float)positionY, (float)tamano_texto, 20 };
+        //DrawRectangle(20, 20 + 30 * i, 200, 30, SKYBLUE);
+        mousePoint = GetMousePosition();
+
+        // Si ponemos el cursor encima
+        if (CheckCollisionPointRec(mousePoint, rectAux)) {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            DrawText(texto.c_str(), positionX, positionY, 20, RED);
+        }
+        else {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            DrawText(texto.c_str(), positionX, positionY, 20, WHITE);
+        }
+
+        // Modo ALT_MUSIC
+        positionX = 20;
+        positionY = 20 + 30 * (4 + 5);
+        // Calculo el tamaño para hacer el rectangulo a medida
+        texto = TextFormat("Musica alternativa: %s", this->ALT_MUSIC_MODE[alt_music]);
         tamano_texto = MeasureText(texto.c_str(), 20);
 
         // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla

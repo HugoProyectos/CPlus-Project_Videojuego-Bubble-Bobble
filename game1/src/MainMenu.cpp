@@ -19,6 +19,7 @@ public:
     Texture2D currentMenu = menu[0];
 
     bool mute_music = false;
+    bool alt_music = false;
     Music music = LoadMusicStream("resources/music/sonido_main_menu.mp3");
 
     Sound sound = LoadSound("resources/music/clic.mp3");

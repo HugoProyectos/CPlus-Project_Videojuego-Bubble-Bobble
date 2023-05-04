@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm> // for std::copy
+#include <iostream> // for debugging
 
 #define BLOQUE_PEQUENO_ANCHO 32
 #define BLOQUE_PEQUENO_ALTO 26
@@ -119,6 +120,8 @@ public:
 
     bool modo_2d = false; 
 
+    int musicNum = 0;
+    int lastMusicNum = 0;
     Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
     Music music2 = LoadMusicStream("resources/music/sonido_gigachad.mp3");
 
@@ -129,12 +132,22 @@ public:
 
     Plataformas() = default;
 
-    Plataformas(std::string ruta_bloque_pequeno, std::string ruta_ubicacion_bloques, float margenSuperior, float margenInferior) {
-        Inicializador(ruta_bloque_pequeno, ruta_ubicacion_bloques, margenSuperior, margenInferior);
+    Plataformas(std::string ruta_bloque_pequeno, std::string ruta_ubicacion_bloques, float margenSuperior, float margenInferior, int musicN) {
+        Inicializador(ruta_bloque_pequeno, ruta_ubicacion_bloques, margenSuperior, margenInferior, musicN);
     }
 
-    void Inicializador(std::string ruta_bloque_pequeno, std::string ruta_ubicacion_bloques, float margenSuperior, float margenInferior)
+    void Inicializador(std::string ruta_bloque_pequeno, std::string ruta_ubicacion_bloques, float margenSuperior, float margenInferior, int musicN)
     {
+        //Seleccionar musica
+        lastMusicNum = musicN;
+        musicNum = musicN;
+        if (musicNum == 0) {
+            PlayMusicStream(music);
+        }
+        else {
+            PlayMusicStream(music2);
+        }
+
         // Guardar textura 
         this->bloque_pequeno = LoadTexture(ruta_bloque_pequeno.c_str());
         ruta_bloque_pequeno.resize(ruta_bloque_pequeno.length() - 4);
@@ -150,7 +163,6 @@ public:
         this->ratioMargenSup = margenSuperior != 0 ? GetScreenHeight() / margenSuperior : 0;
         this->ratioMargenInf = margenInferior != 0 ? GetScreenHeight() / margenInferior : 0;
         this->ratio = (GetScreenHeight() - margenInferior - margenSuperior) / 40;
-        PlayMusicStream(music);
     }
 
     std::vector<Plataforma> leerArchivo(std::string nombreArchivo) {
@@ -193,7 +205,29 @@ public:
 
     void Actualizar() {
         if (!mute_music) {
-            UpdateMusicStream(music);
+            if (musicNum != lastMusicNum) {
+                if (lastMusicNum == 0) {
+                    StopMusicStream(music);
+                }
+                else {
+                    StopMusicStream(music2);
+                }
+                if (musicNum == 0) {
+                    PlayMusicStream(music);
+                }
+                else {
+                    PlayMusicStream(music2);
+                }
+                lastMusicNum = musicNum;
+            }
+            if (musicNum == 0) {
+                std::cout << "Musica 1" << std::endl;
+                UpdateMusicStream(music);
+            }
+            else {
+                std::cout << "Musica 2" << std::endl;
+                UpdateMusicStream(music2);
+            }
         }
         
         for (int i = 0; i < listaPlataforma.size(); i++) {
@@ -453,6 +487,7 @@ public:
     };
 
     void Actualizar() {
+        
         // TODO
         float tamanoMargenSup = ratioMargenSup != 0 ? GetScreenHeight() / ratioMargenSup : 0;
         float tamanoMargenInf = ratioMargenInf != 0 ? GetScreenHeight() / ratioMargenInf : 0;
