@@ -123,7 +123,7 @@ public:
     int musicNum = 0;
     int lastMusicNum = 0;
     //Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
-    Music music = LoadMusicStream("resources/music/sonido_boss_gigachad.mp3");
+    Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
     Music music2 = LoadMusicStream("resources/music/sonido_niveles_alternativo.mp3");
     Music music3 = LoadMusicStream("resources/music/sonido_niveles_gigachad.mp3");
     Music musicHurry = LoadMusicStream("resources/music/sonido_prisa.mp3");
