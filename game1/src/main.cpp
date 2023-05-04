@@ -1172,6 +1172,7 @@ int main(void)
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
                 admin.iniciaMapa(7, 30 * 60); // TODO
+                //admin.iniciaMapa(0, 30 * 60);
                 admin.CambioDeMapa(8); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_9/bloque_grande.png", 9);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_9/bloque_pequeno.png", "resources/mapa_nivel_9/mapa.txt");
@@ -1296,6 +1297,7 @@ int main(void)
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
                 admin.iniciaMapa(4, 30 * 60); // TODO
+                //admin.iniciaMapa(0, 30 * 60);
                 admin.CambioDeMapa(9); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_10/bloque_grande.png", 10);
                 plataformas.CargarSiguienteNivel("resources/mapa_nivel_10/bloque_pequeno.png", "resources/mapa_nivel_10/mapa.txt");
@@ -1610,7 +1612,8 @@ int main(void)
                 admin.scores.puntuacion2 = 0;
 
                 //Reseteo del nivel
-                admin.iniciaMapa(3, 30*60); 
+                //admin.iniciaMapa(3, 30*60); 
+                admin.iniciaMapa(0, 30 * 60);
                 admin.CambioDeMapa(0);
                 columnas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_grande.png", 1);
                 plataformas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt");

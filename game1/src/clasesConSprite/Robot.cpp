@@ -59,6 +59,8 @@ public:
     bool saltandoIzq = false;
     bool saltandoIzqCorto = false;
     bool saltandoRecto = false;
+    bool presaltoIzq = false;
+    bool presaltoDer = false;
     int contador = 0;
     int contadorPreSalto = 0;
     bool frutaProducida = false;
@@ -237,12 +239,11 @@ public:
                     Salto(playerPosition, -2);
                 }
                 //Salto a la derecha, player esta a +distancia
-                else if (!saltandoRecto && (saltandoDer || (destRec.y > playerPosition.y && destRec.x + distanciaSaltoMax > playerPosition.x - anchosX && destRec.x + distanciaSaltoMax < playerPosition.x + anchosX))) { //Si el personaje esta encima
+                else if (presaltoDer || (!saltandoRecto && (saltandoDer || (destRec.y > playerPosition.y && destRec.x + distanciaSaltoMax > playerPosition.x - anchosX && destRec.x + distanciaSaltoMax < playerPosition.x + anchosX)))) { //Si el personaje esta encima
                     Salto(playerPosition, 1);
                 }
                 //Salto a la izquierda, player esta a -distancia
-                else if (!saltandoRecto && (saltandoIzq || (destRec.y > playerPosition.y && destRec.x - distanciaSaltoMax > playerPosition.x - anchosX && destRec.x - distanciaSaltoMax < playerPosition.x + anchosX))){ //Si el personaje esta encima
-
+                else if (presaltoIzq || (!saltandoRecto && (saltandoIzq || (destRec.y > playerPosition.y && destRec.x - distanciaSaltoMax > playerPosition.x - anchosX && destRec.x - distanciaSaltoMax < playerPosition.x + anchosX)))) { //Si el personaje esta encima
                     Salto(playerPosition, -1);
                 }
                 else if (saltando || (sueloArriba && destRec.y > playerPosition.y && destRec.x > playerPosition.x - anchosX && destRec.x < playerPosition.x + anchosX)) { //Si el personaje esta encima
@@ -266,7 +267,7 @@ public:
                     MoverDer();
                 }
             }
-        
+
             //Actualizar posicion no salir de la pantalla
             if (destRec.y > GetScreenHeight() + 50) {
                 destRec.y = -10;
@@ -359,12 +360,18 @@ public:
             enElAire = true;
             cayendo = false;
         }
-        else if (contadorPreSalto < 30 && tipo == 0) {
+        else if (contadorPreSalto < 30 && (tipo == 0 || tipo == -1 || tipo == 1)) {
+            if (tipo == 1) {
+                presaltoDer = true;
+            }
+            else if (tipo == -1) {
+                presaltoIzq = true;
+            }
             contadorPreSalto++;
             srcRec.width = pixels;
             saltandoRecto = true;
         }
-        else if (contadorPreSalto < 60 && tipo == 0) {
+        else if (contadorPreSalto < 60 && (tipo == 0 || tipo == -1 || tipo == 1)) {
             contadorPreSalto++;
             srcRec.width = -pixels;
             saltandoRecto = true;
@@ -388,20 +395,20 @@ public:
                 saltoRecorrido += velocidadSalto;
             }
             else if (tipo == -2) {
-                destRec.x -= velocidadSalto * 2;
+                destRec.x -= velocidadSalto;
                 srcRec.width = pixels;
                 direccionX = 0;
                 saltandoIzqCorto = true;
                 destRec.y -= velocidadSalto;
-                saltoRecorrido += velocidadSalto * 3;
+                saltoRecorrido += velocidadSalto * 1.5;
             }
             else if (tipo == 2) {
-                destRec.x += velocidadSalto * 2;
+                destRec.x += velocidadSalto;
                 srcRec.width = -pixels;
                 direccionX = 1;
                 saltandoDerCorto = true;
                 destRec.y -= velocidadSalto;
-                saltoRecorrido += velocidadSalto * 3;
+                saltoRecorrido += velocidadSalto * 1.5;
             }
             else {
                 destRec.y -= velocidadSalto;
@@ -434,24 +441,24 @@ public:
                 saltoRecorrido -= velocidadSalto;
             }
             else if (tipo == -2) {
-                destRec.x -= velocidadSalto * 2;
+                destRec.x -= velocidadSalto;
                 srcRec.width = pixels;
                 direccionX = 0;
                 saltandoIzqCorto = true;
                 destRec.y += velocidadSalto;
-                saltoRecorrido -= velocidadSalto * 3;
+                saltoRecorrido -= velocidadSalto * 1.5;
             }
             else if (tipo == 2) {
-                destRec.x += velocidadSalto * 2;
+                destRec.x += velocidadSalto;
                 srcRec.width = -pixels;
                 direccionX = 1;
                 saltandoDerCorto = true;
                 destRec.y += velocidadSalto;
-                saltoRecorrido -= velocidadSalto * 3;
+                saltoRecorrido -= velocidadSalto * 1.5;
             }
             else {
                 destRec.y += velocidadSalto;
-                saltoRecorrido -= velocidadSalto * 2;
+                saltoRecorrido -= velocidadSalto;
             }
         }
         else if (saltoRecorrido < 5) {
@@ -462,6 +469,8 @@ public:
             saltandoDerCorto = false;
             saltandoIzqCorto = false;
             saltandoRecto = false;
+            presaltoDer = false;
+            presaltoIzq = false;
 
             contadorPreSalto = 0;
 
