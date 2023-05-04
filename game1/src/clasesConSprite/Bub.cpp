@@ -143,6 +143,9 @@ public:
     bool sueloArribaIzq = false;
     int direccionX = 1; //0 para izquierda, 1 para derecha
     int contadorSaltos = 0;
+    int saltoRecto = false;
+    int saltoDer = false;
+    int saltoIzq = false;
 
     /////////////////////////////////
 
@@ -333,12 +336,23 @@ public:
         ////////////////////////////////////////////
         // IA de BOB 
         ////////////////////////////////////////////
-        Rectangle enemy = Rectangle();
-        if ((admin->enemigos).size()) {
-            enemy = admin->enemigos[0]->posicion;
+        if (!eresBub) {
+            Rectangle enemy = Rectangle();
+            if ((admin->enemigos).size()) {
+                int bestIndex = 0;
+                for (int i = 1; i < (admin->enemigos).size(); i++) {
+                    float dist1 = sqrt(pow(admin->enemigos[i]->posicion.x - destRec.x, 2) + pow(admin->enemigos[bestIndex]->posicion.y - destRec.y, 2));
+                    float dist2 = sqrt(pow(admin->enemigos[bestIndex]->posicion.x - destRec.x, 2) + pow(admin->enemigos[bestIndex]->posicion.y - destRec.y, 2));
+                    if (dist1 <= dist2) {
+                        bestIndex = i;
+                    }
+                }
+                enemy = admin->enemigos[bestIndex]->posicion;
+            }
+
+            ActualizarIA(enemy);
         }
 
-        ActualizarIA(enemy);
         if (!eresBub) {
             if (cambioMapa > 0) {
                 if (cambioMapa == 2) {
@@ -1301,13 +1315,13 @@ public:
             //Mover izquierda
             if (direccionX == 0) {
                 teclaIzquierda = true;
-                srcRec.width = abs(srcRec.width);
-                orientacionActual = 2;
+                //srcRec.width = abs(srcRec.width);
+                //orientacionActual = 2;
             }
             else if (direccionX == 1) {
                 teclaDerecha = true;
-                srcRec.width = -abs(srcRec.width);
-                orientacionActual = 3;
+                //srcRec.width = -abs(srcRec.width);
+                //orientacionActual = 3;
             }
 
             //Saltos que "impiden" situacion irresoluble entre IAs
@@ -1319,20 +1333,49 @@ public:
                 contadorSaltos++;
             }
         }
-        //Si el enemigo esta arriba
-        else if(enemy.y < destRec.y) {
-            teclaIzquierda = true;
-            teclaSalto = true;
+
+        //Si el enemigo esta muy arriba
+        else if (enemy.y < destRec.y - distanciaSaltoMax*3) {
+            if (sueloArriba && !enElAire) {
+                teclaSalto = true;
+                saltoRecto = true;
+            }
+            else if (direccionX == 0 && !saltoRecto) {
+                teclaIzquierda = true;
+                //srcRec.width = abs(srcRec.width);
+                //orientacionActual = 2;
+            }
+            else if (direccionX == 1 && !saltoRecto) {
+                teclaDerecha == true;
+                //srcRec.width = -abs(srcRec.width);
+                //orientacionActual = 3;
+            }
+            //comprobar hueco en el suelo
+            if (direccionX == 0 && !sueloIzquierda) {
+                teclaSalto = true;
+            }
+            else if (direccionX == 1 && !sueloDerecha) {
+                teclaSalto = true;
+            }
+
         }
-
-
-        
-            //Si esta arriba derecha + suelo arriba derecha
-            //Lo mismo para la izq
-            //sino salto recto
-
-        //Si el enemigo tiene tipo == -2 -> huir?
-
+        //El enemigo esta arriba
+        else if (enemy.y < destRec.y) {
+            if (sueloArriba && !enElAire && (3*destRec.width > abs(destRec.x-enemy.x))) {
+                teclaSalto = true;
+                saltoRecto = true;
+            }
+            else if (direccionX == 0 && !saltoRecto) {
+                teclaIzquierda = true;
+                //srcRec.width = abs(srcRec.width);
+                //orientacionActual = 2;
+            }
+            else if (direccionX == 1 && !saltoRecto) {
+                teclaDerecha == true;
+                //srcRec.width = -abs(srcRec.width);
+                //orientacionActual = 3;
+            }
+        }
 
         sueloArriba = false;
         sueloDerecha = false;
@@ -1378,6 +1421,7 @@ public:
             //Si esta en el agua no comprobamos colision
             if (enElAgua) {
                 enElAire = false;
+                saltoRecto = false;
                 cayendo = false;
                 return;
             }
@@ -1468,13 +1512,24 @@ public:
                 switch (s.aproach[0 + (int)!eresBub]) {
                 case 1:
                     destRec.x = s.left - destRec.width / 2.0f;
+                    if (!eresBub) {
+                        direccionX = 0;
+                        srcRec.width = abs(srcRec.width);
+                        orientacionActual = 2;
+                    }
                     break;
                 case 2:
                     destRec.x = s.right + destRec.width / 2.0f;
+                    if (!eresBub) {
+                        direccionX = 1;
+                        srcRec.width = -abs(srcRec.width);
+                        orientacionActual = 3;
+                    }
                     break;
                 case 3:
                     destRec.y = s.top - destRec.height / 2.0f;
                     enElAire = false;
+                    saltoRecto = false;
                     cayendo = false;
                     saltoRecorrido = 0;
                     lastGround = s;

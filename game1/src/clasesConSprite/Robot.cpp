@@ -150,10 +150,10 @@ public:
             else if (playerPosition1.x == -1 && playerPosition1.y == -1) {
                 playerPosition = playerPosition2;
             }
-            else if (destRec.y <= playerPosition1.y && destRec.y + destRec.height >= playerPosition1.y) {
+            else if (destRec.y <= playerPosition1.y && destRec.y + destRec.height >= playerPosition1.y && !(destRec.y <= playerPosition2.y && destRec.y + destRec.height >= playerPosition2.y)) {
                 playerPosition = playerPosition1;
             }
-            else if (destRec.y <= playerPosition2.y && destRec.y + destRec.height >= playerPosition2.y) {
+            else if (destRec.y <= playerPosition2.y && destRec.y + destRec.height >= playerPosition2.y && !(destRec.y <= playerPosition1.y && destRec.y + destRec.height >= playerPosition1.y)) {
                 playerPosition = playerPosition2;
             }
             else {

@@ -200,7 +200,7 @@ public:
 
     void Asciende() {
         if( asciende < ascenso){
-            std::cout << "hola" << std::endl;
+            //std::cout << "hola" << std::endl;
             asciende += 1;
             destRec.y -= (velCaida / 2);
         }
