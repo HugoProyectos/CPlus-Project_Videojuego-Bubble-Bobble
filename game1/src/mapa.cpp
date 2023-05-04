@@ -122,7 +122,6 @@ public:
 
     int musicNum = 0;
     int lastMusicNum = 0;
-    //Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
     Music music = LoadMusicStream("resources/music/sonido_niveles.mp3");
     Music music2 = LoadMusicStream("resources/music/sonido_niveles_alternativo.mp3");
     Music music3 = LoadMusicStream("resources/music/sonido_niveles_gigachad.mp3");
@@ -155,6 +154,8 @@ public:
         SetMusicVolume(music2, 0.25f);
         SetMusicVolume(music3, 0.5f);
         SetMusicVolume(musicHurry, 0.5f);
+        SetMusicVolume(musicHurry2, 0.5f);
+        SetMusicVolume(musicboss2, 0.25f);
         SetMusicVolume(musicboss3, 0.15f);
         //Pitch
         SetMusicPitch(musicHurry3, 0.75f);

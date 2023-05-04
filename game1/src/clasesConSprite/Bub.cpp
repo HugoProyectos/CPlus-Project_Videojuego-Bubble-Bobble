@@ -315,7 +315,7 @@ public:
         deceleracion = velocidadSalto / 40.0f;
         if (waterlessFrames > 0) { waterlessFrames--; }
         //Gestion de wrap vertical
-        if (destRec.y > GetScreenHeight() + 50) {
+        if (destRec.y > GetScreenHeight() + 10) {
             destRec.y = -10;
             enElAire = true;
             cayendo = true;

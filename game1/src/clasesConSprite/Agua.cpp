@@ -39,7 +39,7 @@ void Agua::Actualizar(Plataformas& plat, Columnas& col) {
 			stream[0].comprobarColisionParedes(col);
 		}
 		else {
-			for (int i = 1; i < 10; i++) {
+			for (int i = 0; i < 10; i++) {
 				stream[i].destRec.x = -20;
 				stream[i].destRec.y = -20;
 			}
