@@ -41,6 +41,7 @@ public:
     int lastHeight = 450;
     int lastWidth = 800;
     int killCount = 0;
+    Rectangle posicion;
 
     Enemigo() = default; //Debe llamarsse a Inicializador
 

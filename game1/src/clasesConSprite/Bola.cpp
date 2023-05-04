@@ -68,6 +68,10 @@ public:
 
             lastWidth = GetScreenWidth();
         }
+
+        //Posicion para pasarle a BOB
+        posicion = destRec;
+
         ratioX = destRec.width / 32;
 
         if (!direccion && animacionActiva == 0) { //Si el personaje esta a la izquierda
