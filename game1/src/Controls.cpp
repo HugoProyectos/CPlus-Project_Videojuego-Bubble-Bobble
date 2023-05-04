@@ -92,8 +92,8 @@ public:
 
     unsigned int alt_music = 0;
     bool alt_music_pulsado = false;
-    const char* ALT_MUSIC_MODE[2] = {
-        "OFF", "ON"
+    const char* ALT_MUSIC_MODE[3] = {
+        "OFF", "ON", "ON"
     };
 
     unsigned int effect_modo = 0;
@@ -490,7 +490,7 @@ public:
         positionX = 20;
         positionY = 20 + 30 * (4 + 5);
         // Calculo el tamaño para hacer el rectangulo a medida
-        texto = TextFormat("Musica alternativa: %s", this->ALT_MUSIC_MODE[music_modo]);
+        texto = TextFormat("Musica alternativa: %s", this->ALT_MUSIC_MODE[alt_music]);
         tamano_texto = MeasureText(texto.c_str(), 20);
 
         // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
@@ -505,7 +505,17 @@ public:
                 if (effect_modo == 0) {
                     PlaySound(clic);
                 }
-                alt_music = (alt_music + 1) % 2;
+                if (alt_music == 0) {
+                    if (skin_modo == 1) {
+                        alt_music = 2;
+                    }
+                    else {
+                        alt_music = 1;
+                    }
+                }
+                else {
+                    alt_music = 0;
+                }
                 alt_music_pulsado = true;
             }
             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
