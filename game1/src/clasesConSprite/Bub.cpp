@@ -341,11 +341,20 @@ public:
             if ((admin->enemigos).size()) {
                 int bestIndex = 0;
                 for (int i = 1; i < (admin->enemigos).size(); i++) {
-                    float dist1 = sqrt(pow(admin->enemigos[i]->posicion.x - destRec.x, 2) + pow(admin->enemigos[bestIndex]->posicion.y - destRec.y, 2));
-                    float dist2 = sqrt(pow(admin->enemigos[bestIndex]->posicion.x - destRec.x, 2) + pow(admin->enemigos[bestIndex]->posicion.y - destRec.y, 2));
-                    if (dist1 <= dist2) {
+                    if (destRec.y <= admin->enemigos[i]->posicion.y && destRec.y + destRec.height >= admin->enemigos[i]->posicion.y) {
                         bestIndex = i;
                     }
+                    else {
+                        float dist1 = sqrt(pow(admin->enemigos[i]->posicion.x - destRec.x, 2) + pow(admin->enemigos[bestIndex]->posicion.y - destRec.y, 2));
+                        float dist2 = sqrt(pow(admin->enemigos[bestIndex]->posicion.x - destRec.x, 2) + pow(admin->enemigos[bestIndex]->posicion.y - destRec.y, 2));
+                        if (dist1 < dist2) {
+                            std::cout << "dist1: " << dist1 << std::endl;
+                            std::cout << "dist2: " << dist2 << std::endl;
+                            bestIndex = i;
+                        }
+                    }
+
+
                 }
                 enemy = admin->enemigos[bestIndex]->posicion;
             }
@@ -764,6 +773,8 @@ public:
                     framesInvulnerabilidad = 60 * 3; //3 segundos
                     destRec.x = posicionOriginalBob.x;
                     destRec.y = posicionOriginalBob.y;
+
+                    saltoRecto = false;
                 }
             }
         }
@@ -1267,10 +1278,12 @@ public:
 
 
         //Si el enemigo esta a misma altura
-        if (destRec.y <= enemy.y && destRec.y + destRec.height >= enemy.y) {
+        if (destRec.y - destRec.height * 2 <= enemy.y && destRec.y + destRec.height*2 >= enemy.y) {
+            std::cout << "MISMA ALTURA" << std::endl;
+            std::cout << "---" << std::endl;
             //Comprobar rango de disparo
             int distance = abs(enemy.x - destRec.x);
-            if (distance < destRec.width * 7) {
+            if (distance <= destRec.width * 7) {
                 //Si esta a la derecha
                 if (enemy.x > destRec.x && direccionX == 0) {
                     teclaDerecha = true;
@@ -1310,7 +1323,9 @@ public:
             }
         }
         //Si el enemigo esta abajo
-        else if(destRec.y < enemy.y){
+        else if(enemy.y > destRec.y){
+            std::cout << "ABAJO" << std::endl;
+            std::cout << "---" << std::endl;
             //Moverse en horizontal con direccionX
             //Mover izquierda
             if (direccionX == 0) {
@@ -1333,20 +1348,24 @@ public:
                 contadorSaltos++;
             }
         }
-
         //Si el enemigo esta muy arriba
         else if (enemy.y < destRec.y - distanciaSaltoMax*3) {
+            std::cout << "MUUUUUY ARRIBA" << std::endl;
+
             if (sueloArriba && !enElAire) {
+
                 teclaSalto = true;
                 saltoRecto = true;
             }
             else if (direccionX == 0 && !saltoRecto) {
+
                 teclaIzquierda = true;
                 //srcRec.width = abs(srcRec.width);
                 //orientacionActual = 2;
             }
             else if (direccionX == 1 && !saltoRecto) {
-                teclaDerecha == true;
+
+                teclaDerecha = true;
                 //srcRec.width = -abs(srcRec.width);
                 //orientacionActual = 3;
             }
@@ -1357,20 +1376,34 @@ public:
             else if (direccionX == 1 && !sueloDerecha) {
                 teclaSalto = true;
             }
-
+            std::cout << "---" << std::endl;
         }
         //El enemigo esta arriba
         else if (enemy.y < destRec.y) {
+            std::cout << "ARRIBA" << std::endl;
             if (sueloArriba && !enElAire && (3*destRec.width > abs(destRec.x-enemy.x))) {
                 teclaSalto = true;
                 saltoRecto = true;
             }
             else if (direccionX == 0 && !saltoRecto) {
                 teclaIzquierda = true;
+            }
+            else if (direccionX == 1 && !saltoRecto) {
+                teclaDerecha = true;
+
+            }
+            std::cout << "---" << std::endl;
+
+        }
+        else {
+            std::cout << "RESTOS" << std::endl;
+            std::cout << "---" << std::endl;
+            if (direccionX == 0) {
+                teclaIzquierda = true;
                 //srcRec.width = abs(srcRec.width);
                 //orientacionActual = 2;
             }
-            else if (direccionX == 1 && !saltoRecto) {
+            else if (direccionX == 1) {
                 teclaDerecha == true;
                 //srcRec.width = -abs(srcRec.width);
                 //orientacionActual = 3;
@@ -1728,10 +1761,16 @@ public:
             //Comprobamos columna derecha
             if (s.left_der < (destRec.x + destRec.width / 2.0f)) {
                 destRec.x = s.left_der - destRec.width / 2.0f;
+                direccionX = 0;
+                srcRec.width = abs(srcRec.width);
+                orientacionActual = 2;
             }
             //Comprobamos columna izquierda
             else if (s.right_izq > (destRec.x - destRec.width / 2.0f)) {
                 destRec.x = s.right_izq + destRec.width / 2.0f;
+                direccionX = 1;
+                srcRec.width = -abs(srcRec.width);
+                orientacionActual = 3;
             }
         }
     }
