@@ -6,6 +6,7 @@
 #include "../AdministradorPompas.cpp"
 #include "Controls.cpp" //Bub 0-3, Bob 4-7
 #include <iostream>
+#include<time.h>
 
 
 
@@ -140,7 +141,9 @@ public:
     bool sueloIzquierda = false;
     bool sueloArribaDer = false;
     bool sueloArribaIzq = false;
-    
+    int direccionX = 1; //0 para izquierda, 1 para derecha
+    int contadorSaltos = 0;
+
     /////////////////////////////////
 
 
@@ -330,8 +333,11 @@ public:
         ////////////////////////////////////////////
         // IA de BOB 
         ////////////////////////////////////////////
-        //Rectangle enemy = admin->enemigos[0]->posicion;
         Rectangle enemy = Rectangle();
+        if ((admin->enemigos).size()) {
+            enemy = admin->enemigos[0]->posicion;
+        }
+
         ActualizarIA(enemy);
         if (!eresBub) {
             if (cambioMapa > 0) {
@@ -1247,14 +1253,80 @@ public:
 
 
         //Si el enemigo esta a misma altura
+        if (destRec.y <= enemy.y && destRec.y + destRec.height >= enemy.y) {
             //Comprobar rango de disparo
+            int distance = abs(enemy.x - destRec.x);
+            if (distance < destRec.width * 7) {
+                //Si esta a la derecha
+                if (enemy.x > destRec.x && direccionX == 0) {
+                    teclaDerecha = true;
+                    srcRec.width = -abs(srcRec.width);
+                    orientacionActual = 3;
+                    direccionX = 1;
+                }
+                else if (enemy.x < destRec.x && direccionX == 1) {
+                    teclaIzquierda = true;
+                    srcRec.width = abs(srcRec.width);
+                    orientacionActual = 2;
+                    direccionX = 0;
+                }
+                else {
+                    teclaDisparo = true;
+                }
+            }
             //comprobar direccion
+            else if (enemy.x > destRec.x) {
+                teclaDerecha = true;
+                srcRec.width = -abs(srcRec.width);
+                orientacionActual = 3;
+                direccionX = 1;
+            }
+            else if (enemy.x < destRec.x) {
+                teclaIzquierda = true;
+                srcRec.width = abs(srcRec.width);
+                orientacionActual = 2;
+                direccionX = 0;
+            }
             //comprobar hueco en el suelo
-
+            if (direccionX == 0 && !sueloIzquierda) {
+                teclaSalto = true;
+            }
+            else if (direccionX == 1 && !sueloDerecha) {
+                teclaSalto = true;
+            }
+        }
         //Si el enemigo esta abajo
+        else if(destRec.y < enemy.y){
             //Moverse en horizontal con direccionX
+            //Mover izquierda
+            if (direccionX == 0) {
+                teclaIzquierda = true;
+                srcRec.width = abs(srcRec.width);
+                orientacionActual = 2;
+            }
+            else if (direccionX == 1) {
+                teclaDerecha = true;
+                srcRec.width = -abs(srcRec.width);
+                orientacionActual = 3;
+            }
 
+            //Saltos que "impiden" situacion irresoluble entre IAs
+            if (contadorSaltos > 300) {
+                teclaSalto = true;
+                contadorSaltos = 0;
+            }
+            else if (!enElAire) {
+                contadorSaltos++;
+            }
+        }
         //Si el enemigo esta arriba
+        else if(enemy.y < destRec.y) {
+            teclaIzquierda = true;
+            teclaSalto = true;
+        }
+
+
+        
             //Si esta arriba derecha + suelo arriba derecha
             //Lo mismo para la izq
             //sino salto recto
