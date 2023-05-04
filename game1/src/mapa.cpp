@@ -229,7 +229,6 @@ public:
     }
 
     void Actualizar() {
-        //SetMasterVolume(1.0f);
         if (!mute_music) {
             if (musicNum != lastMusicNum) {
                 if (lastMusicNum == 0) {

@@ -96,6 +96,13 @@ public:
         "OFF", "ON", "ON"
     };
 
+    unsigned int volumen = 0;
+    bool volumen_plus_pulsado = false;
+    bool volumen_minus_pulsado = false;
+    const char* VOLUMEN_MODE[11] = {
+        "0","1","2","3","4","5","6","7","8","9","10"
+    };
+
     unsigned int effect_modo = 0;
     bool effect_pulsado = false;
     const char* EFFECT_MODE[2] = {
@@ -191,10 +198,12 @@ public:
         this->resoluciones1_mode = stoi(ini["screen"]["resolution"]);
         this->music_modo = stoi(ini["sound"]["mute_music"]);
         this->alt_music = stoi(ini["sound"]["alt_music"]);
+        this->volumen = stoi(ini["sound"]["volumen"]);
         this->effect_modo = stoi(ini["sound"]["mute_effects"]);
         if ((alt_music == 1) && (skin_modo == 1)) {
             alt_music = 2;
         }
+        SetMasterVolume((float)volumen / 10);
     }
 
     void guardarControlesNuevos() {
@@ -228,6 +237,7 @@ public:
 
         ini["sound"]["mute_music"] = std::to_string(this->music_modo);
         ini["sound"]["alt_music"] = std::to_string(this->alt_music);
+        ini["sound"]["volumen"] = std::to_string(this->volumen);
         ini["sound"]["mute_effects"] = std::to_string(this->effect_modo);
 
         // generate an INI file (overwrites any previous file)
@@ -501,7 +511,7 @@ public:
         // Si ponemos el cursor encima
         if (CheckCollisionPointRec(mousePoint, rectAux)) {
             // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
-            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && music_pulsado == false) {
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && alt_music_pulsado == false) {
                 if (effect_modo == 0) {
                     PlaySound(clic);
                 }
@@ -519,10 +529,66 @@ public:
                 alt_music_pulsado = true;
             }
             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-                music_pulsado = false;
+                alt_music_pulsado = false;
             }
         }
         ALT_MUSIC_OUT = alt_music;
+
+        // VOLUMEN
+        positionX = 20;
+        positionY = 20 + 30 * (4 + 6);
+        // Calculo el tamaño para hacer el rectangulo a medida
+        texto = TextFormat("Volumen: %s0 %s", VOLUMEN_MODE[volumen], "%");
+        tamano_texto = MeasureText(texto.c_str(), 20);
+        positionX = positionX + tamano_texto;
+
+        //BOTON DE MENOS DEL VOLUMEN
+        texto = TextFormat("-");
+        tamano_texto = MeasureText(texto.c_str(), 20);
+        positionX = positionX + tamano_texto;
+        // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
+        rectAux = { (float)positionX, (float)positionY, (float)tamano_texto, 20 };
+        //DrawRectangle(20, 20 + 30 * i, 200, 30, SKYBLUE);
+        mousePoint = GetMousePosition();
+
+        // Si ponemos el cursor encima
+        if (CheckCollisionPointRec(mousePoint, rectAux)) {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && volumen_minus_pulsado == false) {
+                if (volumen > 0) {
+                    volumen--;
+                    SetMasterVolume((float)volumen/10);
+                }
+                volumen_minus_pulsado = true;
+            }
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+                volumen_minus_pulsado = false;
+            }
+        }
+
+        //BOTON DE MAS DEL VOLUMEN
+        positionX += 2*tamano_texto;
+        texto = TextFormat("+");
+        tamano_texto = MeasureText(texto.c_str(), 20);
+        // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
+        rectAux = { (float)positionX, (float)positionY, (float)tamano_texto, 20 };
+        //DrawRectangle(20, 20 + 30 * i, 200, 30, SKYBLUE);
+        mousePoint = GetMousePosition();
+
+        // Si ponemos el cursor encima
+        if (CheckCollisionPointRec(mousePoint, rectAux)) {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && volumen_plus_pulsado == false) {
+                if (volumen < 10) {
+                    volumen++;
+                    SetMasterVolume((float)volumen / 10);
+                }
+                volumen_plus_pulsado = true;
+            }
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+                volumen_plus_pulsado = false;
+            }
+        }
 
         // Modos EFFECT
         positionX = 20 + (GetScreenWidth() / 2);
@@ -759,6 +825,49 @@ public:
         mousePoint = GetMousePosition();
 
         // Si ponemos el cursor encima
+        if (CheckCollisionPointRec(mousePoint, rectAux)) {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            DrawText(texto.c_str(), positionX, positionY, 20, RED);
+        }
+        else {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            DrawText(texto.c_str(), positionX, positionY, 20, WHITE);
+        }
+
+        // VOLUMEN
+        positionX = 20;
+        positionY = 20 + 30 * (4 + 6);
+        // Calculo el tamaño para hacer el rectangulo a medida
+        texto = TextFormat("Volumen: %s0 %s", VOLUMEN_MODE[volumen],"%");
+        tamano_texto = MeasureText(texto.c_str(), 20);
+        DrawText(texto.c_str(), positionX, positionY, 20, WHITE);
+        positionX = positionX + tamano_texto;
+
+        //BOTON DE MENOS DEL VOLUMEN
+        texto = TextFormat("-");
+        tamano_texto = MeasureText(texto.c_str(), 20);
+        positionX = positionX + tamano_texto;
+        // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
+        rectAux = { (float)positionX, (float)positionY, (float)tamano_texto, 20 };
+        //DrawRectangle(20, 20 + 30 * i, 200, 30, SKYBLUE);
+                // Si ponemos el cursor encima
+        if (CheckCollisionPointRec(mousePoint, rectAux)) {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            DrawText(texto.c_str(), positionX, positionY, 20, RED);
+        }
+        else {
+            // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
+            DrawText(texto.c_str(), positionX, positionY, 20, WHITE);
+        }
+
+        //BOTON DE MAS DEL VOLUMEN
+        positionX += 2*tamano_texto;
+        texto = TextFormat("+");
+        tamano_texto = MeasureText(texto.c_str(), 20);
+        // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
+        rectAux = { (float)positionX, (float)positionY, (float)tamano_texto, 20 };
+        //DrawRectangle(20, 20 + 30 * i, 200, 30, SKYBLUE);
+                // Si ponemos el cursor encima
         if (CheckCollisionPointRec(mousePoint, rectAux)) {
             // Dibujar el nombre de la funcionalidad y la tecla actualmente asignada
             DrawText(texto.c_str(), positionX, positionY, 20, RED);
