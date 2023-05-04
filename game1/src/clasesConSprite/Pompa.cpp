@@ -20,6 +20,7 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->lastWidth = lastWidth;
 		enemigoContenido->lastHeight = lastHeight;
 		if (matalo) {
+			enemigoContenido->rebotando = true;
 			enemigoContenido->killCount = this->killCount;
 		}
 
@@ -35,6 +36,7 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->lastWidth = lastWidth;
 		enemigoContenido->lastHeight = lastHeight;
 		if (matalo) {
+			enemigoContenido->rebotando = true;
 			enemigoContenido->killCount = this->killCount;
 		}
 
@@ -50,6 +52,7 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->lastWidth = lastWidth;
 		enemigoContenido->lastHeight = lastHeight;
 		if (matalo) {
+			enemigoContenido->rebotando = true;
 			enemigoContenido->killCount = this->killCount;
 		}
 
@@ -65,6 +68,7 @@ sh_Enemigo Pompa::extraeEnemigo(bool matalo) {
 		enemigoContenido->lastWidth = lastWidth;
 		enemigoContenido->lastHeight = lastHeight;
 		if (matalo) {
+			enemigoContenido->rebotando = true;
 			enemigoContenido->killCount = this->killCount;
 		}
 

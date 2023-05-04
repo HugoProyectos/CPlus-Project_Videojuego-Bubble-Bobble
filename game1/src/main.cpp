@@ -26,6 +26,7 @@ typedef enum GameScreen { MAIN_MENU, NIVEL_1, NIVEL_2, NIVEL_3, NIVEL_4, NIVEL_5
 //------------------------------------------------------------------------------------
 int main(void)
 {
+    srand(time(NULL));
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
