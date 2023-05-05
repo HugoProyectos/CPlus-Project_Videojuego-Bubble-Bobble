@@ -120,26 +120,54 @@ public:
             destRect1 = { 0, (float)tamanoMargenSup , (float)GetScreenWidth(), (float)tamanoPantalla };
             DrawTexturePro(main_screen, srcRect1, destRect1, Vector2{ 0,0 }, 0, WHITE);
 
-            destRect2 = { float(GetScreenWidth() * 0.024), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda - 1)), float(GetScreenWidth() * 0.443), (float)(tamanoPantalla * 0.196) };
+            destRect2 = { float(GetScreenWidth() * 0.024), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda != 11 ? (ronda - 1) : 9)), float(GetScreenWidth() * 0.443), (float)(tamanoPantalla * 0.196) };
             if (!clear) {
                 DrawTexturePro(gameover_screen[0], srcRect2, destRect2, Vector2{ 0,0 }, 0, WHITE);
+                if (ronda != 11) {
+                    DrawText(std::to_string(ronda).c_str(), float(GetScreenWidth() * 0.069), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda - 1)) + (float)(tamanoPantalla * 0.196 * 0.498), GetScreenHeight() / ratio, BLACK);
+                }
+                else {
+                    DrawText("BOSS", float(GetScreenWidth() * 0.047), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * 9) + (float)(tamanoPantalla * 0.196 * 0.498), GetScreenHeight() / ratio, BLACK);
+                }
+                
             }
             else {
                 DrawTexturePro(clear_screen[0], srcRect2, destRect2, Vector2{ 0,0 }, 0, WHITE);
+                if (ronda != 11) {
+                    DrawText(std::to_string(ronda).c_str(), float(GetScreenWidth() * 0.069), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda - 1)) + (float)(tamanoPantalla * 0.196 * 0.498), GetScreenHeight() / ratio, BLACK);
+                }
+                else {
+                    DrawText("BOSS", float(GetScreenWidth() * 0.047), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * 9) + (float)(tamanoPantalla * 0.196 * 0.498), GetScreenHeight() / ratio, BLACK);
+                }
+                
             }
 
-            DrawText(std::to_string(ronda).c_str(), float(GetScreenWidth() * 0.069), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda - 1)) + (float)(tamanoPantalla * 0.196 * 0.498), GetScreenHeight() / ratio, BLACK);
+            
 
             if (hayP2) {
-                destRect2 = {  float(GetScreenWidth() * 0.532), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda - 1)), float(GetScreenWidth() * 0.443), (float)(tamanoPantalla * 0.196) };
+                destRect2 = {  float(GetScreenWidth() * 0.532), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda != 11 ? (ronda - 1) : 9)), float(GetScreenWidth() * 0.443), (float)(tamanoPantalla * 0.196) };
                 if (!clear) {
                     DrawTexturePro(gameover_screen[1], srcRect2, destRect2, Vector2{ 0,0 }, 0, WHITE);
+                    if (ronda != 11) {
+                        DrawText(std::to_string(ronda).c_str(), float(GetScreenWidth() * (1 - (0.069 * 2))), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda - 1)) + (float)(tamanoPantalla * 0.196 * 0.498), GetScreenHeight() / ratio, BLACK);
+                    }
+                    else {
+                        DrawText("BOSS", float(GetScreenWidth() * 0.837), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * 9) + (float)(tamanoPantalla * 0.196 * 0.498), GetScreenHeight() / ratio, BLACK);
+                    }
+                    
                 }
                 else {
                     DrawTexturePro(clear_screen[1], srcRect2, destRect2, Vector2{ 0,0 }, 0, WHITE);
+                    if (ronda != 11) {
+                        DrawText(std::to_string(ronda).c_str(), float(GetScreenWidth() * (1 - (0.069 * 2))), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda - 1)) + (float)(tamanoPantalla * 0.196 * 0.498), GetScreenHeight() / ratio, BLACK);
+                    }
+                    else {
+                        DrawText("BOSS", float(GetScreenWidth() * 0.837), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * 9) + (float)(tamanoPantalla * 0.196 * 0.498), GetScreenHeight() / ratio, BLACK);
+                    }
+                    
                 }
 
-                DrawText(std::to_string(ronda).c_str(), float(GetScreenWidth() * (1 - (0.069 * 2))), (float)tamanoMargenSup + float(tamanoPantalla * 0.09) + float(tamanoPantalla * 0.077 * (ronda - 1)) + (float)(tamanoPantalla * 0.196 * 0.498), GetScreenHeight() / ratio, BLACK);
+                
             }
 
         }
