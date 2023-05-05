@@ -693,7 +693,7 @@ public:
 			if (enemigos.at(i)->borrame) {
 				//auto aBorrar = pompas.begin() + i;
 				//pompas.erase(aBorrar); //-->Necesita comparador entre pompas
-				if (enemigos.at(i)->muertePorAgua && !enemigos.at(i)->muerto) {
+				if (enemigos.at(i)->muertePorAgua) {
 					enemigosPorMatar--;
 					std::cout << "Quedan " << (int)enemigosPorMatar << " enemigos por matar." << std::endl;
 				}

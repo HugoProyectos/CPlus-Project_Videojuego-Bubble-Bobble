@@ -61,8 +61,10 @@ bool Agua::colisionBub(Rectangle bub, int framesInmunidad) {
 }
 
 void Agua::colisionEnemigo(Enemigo& e) {
-	for (int i = 0; i < 10; i++) {
-		(stream[i].colisionEnemigo(e));
+	if (!e.muerto) {
+		for (int i = 0; i < 10; i++) {
+			(stream[i].colisionEnemigo(e));
+		}
 	}
 }
 
