@@ -57,6 +57,7 @@ public:
     bool mute_sound = false;
     //Variable de identidad
     bool eresBub = true;
+    bool eresIA = false;
 
     //VARIABLES DE DESPLAZAMIENTO DE BUB 
     int8_t cambioMapa = 2; //2->Primera Iteraci�n 1->Desplaz�ndose 0->Ya no
@@ -335,7 +336,7 @@ public:
         ////////////////////////////////////////////
         // IA de BOB 
         ////////////////////////////////////////////
-        if (!eresBub) {
+        if (eresIA && cambioMapa == 0) {
             Rectangle enemy = Rectangle();
             int bestIndex = 0;
             int type = 0;
@@ -368,7 +369,7 @@ public:
             ActualizarIA(enemy, type);
         }
 
-        if (!eresBub) {
+        if (eresIA) {
             if (cambioMapa > 0) {
                 if (cambioMapa == 2) {
                     primeraActualizacion = false;
@@ -387,8 +388,16 @@ public:
                     cambioMapa = 1;
                     animacionActiva = TRASLATION;
                     indiceAnimacion = 6;
-                    razonX = (posicionOriginalBob.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
-                    razonY = (posicionOriginalBob.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
+
+                    //Calculamos la distancia a recorrer por iteracion
+                    if (eresBub) {
+                        razonX = (posicionOriginalBub.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
+                        razonY = (posicionOriginalBub.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
+                    }
+                    else {
+                        razonX = (posicionOriginalBob.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
+                        razonY = (posicionOriginalBob.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
+                    }
                 }
                 destRec.x += razonX;
                 destRec.y += razonY;
@@ -409,10 +418,6 @@ public:
                     cambioMapa = -1;
                     //std::cout << "DEBERIA CANCELAR" << std::endl;
                 }
-                /*
-                if (destRec.x <= posicionOriginalBub.x + 5 && destRec.x >= posicionOriginalBub.x - 5 && destRec.y <= posicionOriginalBub.y + 5 && destRec.y >= posicionOriginalBub.y - 5) {
-                    cambioMapa = -1;
-                }*/
             }
             else if (!muerto) {
                 float velocidadLateralActual = 0;
@@ -543,7 +548,12 @@ public:
                         animacionActiva = SHOOTING;
                         indiceAnimacion = 6; //Es el 0 de la segunda parte de animaciones
                         Pompa p;
-                        p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * ((double)lastWidth / (double)anchoOriginal * sentido), (double)(DISTANCIA_DISPARO * multiplicadorDistanciaDisparo * ((double)lastWidth / (double)anchoOriginal)), true, vidaPompa[nivel]);
+                        if (eresBub) {
+                            p = Pompa(spriteBurbuja, destRec, (double)(VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * ((double)lastWidth / (double)anchoOriginal) * sentido), (double)(DISTANCIA_DISPARO * multiplicadorDistanciaDisparo * ((double)lastWidth / (double)anchoOriginal)), true, vidaPompa[nivel]);
+                        }
+                        else {
+                            p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * ((double)lastWidth / (double)anchoOriginal * sentido), (double)(DISTANCIA_DISPARO * multiplicadorDistanciaDisparo * ((double)lastWidth / (double)anchoOriginal)), true, vidaPompa[nivel]);
+                        }
                         if (imTheThunder) { // Debería estar solo en el jefe (si se llega a hacer)
                             p.modulo = Pompa::MODULO_RAYO;
                             p.indiceAnimacion = 18;
@@ -642,18 +652,24 @@ public:
                                 && (destRec.y - destRec.height / 2.0f) <= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2.0f)
                                 || (admin->enemigos.at(i)->tipo == 7
                                     && ((destRec.y + destRec.height / 2) <= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2)
-                                    && (destRec.y - destRec.height / 2) >= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2))))
+                                        && (destRec.y - destRec.height / 2) >= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2))))
                             && ((destRec.x + destRec.width / 2 - destRec.width * 0.125) >= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2.0f)
                                 && (destRec.x - destRec.width / 2 + destRec.width * 0.125) <= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2.0f)
                                 || (destRec.x + destRec.width / 2 - destRec.width * 0.125) >= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
                                 && (destRec.x - destRec.width / 2 + destRec.width * 0.125) <= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
                                 || (admin->enemigos.at(i)->tipo == 7
                                     && ((destRec.x + destRec.width / 2) <= (admin->enemigos.at(i)->destRec.x + (admin->enemigos.at(i)->destRec.width / 2 - admin->enemigos.at(i)->destRec.width * 0.0625))
-                                    && (destRec.x - destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x - (admin->enemigos.at(i)->destRec.width / 2 + admin->enemigos.at(i)->destRec.width * 0.0625)))))) { //Colisiona con un enemigo
+                                        && (destRec.x - destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x - (admin->enemigos.at(i)->destRec.width / 2 + admin->enemigos.at(i)->destRec.width * 0.0625)))))) { //Colisiona con un enemigo
                             //std::cout << "I DIED" << std::endl;
-                            muriendo = true;
-                            electrocutado = false;
-                            animacionActiva = DYING;
+                            if (admin->enemigos.at(i)->tipo == 7 && admin->enemigos.at(i)->muertoInterno) {
+                                admin->enemigos.at(i)->muertoJefe = true;
+                                admin->enemigos.at(i)->muerto = true;
+                            }
+                            else {
+                                muriendo = true;
+                                electrocutado = false;
+                                animacionActiva = DYING;
+                            }
                         }
                     }
 
@@ -783,8 +799,14 @@ public:
                     electrocutado = false;
                     thunderLessFrames = 0;
                     framesInvulnerabilidad = 60 * 3; //3 segundos
-                    destRec.x = posicionOriginalBob.x;
-                    destRec.y = posicionOriginalBob.y;
+                    if (!eresBub) {
+                        destRec.x = posicionOriginalBob.x;
+                        destRec.y = posicionOriginalBob.y;
+                    }
+                    else {
+                        destRec.x = posicionOriginalBub.x;
+                        destRec.y = posicionOriginalBub.y;
+                    }
 
                     saltoRecto = false;
                 }
@@ -796,501 +818,509 @@ public:
         // FIN IA de BOB 
         ////////////////////////////////////////////
         // 
-        //Gesti�n de desplazamiento lateral
-        if (cambioMapa > 0) {
-            if (cambioMapa == 2) {
-                primeraActualizacion = false;
-                switchOrientacion = 1;
-                //Reiniciamos su orientación
-                if (orientacionActual == 3) {
-                    srcRec.width *= -1;
-                    orientacionActual = 2;
-                    switchOrientacion = 2;
-                }
-
-                destRec.height *= 2;
-                destRec.width *= 2;
-                srcRec.height *= 2;
-                srcRec.width *= 2;
-                cambioMapa = 1;
-                animacionActiva = TRASLATION;
-                indiceAnimacion = 6;
-                //velocidadFrames /= 2;
-
-                //Calculamos la distancia a recorrer por iteracion
-                if (eresBub) {
-                    razonX = (posicionOriginalBub.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
-                    razonY = (posicionOriginalBub.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
-                } else {
-                    razonX = (posicionOriginalBob.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
-                    razonY = (posicionOriginalBob.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
-                }
-            }
-            destRec.x += razonX;
-            destRec.y += razonY;
-
-            cuentaFrames++;
-            if (cuentaFrames >= (targetFrames / velocidadFrames)) {
-                //std::cerr << "Actualiza" << std::endl;
-                cuentaFrames = 0;
-                indiceAnimacion++;//Si la animación no chuta en subsecuentes llamamientos, comenta esta linea, compila, ejecuta, descomenta y vuelve a compilar
-                if (indiceAnimacion >= (fTranslationAnimation + 6 - 2)) { //Los dos últimos frames son de salida de la pompa
-                    //std::cout << "Puede volver a disparar" << std::endl;
-                    indiceAnimacion = 12; //El frame en que inicia la iteración
-                }
-            }
-            cuentaFramesTraslacion++;
-            //std::cout << cuentaFramesTraslacion << "/" << LIMITE_FRAMES_TRASLACION << std::endl;
-            if (cuentaFramesTraslacion >= LIMITE_FRAMES_TRASLACION) {
-                cambioMapa = -1;
-                //std::cout << "DEBERIA CANCELAR" << std::endl;
-            }
-            /*
-            if (destRec.x <= posicionOriginalBub.x + 5 && destRec.x >= posicionOriginalBub.x - 5 && destRec.y <= posicionOriginalBub.y + 5 && destRec.y >= posicionOriginalBub.y - 5) {
-                cambioMapa = -1;
-            }*/
-        }
-		else if(!muerto){
-            float velocidadLateralActual = 0;
-            if (cambioMapa == 0) {
-                if (admin->j1.electrocutalo && !electrocutado && !muriendo && !muerto) {
-                    if (thunderLessFrames <= 0 && !imTheThunder) {
-                        electrocutado = true;
-                        animacionActiva = SHOCK;
-                        indiceAnimacion = 6;
+        else {
+            //Gesti�n de desplazamiento lateral
+            if (cambioMapa > 0) {
+                if (cambioMapa == 2) {
+                    primeraActualizacion = false;
+                    switchOrientacion = 1;
+                    //Reiniciamos su orientación
+                    if (orientacionActual == 3) {
+                        srcRec.width *= -1;
+                        orientacionActual = 2;
+                        switchOrientacion = 2;
                     }
-                    admin->j1.electrocutalo = false;
-                }
-                else if (admin->j2.electrocutalo && !electrocutado && !muriendo && !muerto) {
-                    if (thunderLessFrames <= 0 && !imTheThunder) {
-                        electrocutado = true;
-                        animacionActiva = SHOCK;
-                        indiceAnimacion = 6;
+
+                    destRec.height *= 2;
+                    destRec.width *= 2;
+                    srcRec.height *= 2;
+                    srcRec.width *= 2;
+                    cambioMapa = 1;
+                    animacionActiva = TRASLATION;
+                    indiceAnimacion = 6;
+                    //velocidadFrames /= 2;
+
+                    //Calculamos la distancia a recorrer por iteracion
+                    if (eresBub) {
+                        razonX = (posicionOriginalBub.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
+                        razonY = (posicionOriginalBub.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
                     }
-                    admin->j2.electrocutalo = false;
+                    else {
+                        razonX = (posicionOriginalBob.x - destRec.x) / LIMITE_FRAMES_TRASLACION;
+                        razonY = (posicionOriginalBob.y - destRec.y) / LIMITE_FRAMES_TRASLACION;
+                    }
                 }
-                if (thunderLessFrames > 0) {
-                    thunderLessFrames--;
+                destRec.x += razonX;
+                destRec.y += razonY;
+
+                cuentaFrames++;
+                if (cuentaFrames >= (targetFrames / velocidadFrames)) {
+                    //std::cerr << "Actualiza" << std::endl;
+                    cuentaFrames = 0;
+                    indiceAnimacion++;//Si la animación no chuta en subsecuentes llamamientos, comenta esta linea, compila, ejecuta, descomenta y vuelve a compilar
+                    if (indiceAnimacion >= (fTranslationAnimation + 6 - 2)) { //Los dos últimos frames son de salida de la pompa
+                        //std::cout << "Puede volver a disparar" << std::endl;
+                        indiceAnimacion = 12; //El frame en que inicia la iteración
+                    }
                 }
-                if (admin->j1.debeRebotar > 0 && eresBub) { //Si rebota sobre una pompa, es como iniciar un nuevo salto
-                    if (!electrocutado) {
+                cuentaFramesTraslacion++;
+                //std::cout << cuentaFramesTraslacion << "/" << LIMITE_FRAMES_TRASLACION << std::endl;
+                if (cuentaFramesTraslacion >= LIMITE_FRAMES_TRASLACION) {
+                    cambioMapa = -1;
+                    //std::cout << "DEBERIA CANCELAR" << std::endl;
+                }
+                /*
+                if (destRec.x <= posicionOriginalBub.x + 5 && destRec.x >= posicionOriginalBub.x - 5 && destRec.y <= posicionOriginalBub.y + 5 && destRec.y >= posicionOriginalBub.y - 5) {
+                    cambioMapa = -1;
+                }*/
+            }
+            else if (!muerto) {
+                float velocidadLateralActual = 0;
+                if (cambioMapa == 0) {
+                    if (admin->j1.electrocutalo && !electrocutado && !muriendo && !muerto) {
+                        if (thunderLessFrames <= 0 && !imTheThunder) {
+                            electrocutado = true;
+                            animacionActiva = SHOCK;
+                            indiceAnimacion = 6;
+                        }
+                        admin->j1.electrocutalo = false;
+                    }
+                    else if (admin->j2.electrocutalo && !electrocutado && !muriendo && !muerto) {
+                        if (thunderLessFrames <= 0 && !imTheThunder) {
+                            electrocutado = true;
+                            animacionActiva = SHOCK;
+                            indiceAnimacion = 6;
+                        }
+                        admin->j2.electrocutalo = false;
+                    }
+                    if (thunderLessFrames > 0) {
+                        thunderLessFrames--;
+                    }
+                    if (admin->j1.debeRebotar > 0 && eresBub) { //Si rebota sobre una pompa, es como iniciar un nuevo salto
+                        if (!electrocutado) {
+                            //std::cout << "Me dicen que rebote" << std::endl;
+                            saltoRecorrido = 0;
+
+                            dirCorrer = 0;
+                            //Copy-paste del inicio del salto
+                            if (!disparando) animacionActiva = JUMPING;
+                            enElAire = true;
+                            cayendo = false;
+                            velocidadActual = velocidadSalto;
+                            destRec.y -= velocidadActual;
+                            saltoRecorrido += velocidadActual;
+                            velocidadActual -= deceleracion;
+                            if (!mute_sound) {
+                                PlaySound(sonidoSaltar);
+                            }
+                        }
+                        admin->j1.debeRebotar = 0;
+
+                    }
+                    else if (admin->j2.debeRebotar > 0 && !eresBub) {
                         //std::cout << "Me dicen que rebote" << std::endl;
-                        saltoRecorrido = 0;
-
-                        dirCorrer = 0;
-                        //Copy-paste del inicio del salto
-                        if (!disparando) animacionActiva = JUMPING;
-                        enElAire = true;
-                        cayendo = false;
-                        velocidadActual = velocidadSalto;
-                        destRec.y -= velocidadActual;
-                        saltoRecorrido += velocidadActual;
-                        velocidadActual -= deceleracion;
-                        if (!mute_sound) {
-                            PlaySound(sonidoSaltar);
+                        if (!electrocutado) {
+                            saltoRecorrido = 0;
+                            dirCorrer = 0;
+                            //Copy-paste del inicio del salto
+                            if (!disparando) animacionActiva = JUMPING;
+                            enElAire = true;
+                            cayendo = false;
+                            velocidadActual = velocidadSalto;
+                            destRec.y -= velocidadActual;
+                            saltoRecorrido += velocidadActual;
+                            velocidadActual -= deceleracion;
+                            if (!mute_sound) {
+                                PlaySound(sonidoSaltar);
+                            }
                         }
+                        admin->j2.debeRebotar = 0;
                     }
-                    admin->j1.debeRebotar = 0;
-                    
-                } else if (admin->j2.debeRebotar > 0 && !eresBub) {
-                    //std::cout << "Me dicen que rebote" << std::endl;
-                    if (!electrocutado) {
-                        saltoRecorrido = 0;
-                        dirCorrer = 0;
-                        //Copy-paste del inicio del salto
-                        if (!disparando) animacionActiva = JUMPING;
-                        enElAire = true;
-                        cayendo = false;
-                        velocidadActual = velocidadSalto;
-                        destRec.y -= velocidadActual;
-                        saltoRecorrido += velocidadActual;
-                        velocidadActual -= deceleracion;
-                        if (!mute_sound) {
-                            PlaySound(sonidoSaltar);
-                        }
-                    }
-                    admin->j2.debeRebotar = 0;
-                }
 
-                if (enElAire) {
-                    if (saltoRecorrido > 0) {
-                        if (dirCorrer == 1) {  //Salta izquierda
-                            if (IsKeyDown(right)) { //if (IsKeyDown(KEY_S)) {
-                                //(OPCIONAL) A�adir que decelere en vez de cambiar repentinamente de velocidad
-                                switchOrientacion = 3;
-                                destRec.x -= velocidadLateral / 3.0f;;
-                                velocidadLateralActual = velocidadLateral / 3.0f;;
-                                dirAir = 2;
+                    if (enElAire) {
+                        if (saltoRecorrido > 0) {
+                            if (dirCorrer == 1) {  //Salta izquierda
+                                if (IsKeyDown(right)) { //if (IsKeyDown(KEY_S)) {
+                                    //(OPCIONAL) A�adir que decelere en vez de cambiar repentinamente de velocidad
+                                    switchOrientacion = 3;
+                                    destRec.x -= velocidadLateral / 3.0f;;
+                                    velocidadLateralActual = velocidadLateral / 3.0f;;
+                                    dirAir = 2;
+                                }
+                                else {
+                                    if (IsKeyDown(left)) { //if (IsKeyDown(KEY_A)) {
+                                        switchOrientacion = 2;
+                                        dirAir = 1;
+                                        destRec.x -= velocidadLateral;
+                                        velocidadLateralActual = velocidadLateral;
+                                    }
+                                    else if (dirAir == 1) {
+                                        destRec.x -= velocidadLateral;
+                                        velocidadLateralActual = velocidadLateral;
+                                    }
+                                    else {
+                                        destRec.x -= velocidadLateral / 3.0f;
+                                        velocidadLateralActual = velocidadLateral / 3.0f;
+                                    }
+                                }
+                            }
+                            else if (dirCorrer == 2) {  //Salta derecha
+                                if (IsKeyDown(left)) { //if (IsKeyDown(KEY_A)) {
+                                    //(OPCIONAL) A�adir que decelere en vez de cambiar repentinamente de velocidad
+                                    switchOrientacion = 2;
+                                    destRec.x += velocidadLateral / 3.0f;
+                                    velocidadLateralActual = velocidadLateral / 3.0f;
+                                    dirAir = 1;
+                                }
+                                else {
+                                    if (IsKeyDown(right)) { //if (IsKeyDown(KEY_S)) {
+                                        switchOrientacion = 3;
+                                        dirAir = 2;
+                                        destRec.x += velocidadLateral;
+                                        velocidadLateralActual = velocidadLateral;
+                                    }
+                                    else if (dirAir == 2) {
+                                        destRec.x += velocidadLateral;
+                                        velocidadLateralActual = velocidadLateral;
+                                    }
+                                    else {
+                                        destRec.x += velocidadLateral / 3.0f;
+                                        velocidadLateralActual = velocidadLateral / 3.0f;
+                                    }
+                                }
                             }
                             else {
                                 if (IsKeyDown(left)) { //if (IsKeyDown(KEY_A)) {
                                     switchOrientacion = 2;
-                                    dirAir = 1;
-                                    destRec.x -= velocidadLateral;
-                                    velocidadLateralActual = velocidadLateral;
+                                    destRec.x -= velocidadLateral / 2.0f;
+                                    velocidadLateralActual = velocidadLateral / 2.0f;
                                 }
-                                else if (dirAir == 1) {
-                                    destRec.x -= velocidadLateral;
-                                    velocidadLateralActual = velocidadLateral;
-                                }
-                                else {
-                                    destRec.x -= velocidadLateral / 3.0f;
-                                    velocidadLateralActual = velocidadLateral / 3.0f;
-                                }
-                            }
-                        }
-                        else if (dirCorrer == 2) {  //Salta derecha
-                            if (IsKeyDown(left)) { //if (IsKeyDown(KEY_A)) {
-                                //(OPCIONAL) A�adir que decelere en vez de cambiar repentinamente de velocidad
-                                switchOrientacion = 2;
-                                destRec.x += velocidadLateral / 3.0f;
-                                velocidadLateralActual = velocidadLateral / 3.0f;
-                                dirAir = 1;
-                            }
-                            else {
-                                if (IsKeyDown(right)) { //if (IsKeyDown(KEY_S)) {
+                                else if (IsKeyDown(right)) { //if (IsKeyDown(KEY_S)) {
                                     switchOrientacion = 3;
-                                    dirAir = 2;
-                                    destRec.x += velocidadLateral;
-                                    velocidadLateralActual = velocidadLateral;
-                                }
-                                else if (dirAir == 2) {
-                                    destRec.x += velocidadLateral;
-                                    velocidadLateralActual = velocidadLateral;
-                                }
-                                else {
-                                    destRec.x += velocidadLateral / 3.0f;
-                                    velocidadLateralActual = velocidadLateral / 3.0f;
+                                    destRec.x += velocidadLateral / 2.0f;
+                                    velocidadLateralActual = velocidadLateral / 2.0f;
                                 }
                             }
                         }
                         else {
                             if (IsKeyDown(left)) { //if (IsKeyDown(KEY_A)) {
+                                if (!disparando && !muriendo && !electrocutado) animacionActiva = MOVING;
                                 switchOrientacion = 2;
                                 destRec.x -= velocidadLateral / 2.0f;
                                 velocidadLateralActual = velocidadLateral / 2.0f;
                             }
-                            else if (IsKeyDown(right)) { //if (IsKeyDown(KEY_S)) {
+                            else if (IsKeyDown(right)) {//if (IsKeyDown(KEY_S)) {
+                                if (!disparando && !muriendo && !electrocutado) animacionActiva = MOVING;
                                 switchOrientacion = 3;
                                 destRec.x += velocidadLateral / 2.0f;
                                 velocidadLateralActual = velocidadLateral / 2.0f;
                             }
                         }
                     }
-                    else {
-                        if (IsKeyDown(left)) { //if (IsKeyDown(KEY_A)) {
-                            if (!disparando && !muriendo && !electrocutado) animacionActiva = MOVING;
-                            switchOrientacion = 2;
-                            destRec.x -= velocidadLateral / 2.0f;
-                            velocidadLateralActual = velocidadLateral / 2.0f;
-                        }
-                        else if (IsKeyDown(right)) {//if (IsKeyDown(KEY_S)) {
-                            if (!disparando && !muriendo && !electrocutado) animacionActiva = MOVING;
-                            switchOrientacion = 3;
-                            destRec.x += velocidadLateral / 2.0f;
-                            velocidadLateralActual = velocidadLateral / 2.0f;
-                        }
-                    }
-                }
 
-                // Se puede disparar en el aire. Las acciones en el aire no se ven limitadas por el disparo, 
-                // pero las del suelo s�. Para mantener la idea if/else de en el aire o en el suelo, 
-                // al del suelo se le ha a�aido la restricci�n opuesta al de en el aire (!enElAire)
-                if (IsKeyPressed(shoot) && (!disparando || permitirDisparo) && !muriendo && !electrocutado) { //if (IsKeyDown(KEY_F)) {
-                    //std::cout << "Dispara" << std::endl;
-                    int sentido = 1; //Hacia la derecha
-                    if (orientacionActual == 2) { //Si es hacia la izquierda
-                        sentido = -1;
-                    }
-                    disparando = true;
-                    permitirDisparo = false;
-                    animacionActiva = SHOOTING;
-                    indiceAnimacion = 6; //Es el 0 de la segunda parte de animaciones
-                    Pompa p;
-                    if (eresBub) {
-                        p = Pompa(spriteBurbuja, destRec, (double)(VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * ((double)lastWidth/ (double)anchoOriginal) * sentido), (double)(DISTANCIA_DISPARO * multiplicadorDistanciaDisparo * ((double)lastWidth / (double)anchoOriginal)), true, vidaPompa[nivel]);
-                        //std::cout << "Dimensiones pompa; " <<p.destRec.x << "," << p.destRec.y << "/" << p.lastHeight << "," << p.lastWidth << std::endl;
-                    
-                    } else {
-                        p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * ((double)lastWidth / (double)anchoOriginal * sentido), (double)(DISTANCIA_DISPARO * multiplicadorDistanciaDisparo * ((double)lastWidth / (double)anchoOriginal)), true, vidaPompa[nivel]);
-                    }
-                    if (imTheThunder) { // Debería estar solo en el jefe (si se llega a hacer)
-                        p.modulo = Pompa::MODULO_RAYO;
-                        p.indiceAnimacion = 18;
-                        p.tVida = Pompa::INFINITA;
-                    }
-                    //std::cout << "Dimensiones pompa; " <<p.destRec.x << "," << p.destRec.y << "/" << p.lastHeight << "," << p.lastWidth << std::endl;
-                    admin->pompas.push_back(std::make_shared<Pompa>(p));
-                    if (!mute_sound) {
-                        PlaySound(sonidoDisparar);
-                    }
-                    
-                }
-                else if (!enElAire && !electrocutado) {
-                    if (IsKeyDown(left) && !muriendo) { //if (IsKeyDown(KEY_A)) {
-                        if (!disparando) animacionActiva = MOVING;
-                        switchOrientacion = 2;
-                        //std::cout << "Muevo Izquierda, orientacion: " << switchOrientacion << std::endl;
-                        if (!enElAgua) {
-                            destRec.x -= velocidadLateral;
-                            velocidadLateralActual = velocidadLateral;
+                    // Se puede disparar en el aire. Las acciones en el aire no se ven limitadas por el disparo, 
+                    // pero las del suelo s�. Para mantener la idea if/else de en el aire o en el suelo, 
+                    // al del suelo se le ha a�aido la restricci�n opuesta al de en el aire (!enElAire)
+                    if (IsKeyPressed(shoot) && (!disparando || permitirDisparo) && !muriendo && !electrocutado) { //if (IsKeyDown(KEY_F)) {
+                        //std::cout << "Dispara" << std::endl;
+                        int sentido = 1; //Hacia la derecha
+                        if (orientacionActual == 2) { //Si es hacia la izquierda
+                            sentido = -1;
                         }
-                        dirCorrer = 1;
-                        dirAir = 1;
-                        compruebaSuelo(lastGround);
-                    }
-                    else if (IsKeyDown(right) && !muriendo) { //if (IsKeyDown(KEY_S)) {
-                        if (!disparando) animacionActiva = MOVING;
-                        switchOrientacion = 3;
-                        //std::cout << "Muevo Derecha, orientacion: " << switchOrientacion << std::endl;
-                        if (!enElAgua) {
-                            destRec.x += velocidadLateral;
-                            velocidadLateralActual = velocidadLateral;
-                        }
-                        dirCorrer = 2;
-                        dirAir = 2;
-                        compruebaSuelo(lastGround);
-                    }
-                    else {
-                        dirCorrer = 0;
-                        if (!(enElAire && saltoRecorrido == 0)) {
-                            switchOrientacion = 1;
-                        }
-                        if (!disparando && !muriendo) animacionActiva = STANDING;
-                    }
-                }
-
-                //Gesti�n de salto
-                if (IsKeyPressed(jump) && !enElAire && !muriendo && !electrocutado) { //if (IsKeyDown(KEY_SPACE)) {
-
-                    //std::cout << "Salto" << std::endl;
-                    if (!disparando) animacionActiva = JUMPING;
-                    enElAire = true;
-                    if (enElAgua) { enElAgua = false; waterlessFrames = 3; }
-                    velocidadActual = velocidadSalto;
-                    destRec.y -= velocidadActual;
-                    saltoRecorrido += velocidadActual;
-                    velocidadActual -= deceleracion;
-                    if (!mute_sound) {
-                        PlaySound(sonidoSaltar);
-                    }
-                    
-                }
-                else if (velocidadActual > 0 && enElAire && !cayendo) {
-                    if (!disparando && !muriendo && !electrocutado) animacionActiva = JUMPING;
-                    destRec.y -= velocidadActual;
-                    saltoRecorrido += velocidadActual;
-                    velocidadActual -= deceleracion;
-                }
-                else if (enElAire && cayendo && saltoRecorrido > 0) {
-                    if (!disparando && !muriendo && !electrocutado) animacionActiva = FALLING;
-                    destRec.y -= velocidadActual;
-                    saltoRecorrido += velocidadActual;
-                    velocidadActual -= deceleracion;
-                }
-                else if (enElAire && cayendo) { //Planeando
-                    //std::cout << "I'm gliding" << std::endl;
-                    if (!disparando && !muriendo && !electrocutado) animacionActiva = FALLING;
-                    destRec.y += velocidadSalto / 2.0f;
-                    saltoRecorrido -= velocidadSalto / 2.0f;
-                }
-                else if (enElAire) { //Inicio ca�da
-                    if (!disparando && !muriendo && !electrocutado) animacionActiva = FALLING;
-                    cayendo = true;
-                    destRec.y -= velocidadActual;
-                    saltoRecorrido += velocidadActual; //planeo
-                    velocidadActual -= deceleracion;
-                }
-
-
-                //Comprueba choque con los enemigos
-                for (int i = 0; i < admin->enemigos.size(); i++) {
-                    if (!admin->enemigos.at(i)->borrame && !admin->enemigos.at(i)->muerto && !admin->enemigos.at(i)->muertePorAgua && !muriendo && !invulnerable
-                        && ((destRec.y + destRec.height / 2.0f) >= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2.0f)
-                            && (destRec.y - destRec.height / 2.0f) <= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2.0f)
-                            || (destRec.y + destRec.height / 2.0f) >= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2.0f)
-                            && (destRec.y - destRec.height / 2.0f) <= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2.0f)
-                            || (admin->enemigos.at(i)->tipo == 7
-                                && ((destRec.y + destRec.height / 2) <= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2)
-                                && (destRec.y - destRec.height / 2) >= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2))))
-                        && ((destRec.x + destRec.width / 2 - destRec.width*0.125) >= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2.0f)
-                            && (destRec.x - destRec.width / 2 + destRec.width * 0.125) <= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2.0f)
-                            || (destRec.x + destRec.width / 2 - destRec.width * 0.125) >= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
-                            && (destRec.x - destRec.width / 2 + destRec.width * 0.125) <= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
-                            || (admin->enemigos.at(i)->tipo == 7
-                                && ((destRec.x + destRec.width / 2) <= (admin->enemigos.at(i)->destRec.x + (admin->enemigos.at(i)->destRec.width / 2 - admin->enemigos.at(i)->destRec.width * 0.0625))
-                                && (destRec.x - destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x - (admin->enemigos.at(i)->destRec.width / 2 + admin->enemigos.at(i)->destRec.width * 0.0625)))))) { //Colisiona con un enemigo
-                        //std::cout << "I DIED" << std::endl;
-                        if (admin->enemigos.at(i)->tipo == 7 && admin->enemigos.at(i)->muertoInterno) {
-                            admin->enemigos.at(i)->muertoJefe = true;
-                            admin->enemigos.at(i)->muerto= true;
-                        }
-                        else {
-                            muriendo = true;
-                            electrocutado = false;
-                            animacionActiva = DYING;
-                        }
-                    }
-                }
-
-                // Comprueba que se come la fruta
-                for (int i = 0; i < admin->frutas.size(); i++) {
-                    if (!admin->frutas.at(i)->borrame && !admin->frutas.at(i)->muerto_bub && !admin->frutas.at(i)->muerto_bob && !muriendo
-                        && ((destRec.y + destRec.height / 2.0f) >= (admin->frutas.at(i)->destRec.y + admin->frutas.at(i)->destRec.height / 2.0f)
-                            && (destRec.y - destRec.height / 2.0f) <= (admin->frutas.at(i)->destRec.y + admin->frutas.at(i)->destRec.height / 2.0f)
-                            || (destRec.y + destRec.height / 2.0f) >= (admin->frutas.at(i)->destRec.y - admin->frutas.at(i)->destRec.height / 2.0f)
-                            && (destRec.y - destRec.height / 2.0f) <= (admin->frutas.at(i)->destRec.y - admin->frutas.at(i)->destRec.height / 2.0f))
-                        && ((destRec.x + destRec.width / 2 - 2) >= (admin->frutas.at(i)->destRec.x - admin->frutas.at(i)->destRec.width / 2.0f)
-                            && (destRec.x - destRec.width / 2 + 2) <= (admin->frutas.at(i)->destRec.x - admin->frutas.at(i)->destRec.width / 2.0f)
-                            || (destRec.x + destRec.width / 2 - 2) >= (admin->frutas.at(i)->destRec.x + admin->frutas.at(i)->destRec.width / 2.0f)
-                            && (destRec.x - destRec.width / 2 + 2) <= (admin->frutas.at(i)->destRec.x + admin->frutas.at(i)->destRec.width / 2.0f))) 
-                    { //Colisiona con fruta
+                        disparando = true;
+                        permitirDisparo = false;
+                        animacionActiva = SHOOTING;
+                        indiceAnimacion = 6; //Es el 0 de la segunda parte de animaciones
+                        Pompa p;
                         if (eresBub) {
-                            admin->scores.SumarPuntuacionP1((unsigned int)admin->frutas.at(i)->puntuacion);
-                            admin->frutas.at(i)->muerto_bub = true;
+                            p = Pompa(spriteBurbuja, destRec, (double)(VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * ((double)lastWidth / (double)anchoOriginal) * sentido), (double)(DISTANCIA_DISPARO * multiplicadorDistanciaDisparo * ((double)lastWidth / (double)anchoOriginal)), true, vidaPompa[nivel]);
+                            //std::cout << "Dimensiones pompa; " <<p.destRec.x << "," << p.destRec.y << "/" << p.lastHeight << "," << p.lastWidth << std::endl;
+
                         }
                         else {
-                            admin->scores.SumarPuntuacionP2((unsigned int)admin->frutas.at(i)->puntuacion);
-                            admin->frutas.at(i)->muerto_bob = true;
+                            p = Pompa(spriteBurbuja2, destRec, VELOCIDAD_DISPARO * multiplicadorVelocidadDisparo * ((double)lastWidth / (double)anchoOriginal * sentido), (double)(DISTANCIA_DISPARO * multiplicadorDistanciaDisparo * ((double)lastWidth / (double)anchoOriginal)), true, vidaPompa[nivel]);
                         }
+                        if (imTheThunder) { // Debería estar solo en el jefe (si se llega a hacer)
+                            p.modulo = Pompa::MODULO_RAYO;
+                            p.indiceAnimacion = 18;
+                            p.tVida = Pompa::INFINITA;
+                        }
+                        //std::cout << "Dimensiones pompa; " <<p.destRec.x << "," << p.destRec.y << "/" << p.lastHeight << "," << p.lastWidth << std::endl;
+                        admin->pompas.push_back(std::make_shared<Pompa>(p));
                         if (!mute_sound) {
-                            PlaySound(sonidoFruta);
+                            PlaySound(sonidoDisparar);
                         }
-                    }
-                }
 
-                //Le dice al administrador los datos que necesita saber
-                if (eresBub) {
-                    admin->j1.velLateral = velocidadLateralActual;
-                    admin->j1.jugadorCayendo = cayendo;
-                    admin->j1.posicionJugador = destRec;
-                    admin->j1.sentidoJugador = orientacionActual;
-                    admin->j1.muriendo = muriendo;
-                    admin->j1.thunderLessFrames = thunderLessFrames;
-                    admin->j1.electrocutado = electrocutado;
-                    admin->j1.heIsTheThunder = imTheThunder;
-                } else {
-                    admin->j2.velLateral = velocidadLateralActual;
-                    admin->j2.jugadorCayendo = cayendo;
-                    admin->j2.posicionJugador = destRec;
-                    admin->j2.sentidoJugador = orientacionActual;
-                    admin->j2.muriendo = muriendo;
-                    admin->j2.thunderLessFrames = thunderLessFrames;
-                    admin->j2.electrocutado = electrocutado;
-                    admin->j2.heIsTheThunder = imTheThunder;
-                }
-            }
-
-			//Actualizar puntero de animacion
-			cuentaFrames++;
-			if (cuentaFrames >= (targetFrames / velocidadFrames) ) {
-				//std::cerr << "Actualiza" << std::endl;
-				cuentaFrames = 0;
-				switch (animacionActiva) {
-				case 0:
-					indiceAnimacion = (indiceAnimacion + 1) % fStandingAnimation;
-					break;
-				case 1:
-					indiceAnimacion = (indiceAnimacion + 1) % fMovingAnimation;
-					break;
-				case 2:
-					indiceAnimacion = (indiceAnimacion + 1) % fJumpingAnimation;
-					break;
-				case 3:
-					indiceAnimacion = (indiceAnimacion + 1) % fFallingAnimation;
-					break;
-				case 4:
-					indiceAnimacion++;
-                    if (imTheThunder && indiceAnimacion == 9) {
-                        permitirDisparo = true;
                     }
-					if (indiceAnimacion >= (fShootingAnimation+6)) {
-						//std::cout << "Puede volver a disparar" << std::endl;
-						disparando = false;
-						animacionActiva = STANDING;
-						indiceAnimacion = 0;
-					}
-					break;
-				case 5:
-                    indiceAnimacion++;
-                    if (indiceAnimacion >= (fDeathAnimation + 6)) {
-                        indiceAnimacion = 6;
-                        muerto = true;
-                    }
-                    break; 
-                case 6:
-                    indiceAnimacion++;//Animacion de traslacion
-                    //std::cout << "Im in" << std::endl;
-                    if (indiceAnimacion >= (fTranslationAnimation + 6)) { 
-                        //std::cout << "Im truly in" << std::endl;
-                        //Reestablecemos las dimensiones de la animación
-                        destRec.height /= 2;
-                        destRec.width /= 2;
-                        destRec.x += destRec.width / 2.0f;
-                        destRec.y += destRec.height / 2.0f;
-                        srcRec.height = heightAnimation;
-                        srcRec.width = widthAnimation;
-                        //velocidadFrames *= 2;
-                        //Preparamos el personaje para que vuelva a funcionar
-                        animacionActiva = STANDING;
-                        indiceAnimacion = 0;
-                        if (eresBub && orientacionActual == 2) {
+                    else if (!enElAire && !electrocutado) {
+                        if (IsKeyDown(left) && !muriendo) { //if (IsKeyDown(KEY_A)) {
+                            if (!disparando) animacionActiva = MOVING;
+                            switchOrientacion = 2;
+                            //std::cout << "Muevo Izquierda, orientacion: " << switchOrientacion << std::endl;
+                            if (!enElAgua) {
+                                destRec.x -= velocidadLateral;
+                                velocidadLateralActual = velocidadLateral;
+                            }
+                            dirCorrer = 1;
+                            dirAir = 1;
+                            compruebaSuelo(lastGround);
+                        }
+                        else if (IsKeyDown(right) && !muriendo) { //if (IsKeyDown(KEY_S)) {
+                            if (!disparando) animacionActiva = MOVING;
                             switchOrientacion = 3;
-                            orientacionActual = 2;
+                            //std::cout << "Muevo Derecha, orientacion: " << switchOrientacion << std::endl;
+                            if (!enElAgua) {
+                                destRec.x += velocidadLateral;
+                                velocidadLateralActual = velocidadLateral;
+                            }
                             dirCorrer = 2;
                             dirAir = 2;
-                        }
-                        enElAire = true;
-                        cayendo = true;
-                        disparando = false;
-                        cambioMapa = 0;
-                        cuentaFramesTraslacion = 0;
-                    }
-                    break;
-                case 7:
-                    indiceAnimacion++;
-                    if (indiceAnimacion >= (8)) {
-                        if (cuentaShock >= LIMITE_CUENTA_SHOCK) {
-                            indiceAnimacion = 0;
-                            cuentaShock = 0;
-                            animacionActiva = STANDING;
-                            electrocutado = false;
-                            thunderLessFrames = 60 * 1.5;
+                            compruebaSuelo(lastGround);
                         }
                         else {
-                            indiceAnimacion = 6;
-                            cuentaShock++;
-                            thunderLessFrames = 60 * 1.5;
+                            dirCorrer = 0;
+                            if (!(enElAire && saltoRecorrido == 0)) {
+                                switchOrientacion = 1;
+                            }
+                            if (!disparando && !muriendo) animacionActiva = STANDING;
+                        }
+                    }
+
+                    //Gesti�n de salto
+                    if (IsKeyPressed(jump) && !enElAire && !muriendo && !electrocutado) { //if (IsKeyDown(KEY_SPACE)) {
+
+                        //std::cout << "Salto" << std::endl;
+                        if (!disparando) animacionActiva = JUMPING;
+                        enElAire = true;
+                        if (enElAgua) { enElAgua = false; waterlessFrames = 3; }
+                        velocidadActual = velocidadSalto;
+                        destRec.y -= velocidadActual;
+                        saltoRecorrido += velocidadActual;
+                        velocidadActual -= deceleracion;
+                        if (!mute_sound) {
+                            PlaySound(sonidoSaltar);
                         }
 
                     }
-				default:
-					break;
-				}
-			}
-		} else {
-			if (numVidas > 0) {
-                numVidas--;
-                muerto = false;
-                muriendo = false;
-				enElAire = true;
-				cayendo = true;
-                disparando = false;
-                animacionActiva = STANDING;
-                invulnerable = true;
-                electrocutado = false;
-                thunderLessFrames = 0;
-                framesInvulnerabilidad = 60 * 3; //3 segundos
-                if (eresBub) {
-                    destRec.x = posicionOriginalBub.x;
-                    destRec.y = posicionOriginalBub.y;
+                    else if (velocidadActual > 0 && enElAire && !cayendo) {
+                        if (!disparando && !muriendo && !electrocutado) animacionActiva = JUMPING;
+                        destRec.y -= velocidadActual;
+                        saltoRecorrido += velocidadActual;
+                        velocidadActual -= deceleracion;
+                    }
+                    else if (enElAire && cayendo && saltoRecorrido > 0) {
+                        if (!disparando && !muriendo && !electrocutado) animacionActiva = FALLING;
+                        destRec.y -= velocidadActual;
+                        saltoRecorrido += velocidadActual;
+                        velocidadActual -= deceleracion;
+                    }
+                    else if (enElAire && cayendo) { //Planeando
+                        //std::cout << "I'm gliding" << std::endl;
+                        if (!disparando && !muriendo && !electrocutado) animacionActiva = FALLING;
+                        destRec.y += velocidadSalto / 2.0f;
+                        saltoRecorrido -= velocidadSalto / 2.0f;
+                    }
+                    else if (enElAire) { //Inicio ca�da
+                        if (!disparando && !muriendo && !electrocutado) animacionActiva = FALLING;
+                        cayendo = true;
+                        destRec.y -= velocidadActual;
+                        saltoRecorrido += velocidadActual; //planeo
+                        velocidadActual -= deceleracion;
+                    }
 
-                } else {
-                    destRec.x = posicionOriginalBob.x;
-                    destRec.y = posicionOriginalBob.y;
+
+                    //Comprueba choque con los enemigos
+                    for (int i = 0; i < admin->enemigos.size(); i++) {
+                        if (!admin->enemigos.at(i)->borrame && !admin->enemigos.at(i)->muerto && !admin->enemigos.at(i)->muertePorAgua && !muriendo && !invulnerable
+                            && ((destRec.y + destRec.height / 2.0f) >= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2.0f)
+                                && (destRec.y - destRec.height / 2.0f) <= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2.0f)
+                                || (destRec.y + destRec.height / 2.0f) >= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2.0f)
+                                && (destRec.y - destRec.height / 2.0f) <= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2.0f)
+                                || (admin->enemigos.at(i)->tipo == 7
+                                    && ((destRec.y + destRec.height / 2) <= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2)
+                                        && (destRec.y - destRec.height / 2) >= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2))))
+                            && ((destRec.x + destRec.width / 2 - destRec.width * 0.125) >= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2.0f)
+                                && (destRec.x - destRec.width / 2 + destRec.width * 0.125) <= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2.0f)
+                                || (destRec.x + destRec.width / 2 - destRec.width * 0.125) >= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
+                                && (destRec.x - destRec.width / 2 + destRec.width * 0.125) <= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
+                                || (admin->enemigos.at(i)->tipo == 7
+                                    && ((destRec.x + destRec.width / 2) <= (admin->enemigos.at(i)->destRec.x + (admin->enemigos.at(i)->destRec.width / 2 - admin->enemigos.at(i)->destRec.width * 0.0625))
+                                        && (destRec.x - destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x - (admin->enemigos.at(i)->destRec.width / 2 + admin->enemigos.at(i)->destRec.width * 0.0625)))))) { //Colisiona con un enemigo
+                            //std::cout << "I DIED" << std::endl;
+                            if (admin->enemigos.at(i)->tipo == 7 && admin->enemigos.at(i)->muertoInterno) {
+                                admin->enemigos.at(i)->muertoJefe = true;
+                                admin->enemigos.at(i)->muerto = true;
+                            }
+                            else {
+                                muriendo = true;
+                                electrocutado = false;
+                                animacionActiva = DYING;
+                            }
+                        }
+                    }
+
+                    // Comprueba que se come la fruta
+                    for (int i = 0; i < admin->frutas.size(); i++) {
+                        if (!admin->frutas.at(i)->borrame && !admin->frutas.at(i)->muerto_bub && !admin->frutas.at(i)->muerto_bob && !muriendo
+                            && ((destRec.y + destRec.height / 2.0f) >= (admin->frutas.at(i)->destRec.y + admin->frutas.at(i)->destRec.height / 2.0f)
+                                && (destRec.y - destRec.height / 2.0f) <= (admin->frutas.at(i)->destRec.y + admin->frutas.at(i)->destRec.height / 2.0f)
+                                || (destRec.y + destRec.height / 2.0f) >= (admin->frutas.at(i)->destRec.y - admin->frutas.at(i)->destRec.height / 2.0f)
+                                && (destRec.y - destRec.height / 2.0f) <= (admin->frutas.at(i)->destRec.y - admin->frutas.at(i)->destRec.height / 2.0f))
+                            && ((destRec.x + destRec.width / 2 - 2) >= (admin->frutas.at(i)->destRec.x - admin->frutas.at(i)->destRec.width / 2.0f)
+                                && (destRec.x - destRec.width / 2 + 2) <= (admin->frutas.at(i)->destRec.x - admin->frutas.at(i)->destRec.width / 2.0f)
+                                || (destRec.x + destRec.width / 2 - 2) >= (admin->frutas.at(i)->destRec.x + admin->frutas.at(i)->destRec.width / 2.0f)
+                                && (destRec.x - destRec.width / 2 + 2) <= (admin->frutas.at(i)->destRec.x + admin->frutas.at(i)->destRec.width / 2.0f)))
+                        { //Colisiona con fruta
+                            if (eresBub) {
+                                admin->scores.SumarPuntuacionP1((unsigned int)admin->frutas.at(i)->puntuacion);
+                                admin->frutas.at(i)->muerto_bub = true;
+                            }
+                            else {
+                                admin->scores.SumarPuntuacionP2((unsigned int)admin->frutas.at(i)->puntuacion);
+                                admin->frutas.at(i)->muerto_bob = true;
+                            }
+                            if (!mute_sound) {
+                                PlaySound(sonidoFruta);
+                            }
+                        }
+                    }
+
+                    //Le dice al administrador los datos que necesita saber
+                    if (eresBub) {
+                        admin->j1.velLateral = velocidadLateralActual;
+                        admin->j1.jugadorCayendo = cayendo;
+                        admin->j1.posicionJugador = destRec;
+                        admin->j1.sentidoJugador = orientacionActual;
+                        admin->j1.muriendo = muriendo;
+                        admin->j1.thunderLessFrames = thunderLessFrames;
+                        admin->j1.electrocutado = electrocutado;
+                        admin->j1.heIsTheThunder = imTheThunder;
+                    }
+                    else {
+                        admin->j2.velLateral = velocidadLateralActual;
+                        admin->j2.jugadorCayendo = cayendo;
+                        admin->j2.posicionJugador = destRec;
+                        admin->j2.sentidoJugador = orientacionActual;
+                        admin->j2.muriendo = muriendo;
+                        admin->j2.thunderLessFrames = thunderLessFrames;
+                        admin->j2.electrocutado = electrocutado;
+                        admin->j2.heIsTheThunder = imTheThunder;
+                    }
+                }
+
+                //Actualizar puntero de animacion
+                cuentaFrames++;
+                if (cuentaFrames >= (targetFrames / velocidadFrames)) {
+                    //std::cerr << "Actualiza" << std::endl;
+                    cuentaFrames = 0;
+                    switch (animacionActiva) {
+                    case 0:
+                        indiceAnimacion = (indiceAnimacion + 1) % fStandingAnimation;
+                        break;
+                    case 1:
+                        indiceAnimacion = (indiceAnimacion + 1) % fMovingAnimation;
+                        break;
+                    case 2:
+                        indiceAnimacion = (indiceAnimacion + 1) % fJumpingAnimation;
+                        break;
+                    case 3:
+                        indiceAnimacion = (indiceAnimacion + 1) % fFallingAnimation;
+                        break;
+                    case 4:
+                        indiceAnimacion++;
+                        if (imTheThunder && indiceAnimacion == 9) {
+                            permitirDisparo = true;
+                        }
+                        if (indiceAnimacion >= (fShootingAnimation + 6)) {
+                            //std::cout << "Puede volver a disparar" << std::endl;
+                            disparando = false;
+                            animacionActiva = STANDING;
+                            indiceAnimacion = 0;
+                        }
+                        break;
+                    case 5:
+                        indiceAnimacion++;
+                        if (indiceAnimacion >= (fDeathAnimation + 6)) {
+                            indiceAnimacion = 6;
+                            muerto = true;
+                        }
+                        break;
+                    case 6:
+                        indiceAnimacion++;//Animacion de traslacion
+                        //std::cout << "Im in" << std::endl;
+                        if (indiceAnimacion >= (fTranslationAnimation + 6)) {
+                            //std::cout << "Im truly in" << std::endl;
+                            //Reestablecemos las dimensiones de la animación
+                            destRec.height /= 2;
+                            destRec.width /= 2;
+                            destRec.x += destRec.width / 2.0f;
+                            destRec.y += destRec.height / 2.0f;
+                            srcRec.height = heightAnimation;
+                            srcRec.width = widthAnimation;
+                            //velocidadFrames *= 2;
+                            //Preparamos el personaje para que vuelva a funcionar
+                            animacionActiva = STANDING;
+                            indiceAnimacion = 0;
+                            if (eresBub && orientacionActual == 2) {
+                                switchOrientacion = 3;
+                                orientacionActual = 2;
+                                dirCorrer = 2;
+                                dirAir = 2;
+                            }
+                            enElAire = true;
+                            cayendo = true;
+                            disparando = false;
+                            cambioMapa = 0;
+                            cuentaFramesTraslacion = 0;
+                        }
+                        break;
+                    case 7:
+                        indiceAnimacion++;
+                        if (indiceAnimacion >= (8)) {
+                            if (cuentaShock >= LIMITE_CUENTA_SHOCK) {
+                                indiceAnimacion = 0;
+                                cuentaShock = 0;
+                                animacionActiva = STANDING;
+                                electrocutado = false;
+                                thunderLessFrames = 60 * 1.5;
+                            }
+                            else {
+                                indiceAnimacion = 6;
+                                cuentaShock++;
+                                thunderLessFrames = 60 * 1.5;
+                            }
+
+                        }
+                    default:
+                        break;
+                    }
                 }
             }
-		}
+            else {
+                if (numVidas > 0) {
+                    numVidas--;
+                    muerto = false;
+                    muriendo = false;
+                    enElAire = true;
+                    cayendo = true;
+                    disparando = false;
+                    animacionActiva = STANDING;
+                    invulnerable = true;
+                    electrocutado = false;
+                    thunderLessFrames = 0;
+                    framesInvulnerabilidad = 60 * 3; //3 segundos
+                    if (eresBub) {
+                        destRec.x = posicionOriginalBub.x;
+                        destRec.y = posicionOriginalBub.y;
+
+                    }
+                    else {
+                        destRec.x = posicionOriginalBob.x;
+                        destRec.y = posicionOriginalBob.y;
+                    }
+                }
+            }
+        }
     };
 
     void ActualizarIA(Rectangle enemy, int tipo) 
@@ -1302,8 +1332,8 @@ public:
         if (enemy.x == 0 && enemy.y == 0) {
             //No hay enemigos
         }
-        else if (tipo == -2) {
-            if (enemy.x > destRec.x) {
+        else if (tipo < 0) {
+            if (enemy.x < destRec.x) {
                 teclaDerecha = true;
                 srcRec.width = -abs(srcRec.width);
                 orientacionActual = 3;
