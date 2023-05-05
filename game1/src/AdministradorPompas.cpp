@@ -152,6 +152,7 @@ public:
 						else {
 							enemigos.at(j)->muertePorRayo = true;
 							enemigos.at(j)->muerto = true;
+							enemigos.at(j)->rebotando = true;
 							rayos.at(i).animacionActiva = 1;
 							rayos.at(i).indiceAnimacion = 0;
 							enemigosPorMatar--;
