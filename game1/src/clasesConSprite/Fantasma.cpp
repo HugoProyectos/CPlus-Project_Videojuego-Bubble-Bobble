@@ -244,14 +244,11 @@ public:
                 }
                 else if ( (destRec.y != playerPosition.y) && (direccionX == 0) ) {
                         //Izquierda
-                        std::cout << destRec.y << std::endl;
-                        std::cout << playerPosition.y << std::endl;
                         MoverIzq();
                         contador++;
                 }
                 else if ( (destRec.y != playerPosition.y) && ( direccionX == 1) ) {
                         //Derecha
-                        std::cout << "cabron" << std::endl;
                         MoverDer();
                         contador++;
                     
@@ -608,6 +605,7 @@ public:
                     break;
                 case 2:
                     //Izquierda
+                    std::cout << "e" << std::endl;
                     destRec.x = s.right + destRec.width / 2;
                     direccionX = 1; //Colisiona izquierda, hora se mueve derecha
                     //Se puede añadir un movimiento random en eje Y
@@ -627,8 +625,8 @@ public:
                 if (
                     //Comprobamos colision esquina superior derecha
                     (
-                        (((s.bot) > (destRec.y - destRec.height / 2)) &&
-                            ((destRec.y - destRec.height / 2) > (s.top))
+                        (((s.bot) > (destRec.y - (destRec.height*0.40))) &&
+                            ((destRec.y - (destRec.height * 0.40)) > (s.top))
                             ) && (
                                 ((s.right) > (destRec.x + destRec.width / 2 + 5)) &&
                                 ((destRec.x + destRec.width / 2 + 5) > (s.left))
@@ -651,8 +649,8 @@ public:
                 else if (
                     //Comprobamos colision esquina superior derecha
                     (
-                        (((s.bot) > (destRec.y - destRec.height / 2)) &&
-                            ((destRec.y - destRec.height / 2) > (s.top))
+                        (((s.bot) > (destRec.y - (destRec.height * 0.40))) &&
+                            ((destRec.y - (destRec.height * 0.40)) > (s.top))
                             ) && (
                                 ((s.right) > (destRec.x - destRec.width / 2 - 5)) &&
                                 ((destRec.x - destRec.width / 2 - 5) > (s.left))
