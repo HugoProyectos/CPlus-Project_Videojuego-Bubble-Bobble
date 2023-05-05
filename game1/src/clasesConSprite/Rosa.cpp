@@ -100,6 +100,13 @@ public:
             IAoriginal = false;
 
         }
+        if (((float)rand() / (float)RAND_MAX) < 0.5) {
+            velXRebote = -(0.001 + (0.0025 * ((float)rand() / (float)RAND_MAX))) * GetScreenWidth();
+        }
+        else {
+            velXRebote = (0.001 + (0.0025 * ((float)rand() / (float)RAND_MAX))) * GetScreenWidth();
+        }
+        velYRebote = -(0.002 + (0.005 * ((float)rand() / (float)RAND_MAX))) * GetScreenHeight();
     };
 
     void enfadar() {
