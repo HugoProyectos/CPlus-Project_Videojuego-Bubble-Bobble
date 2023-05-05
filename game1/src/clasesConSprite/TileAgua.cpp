@@ -297,8 +297,8 @@ void tileAgua::colisionEnemigo(Enemigo& e) {
 	if (
 		(
 			//Comprobamos colision esquina inferior derecha
-			(((destRec.y + destRec.height) >= (e.destRec.y + e.destRec.height / 2)) &&
-				((e.destRec.y + e.destRec.height / 2) >= (destRec.y))
+			(((destRec.y + destRec.height + 5) >= (e.destRec.y + e.destRec.height / 2)) &&
+				((e.destRec.y + e.destRec.height / 2) >= (destRec.y - 5))
 				) && (
 					((destRec.x + destRec.width) > (e.destRec.x + e.destRec.width / 2)) &&
 					((e.destRec.x + e.destRec.width / 2) > (destRec.x))
@@ -324,8 +324,8 @@ void tileAgua::colisionEnemigo(Enemigo& e) {
 			) ||
 		(
 			//Comprobamos colision esquina inferior izquierda
-			(((destRec.y + destRec.height) >= (e.destRec.y + e.destRec.height / 2)) &&
-				((e.destRec.y + e.destRec.height / 2) >= (destRec.y))
+			(((destRec.y + destRec.height + 5) >= (e.destRec.y + e.destRec.height / 2)) &&
+				((e.destRec.y + e.destRec.height / 2) >= (destRec.y - 5))
 				) && (
 					((destRec.x + destRec.width) > (e.destRec.x - e.destRec.width / 2)) &&
 					((e.destRec.x - e.destRec.width / 2) > (destRec.x))
