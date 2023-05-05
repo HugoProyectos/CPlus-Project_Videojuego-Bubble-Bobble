@@ -16,7 +16,7 @@ public:
     
     Texture2D bubPoints = LoadTexture("resources/puntos/puntosBub.png");
     
-    Texture2D bobPoints = LoadTexture("resources/frutas/puntosBub.png");
+    Texture2D bobPoints = LoadTexture("resources/puntos/puntosBob.png");
 
     Texture2D animaciones[3] = { fruit, bubPoints, bobPoints };
 
