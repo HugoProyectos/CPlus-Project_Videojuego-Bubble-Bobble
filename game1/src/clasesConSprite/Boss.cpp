@@ -71,8 +71,11 @@ void Boss::Actualizar(Rectangle playerPosition1, Rectangle playerPosition2) {
         muertoPorPrimeraVez = true;
         tempAngry = clock();
     }
-    else if (muertoInterno) {
+    else if (muertoInterno && !muertoJefe) {
         // Asciende arriba a la izquierda
+        animacionActiva = 4;
+    }
+    else if (muertoJefe) {
         animacionActiva = 2;
     }
 
@@ -138,7 +141,6 @@ void Boss::Actualizar(Rectangle playerPosition1, Rectangle playerPosition2) {
             } 
             else if (indiceAnimacion >= fDead) {
                 indiceAnimacion = 0;
-                borrame = true;
             }
             widthAnimation = dead.width / fDead;
             heightAnimation = dead.height;
@@ -200,8 +202,6 @@ void Boss::Ia(Rectangle playerPosition) {
     else {
         if (!muertoInterno && !muertoPorPrimeraVez) {
             if (enfadado) {
-                velocidadLateral = 2.0f;
-                velocidadSalto = 2.0f;
                 animacionActiva = 3;
             }
 
@@ -233,30 +233,53 @@ void Boss::Ia(Rectangle playerPosition) {
                 destRec.y = GetScreenHeight() + 5;
             }
         }
+        else {
+            if (!muertoJefe) {
+                if (destRec.x < GetScreenWidth() * 0.49) {
+                    destRec.x += velocidadLateral * ratioX;
+                }
+                else if (destRec.x > GetScreenWidth() * 0.51) {
+                    destRec.x -= velocidadLateral * ratioX;
+                }
+                if (destRec.y < GetScreenWidth() * 0.20) {
+                    destRec.y += velocidadSalto * ratioY;
+                }
+                else if (destRec.x > GetScreenWidth() * 0.24) {
+                    destRec.y -= velocidadSalto * ratioY;
+                }
+            }
+            else {
+                destRec.y += velocidadSalto * ratioY;
+                if (destRec.y > (GetScreenHeight() + destRec.height * 1.1)) {
+                    borrame = true;
+                }
+            }
+           
+        }
     }
 }
 
 void Boss::MoverIzqArriba() {
-    destRec.x -= velocidadLateral * ratioX;
-    destRec.y -= velocidadSalto * ratioY;
+    destRec.x -= (velocidadLateral * ratioX + velocidadLateral * (int)enfadado * 0.3);
+    destRec.y -= (velocidadSalto * ratioY + velocidadSalto * (int)enfadado * 0.3);
     srcRec.width = pixels;
 }
 
 void Boss::MoverIzqAbajo() {
-    destRec.x -= velocidadLateral * ratioX;
-    destRec.y += velocidadSalto * ratioY;
+    destRec.x -= (velocidadLateral * ratioX + velocidadLateral * (int)enfadado * 0.3);
+    destRec.y += (velocidadSalto * ratioY + velocidadSalto * (int)enfadado * 0.3);
     srcRec.width = pixels;
 }
 
 void Boss::MoverDerArriba() {
-    destRec.x += velocidadLateral * ratioX;
-    destRec.y -= velocidadSalto * ratioY;
+    destRec.x += (velocidadLateral * ratioX + velocidadLateral * (int)enfadado * 0.3);
+    destRec.y -= (velocidadSalto * ratioY + velocidadSalto * (int)enfadado * 0.3);
     srcRec.width = -pixels;
 }
 
 void Boss::MoverDerAbajo() {
-    destRec.x += velocidadLateral * ratioX;
-    destRec.y += velocidadSalto * ratioY;
+    destRec.x += (velocidadLateral * ratioX + velocidadLateral * (int)enfadado * 0.3);
+    destRec.y += (velocidadSalto * ratioY + velocidadSalto * (int)enfadado * 0.3);
     srcRec.width = -pixels;
 }
 

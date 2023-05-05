@@ -340,7 +340,7 @@ int main(void)
             }
 
             else if (admin.cambiaNivel) {
-                /*admin.iniciaMapa(1, 3000000 * 60); // TODO
+                admin.iniciaMapa(1, 3000000 * 60); // TODO
                 admin.CambioDeMapa(10); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_boss/bloque_grande.png", 10);
                 plataformas.CargarSiguienteNivel("resources/mapa_boss/bloque_pequeno.png", "resources/mapa_boss/mapa.txt");
@@ -352,8 +352,8 @@ int main(void)
                 jugando_nivel = false;
                 for (int i = 0; i < 10; i++) {
                     admin.agua.stream[i].numPlataformas = plataformas.listaPlataformaSiguiente.size();
-                }*/
-                admin.iniciaMapa(4, 60 * 30);
+                }
+                    /* admin.iniciaMapa(4, 60 * 30);
                 //admin.iniciaMapa(0, 30 * 60);
                 admin.CambioDeMapa(1);
                 columnas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_grande.png", 2);
@@ -366,21 +366,21 @@ int main(void)
                 jugando_nivel = false;
                 for (int i = 0; i < 10; i++) {
                     admin.agua.stream[i].numPlataformas = plataformas.listaPlataformaSiguiente.size();
-                }
+                }*/
             }
             else {
-                /*currentScreen = NIVEL_BOSS;
+                currentScreen = NIVEL_BOSS;
                 bub.imTheThunder = true;
                 bob.imTheThunder = true;
                 // ----------------------------------------------------------------------------------------------------------
                 destRob = { (float)400, 100, 128, 128 };
-                robot = std::make_shared<Boss>(Boss(2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
+                robot = std::make_shared<Boss>(Boss(2.5f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin));
                 robot->lastWidth = 799;
                 robot->lastHeight = 449;
                 robot->tipo = 7;
                 robot->vida = 100;
-                admin.enemigos.push_back(robot);*/
-                currentScreen = NIVEL_2;
+                admin.enemigos.push_back(robot);
+                    /*currentScreen = NIVEL_2;
                 destRob = { (float)400 + 20, 100, 32, 32 };
                 robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin, Modo_IA));
                 admin.enemigos.push_back(robot);
@@ -395,7 +395,7 @@ int main(void)
 
                 destRob = { (float)400 - 50, 190, 32, 32 };
                 robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin, Modo_IA));
-                admin.enemigos.push_back(robot);
+                admin.enemigos.push_back(robot);*/
                 
                 admin.frutas.clear();
 
@@ -1614,18 +1614,18 @@ int main(void)
 
                 //Reseteo del nivel
                 //admin.iniciaMapa(3, 30*60); 
-                admin.iniciaMapa(0, 30 * 60);
+                admin.iniciaMapa(4, 30 * 60);
                 admin.CambioDeMapa(0);
                 columnas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_grande.png", 1);
                 plataformas.VolverAlPrimerNivel("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt");
                 
-                Rectangle destRob = { 800 / 2, 30, 32, 32 };
+                Rectangle destRob = { (float)400 + 70, 60, 32, 32 };
                 sh_Enemigo rosa = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
-                destRob = { (float)800 / 2, 80, 32, 32 };
+                destRob = { (float)400 + 20, 160, 32, 32 };
                 sh_Enemigo robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
-                destRob = { (float)800 / 2, 30, 32, 32 };
+                destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
                 sh_Enemigo robot2 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
-                destRob = { (float)800 / 2, 70, 36, 32 };
+                destRob = { (float)GetScreenWidth() / 2, 70, 36, 32 };
                 sh_Enemigo robot3 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
 
                 admin.enemigos.push_back(rosa);

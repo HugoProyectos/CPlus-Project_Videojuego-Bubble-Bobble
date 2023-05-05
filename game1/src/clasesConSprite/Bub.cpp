@@ -146,7 +146,6 @@ public:
     int saltoRecto = false;
     int saltoDer = false;
     int saltoIzq = false;
-
     /////////////////////////////////
 
 
@@ -338,28 +337,35 @@ public:
         ////////////////////////////////////////////
         if (!eresBub) {
             Rectangle enemy = Rectangle();
+            int bestIndex = 0;
+            int type = 0;
             if ((admin->enemigos).size()) {
-                int bestIndex = 0;
                 for (int i = 1; i < (admin->enemigos).size(); i++) {
-                    if (destRec.y <= admin->enemigos[i]->posicion.y && destRec.y + destRec.height >= admin->enemigos[i]->posicion.y) {
+                    if (admin->enemigos[i]->muerto || admin->enemigos[i]->rebotando || admin->enemigos[i]->borrame) {
+                        //No se añaden
+                    }
+                    else if (destRec.y <= admin->enemigos[i]->posicion.y && destRec.y + destRec.height >= admin->enemigos[i]->posicion.y) {
+                        if(abs(admin->enemigos[bestIndex]->posicion.y - destRec.y) > abs(admin->enemigos[i]->posicion.y - destRec.y))
                         bestIndex = i;
                     }
                     else {
                         float dist1 = sqrt(pow(admin->enemigos[i]->posicion.x - destRec.x, 2) + pow(admin->enemigos[bestIndex]->posicion.y - destRec.y, 2));
                         float dist2 = sqrt(pow(admin->enemigos[bestIndex]->posicion.x - destRec.x, 2) + pow(admin->enemigos[bestIndex]->posicion.y - destRec.y, 2));
                         if (dist1 < dist2) {
-                            std::cout << "dist1: " << dist1 << std::endl;
-                            std::cout << "dist2: " << dist2 << std::endl;
                             bestIndex = i;
                         }
                     }
 
+                    if (admin->enemigos[bestIndex]->muerto || admin->enemigos[bestIndex]->rebotando || admin->enemigos[bestIndex]->borrame)
+                        bestIndex = i;
 
                 }
-                enemy = admin->enemigos[bestIndex]->posicion;
+                if (!(admin->enemigos[bestIndex]->muerto || admin->enemigos[bestIndex]->rebotando || admin->enemigos[bestIndex]->borrame)) 
+                    enemy = admin->enemigos[bestIndex]->posicion;
+                    type = admin->enemigos[bestIndex]->tipo;
             }
 
-            ActualizarIA(enemy);
+            ActualizarIA(enemy, type);
         }
 
         if (!eresBub) {
@@ -642,8 +648,8 @@ public:
                                 || (destRec.x + destRec.width / 2 - destRec.width * 0.125) >= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
                                 && (destRec.x - destRec.width / 2 + destRec.width * 0.125) <= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
                                 || (admin->enemigos.at(i)->tipo == 7
-                                    && ((destRec.x + destRec.width / 2) <= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2)
-                                        && (destRec.x - destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2))))) { //Colisiona con un enemigo
+                                    && ((destRec.x + destRec.width / 2) <= (admin->enemigos.at(i)->destRec.x + (admin->enemigos.at(i)->destRec.width / 2 - admin->enemigos.at(i)->destRec.width * 0.0625))
+                                    && (destRec.x - destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x - (admin->enemigos.at(i)->destRec.width / 2 + admin->enemigos.at(i)->destRec.width * 0.0625)))))) { //Colisiona con un enemigo
                             //std::cout << "I DIED" << std::endl;
                             muriendo = true;
                             electrocutado = false;
@@ -1111,13 +1117,19 @@ public:
                             && (destRec.x - destRec.width / 2 + destRec.width * 0.125) <= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2.0f)
                             || (destRec.x + destRec.width / 2 - destRec.width * 0.125) >= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
                             && (destRec.x - destRec.width / 2 + destRec.width * 0.125) <= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
-                                || (admin->enemigos.at(i)->tipo == 7
-                                && ((destRec.x + destRec.width / 2) <= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2)
-                                && (destRec.x - destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2))))) { //Colisiona con un enemigo
+                            || (admin->enemigos.at(i)->tipo == 7
+                                && ((destRec.x + destRec.width / 2) <= (admin->enemigos.at(i)->destRec.x + (admin->enemigos.at(i)->destRec.width / 2 - admin->enemigos.at(i)->destRec.width * 0.0625))
+                                && (destRec.x - destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x - (admin->enemigos.at(i)->destRec.width / 2 + admin->enemigos.at(i)->destRec.width * 0.0625)))))) { //Colisiona con un enemigo
                         //std::cout << "I DIED" << std::endl;
-                        muriendo = true;
-                        electrocutado = false;
-                        animacionActiva = DYING;
+                        if (admin->enemigos.at(i)->tipo == 7 && admin->enemigos.at(i)->muertoInterno) {
+                            admin->enemigos.at(i)->muertoJefe = true;
+                            admin->enemigos.at(i)->muerto= true;
+                        }
+                        else {
+                            muriendo = true;
+                            electrocutado = false;
+                            animacionActiva = DYING;
+                        }
                     }
                 }
 
@@ -1281,18 +1293,40 @@ public:
 		}
     };
 
-    void ActualizarIA(Rectangle enemy) 
+    void ActualizarIA(Rectangle enemy, int tipo) 
     {
         teclaDerecha = false;
         teclaIzquierda = false;
         teclaSalto = false;
         teclaDisparo = false;
+        if (enemy.x == 0 && enemy.y == 0) {
+            //No hay enemigos
+        }
+        else if (tipo == -2) {
+            if (enemy.x > destRec.x) {
+                teclaDerecha = true;
+                srcRec.width = -abs(srcRec.width);
+                orientacionActual = 3;
+                direccionX = 1;
+            }
+            else {
+                teclaIzquierda = true;
+                srcRec.width = abs(srcRec.width);
+                orientacionActual = 2;
+                direccionX = 0;
+            }
 
+            //comprobar hueco en el suelo
+            if (direccionX == 0 && !sueloIzquierda) {
+                teclaSalto = true;
+            }
+            else if (direccionX == 1 && !sueloDerecha) {
+                teclaSalto = true;
+            }
 
+        }
         //Si el enemigo esta a misma altura
-        if (destRec.y - destRec.height * 2 <= enemy.y && destRec.y + destRec.height*2 >= enemy.y) {
-            std::cout << "MISMA ALTURA" << std::endl;
-            std::cout << "---" << std::endl;
+        else if (destRec.y - destRec.height * 3 <= enemy.y && destRec.y + destRec.height * 3 >= enemy.y) {
             //Comprobar rango de disparo
             int distance = abs(enemy.x - destRec.x);
             if (distance <= destRec.width * 7) {
@@ -1310,7 +1344,7 @@ public:
                     direccionX = 0;
                 }
                 else {
-                    teclaDisparo = true;
+                    if (destRec.y - destRec.height <= enemy.y && destRec.y + destRec.height >= enemy.y) { teclaDisparo = true; }
                 }
             }
             //comprobar direccion
@@ -1336,8 +1370,6 @@ public:
         }
         //Si el enemigo esta abajo
         else if(enemy.y > destRec.y){
-            std::cout << "ABAJO" << std::endl;
-            std::cout << "---" << std::endl;
             //Moverse en horizontal con direccionX
             //Mover izquierda
             if (direccionX == 0) {
@@ -1362,8 +1394,6 @@ public:
         }
         //Si el enemigo esta muy arriba
         else if (enemy.y < destRec.y - distanciaSaltoMax*3) {
-            std::cout << "MUUUUUY ARRIBA" << std::endl;
-
             if (sueloArriba && !enElAire) {
 
                 teclaSalto = true;
@@ -1388,12 +1418,10 @@ public:
             else if (direccionX == 1 && !sueloDerecha) {
                 teclaSalto = true;
             }
-            std::cout << "---" << std::endl;
         }
         //El enemigo esta arriba
         else if (enemy.y < destRec.y) {
-            std::cout << "ARRIBA" << std::endl;
-            if (sueloArriba && !enElAire && (3*destRec.width > abs(destRec.x-enemy.x))) {
+            if (sueloArriba && !enElAire && (5*destRec.width < abs(destRec.x-enemy.x))) {
                 teclaSalto = true;
                 saltoRecto = true;
             }
@@ -1404,12 +1432,17 @@ public:
                 teclaDerecha = true;
 
             }
-            std::cout << "---" << std::endl;
+
+            //comprobar hueco en el suelo
+            if (direccionX == 0 && !sueloIzquierda) {
+                teclaSalto = true;
+            }
+            else if (direccionX == 1 && !sueloDerecha) {
+                teclaSalto = true;
+            }
 
         }
         else {
-            std::cout << "RESTOS" << std::endl;
-            std::cout << "---" << std::endl;
             if (direccionX == 0) {
                 teclaIzquierda = true;
                 //srcRec.width = abs(srcRec.width);
