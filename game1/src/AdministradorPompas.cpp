@@ -349,10 +349,10 @@ public:
 							//			derecha
 							//			abajo
 							//			arriba
-							if ((ini.x - ini.width / 2 + 2 < candidata.x + candidata.width / 2 - 2) && (ini.x + ini.width / 2 - 2 >= candidata.x + candidata.width / 2 - 2) && !((ini.y - ini.height / 2 + 2 > candidata.y + candidata.height / 2 - 2) || (ini.y + ini.height / 2 - 2 < candidata.y - candidata.height / 2 + 2))
-								|| (ini.x - ini.width / 2 + 2 < candidata.x - candidata.width / 2 + 2) && (ini.x + ini.width / 2 - 2 >= candidata.x - candidata.width / 2 + 2) && !((ini.y - ini.height / 2 + 2 > candidata.y + candidata.height / 2 - 2) || (ini.y + ini.height / 2 - 2 < candidata.y - candidata.height / 2 + 2))
-								|| (ini.y - ini.height / 2 + 2 < candidata.y + candidata.height / 2 - 2) && (ini.y + ini.height / 2 - 2 >= candidata.y + candidata.height / 2 - 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))
-								|| (ini.y - ini.height / 2 + 2 < candidata.y - candidata.height / 2 + 2) && (ini.y + ini.height / 2 - 2 >= candidata.y - candidata.height / 2 + 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))) {
+							if ((ini.x - ini.width / 2 < candidata.x + candidata.width / 2) && (ini.x + ini.width / 2 >= candidata.x + candidata.width / 2) && !((ini.y - ini.height / 2 > candidata.y + candidata.height / 2) || (ini.y + ini.height / 2 < candidata.y - candidata.height / 2))
+								|| (ini.x - ini.width / 2 < candidata.x - candidata.width / 2) && (ini.x + ini.width / 2 >= candidata.x - candidata.width / 2) && !((ini.y - ini.height / 2 > candidata.y + candidata.height / 2) || (ini.y + ini.height / 2 < candidata.y - candidata.height / 2))
+								|| (ini.y - ini.height / 2 < candidata.y + candidata.height / 2) && (ini.y + ini.height / 2 >= candidata.y + candidata.height / 2) && !((ini.x - ini.width / 2 > candidata.x + candidata.width / 2) || (ini.x + ini.width / 2 < candidata.x - candidata.width / 2))
+								|| (ini.y - ini.height / 2 < candidata.y - candidata.height / 2) && (ini.y + ini.height / 2 >= candidata.y - candidata.height / 2) && !((ini.x - ini.width / 2 > candidata.x + candidata.width / 2) || (ini.x + ini.width / 2 < candidata.x - candidata.width / 2))) {
 								pompas.at(j)->cadena = pompas.at(i)->cadena;
 								pompas.at(j)->sentidoJugador = pompas.at(i)->sentidoJugador;
 								pompas.at(j)->rayoDeBub = pompas.at(i)->rayoDeBub;
@@ -503,10 +503,10 @@ public:
 							//			derecha
 							//			abajo
 							//			arriba
-							if ((ini.x - ini.width / 2 + 2 < candidata.x + candidata.width / 2 - 2) && (ini.x + ini.width / 2 - 2 >= candidata.x + candidata.width / 2 - 2) && !((ini.y - ini.height / 2 + 2 > candidata.y + candidata.height / 2 - 2) || (ini.y + ini.height / 2 - 2 < candidata.y - candidata.height / 2 + 2))
-								|| (ini.x - ini.width / 2 + 2 < candidata.x - candidata.width / 2 + 2) && (ini.x + ini.width / 2 - 2 >= candidata.x - candidata.width / 2 + 2) && !((ini.y - ini.height / 2 + 2 > candidata.y + candidata.height / 2 - 2) || (ini.y + ini.height / 2 - 2 < candidata.y - candidata.height / 2 + 2))
-								|| (ini.y - ini.height / 2 + 2 < candidata.y + candidata.height / 2 - 2) && (ini.y + ini.height / 2 - 2 >= candidata.y + candidata.height / 2 - 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))
-								|| (ini.y - ini.height / 2 + 2 < candidata.y - candidata.height / 2 + 2) && (ini.y + ini.height / 2 - 2 >= candidata.y - candidata.height / 2 + 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))) {
+							if ((ini.x - ini.width / 2 < candidata.x + candidata.width / 2) && (ini.x + ini.width / 2 >= candidata.x + candidata.width / 2) && !((ini.y - ini.height / 2 > candidata.y + candidata.height / 2) || (ini.y + ini.height / 2 < candidata.y - candidata.height / 2))
+								|| (ini.x - ini.width / 2 < candidata.x - candidata.width / 2) && (ini.x + ini.width / 2 >= candidata.x - candidata.width / 2) && !((ini.y - ini.height / 2 > candidata.y + candidata.height / 2) || (ini.y + ini.height / 2 < candidata.y - candidata.height / 2))
+								|| (ini.y - ini.height / 2 < candidata.y + candidata.height / 2) && (ini.y + ini.height / 2 >= candidata.y + candidata.height / 2) && !((ini.x - ini.width / 2 > candidata.x + candidata.width / 2) || (ini.x + ini.width / 2 < candidata.x - candidata.width / 2))
+								|| (ini.y - ini.height / 2 < candidata.y - candidata.height / 2) && (ini.y + ini.height / 2 >= candidata.y - candidata.height / 2) && !((ini.x - ini.width / 2 > candidata.x + candidata.width / 2) || (ini.x + ini.width / 2 < candidata.x - candidata.width / 2))) {
 								pompas.at(j)->cadena = pompas.at(i)->cadena;
 								int a = pompas.at(j)->sentidoJugador;
 								int b = pompas.at(i)->sentidoJugador;
