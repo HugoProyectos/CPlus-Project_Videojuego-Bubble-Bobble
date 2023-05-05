@@ -5,7 +5,7 @@ Botellas::Botellas(float tamano, float velSalto, float velLateral, float _target
 	Botellas::Inicializador("resources/enemyBotellas/walk.png", tamano, 2, velSalto, velLateral);
 	this->ID = ID;
 	destRec = destino;
-    tipo = -2;
+    tipo = -3;
     widthAnimation = walk.width / fWalk;
     heightAnimation = walk.height;
     targetFrames = _targetFPS;

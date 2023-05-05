@@ -22,6 +22,8 @@ public:
     bool sinVida = false;
     bool hit = false;
     int vida = 0;
+    bool muertoJefe = false;
+    bool muertoInterno = false;
 
     int tipo = -1; // -2->No atrapable por pompa 1->Robot 2-> Agua NO USAR 3->Fantasma 4-> Monsta 5-> Rosa 6->Rayo
     bool borrame = false; //Eliminarlo de la lista

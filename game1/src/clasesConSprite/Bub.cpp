@@ -642,8 +642,8 @@ public:
                                 || (destRec.x + destRec.width / 2 - destRec.width * 0.125) >= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
                                 && (destRec.x - destRec.width / 2 + destRec.width * 0.125) <= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
                                 || (admin->enemigos.at(i)->tipo == 7
-                                    && ((destRec.x + destRec.width / 2) <= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2)
-                                        && (destRec.x - destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2))))) { //Colisiona con un enemigo
+                                    && ((destRec.x + destRec.width / 2) <= (admin->enemigos.at(i)->destRec.x + (admin->enemigos.at(i)->destRec.width / 2 - admin->enemigos.at(i)->destRec.width * 0.0625))
+                                    && (destRec.x - destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x - (admin->enemigos.at(i)->destRec.width / 2 + admin->enemigos.at(i)->destRec.width * 0.0625)))))) { //Colisiona con un enemigo
                             //std::cout << "I DIED" << std::endl;
                             muriendo = true;
                             electrocutado = false;
@@ -1111,13 +1111,19 @@ public:
                             && (destRec.x - destRec.width / 2 + destRec.width * 0.125) <= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2.0f)
                             || (destRec.x + destRec.width / 2 - destRec.width * 0.125) >= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
                             && (destRec.x - destRec.width / 2 + destRec.width * 0.125) <= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2.0f)
-                                || (admin->enemigos.at(i)->tipo == 7
-                                && ((destRec.x + destRec.width / 2) <= (admin->enemigos.at(i)->destRec.x + admin->enemigos.at(i)->destRec.width / 2)
-                                && (destRec.x - destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x - admin->enemigos.at(i)->destRec.width / 2))))) { //Colisiona con un enemigo
+                            || (admin->enemigos.at(i)->tipo == 7
+                                && ((destRec.x + destRec.width / 2) <= (admin->enemigos.at(i)->destRec.x + (admin->enemigos.at(i)->destRec.width / 2 - admin->enemigos.at(i)->destRec.width * 0.0625))
+                                && (destRec.x - destRec.width / 2) >= (admin->enemigos.at(i)->destRec.x - (admin->enemigos.at(i)->destRec.width / 2 + admin->enemigos.at(i)->destRec.width * 0.0625)))))) { //Colisiona con un enemigo
                         //std::cout << "I DIED" << std::endl;
-                        muriendo = true;
-                        electrocutado = false;
-                        animacionActiva = DYING;
+                        if (admin->enemigos.at(i)->tipo == 7 && admin->enemigos.at(i)->muertoInterno) {
+                            admin->enemigos.at(i)->muertoJefe = true;
+                            admin->enemigos.at(i)->muerto= true;
+                        }
+                        else {
+                            muriendo = true;
+                            electrocutado = false;
+                            animacionActiva = DYING;
+                        }
                     }
                 }
 

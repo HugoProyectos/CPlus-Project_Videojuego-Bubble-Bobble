@@ -87,7 +87,6 @@ public:
     int ratioX = 1;
     int ratioY = 1;
     bool muertoPorPrimeraVez = false;
-    bool muertoInterno = false;
     bool parpadeo = false;
 
 	// --------------------------------------------------------
