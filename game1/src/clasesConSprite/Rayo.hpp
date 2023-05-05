@@ -12,7 +12,7 @@ class Rayo : public Sprite{
 public:
 	int lastHeight = GetScreenHeight();
 	int lastWidth = GetScreenWidth();
-	static const int DANYO_RAYO = 2;
+	static const int DANYO_RAYO = 3;
 	static bool mute_sound;
 	const Sound sonidoRayo = LoadSound("resources/music/sonido_rayo.mp3");
 
