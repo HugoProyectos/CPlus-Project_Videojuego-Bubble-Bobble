@@ -664,6 +664,12 @@ public:
                             if (admin->enemigos.at(i)->tipo == 7 && admin->enemigos.at(i)->muertoInterno) {
                                 admin->enemigos.at(i)->muertoJefe = true;
                                 admin->enemigos.at(i)->muerto = true;
+                                if (eresBub) {
+                                    admin->scores.SumarPuntuacionP1((unsigned int)10000);
+                                }
+                                else {
+                                    admin->scores.SumarPuntuacionP2((unsigned int)10000);
+                                }
                             }
                             else {
                                 muriendo = true;
@@ -685,8 +691,14 @@ public:
                                 || (destRec.x + destRec.width / 2 - 2) >= (admin->frutas.at(i)->destRec.x + admin->frutas.at(i)->destRec.width / 2.0f)
                                 && (destRec.x - destRec.width / 2 + 2) <= (admin->frutas.at(i)->destRec.x + admin->frutas.at(i)->destRec.width / 2.0f)))
                         { //Colisiona con fruta
-                            admin->scores.SumarPuntuacionP2((unsigned int)admin->frutas.at(i)->puntuacion);
-                            admin->frutas.at(i)->muerto_bob = true;
+                            if (eresBub) {
+                                admin->scores.SumarPuntuacionP1((unsigned int)admin->frutas.at(i)->puntuacion);
+                                admin->frutas.at(i)->muerto_bub = true;
+                            }
+                            else {
+                                admin->scores.SumarPuntuacionP2((unsigned int)admin->frutas.at(i)->puntuacion);
+                                admin->frutas.at(i)->muerto_bob = true;
+                            }
                             if (!mute_sound) {
                                 PlaySound(sonidoFruta);
                             }
@@ -1149,7 +1161,13 @@ public:
                             //std::cout << "I DIED" << std::endl;
                             if (admin->enemigos.at(i)->tipo == 7 && admin->enemigos.at(i)->muertoInterno) {
                                 admin->enemigos.at(i)->muertoJefe = true;
-                                admin->enemigos.at(i)->muerto = true;
+                                admin->enemigos.at(i)->muerto = true; 
+                                if (eresBub) {
+                                    admin->scores.SumarPuntuacionP1((unsigned int)10000);
+                                }
+                                else {
+                                    admin->scores.SumarPuntuacionP2((unsigned int)10000);
+                                }
                             }
                             else {
                                 muriendo = true;
