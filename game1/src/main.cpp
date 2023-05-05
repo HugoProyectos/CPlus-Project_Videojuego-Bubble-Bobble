@@ -75,6 +75,7 @@ int main(void)
     int Mute_music = controls.music_modo; // 1 -> muted
     int Alt_music = controls.alt_music; // 0->  normal  1-> alternativa  2-> gigachad
     int Mute_effect = controls.effect_modo; // 1 -> muted
+    int Game_mode = controls.game_modo; // 0 -> cooperativo, 1 -> P V IA (BOT)
     main_menu.mute_music = Mute_music == 1 ? true : false;  
     main_menu.mute_sound = Mute_effect == 1 ? true : false;
     credits.mute_sound = Mute_effect == 1 ? true : false;   
@@ -319,7 +320,7 @@ int main(void)
                 }
 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
-                    gameover.ronda = 1;
+                    gameover.ronda = 1;  
                     currentScreen = GAME_OVER;
                 }
                 else if (gameover.hayP2 && bub.muerto && bob.muerto && bub.numVidas == 0 && bob.numVidas == 0) {
@@ -329,7 +330,7 @@ int main(void)
 
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
                 {
-                    credits.creditos -= 1;
+                    credits.creditos -= 1; 
                     admin.scores.hayP2 = true;
                     contadorVidas.hayP2 = true;
                     gameover.hayP2 = true;
@@ -1413,7 +1414,7 @@ int main(void)
                 admin.iniciaMapa(1, 3000000 * 60); // TODO
                 plataformas.boss = true;
                 admin.CambioDeMapa(10); // TODO
-                columnas.CargarSiguienteNivel("resources/mapa_boss/bloque_grande.png", 10);
+                columnas.CargarSiguienteNivel("resources/mapa_boss/bloque_grande.png", 11);
                 plataformas.CargarSiguienteNivel("resources/mapa_boss/bloque_pequeno.png", "resources/mapa_boss/mapa.txt");
                 contadorVidas.cargar_siguiente_nivel();
                 bub.cambioMapa = 2; // TODO
@@ -1497,16 +1498,16 @@ int main(void)
                 }
 
                 if (bub.muerto && bub.numVidas == 0 && !gameover.hayP2) {
-                    gameover.ronda = 10;
+                    gameover.ronda = 11;
                     currentScreen = GAME_OVER;
                 }
                 else if (gameover.hayP2 && bub.muerto && bob.muerto && bub.numVidas == 0 && bob.numVidas == 0) {
-                    gameover.ronda = 10;
+                    gameover.ronda = 11;
                     currentScreen = GAME_OVER;
                 }
 
                 if (IsKeyPressed(tecla_p2) && credits.creditos >= 1 && admin.scores.hayP1 && !admin.scores.hayP2)
-                {
+                { 
                     credits.creditos -= 1;
                     admin.scores.hayP2 = true;
                     contadorVidas.hayP2 = true;
@@ -1515,7 +1516,7 @@ int main(void)
 
             }
             else if (admin.cambiaNivel) {
-                gameover.ronda = 10;
+                gameover.ronda = 11;
                 gameover.clear = true;
                 admin.frutas.clear();
                 currentScreen = GAME_OVER;
@@ -1524,7 +1525,7 @@ int main(void)
         }
         case CONTROLS_MENU:
         { 
-            controls.Actualizar(Modo_IA, Modo_skins, Modo_mapa, Mute_music, Alt_music, Mute_effect);
+            controls.Actualizar(Modo_IA, Modo_skins, Modo_mapa, Mute_music, Alt_music, Mute_effect, Game_mode);
             if (IsKeyPressed(KEY_ENTER)) {
                 // ASIGNAR TODOS LOS BOTONES
                 controls.guardarControlesNuevos();

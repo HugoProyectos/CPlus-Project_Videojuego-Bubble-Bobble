@@ -497,7 +497,13 @@ public:
     void inicio_de_ronda(unsigned int ronda) {
         if (!empezar_contador) {
             iteraciones = 0;
-            texto_inicio_ronda = "ROUND " + std::to_string(ronda) + "\nREADY !";
+            if (ronda != 11) {
+                texto_inicio_ronda = "ROUND " + std::to_string(ronda) + "\nREADY !";
+            }
+            else {
+                texto_inicio_ronda = "ROUND BOSS\nREADY !";
+            }
+            
             empezar_contador = true;
         }
     }
@@ -636,10 +642,11 @@ public:
                 DrawTexturePro(modo_2d ? bloque_grande_2d : bloque_grande, modo_2d ? srcRect_2d : srcRect, destRect, Vector2{ 0, 0 }, 0.0f, WHITE);
                 destRect.y += altura_bloque;
             }
-
-            // Poner nº de nivel
-            float tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
-            DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
+            if (stoi(numeroNivel) != 11) {
+                // Poner nº de nivel
+                float tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
+                DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
+            }
         }
         else {
             float movimiento_por_frame = altura_bloque * (BLOQUE_GRANDE_ALTO + 3) / float(FRAMES_CARGAR_SIGUIENTE_NIVEL);
@@ -658,10 +665,12 @@ public:
             }
             DrawRectangle(0, 0, anchura_bloque, tamanoMargenSup, BLACK);
 
-
-            // Poner nº de nivel
-            float tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
-            DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
+            if (stoi(numeroNivel) != 11) {
+                // Poner nº de nivel
+                float tamano_texto = MeasureText(numeroNivel.c_str(), altura_bloque);
+                DrawText(numeroNivel.c_str(), anchura_bloque / 2 - tamano_texto / 2, tamanoMargenSup, altura_bloque, RAYWHITE);
+            }
+            
 
         }
         
