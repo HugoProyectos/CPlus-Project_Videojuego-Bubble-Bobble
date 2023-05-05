@@ -16,6 +16,22 @@
 
 const int TARGET_FPS = 60;
 
+void VidaExtraSegunPuntuacion(unsigned int puntuacion1, unsigned int puntuacion2, unsigned int puntuacion1_next, unsigned int puntuacion2_next, int& vidasP1, int& vidasP2) {
+    if (puntuacion1 < 30000 && puntuacion1_next >= 30000) {
+        vidasP1++;
+    }
+    else if (puntuacion1 < 100000 && puntuacion1_next >= 100000) {
+        vidasP1++;
+    }
+    if (puntuacion2 < 30000 && puntuacion2_next >= 30000) {
+        vidasP2++;
+    }
+    else if (puntuacion2 < 100000 && puntuacion2_next >= 100000) {
+        vidasP2++;
+    }
+}
+
+
 //------------------------------------------------------------------------------------------
 // Types and Structures Definition
 //------------------------------------------------------------------------------------------
@@ -34,7 +50,7 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "Bubble Bobble");
     SetWindowMinSize(200, 200);
-    SetWindowState(FLAG_WINDOW_RESIZABLE);
+    //SetWindowState(FLAG_WINDOW_RESIZABLE);
 
     InitAudioDevice();
 
@@ -79,6 +95,7 @@ int main(void)
     main_menu.mute_music = Mute_music == 1 ? true : false;  
     main_menu.mute_sound = Mute_effect == 1 ? true : false;
     credits.mute_sound = Mute_effect == 1 ? true : false;
+    Rayo::mute_sound = Mute_effect == 1 ? true : false;
     plataformas.mute_effect = Mute_effect == 1 ? true : false;
     plataformas.musicNum = Alt_music;
     plataformas.mute_music = Mute_music == 1 ? true : false;
@@ -113,12 +130,14 @@ int main(void)
     admin.iniciaMapa(4, 30 * 60);
     //admin.iniciaMapa(0, 30 * 60);
     admin.CambioDeMapa(0);
+    //admin.CambioDeMapa(4);
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
 
-
+    unsigned int puntuacionP1 = 0;
+    unsigned int puntuacionP2 = 0;
 
 
     Rectangle destRob = { (float)400 + 70, 60, 32, 32 };
@@ -175,6 +194,7 @@ int main(void)
     bob.mute_sound = Mute_effect == 1 ? true : false;
     bub.segundaSkin = Modo_skins == 1 ? true : false;
     bob.segundaSkin = Modo_skins == 1 ? true : false;
+    bob.eresIA = Game_mode == 1 ? true : false;
     //bub.nivel = 4;
     //bob.nivel = 4;
 
@@ -268,16 +288,21 @@ int main(void)
         {
             // TODO: Update NIVEL_1 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
                 admin.scores.Actualizar();
+
+                
                 bub.Actualizar();
                 for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
                     bub.compruebaColision(plataformas.listaPlataforma[i]);
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -291,6 +316,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -337,10 +363,12 @@ int main(void)
                     //bob.resizeMe();
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
+                
             }
 
             else if (admin.cambiaNivel) {
-                admin.iniciaMapa(1, 3000000 * 60); // TODO
+                /* admin.iniciaMapa(1, 3000000 * 60); // TODO
                 admin.CambioDeMapa(10); // TODO
                 columnas.CargarSiguienteNivel("resources/mapa_boss/bloque_grande.png", 10);
                 plataformas.CargarSiguienteNivel("resources/mapa_boss/bloque_pequeno.png", "resources/mapa_boss/mapa.txt");
@@ -352,24 +380,24 @@ int main(void)
                 jugando_nivel = false;
                 for (int i = 0; i < 10; i++) {
                     admin.agua.stream[i].numPlataformas = plataformas.listaPlataformaSiguiente.size();
+                }*/
+                admin.iniciaMapa(4, 60 * 30);
+                //admin.iniciaMapa(0, 30 * 60);
+                admin.CambioDeMapa(1);
+                columnas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_grande.png", 2);
+                plataformas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_pequeno.png", "resources/mapa_nivel_2/mapa.txt");
+                contadorVidas.cargar_siguiente_nivel();
+                bub.cambioMapa = 2;
+                bob.cambioMapa = 2;
+                bub.nivel = 1;
+                bob.nivel = 1;
+                jugando_nivel = false;
+                for (int i = 0; i < 10; i++) {
+                    admin.agua.stream[i].numPlataformas = plataformas.listaPlataformaSiguiente.size();
                 }
-                /* admin.iniciaMapa(4, 60 * 30);
-            //admin.iniciaMapa(0, 30 * 60);
-            admin.CambioDeMapa(1);
-            columnas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_grande.png", 2);
-            plataformas.CargarSiguienteNivel("resources/mapa_nivel_2/bloque_pequeno.png", "resources/mapa_nivel_2/mapa.txt");
-            contadorVidas.cargar_siguiente_nivel();
-            bub.cambioMapa = 2;
-            bob.cambioMapa = 2;
-            bub.nivel = 1;
-            bob.nivel = 1;
-            jugando_nivel = false;
-            for (int i = 0; i < 10; i++) {
-                admin.agua.stream[i].numPlataformas = plataformas.listaPlataformaSiguiente.size();
-            }*/
             }
             else {
-                currentScreen = NIVEL_BOSS;
+                /*currentScreen = NIVEL_BOSS;
                 bub.imTheThunder = true;
                 bob.imTheThunder = true;
                 // ----------------------------------------------------------------------------------------------------------
@@ -379,21 +407,24 @@ int main(void)
                 robot->lastHeight = 449;
                 robot->tipo = 7;
                 robot->vida = 100;
+                admin.enemigos.push_back(robot);*/
+                currentScreen = NIVEL_2;
+                destRob = { (float)400 + 20, 100, 32, 32 };
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin, Modo_IA));
                 admin.enemigos.push_back(robot);
-                /*currentScreen = NIVEL_2;
-            destRob = { (float)400 + 20, 100, 32, 32 };
-            robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin, Modo_IA));
-            admin.enemigos.push_back(robot);
-            destRob = { (float)400 - 20, 100, 32, 32 };
-            robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin, Modo_IA));
-            admin.enemigos.push_back(robot);
-            destRob = { (float)400 + 50, 190, 32, 32 };
-            robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin, Modo_IA));
-            admin.enemigos.push_back(robot);
-            destRob = { (float)400 - 50, 190, 32, 32 };
-            robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin, Modo_IA));
-            admin.enemigos.push_back(robot);*/
 
+                destRob = { (float)400 - 20, 100, 32, 32 };
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin, Modo_IA));
+                admin.enemigos.push_back(robot);
+
+                destRob = { (float)400 + 50, 190, 32, 32 };
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin, Modo_IA));
+                admin.enemigos.push_back(robot);
+
+                destRob = { (float)400 - 50, 190, 32, 32 };
+                robot = std::make_shared<Morado>(Morado("USELESS", 2.0f, 40.0f, 1.0f, 1.0f, TARGET_FPS, destRob, admin, Modo_IA));
+                admin.enemigos.push_back(robot);
+                
                 admin.frutas.clear();
 
                 jugando_nivel = true;
@@ -404,16 +435,21 @@ int main(void)
         {
             // TODO: Update NIVEL_2 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
+                
                 admin.scores.Actualizar();
+                
                 bub.Actualizar();
                 for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
                     bub.compruebaColision(plataformas.listaPlataforma[i]);
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -427,6 +463,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -470,6 +507,8 @@ int main(void)
                     //bob.destRec.x = (float)GetScreenWidth() - 50;
                     //bob.resizeMe();
                 }
+
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
 
             }
             else if (admin.cambiaNivel) {
@@ -516,6 +555,8 @@ int main(void)
         {
             // TODO: Update NIVEL_3 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -526,6 +567,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -539,6 +581,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -583,6 +626,7 @@ int main(void)
                     //bob.resizeMe();
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 admin.iniciaMapa(6, 30 * 60); // TODO 
@@ -636,6 +680,8 @@ int main(void)
         {
             // TODO: Update NIVEL_4 screen variables here!     
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -646,6 +692,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -659,6 +706,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -703,6 +751,7 @@ int main(void)
                     //bob.resizeMe();
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -749,6 +798,8 @@ int main(void)
         {
             // TODO: Update NIVEL_5 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -759,6 +810,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -772,6 +824,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -816,6 +869,7 @@ int main(void)
                     //bob.resizeMe();
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -864,6 +918,8 @@ int main(void)
         {
             // TODO: Update NIVEL_6 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -874,6 +930,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -887,6 +944,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -928,6 +986,7 @@ int main(void)
                     gameover.hayP2 = true;
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -977,6 +1036,8 @@ int main(void)
         {
             // TODO: Update NIVEL_7 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -987,6 +1048,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -1000,6 +1062,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -1041,6 +1104,7 @@ int main(void)
                     gameover.hayP2 = true;
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -1102,6 +1166,8 @@ int main(void)
         {
             // TODO: Update NIVEL_8 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -1112,6 +1178,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -1125,6 +1192,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -1166,6 +1234,7 @@ int main(void)
                     gameover.hayP2 = true;
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -1227,6 +1296,8 @@ int main(void)
         {
             // TODO: Update NIVEL_9 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -1237,6 +1308,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -1250,6 +1322,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -1291,6 +1364,7 @@ int main(void)
                     gameover.hayP2 = true;
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -1340,6 +1414,8 @@ int main(void)
         {
             // TODO: Update NIVEL_10 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -1350,6 +1426,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -1363,6 +1440,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -1404,6 +1482,7 @@ int main(void)
                     gameover.hayP2 = true;
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -1446,6 +1525,8 @@ int main(void)
         {
             // TODO: Update NIVEL_BOSS screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -1456,6 +1537,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -1469,6 +1551,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -1510,6 +1593,7 @@ int main(void)
                     gameover.hayP2 = true;
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 gameover.ronda = 11;
@@ -1534,6 +1618,7 @@ int main(void)
                 main_menu.alt_music = Alt_music == 1 ? true : false;
                 main_menu.mute_sound = Mute_effect == 1 ? true : false;
                 credits.mute_sound = Mute_effect == 1 ? true : false;
+                Rayo::mute_sound = Mute_effect == 1 ? true : false;
                 plataformas.mute_effect = Mute_effect == 1 ? true : false;
                 //Si skins alternativas, la musica alternativa es gigachad
                 if ((Modo_skins == 1) && (Alt_music == 1)) {
@@ -1549,6 +1634,7 @@ int main(void)
                 admin.mute_sound = Mute_effect == 1 ? true : false;
                 bub.segundaSkin = Modo_skins == 1 ? true : false;
                 bob.segundaSkin = Modo_skins == 1 ? true : false;
+                bob.eresIA = Game_mode == 1 ? true : false;
                 // ...
                 // Asignamos los controles de los jugadores 
                 /*controls.keys[0] = controls.left_p1;

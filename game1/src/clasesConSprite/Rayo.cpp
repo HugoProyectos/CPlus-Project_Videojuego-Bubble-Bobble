@@ -1,6 +1,8 @@
 #include "Rayo.hpp"
 #include <iostream>
 
+bool Rayo::mute_sound = false;
+
 Rayo::Rayo(Texture2D spriteSheet, const Rectangle origen, bool izquierda) {
 	Inicializador(spriteSheet, origen, izquierda);
 }
@@ -54,6 +56,9 @@ void Rayo::Actualizar(DatosJugador& j1, DatosJugador& j2) {
 			if (animacionActiva == 0) {
 				animacionActiva = 1;
 				indiceAnimacion = 0;
+				if (!mute_sound) {
+					PlaySound(sonidoRayo);
+				}
 			}
 		}
 		if ((!j2.muriendo && !j2.electrocutado && j2.thunderLessFrames <= 0 && !j2.heIsTheThunder && !golpeJefe
@@ -69,6 +74,9 @@ void Rayo::Actualizar(DatosJugador& j1, DatosJugador& j2) {
 			if (animacionActiva == 0) {
 				animacionActiva = 1;
 				indiceAnimacion = 0;
+				if (!mute_sound) {
+					PlaySound(sonidoRayo);
+				}
 			}
 		}
 

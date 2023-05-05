@@ -321,15 +321,15 @@ public:
         deceleracion = velocidadSalto / 40.0f;
         if (waterlessFrames > 0) { waterlessFrames--; }
         //Gestion de wrap vertical
-        if (destRec.y > GetScreenHeight() + 10) {
-            destRec.y = -10;
+        if ( destRec.y > GetScreenHeight() * 1.05f ) {
+            destRec.y = GetScreenHeight() * 0.025f;
             enElAire = true;
             cayendo = true;
             enElAgua = false;
-            waterlessFrames = 3;
+            waterlessFrames = 5;
         }
-        else if (destRec.y < -50) {
-            destRec.y = GetScreenHeight() + 5;
+        else if (destRec.y < (-GetScreenHeight() * 0.05f) ) {
+            destRec.y = GetScreenHeight() * 1.025f;
         }
 
 
@@ -606,7 +606,7 @@ public:
                         //std::cout << "Salto" << std::endl;
                         if (!disparando) animacionActiva = JUMPING;
                         enElAire = true;
-                        if (enElAgua) { enElAgua = false; waterlessFrames = 3; }
+                        if (enElAgua) { enElAgua = false; waterlessFrames = 5; }
                         velocidadActual = velocidadSalto;
                         destRec.y -= velocidadActual;
                         saltoRecorrido += velocidadActual;
@@ -664,6 +664,12 @@ public:
                             if (admin->enemigos.at(i)->tipo == 7 && admin->enemigos.at(i)->muertoInterno) {
                                 admin->enemigos.at(i)->muertoJefe = true;
                                 admin->enemigos.at(i)->muerto = true;
+                                if (eresBub) {
+                                    admin->scores.SumarPuntuacionP1((unsigned int)10000);
+                                }
+                                else {
+                                    admin->scores.SumarPuntuacionP2((unsigned int)10000);
+                                }
                             }
                             else {
                                 muriendo = true;
@@ -685,8 +691,14 @@ public:
                                 || (destRec.x + destRec.width / 2 - 2) >= (admin->frutas.at(i)->destRec.x + admin->frutas.at(i)->destRec.width / 2.0f)
                                 && (destRec.x - destRec.width / 2 + 2) <= (admin->frutas.at(i)->destRec.x + admin->frutas.at(i)->destRec.width / 2.0f)))
                         { //Colisiona con fruta
-                            admin->scores.SumarPuntuacionP2((unsigned int)admin->frutas.at(i)->puntuacion);
-                            admin->frutas.at(i)->muerto_bob = true;
+                            if (eresBub) {
+                                admin->scores.SumarPuntuacionP1((unsigned int)admin->frutas.at(i)->puntuacion);
+                                admin->frutas.at(i)->muerto_bub = true;
+                            }
+                            else {
+                                admin->scores.SumarPuntuacionP2((unsigned int)admin->frutas.at(i)->puntuacion);
+                                admin->frutas.at(i)->muerto_bob = true;
+                            }
                             if (!mute_sound) {
                                 PlaySound(sonidoFruta);
                             }
@@ -1092,7 +1104,7 @@ public:
                         //std::cout << "Salto" << std::endl;
                         if (!disparando) animacionActiva = JUMPING;
                         enElAire = true;
-                        if (enElAgua) { enElAgua = false; waterlessFrames = 3; }
+                        if (enElAgua) { enElAgua = false; waterlessFrames = 5; }
                         velocidadActual = velocidadSalto;
                         destRec.y -= velocidadActual;
                         saltoRecorrido += velocidadActual;
@@ -1149,7 +1161,13 @@ public:
                             //std::cout << "I DIED" << std::endl;
                             if (admin->enemigos.at(i)->tipo == 7 && admin->enemigos.at(i)->muertoInterno) {
                                 admin->enemigos.at(i)->muertoJefe = true;
-                                admin->enemigos.at(i)->muerto = true;
+                                admin->enemigos.at(i)->muerto = true; 
+                                if (eresBub) {
+                                    admin->scores.SumarPuntuacionP1((unsigned int)10000);
+                                }
+                                else {
+                                    admin->scores.SumarPuntuacionP2((unsigned int)10000);
+                                }
                             }
                             else {
                                 muriendo = true;
@@ -1530,7 +1548,7 @@ public:
             if (enElAgua) {
                 enElAire = false;
                 saltoRecto = false;
-                cayendo = false;
+                cayendo = true;
                 return;
             }
             //Comprobamos si colisiona con la superficie
