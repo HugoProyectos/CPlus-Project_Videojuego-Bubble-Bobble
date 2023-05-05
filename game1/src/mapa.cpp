@@ -501,7 +501,7 @@ public:
                 texto_inicio_ronda = "ROUND " + std::to_string(ronda) + "\nREADY !";
             }
             else {
-                texto_inicio_ronda = "ROUND BOSS\nREADY !";
+                texto_inicio_ronda = "BOSS ROUND\nREADY !";
             }
             
             empezar_contador = true;
