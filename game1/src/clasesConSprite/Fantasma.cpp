@@ -107,6 +107,13 @@ public:
         else {
             IAoriginal = false;
         }
+        if (((float)rand() / (float)RAND_MAX) < 0.5) {
+            velXRebote = -(0.001 + (0.0025 * ((float)rand() / (float)RAND_MAX))) * GetScreenWidth();
+        }
+        else {
+            velXRebote = (0.001 + (0.0025 * ((float)rand() / (float)RAND_MAX))) * GetScreenWidth();
+        }
+        velYRebote = -(0.002 + (0.005 * ((float)rand() / (float)RAND_MAX))) * GetScreenHeight();
     };
 
     void enfadar() {
@@ -119,6 +126,8 @@ public:
         if (lastHeight != GetScreenHeight()) {
             destRec.height = GetScreenHeight() / 14.0625f;
             destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+            velYRebote = GetScreenHeight() * (velYRebote / lastHeight);
+            deathHeight = GetScreenHeight() * (deathHeight / lastHeight);
             posicionDestino.y = GetScreenHeight() * (posicionDestino.y / lastHeight);
             if (cambioMapa > 0 && !primeraActualizacion) {
                 razonY = ((posicionDestino.y - posicionDestino.y * 0.05) - destRec.y) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
@@ -130,6 +139,7 @@ public:
         if (lastWidth != GetScreenWidth()) {
             destRec.width = GetScreenWidth() / 25.0f;
             destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+            velXRebote = GetScreenWidth() * (velXRebote / lastWidth);
             posicionDestino.x = GetScreenWidth() * (posicionDestino.x / lastWidth);
             if (cambioMapa > 0 && !primeraActualizacion) {
                 razonX = (posicionDestino.x - destRec.x) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
@@ -157,7 +167,23 @@ public:
                 cambioMapa = 0;
             }
         }
-        else {
+        else if (rebotando) {
+            animacionActiva = 1;
+            destRec.x += velXRebote;
+            destRec.y += velYRebote;
+            if (deathHeight == 0) {
+                deathHeight = destRec.y;
+            }
+            if (destRec.y < 0) {
+                velYRebote += 0.0001 * GetScreenHeight();
+            }
+            else {
+                velYRebote += 0.00005 * GetScreenHeight();
+            }
+            if (deathHeight < destRec.y) {
+                rebotando = false;
+            }
+        }else {
             //Obtener el rectangulo del jugador a seguir
             Rectangle playerPosition;
             if (playerPosition2.x == -1 && playerPosition2.y == -1) {
@@ -218,14 +244,11 @@ public:
                 }
                 else if ( (destRec.y != playerPosition.y) && (direccionX == 0) ) {
                         //Izquierda
-                        std::cout << destRec.y << std::endl;
-                        std::cout << playerPosition.y << std::endl;
                         MoverIzq();
                         contador++;
                 }
                 else if ( (destRec.y != playerPosition.y) && ( direccionX == 1) ) {
                         //Derecha
-                        std::cout << "cabron" << std::endl;
                         MoverDer();
                         contador++;
                     
@@ -533,7 +556,7 @@ public:
 
     //Comprobacion de colisiones
     void compruebaColision(Plataforma& s, int enemyNum) override {
-        if (cambioMapa == 0) {
+        if ((cambioMapa == 0) && (!rebotando)) {
             //Comprobamos si colisiona con la superficie
             if (
                 (
@@ -582,6 +605,7 @@ public:
                     break;
                 case 2:
                     //Izquierda
+                    std::cout << "e" << std::endl;
                     destRec.x = s.right + destRec.width / 2;
                     direccionX = 1; //Colisiona izquierda, hora se mueve derecha
                     //Se puede añadir un movimiento random en eje Y
@@ -601,8 +625,8 @@ public:
                 if (
                     //Comprobamos colision esquina superior derecha
                     (
-                        (((s.bot) > (destRec.y - destRec.height / 2)) &&
-                            ((destRec.y - destRec.height / 2) > (s.top))
+                        (((s.bot) > (destRec.y - (destRec.height*0.40))) &&
+                            ((destRec.y - (destRec.height * 0.40)) > (s.top))
                             ) && (
                                 ((s.right) > (destRec.x + destRec.width / 2 + 5)) &&
                                 ((destRec.x + destRec.width / 2 + 5) > (s.left))
@@ -625,8 +649,8 @@ public:
                 else if (
                     //Comprobamos colision esquina superior derecha
                     (
-                        (((s.bot) > (destRec.y - destRec.height / 2)) &&
-                            ((destRec.y - destRec.height / 2) > (s.top))
+                        (((s.bot) > (destRec.y - (destRec.height * 0.40))) &&
+                            ((destRec.y - (destRec.height * 0.40)) > (s.top))
                             ) && (
                                 ((s.right) > (destRec.x - destRec.width / 2 - 5)) &&
                                 ((destRec.x - destRec.width / 2 - 5) > (s.left))
@@ -709,7 +733,7 @@ public:
 
     //Comprobacion de si debe caer
     void compruebaSuelo() override {
-        if (cambioMapa == 0) {
+        if ((cambioMapa == 0) && (!rebotando)) {
             if (
                 !(
                     //Comprobamos colision esquina inferior derecha
@@ -738,10 +762,22 @@ public:
                 animacionActiva = 1;
                 enElAire = false;
                 cayendo = false;
-                if (!muertePorAgua && !frutaProducida) {
+                if (!frutaProducida) {
                     frutaProducida = true;
+                    //std::cout << "-------------------------------     " + std::to_string(killCount) << std::endl;
+                    //while (true) {}
                     Rectangle  aux = destRec;
-                    if (killCount == 0) {
+                    if (muertePorRayo) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)8000, 60, aux, admin->scores, lastHeight, lastWidth, razonX, razonY, origin);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                    }
+                    else if (muertePorAgua) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)7000, 60, aux, admin->scores, lastHeight, lastWidth, razonX, razonY, origin);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                    }
+                    else if (killCount == 0) {
                         Frutas f = Frutas();
                         f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)500, 60, aux, admin->scores, lastHeight, lastWidth, razonX, razonY, origin);
                         admin->frutas.push_back(std::make_shared<Frutas>(f));
@@ -782,6 +818,7 @@ public:
                         admin->frutas.push_back(std::make_shared<Frutas>(f));
 
                     }
+
                 }
                 borrame = true;
 
@@ -800,11 +837,17 @@ public:
             if (s.left_der < (destRec.x + destRec.width / 2)) {
                 destRec.x = s.left_der - destRec.width / 2;
                 direccionX = 0;
+                if (rebotando) {
+                    velXRebote = -velXRebote;
+                }
             }
             //Comprobamos columna izquierda
             else if (s.right_izq > (destRec.x - destRec.width / 2)) {
                 destRec.x = s.right_izq + destRec.width / 2;
                 direccionX = 1;
+                if (rebotando) {
+                    velXRebote = -velXRebote;
+                }
             }
         }
     }

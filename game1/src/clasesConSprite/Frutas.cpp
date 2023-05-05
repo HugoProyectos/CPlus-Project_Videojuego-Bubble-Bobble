@@ -167,8 +167,11 @@ public:
                 case 6:
                     srcRec = { 594,0,16,9 };
                     break;
-                default:
+                case 7:
                     srcRec = { 0,14,16,9 };
+                    break;
+                default:
+                    srcRec = { 18,14,16,9 };
             }
         }
         if (muerto_bub) {

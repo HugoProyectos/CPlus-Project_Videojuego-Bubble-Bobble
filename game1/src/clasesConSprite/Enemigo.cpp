@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Sprite.hpp"
 #include "Suelo.cpp"
 #include "mapa.cpp"
@@ -9,8 +9,8 @@
 
 class Enemigo : public Sprite {
 public:
-    //Gestión de transición de nivel
-    //int8_t cambioMapa = 2; //2->Primera Iteración 1->Desplazándose 0->Ya no
+    //GestiÃ³n de transiciÃ³n de nivel
+    //int8_t cambioMapa = 2; //2->Primera IteraciÃ³n 1->DesplazÃ¡ndose 0->Ya no
     //Rectangle posicionPartida = { (float)GetScreenWidth()/2, (float)50, 32, 32};
     //int cuentaFramesTraslacion = 0; //3 segundos = 3 * 60 frames = 180 frames
     //const int LIMITE_FRAMES_TRASLACION = 180; //3 segundos = 3 * 60 frames = 180 frames
@@ -22,6 +22,8 @@ public:
     bool sinVida = false;
     bool hit = false;
     int vida = 0;
+    bool muertoJefe = false;
+    bool muertoInterno = false;
 
     int tipo = -1; // -2->No atrapable por pompa 1->Robot 2-> Agua NO USAR 3->Fantasma 4-> Monsta 5-> Rosa 6->Rayo
     bool borrame = false; //Eliminarlo de la lista

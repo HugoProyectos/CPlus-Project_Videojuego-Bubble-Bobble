@@ -91,7 +91,6 @@ public:
             IAoriginal = false;
 
         }
-        velXRebote = rand() % (GetScreenWidth() / 200) - (GetScreenWidth() / 400.0f);
         if ( ((float)rand() / (float)RAND_MAX) < 0.5){
             velXRebote = -( 0.001 + (0.0025 * ((float)rand() / (float)RAND_MAX))) * GetScreenWidth();
         }
@@ -164,11 +163,10 @@ public:
             else {
                 velYRebote += 0.00005 * GetScreenHeight();
             }
-            
             if (deathHeight < destRec.y) {
                 rebotando = false;
             }
-        }else {
+        }else{
             //Obtener el rectangulo del jugador a seguir
             Rectangle playerPosition;
             if (playerPosition2.x == -1 && playerPosition2.y == -1) {
@@ -699,7 +697,6 @@ public:
             destRec.x = destRec.x - destRec.width * 3 / 4;
         }
     }
-
     //Comprobacion de si debe caer
     void compruebaSuelo() override {
         if ( (cambioMapa == 0) && (!rebotando) ) {
@@ -730,12 +727,21 @@ public:
             else if (muerto) {
                 enElAire = false;
                 cayendo = false;
-                if (!muertePorAgua && !frutaProducida) {
+                if (!frutaProducida) {
                     frutaProducida = true;
                     //std::cout << "-------------------------------     " + std::to_string(killCount) << std::endl;
                     //while (true) {}
                     Rectangle  aux = destRec;
-                    if (killCount == 0) {
+                    if (muertePorRayo) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)8000, 60, aux, admin->scores, lastHeight, lastWidth, razonX, razonY, origin);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                    }
+                    else if (muertePorAgua) {
+                        Frutas f = Frutas();
+                        f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)7000, 60, aux, admin->scores, lastHeight, lastWidth, razonX, razonY, origin);
+                        admin->frutas.push_back(std::make_shared<Frutas>(f));
+                    }else if (killCount == 0) {
                         Frutas f = Frutas();
                         f = Frutas("resources/frutas/platano.png", 1.0f, 2.0f, (unsigned int)500, 60, aux, admin->scores, lastHeight, lastWidth, razonX, razonY, origin);
                         admin->frutas.push_back(std::make_shared<Frutas>(f));

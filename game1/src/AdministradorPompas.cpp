@@ -123,7 +123,7 @@ public:
 			else {
 				rayos.at(i).Actualizar(j1,j2);
 				for (int j = 0; j < enemigos.size(); j++) {
-					if (!rayos.at(i).golpeJefe && !enemigos.at(j)->borrame && !enemigos.at(j)->muerto && (enemigos.at(j)->tipo != -2)
+					if (!rayos.at(i).golpeJefe && !enemigos.at(j)->borrame && !enemigos.at(j)->muerto && (enemigos.at(j)->tipo > -1)
 						&& ((rayos.at(i).destRec.y + rayos.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
 							&& (rayos.at(i).destRec.y - rayos.at(i).destRec.height / 2) <= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
 							|| (rayos.at(i).destRec.y + rayos.at(i).destRec.height / 2) >= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
@@ -245,7 +245,7 @@ public:
 				//std::cout << "CHECK DISPARADA" << std::endl;
 
 				for (int j = 0; j < enemigos.size(); j++) {
-					if (!enemigos.at(j)->borrame && !enemigos.at(j)->muerto && (enemigos.at(j)->tipo != -2) && enemigos.at(j)->tipo != 7
+					if (!enemigos.at(j)->borrame && !enemigos.at(j)->muerto && (enemigos.at(j)->tipo > -1) && enemigos.at(j)->tipo != 7
 						&& ((pompas.at(i)->destRec.y + pompas.at(i)->destRec.height / 2) >= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
 							&& (pompas.at(i)->destRec.y - pompas.at(i)->destRec.height / 2) <= (enemigos.at(j)->destRec.y + enemigos.at(j)->destRec.height / 2)
 							|| (pompas.at(i)->destRec.y + pompas.at(i)->destRec.height / 2) >= (enemigos.at(j)->destRec.y - enemigos.at(j)->destRec.height / 2)
@@ -349,10 +349,10 @@ public:
 							//			derecha
 							//			abajo
 							//			arriba
-							if ((ini.x - ini.width / 2 + 2 < candidata.x + candidata.width / 2 - 2) && (ini.x + ini.width / 2 - 2 >= candidata.x + candidata.width / 2 - 2) && !((ini.y - ini.height / 2 + 2 > candidata.y + candidata.height / 2 - 2) || (ini.y + ini.height / 2 - 2 < candidata.y - candidata.height / 2 + 2))
-								|| (ini.x - ini.width / 2 + 2 < candidata.x - candidata.width / 2 + 2) && (ini.x + ini.width / 2 - 2 >= candidata.x - candidata.width / 2 + 2) && !((ini.y - ini.height / 2 + 2 > candidata.y + candidata.height / 2 - 2) || (ini.y + ini.height / 2 - 2 < candidata.y - candidata.height / 2 + 2))
-								|| (ini.y - ini.height / 2 + 2 < candidata.y + candidata.height / 2 - 2) && (ini.y + ini.height / 2 - 2 >= candidata.y + candidata.height / 2 - 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))
-								|| (ini.y - ini.height / 2 + 2 < candidata.y - candidata.height / 2 + 2) && (ini.y + ini.height / 2 - 2 >= candidata.y - candidata.height / 2 + 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))) {
+							if ((ini.x - ini.width / 2 < candidata.x + candidata.width / 2) && (ini.x + ini.width / 2 >= candidata.x + candidata.width / 2) && !((ini.y - ini.height / 2 > candidata.y + candidata.height / 2) || (ini.y + ini.height / 2 < candidata.y - candidata.height / 2))
+								|| (ini.x - ini.width / 2 < candidata.x - candidata.width / 2) && (ini.x + ini.width / 2 >= candidata.x - candidata.width / 2) && !((ini.y - ini.height / 2 > candidata.y + candidata.height / 2) || (ini.y + ini.height / 2 < candidata.y - candidata.height / 2))
+								|| (ini.y - ini.height / 2 < candidata.y + candidata.height / 2) && (ini.y + ini.height / 2 >= candidata.y + candidata.height / 2) && !((ini.x - ini.width / 2 > candidata.x + candidata.width / 2) || (ini.x + ini.width / 2 < candidata.x - candidata.width / 2))
+								|| (ini.y - ini.height / 2 < candidata.y - candidata.height / 2) && (ini.y + ini.height / 2 >= candidata.y - candidata.height / 2) && !((ini.x - ini.width / 2 > candidata.x + candidata.width / 2) || (ini.x + ini.width / 2 < candidata.x - candidata.width / 2))) {
 								pompas.at(j)->cadena = pompas.at(i)->cadena;
 								pompas.at(j)->sentidoJugador = pompas.at(i)->sentidoJugador;
 								pompas.at(j)->rayoDeBub = pompas.at(i)->rayoDeBub;
@@ -503,10 +503,10 @@ public:
 							//			derecha
 							//			abajo
 							//			arriba
-							if ((ini.x - ini.width / 2 + 2 < candidata.x + candidata.width / 2 - 2) && (ini.x + ini.width / 2 - 2 >= candidata.x + candidata.width / 2 - 2) && !((ini.y - ini.height / 2 + 2 > candidata.y + candidata.height / 2 - 2) || (ini.y + ini.height / 2 - 2 < candidata.y - candidata.height / 2 + 2))
-								|| (ini.x - ini.width / 2 + 2 < candidata.x - candidata.width / 2 + 2) && (ini.x + ini.width / 2 - 2 >= candidata.x - candidata.width / 2 + 2) && !((ini.y - ini.height / 2 + 2 > candidata.y + candidata.height / 2 - 2) || (ini.y + ini.height / 2 - 2 < candidata.y - candidata.height / 2 + 2))
-								|| (ini.y - ini.height / 2 + 2 < candidata.y + candidata.height / 2 - 2) && (ini.y + ini.height / 2 - 2 >= candidata.y + candidata.height / 2 - 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))
-								|| (ini.y - ini.height / 2 + 2 < candidata.y - candidata.height / 2 + 2) && (ini.y + ini.height / 2 - 2 >= candidata.y - candidata.height / 2 + 2) && !((ini.x - ini.width / 2 + 2 > candidata.x + candidata.width / 2 - 2) || (ini.x + ini.width / 2 - 2 < candidata.x - candidata.width / 2 + 2))) {
+							if ((ini.x - ini.width / 2 < candidata.x + candidata.width / 2) && (ini.x + ini.width / 2 >= candidata.x + candidata.width / 2) && !((ini.y - ini.height / 2 > candidata.y + candidata.height / 2) || (ini.y + ini.height / 2 < candidata.y - candidata.height / 2))
+								|| (ini.x - ini.width / 2 < candidata.x - candidata.width / 2) && (ini.x + ini.width / 2 >= candidata.x - candidata.width / 2) && !((ini.y - ini.height / 2 > candidata.y + candidata.height / 2) || (ini.y + ini.height / 2 < candidata.y - candidata.height / 2))
+								|| (ini.y - ini.height / 2 < candidata.y + candidata.height / 2) && (ini.y + ini.height / 2 >= candidata.y + candidata.height / 2) && !((ini.x - ini.width / 2 > candidata.x + candidata.width / 2) || (ini.x + ini.width / 2 < candidata.x - candidata.width / 2))
+								|| (ini.y - ini.height / 2 < candidata.y - candidata.height / 2) && (ini.y + ini.height / 2 >= candidata.y - candidata.height / 2) && !((ini.x - ini.width / 2 > candidata.x + candidata.width / 2) || (ini.x + ini.width / 2 < candidata.x - candidata.width / 2))) {
 								pompas.at(j)->cadena = pompas.at(i)->cadena;
 								int a = pompas.at(j)->sentidoJugador;
 								int b = pompas.at(i)->sentidoJugador;
@@ -697,7 +697,7 @@ public:
 			else {
 				enemigos.at(i)->Actualizar(j1.posicionJugador, j2.posicionJugador);
 				for (int j = 0; j < plataformas.listaPlataforma.size(); j++) {
-					if (enemigos.at(i)->tipo != 7) {
+					if (enemigos.at(i)->tipo != 7 && enemigos.at(i)->tipo != -3) {
 						enemigos.at(i)->compruebaSuelo();
 						enemigos.at(i)->compruebaColision(plataformas.listaPlataforma[j], i);
 						enemigos.at(i)->compruebaPared(columnas);
