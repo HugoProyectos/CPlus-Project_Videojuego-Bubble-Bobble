@@ -109,6 +109,8 @@ public:
         if (lastHeight != GetScreenHeight()) {
             destRec.height = GetScreenHeight() / 14.0625f;
             destRec.y = GetScreenHeight() * (destRec.y / lastHeight);
+            velYRebote = GetScreenHeight() * (velYRebote / lastHeight);
+            deathHeight = GetScreenHeight() * (deathHeight / lastHeight);
             posicionDestino.y = GetScreenHeight() * (posicionDestino.y / lastHeight);
             if (cambioMapa > 0 && !primeraActualizacion) {
                 razonY = ((posicionDestino.y - posicionDestino.y * 0.05) - destRec.y) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
@@ -121,6 +123,7 @@ public:
         if (lastWidth != GetScreenWidth()) {
             destRec.width = GetScreenWidth() / 25.0f;
             destRec.x = GetScreenWidth() * (destRec.x / lastWidth);
+            velXRebote = GetScreenWidth() * (velXRebote / lastWidth);
             posicionDestino.x = GetScreenWidth() * (posicionDestino.x / lastWidth);
             if (cambioMapa > 0 && !primeraActualizacion) {
                 razonX = (posicionDestino.x - destRec.x) / (LIMITE_FRAMES_TRASLACION - cuentaFramesTraslacion);
@@ -147,8 +150,23 @@ public:
             if (cuentaFramesTraslacion >= LIMITE_FRAMES_TRASLACION) {
                 cambioMapa = 0;
             }
-        }
-        else {
+        }else if (rebotando) {
+            animacionActiva = 1;
+            destRec.x += velXRebote;
+            destRec.y += velYRebote;
+            if (deathHeight == 0) {
+                deathHeight = destRec.y;
+            }
+            if (destRec.y < 0) {
+                velYRebote += 0.0001 * GetScreenHeight();
+            }
+            else {
+                velYRebote += 0.00005 * GetScreenHeight();
+            }
+            if (deathHeight < destRec.y) {
+                rebotando = false;
+            }
+        }else{
             //Obtener el rectangulo del jugador a seguir
             Rectangle playerPosition;
             if (playerPosition2.x == -1 && playerPosition2.y == -1) {
@@ -420,7 +438,7 @@ public:
 
     //Comprobacion de colisiones
     void compruebaColision(Plataforma& s, int enemyNum) override {
-        if (cambioMapa == 0) {
+        if ( (cambioMapa == 0) && (!rebotando) ) {
             //Comprobamos si colisiona con la superficie
             if (
                 (
@@ -647,7 +665,7 @@ public:
 
     //Comprobacion de si debe caer
     void compruebaSuelo() override {
-        if (cambioMapa == 0) {
+        if ( (cambioMapa == 0) && (!rebotando)) {
             if (
                 !(
                     //Comprobamos colision esquina inferior derecha
@@ -736,11 +754,17 @@ public:
             if (s.left_der < (destRec.x + destRec.width / 2)) {
                 destRec.x = s.left_der - destRec.width / 2;
                 direccionX = 0;
+                if (rebotando) {
+                    velXRebote = -velXRebote;
+                }
             }
             //Comprobamos columna izquierda
             else if (s.right_izq > (destRec.x - destRec.width / 2)) {
                 destRec.x = s.right_izq + destRec.width / 2;
                 direccionX = 1;
+                if (rebotando) {
+                    velXRebote = -velXRebote;
+                }
             }
         }
     }
