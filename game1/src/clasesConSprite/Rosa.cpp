@@ -62,6 +62,8 @@ public:
     int num = 0;
     int contadorCambio = 0;
     bool IAoriginal = false;
+    int contadorAlter = 0;
+    int lastEstado = 0;
 
     //Muerto -> Ahora esta en Enemigo
     //bool muerto = false;
@@ -235,19 +237,41 @@ public:
                     velMin = velocidadLateral / 2;
                 }
 
+
                 if (muerto) {
                     animacionActiva = 1;
                     CaerLento();
                 }
-                else if (colision == 0) {
-                    SeguirJugador(playerPosition);
+                else {
+                    if (contadorAlter < 20) {
+                        contadorAlter++;
+                        if (lastEstado == 0) {
+                            SeguirJugador(playerPosition);
+                        }
+                        else if (lastEstado == 2) {
+                            MoverHorizontal(playerPosition);
+                        }
+                        else if (lastEstado == 1) {
+                            MoverVertical(playerPosition);
+                        }
+                    }
+                    else {
+                        contadorAlter = 0;
+                        if (colision == 0) {
+                            SeguirJugador(playerPosition);
+                            lastEstado = 0;
+                        }
+                        else if (colision == 2) {
+                            MoverHorizontal(playerPosition);
+                            lastEstado = 2;
+                        }
+                        else if (colision == 1) {
+                            MoverVertical(playerPosition);
+                            lastEstado = 1;
+                        }
+                    }
                 }
-                else if (colision == 2) {
-                    MoverHorizontal(playerPosition);
-                }
-                else if (colision == 1) {
-                    MoverVertical(playerPosition);
-                }
+
             }
 
             //Actualizar posicion no salir de la pantalla
