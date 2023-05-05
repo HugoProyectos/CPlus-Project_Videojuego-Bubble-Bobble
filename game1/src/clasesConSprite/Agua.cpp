@@ -32,7 +32,7 @@ void Agua::Actualizar(Plataformas& plat, Columnas& col) {
 			lastWidth = GetScreenWidth();
 		}
 		Response next = stream[0].ActualizarHead(plat);
-		if (stream[0].destRec.y < GetScreenHeight() + 50) {
+		if (stream[9].destRec.y < (GetScreenHeight() * 1.1f) ) {
 			for (int i = 1; i < 10; i++) {
 				next = stream[i].Actualizar(next);
 			}
