@@ -112,7 +112,7 @@ public:
     unsigned int game_modo = 0;
     bool game_pulsado = false;
     const char* GAME_MODE[2] = {
-        "COOPERATIVE", "P V IA (BOT)"
+        "OFF", "ON"
     };
 
     bool soundPlaying = false;
@@ -632,7 +632,7 @@ public:
         positionX = 20 + (GetScreenWidth() / 2);
         positionY = 20 + 30 * (4 + 5);
         // Calculo el tamaño para hacer el rectangulo a medida
-        texto = TextFormat("Modo de juego: %s", this->GAME_MODE[game_modo]);
+        texto = TextFormat("IA P2: %s", this->GAME_MODE[game_modo]);
         tamano_texto = MeasureText(texto.c_str(), 20);
 
         // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
@@ -941,7 +941,7 @@ public:
         positionX = 20 + (GetScreenWidth() / 2);
         positionY = 20 + 30 * (4 + 5);
         // Calculo el tamaño para hacer el rectangulo a medida
-        texto = TextFormat("Modo de juego: %s", this->GAME_MODE[game_modo]);
+        texto = TextFormat("IA P2: %s", this->GAME_MODE[game_modo]);
         tamano_texto = MeasureText(texto.c_str(), 20);
 
         // Si el usuario hace clic en la funcionalidad, seleccionarla para cambiar la tecla
