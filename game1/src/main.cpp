@@ -1673,6 +1673,8 @@ int main(void)
                 bub.lastWidth = 800;
                 bub.lastHeight = 450;
                 bub.cambioMapa = 2;
+                bub.indiceAnimacion = 0;
+                bub.animacionActiva = 0;
                 bub.muerto = false;
                 bub.muriendo = false;
                 bub.primeraActualizacion = true;
@@ -1688,6 +1690,8 @@ int main(void)
                     bob.cambioMapa = 2;
                     bob.muerto = false;
                     bob.muriendo = false;
+                    bob.indiceAnimacion = 0;
+                    bob.animacionActiva = 0;
                     bob.primeraActualizacion = true;
                 }
                 gameover.clear = false;
