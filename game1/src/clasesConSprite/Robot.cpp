@@ -150,7 +150,19 @@ public:
             if (cuentaFramesTraslacion >= LIMITE_FRAMES_TRASLACION) {
                 cambioMapa = 0;
             }
-        }else if(rebotando){
+        }
+        else if (enElAgua) {
+            animacionActiva = 1;
+            if (destRec.y > GetScreenHeight() * 1.05f) {
+                destRec.y = -GetScreenHeight() * 0.025f;
+                enElAire = true;
+                cayendo = true;
+                if (enElAgua) {
+                    enElAgua = false;
+                    muerto = true;
+                }
+            }
+        }else if (rebotando) {
             animacionActiva = 1;
             destRec.x += velXRebote;
             destRec.y += velYRebote;
@@ -298,13 +310,17 @@ public:
             }
 
             //Actualizar posicion no salir de la pantalla
-            if (destRec.y > GetScreenHeight() + 50) {
-                destRec.y = -10;
+            if (destRec.y > GetScreenHeight() * 1.05f) {
+                destRec.y = -GetScreenHeight() * 0.025f;
                 enElAire = true;
                 cayendo = true;
+                if (enElAgua) {
+                    enElAgua = false;
+                    muerto = true;
+                }
             }
-            else if (destRec.y < -50) {
-                destRec.y = GetScreenHeight() + 5;
+            else if (destRec.y < (-GetScreenHeight() * 0.05f)) {
+                destRec.y = GetScreenHeight() * 1.025f;
             }
         }
 

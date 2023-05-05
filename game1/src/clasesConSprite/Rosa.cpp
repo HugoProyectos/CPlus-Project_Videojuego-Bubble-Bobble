@@ -159,6 +159,17 @@ public:
             if (cuentaFramesTraslacion >= LIMITE_FRAMES_TRASLACION) {
                 cambioMapa = 0;
             }
+        }else if (enElAgua) {
+            animacionActiva = 1;
+            if (destRec.y > GetScreenHeight() * 1.05f) {
+                destRec.y = -GetScreenHeight() * 0.025f;
+                enElAire = true;
+                cayendo = true;
+                if (enElAgua) {
+                    enElAgua = false;
+                    muerto = true;
+                }
+            }
         }else if (rebotando) {
             animacionActiva = 1;
             destRec.x += velXRebote;

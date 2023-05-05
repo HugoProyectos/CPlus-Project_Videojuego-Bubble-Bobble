@@ -322,7 +322,7 @@ public:
         if (waterlessFrames > 0) { waterlessFrames--; }
         //Gestion de wrap vertical
         if ( destRec.y > GetScreenHeight() * 1.05f ) {
-            destRec.y = GetScreenHeight() * 0.025f;
+            destRec.y = - GetScreenHeight() * 0.025f;
             enElAire = true;
             cayendo = true;
             enElAgua = false;
@@ -648,7 +648,7 @@ public:
 
                     //Comprueba choque con los enemigos
                     for (int i = 0; i < admin->enemigos.size(); i++) {
-                        if (!admin->enemigos.at(i)->borrame && !admin->enemigos.at(i)->muerto && !admin->enemigos.at(i)->muertePorAgua && !muriendo && !invulnerable
+                        if (!admin->enemigos.at(i)->enElAgua && !admin->enemigos.at(i)->borrame && !admin->enemigos.at(i)->muerto && !admin->enemigos.at(i)->muertePorAgua && !muriendo && !invulnerable
                             && ((destRec.y + destRec.height / 2.0f) >= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2.0f)
                                 && (destRec.y - destRec.height / 2.0f) <= (admin->enemigos.at(i)->destRec.y + admin->enemigos.at(i)->destRec.height / 2.0f)
                                 || (destRec.y + destRec.height / 2.0f) >= (admin->enemigos.at(i)->destRec.y - admin->enemigos.at(i)->destRec.height / 2.0f)

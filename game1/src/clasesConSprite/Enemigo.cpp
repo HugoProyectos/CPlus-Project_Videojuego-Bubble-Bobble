@@ -32,7 +32,9 @@ public:
     float velYRebote;
     float velXRebote;
     float deathHeight = 0;
-    bool muertePorAgua = false; 
+    bool muertePorAgua = false;
+    bool enElAgua = false;
+    int numTileAgua;
     bool muertePorRayo = false;
     
     bool saltando = false;
@@ -48,6 +50,7 @@ public:
     int lastHeight = 450;
     int lastWidth = 800;
     int killCount = 0;
+    int animacionActiva;
     Rectangle posicion;
 
     Enemigo() = default; //Debe llamarsse a Inicializador

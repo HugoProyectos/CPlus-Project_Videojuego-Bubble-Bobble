@@ -74,8 +74,8 @@ int main(void)
 
     // Nivel 1:
     //--------------------------------------------------------------------------------------
-    Columnas columnas = Columnas("resources/mapa_nivel_1/bloque_grande.png", 40.0f, 0.0f, 1);
-    Plataformas plataformas = Plataformas("resources/mapa_nivel_1/bloque_pequeno.png", "resources/mapa_nivel_1/mapa.txt", 40.0f, 0.0f, 1);
+    Columnas columnas = Columnas("resources/mapa_nivel_5/bloque_grande.png", 40.0f, 0.0f, 1);
+    Plataformas plataformas = Plataformas("resources/mapa_nivel_5/bloque_pequeno.png", "resources/mapa_nivel_5/mapa.txt", 40.0f, 0.0f, 1);
     //--------------------------------------------------------------------------------------
 
     // Controls:
@@ -129,8 +129,8 @@ int main(void)
     admin.plat = &plataformas;
     admin.iniciaMapa(4, 30 * 60);
     //admin.iniciaMapa(0, 30 * 60);
-    admin.CambioDeMapa(0);
-    //admin.CambioDeMapa(4);
+    //admin.CambioDeMapa(0);
+    admin.CambioDeMapa(4);
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
@@ -328,7 +328,13 @@ int main(void)
                 admin.agua.Actualizar(plataformas, columnas);
                 admin.actualizaPompas();
                 for (int i = 0; i < admin.enemigos.size(); i++) {
-                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    if (admin.enemigos.at(i)->enElAgua) {
+                        admin.enemigos.at(i)->destRec.x = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.x + admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.width / 2;
+                        admin.enemigos.at(i)->destRec.y = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.y - admin.enemigos.at(i)->destRec.height / 2;
+                    }
+                    else {
+                        admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    }
                 }
 
                 admin.actualizaEnemigos(plataformas, columnas);
@@ -474,7 +480,13 @@ int main(void)
                 admin.agua.Actualizar(plataformas, columnas);
                 admin.actualizaPompas();
                 for (int i = 0; i < admin.enemigos.size(); i++) {
-                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    if (admin.enemigos.at(i)->enElAgua) {
+                        admin.enemigos.at(i)->destRec.x = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.x + admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.width / 2;
+                        admin.enemigos.at(i)->destRec.y = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.y - admin.enemigos.at(i)->destRec.height / 2;
+                    }
+                    else {
+                        admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    }
                 }
 
                 admin.actualizaEnemigos(plataformas, columnas);
@@ -592,7 +604,13 @@ int main(void)
                 admin.agua.Actualizar(plataformas, columnas);
                 admin.actualizaPompas();
                 for (int i = 0; i < admin.enemigos.size(); i++) {
-                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    if (admin.enemigos.at(i)->enElAgua) {
+                        admin.enemigos.at(i)->destRec.x = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.x + admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.width / 2;
+                        admin.enemigos.at(i)->destRec.y = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.y - admin.enemigos.at(i)->destRec.height / 2;
+                    }
+                    else {
+                        admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    }
                 }
 
                 admin.actualizaEnemigos(plataformas, columnas);
@@ -717,7 +735,13 @@ int main(void)
                 admin.agua.Actualizar(plataformas, columnas);
                 admin.actualizaPompas();
                 for (int i = 0; i < admin.enemigos.size(); i++) {
-                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    if (admin.enemigos.at(i)->enElAgua) {
+                        admin.enemigos.at(i)->destRec.x = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.x + admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.width / 2;
+                        admin.enemigos.at(i)->destRec.y = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.y - admin.enemigos.at(i)->destRec.height / 2;
+                    }
+                    else {
+                        admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    }
                 }
 
                 admin.actualizaEnemigos(plataformas, columnas);
@@ -835,7 +859,13 @@ int main(void)
                 admin.agua.Actualizar(plataformas, columnas);
                 admin.actualizaPompas();
                 for (int i = 0; i < admin.enemigos.size(); i++) {
-                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    if (admin.enemigos.at(i)->enElAgua) {
+                        admin.enemigos.at(i)->destRec.x = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.x + admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.width / 2;
+                        admin.enemigos.at(i)->destRec.y = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.y - admin.enemigos.at(i)->destRec.height / 2;
+                    }
+                    else {
+                        admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    }
                 }
 
                 admin.actualizaEnemigos(plataformas, columnas);
@@ -955,7 +985,13 @@ int main(void)
                 admin.agua.Actualizar(plataformas, columnas);
                 admin.actualizaPompas();
                 for (int i = 0; i < admin.enemigos.size(); i++) {
-                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    if (admin.enemigos.at(i)->enElAgua) {
+                        admin.enemigos.at(i)->destRec.x = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.x + admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.width / 2;
+                        admin.enemigos.at(i)->destRec.y = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.y - admin.enemigos.at(i)->destRec.height / 2;
+                    }
+                    else {
+                        admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    }
                 }
 
                 admin.actualizaEnemigos(plataformas, columnas);
@@ -1073,7 +1109,13 @@ int main(void)
                 admin.agua.Actualizar(plataformas, columnas);
                 admin.actualizaPompas();
                 for (int i = 0; i < admin.enemigos.size(); i++) {
-                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    if (admin.enemigos.at(i)->enElAgua) {
+                        admin.enemigos.at(i)->destRec.x = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.x + admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.width / 2;
+                        admin.enemigos.at(i)->destRec.y = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.y - admin.enemigos.at(i)->destRec.height / 2;
+                    }
+                    else {
+                        admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    }
                 }
 
                 admin.actualizaEnemigos(plataformas, columnas);
@@ -1203,7 +1245,13 @@ int main(void)
                 admin.agua.Actualizar(plataformas, columnas);
                 admin.actualizaPompas();
                 for (int i = 0; i < admin.enemigos.size(); i++) {
-                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    if (admin.enemigos.at(i)->enElAgua) {
+                        admin.enemigos.at(i)->destRec.x = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.x + admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.width / 2;
+                        admin.enemigos.at(i)->destRec.y = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.y - admin.enemigos.at(i)->destRec.height / 2;
+                    }
+                    else {
+                        admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    }
                 }
 
                 admin.actualizaEnemigos(plataformas, columnas);
@@ -1333,7 +1381,13 @@ int main(void)
                 admin.agua.Actualizar(plataformas, columnas);
                 admin.actualizaPompas();
                 for (int i = 0; i < admin.enemigos.size(); i++) {
-                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    if (admin.enemigos.at(i)->enElAgua) {
+                        admin.enemigos.at(i)->destRec.x = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.x + admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.width / 2;
+                        admin.enemigos.at(i)->destRec.y = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.y - admin.enemigos.at(i)->destRec.height / 2;
+                    }
+                    else {
+                        admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    }
                 }
 
                 admin.actualizaEnemigos(plataformas, columnas);
@@ -1451,7 +1505,13 @@ int main(void)
                 admin.agua.Actualizar(plataformas, columnas);
                 admin.actualizaPompas();
                 for (int i = 0; i < admin.enemigos.size(); i++) {
-                    admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    if (admin.enemigos.at(i)->enElAgua) {
+                        admin.enemigos.at(i)->destRec.x = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.x + admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.width / 2;
+                        admin.enemigos.at(i)->destRec.y = admin.agua.stream[admin.enemigos.at(i)->numTileAgua].destRec.y - admin.enemigos.at(i)->destRec.height / 2;
+                    }
+                    else {
+                        admin.agua.colisionEnemigo(*admin.enemigos.at(i));
+                    }
                 }
 
                 admin.actualizaEnemigos(plataformas, columnas);
