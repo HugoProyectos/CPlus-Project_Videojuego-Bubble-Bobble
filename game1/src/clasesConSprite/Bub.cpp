@@ -41,6 +41,7 @@ class Bub : public Sprite {
     const float VELOCIDAD_DISPARO = 5.0;
     const float DISTANCIA_DISPARO = 200.0;
     Rectangle inicio = { -1,-1,-1,-1 };
+    
 
     const int anchoOriginal = 800;
     Texture2D sprite2;
@@ -148,7 +149,6 @@ public:
     int saltoDer = false;
     int saltoIzq = false;
     /////////////////////////////////
-
 
     Bub(float tamano, float saltoMax, float velSalto, float velLateral, int _targetFrames, Rectangle destino, AdministradorPompas& adm, bool esBub) {
         Inicializador(tamano, saltoMax, velSalto, velLateral, _targetFrames, adm, esBub);
@@ -835,7 +835,7 @@ public:
         // 
         else {
             //Gesti�n de desplazamiento lateral
-            if (cambioMapa > 0) {
+            if (cambioMapa > 0 && !muerto) {
                 if (cambioMapa == 2) {
                     primeraActualizacion = false;
                     enElAire = true;
