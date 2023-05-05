@@ -17,6 +17,8 @@
 
 class AdministradorPompas {
 public:
+	const Sound sonidoRayo = LoadSound("resources/music/sonido_rayo.mp3");
+
 	Sound sonidoMuerteEnemigo = LoadSound("resources/music/sonido_muerte_enemigo.mp3");
 	bool mute_sound = false;
 	//Referencias a plataformas y columnas para la colision de pompas
@@ -148,6 +150,9 @@ public:
 							rayos.at(i).golpeJefe = true;
 							rayos.at(i).animacionActiva = 1;
 							rayos.at(i).indiceAnimacion = 0;
+							if (!mute_sound) {
+								PlaySound(sonidoRayo);
+							}
 						}
 						else {
 							enemigos.at(j)->muertePorRayo = true;
@@ -156,6 +161,9 @@ public:
 							rayos.at(i).animacionActiva = 1;
 							rayos.at(i).indiceAnimacion = 0;
 							enemigosPorMatar--;
+							if (!mute_sound) {
+								PlaySound(sonidoRayo);
+							}
 						}
 						break;
 					}
