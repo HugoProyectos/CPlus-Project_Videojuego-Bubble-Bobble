@@ -1399,7 +1399,7 @@ int main(void)
                 robot = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
                 admin.enemigos.push_back(robot);
 
-                destRob = { (float)500, 240, 32, 32 };
+                destRob = { (float)485, 240, 32, 32 };
                 robot = std::make_shared<Rosa>(Rosa("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
                 admin.enemigos.push_back(robot);
                 // ----------------------------------------------------------------------------------------------------------
