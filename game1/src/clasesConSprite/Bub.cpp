@@ -321,15 +321,15 @@ public:
         deceleracion = velocidadSalto / 40.0f;
         if (waterlessFrames > 0) { waterlessFrames--; }
         //Gestion de wrap vertical
-        if (destRec.y > GetScreenHeight() + 10) {
-            destRec.y = -10;
+        if ( destRec.y > GetScreenHeight() * 1.05f ) {
+            destRec.y = GetScreenHeight() * 0.025f;
             enElAire = true;
             cayendo = true;
             enElAgua = false;
-            waterlessFrames = 3;
+            waterlessFrames = 5;
         }
-        else if (destRec.y < -50) {
-            destRec.y = GetScreenHeight() + 5;
+        else if (destRec.y < (-GetScreenHeight() * 0.05f) ) {
+            destRec.y = GetScreenHeight() * 1.025f;
         }
 
 
@@ -606,7 +606,7 @@ public:
                         //std::cout << "Salto" << std::endl;
                         if (!disparando) animacionActiva = JUMPING;
                         enElAire = true;
-                        if (enElAgua) { enElAgua = false; waterlessFrames = 3; }
+                        if (enElAgua) { enElAgua = false; waterlessFrames = 5; }
                         velocidadActual = velocidadSalto;
                         destRec.y -= velocidadActual;
                         saltoRecorrido += velocidadActual;
@@ -1092,7 +1092,7 @@ public:
                         //std::cout << "Salto" << std::endl;
                         if (!disparando) animacionActiva = JUMPING;
                         enElAire = true;
-                        if (enElAgua) { enElAgua = false; waterlessFrames = 3; }
+                        if (enElAgua) { enElAgua = false; waterlessFrames = 5; }
                         velocidadActual = velocidadSalto;
                         destRec.y -= velocidadActual;
                         saltoRecorrido += velocidadActual;
@@ -1530,7 +1530,7 @@ public:
             if (enElAgua) {
                 enElAire = false;
                 saltoRecto = false;
-                cayendo = false;
+                cayendo = true;
                 return;
             }
             //Comprobamos si colisiona con la superficie

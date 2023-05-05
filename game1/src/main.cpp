@@ -110,8 +110,9 @@ int main(void)
     admin.col = &columnas;
     admin.plat = &plataformas;
     admin.iniciaMapa(4, 30*60); 
-    //admin.iniciaMapa(0, 30 * 60);
+    //admin.iniciaMapa(5, 300000 * 60);
     admin.CambioDeMapa(0);
+    //admin.CambioDeMapa(4);
     Texture2D spritePompa = LoadTexture("resources/Players/Bobblun/Pompa.png");
     Rectangle destRec = { GetScreenWidth() / 2.0f + 20, GetScreenHeight() / 2.0f - 20, (float)32, 32.0f }; //Dos primeros, ubicacion. Dos ultimos, dimensiones
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
@@ -278,6 +279,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -291,6 +293,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -417,6 +420,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -430,6 +434,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -529,6 +534,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -542,6 +548,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -649,6 +656,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -662,6 +670,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -762,6 +771,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -775,6 +785,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -877,6 +888,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -890,6 +902,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -990,6 +1003,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -1003,6 +1017,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -1115,6 +1130,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -1128,6 +1144,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -1240,6 +1257,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -1253,6 +1271,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -1353,6 +1372,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -1366,6 +1386,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
@@ -1459,6 +1480,7 @@ int main(void)
                 }
                 bub.compruebaPared(columnas);
                 if (bub.enElAgua) {
+                    bub.velocidadActual = 0;
                     bub.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                     bub.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                 }
@@ -1472,6 +1494,7 @@ int main(void)
                     }
                     bob.compruebaPared(columnas);
                     if (bob.enElAgua) {
+                        bob.velocidadActual = 0;
                         bob.destRec.x = admin.agua.stream[admin.agua.bubTile].destRec.x;
                         bob.destRec.y = admin.agua.stream[admin.agua.bubTile].destRec.y;
                     }
