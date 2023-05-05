@@ -144,9 +144,9 @@ int main(void)
     sh_Enemigo rosa = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
     destRob = { (float)400 + 20, 160, 32, 32 };
     sh_Enemigo robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
-    destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
+    destRob = { (float)400, 30, 32, 32 };
     sh_Enemigo robot2 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
-    destRob = { (float)GetScreenWidth() / 2, 70, 36, 32 };
+    destRob = { (float)400, 70, 36, 32 };
     sh_Enemigo robot3 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
 
 
@@ -1706,9 +1706,9 @@ int main(void)
                 sh_Enemigo rosa = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
                 destRob = { (float)400 + 20, 160, 32, 32 };
                 sh_Enemigo robot = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
-                destRob = { (float)GetScreenWidth() / 2, 30, 32, 32 };
+                destRob = { (float)400, 30, 32, 32 };
                 sh_Enemigo robot2 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
-                destRob = { (float)GetScreenWidth() / 2, 70, 36, 32 };
+                destRob = { (float)400, 70, 36, 32 };
                 sh_Enemigo robot3 = std::make_shared<Robot>(Robot("USELESS", 2.0f, 80.0f, 2.0f, 2.0f, TARGET_FPS, destRob, admin, Modo_IA));
 
                 admin.enemigos.push_back(rosa);
