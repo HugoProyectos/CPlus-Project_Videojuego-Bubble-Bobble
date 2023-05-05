@@ -373,6 +373,9 @@ public:
             if (cambioMapa > 0) {
                 if (cambioMapa == 2) {
                     primeraActualizacion = false;
+                    enElAire = true;
+                    cayendo = true;
+                    velocidadActual = 0;
                     switchOrientacion = 1;
                     //Reiniciamos su orientación
                     if (orientacionActual == 3) {
@@ -835,6 +838,9 @@ public:
             if (cambioMapa > 0) {
                 if (cambioMapa == 2) {
                     primeraActualizacion = false;
+                    enElAire = true;
+                    cayendo = true;
+                    velocidadActual = 0;
                     switchOrientacion = 1;
                     //Reiniciamos su orientación
                     if (orientacionActual == 3) {

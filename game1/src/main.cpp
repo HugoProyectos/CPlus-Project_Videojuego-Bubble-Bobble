@@ -95,6 +95,7 @@ int main(void)
     main_menu.mute_music = Mute_music == 1 ? true : false;  
     main_menu.mute_sound = Mute_effect == 1 ? true : false;
     credits.mute_sound = Mute_effect == 1 ? true : false;
+    Rayo::mute_sound = Mute_effect == 1 ? true : false;
     plataformas.mute_effect = Mute_effect == 1 ? true : false;
     plataformas.musicNum = Alt_music;
     plataformas.mute_music = Mute_music == 1 ? true : false;
@@ -1617,6 +1618,7 @@ int main(void)
                 main_menu.alt_music = Alt_music == 1 ? true : false;
                 main_menu.mute_sound = Mute_effect == 1 ? true : false;
                 credits.mute_sound = Mute_effect == 1 ? true : false;
+                Rayo::mute_sound = Mute_effect == 1 ? true : false;
                 plataformas.mute_effect = Mute_effect == 1 ? true : false;
                 //Si skins alternativas, la musica alternativa es gigachad
                 if ((Modo_skins == 1) && (Alt_music == 1)) {
