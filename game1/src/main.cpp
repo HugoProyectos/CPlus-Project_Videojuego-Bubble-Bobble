@@ -16,6 +16,22 @@
 
 const int TARGET_FPS = 60;
 
+void VidaExtraSegunPuntuacion(unsigned int puntuacion1, unsigned int puntuacion2, unsigned int puntuacion1_next, unsigned int puntuacion2_next, int& vidasP1, int& vidasP2) {
+    if (puntuacion1 < 30000 && puntuacion1_next >= 30000) {
+        vidasP1++;
+    }
+    else if (puntuacion1 < 100000 && puntuacion1_next >= 100000) {
+        vidasP1++;
+    }
+    if (puntuacion2 < 30000 && puntuacion2_next >= 30000) {
+        vidasP2++;
+    }
+    else if (puntuacion2 < 100000 && puntuacion2_next >= 100000) {
+        vidasP2++;
+    }
+}
+
+
 //------------------------------------------------------------------------------------------
 // Types and Structures Definition
 //------------------------------------------------------------------------------------------
@@ -34,7 +50,7 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "Bubble Bobble");
     SetWindowMinSize(200, 200);
-    SetWindowState(FLAG_WINDOW_RESIZABLE);
+    //SetWindowState(FLAG_WINDOW_RESIZABLE);
 
     InitAudioDevice();
 
@@ -118,7 +134,8 @@ int main(void)
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
     //Pompa p = Pompa(spritePompa, destRec, 5.0, 200.0, true, 100);
 
-
+    unsigned int puntuacionP1 = 0;
+    unsigned int puntuacionP2 = 0;
 
 
     Rectangle destRob = { (float)400 + 70, 60, 32, 32 };
@@ -175,6 +192,7 @@ int main(void)
     bob.mute_sound = Mute_effect == 1 ? true : false;
     bub.segundaSkin = Modo_skins == 1 ? true : false;
     bob.segundaSkin = Modo_skins == 1 ? true : false;
+    bob.eresIA = Game_mode == 1 ? true : false;
     //bub.nivel = 4;
     //bob.nivel = 4;
 
@@ -268,10 +286,14 @@ int main(void)
         {
             // TODO: Update NIVEL_1 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
                 admin.scores.Actualizar();
+
+                
                 bub.Actualizar();
                 for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
                     bub.compruebaColision(plataformas.listaPlataforma[i]);
@@ -337,6 +359,8 @@ int main(void)
                     //bob.resizeMe();
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
+                
             }
 
             else if (admin.cambiaNivel) {
@@ -404,10 +428,14 @@ int main(void)
         {
             // TODO: Update NIVEL_2 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
+                
                 admin.scores.Actualizar();
+                
                 bub.Actualizar();
                 for (int i = 0; i < plataformas.listaPlataforma.size(); i++) {
                     bub.compruebaColision(plataformas.listaPlataforma[i]);
@@ -470,6 +498,8 @@ int main(void)
                     //bob.destRec.x = (float)GetScreenWidth() - 50;
                     //bob.resizeMe();
                 }
+
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
 
             }
             else if (admin.cambiaNivel) {
@@ -516,6 +546,8 @@ int main(void)
         {
             // TODO: Update NIVEL_3 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -583,6 +615,7 @@ int main(void)
                     //bob.resizeMe();
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 admin.iniciaMapa(6, 30 * 60); // TODO 
@@ -636,6 +669,8 @@ int main(void)
         {
             // TODO: Update NIVEL_4 screen variables here!     
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -703,6 +738,7 @@ int main(void)
                     //bob.resizeMe();
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -749,6 +785,8 @@ int main(void)
         {
             // TODO: Update NIVEL_5 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -816,6 +854,7 @@ int main(void)
                     //bob.resizeMe();
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -864,6 +903,8 @@ int main(void)
         {
             // TODO: Update NIVEL_6 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -928,6 +969,7 @@ int main(void)
                     gameover.hayP2 = true;
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -977,6 +1019,8 @@ int main(void)
         {
             // TODO: Update NIVEL_7 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -1041,6 +1085,7 @@ int main(void)
                     gameover.hayP2 = true;
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -1102,6 +1147,8 @@ int main(void)
         {
             // TODO: Update NIVEL_8 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -1166,6 +1213,7 @@ int main(void)
                     gameover.hayP2 = true;
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -1227,6 +1275,8 @@ int main(void)
         {
             // TODO: Update NIVEL_9 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -1291,6 +1341,7 @@ int main(void)
                     gameover.hayP2 = true;
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -1340,6 +1391,8 @@ int main(void)
         {
             // TODO: Update NIVEL_10 screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -1404,6 +1457,7 @@ int main(void)
                     gameover.hayP2 = true;
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 //CAMBIADO PARA PRUEBAS DE AGUA
@@ -1446,6 +1500,8 @@ int main(void)
         {
             // TODO: Update NIVEL_BOSS screen variables here!
             if (!admin.cambiaNivel && jugando_nivel) {
+                puntuacionP1 = admin.scores.puntuacion1;
+                puntuacionP2 = admin.scores.puntuacion2;
                 columnas.Actualizar();
                 plataformas.Actualizar();
                 credits.Actualizar();
@@ -1510,6 +1566,7 @@ int main(void)
                     gameover.hayP2 = true;
                 }
 
+                VidaExtraSegunPuntuacion(puntuacionP1, puntuacionP2, admin.scores.puntuacion1, admin.scores.puntuacion2, bub.numVidas, bob.numVidas);
             }
             else if (admin.cambiaNivel) {
                 gameover.ronda = 11;
@@ -1549,6 +1606,7 @@ int main(void)
                 admin.mute_sound = Mute_effect == 1 ? true : false;
                 bub.segundaSkin = Modo_skins == 1 ? true : false;
                 bob.segundaSkin = Modo_skins == 1 ? true : false;
+                bob.eresIA = Game_mode == 1 ? true : false;
                 // ...
                 // Asignamos los controles de los jugadores 
                 /*controls.keys[0] = controls.left_p1;
